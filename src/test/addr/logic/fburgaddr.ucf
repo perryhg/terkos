@@ -1,0 +1,49 @@
+NET Addr<0> LOC = P6; # PN0
+NET Addr<1> LOC = P12; # PN2
+NET Addr<2> LOC = P18; # PN3
+NET Addr<3> LOC = P24; # PN4
+NET Addr<4> LOC = P31; # PN6
+NET Addr<5> LOC = P38; # PN8
+NET Addr<6> LOC = P41; # PN9
+NET Addr<7> LOC = P47; # PN10
+NET Addr<8> LOC = P114; # PN22
+NET Addr<9> LOC = P120;	# PN24
+NET Addr<10> LOC = P129; # PN26
+NET Addr<11> LOC = P136; # PN27
+
+NET Data<0> LOC = P113;	# P56
+NET Data<1> LOC = P117;	# P58
+NET Data<2> LOC = P126;	# P63
+NET Data<3> LOC = P135;	# P68
+NET Data<4> LOC = P139; # P69
+NET Data<5> LOC = P140;	# P70
+NET Data<6> LOC = P142;	# P71
+NET Data<7> LOC = P5; # P3
+NET Data<8> LOC = P8; # P5
+NET Data<9> LOC = P17; # P9
+NET Data<10> LOC = P23;	# P13
+NET Data<11> LOC = P26;	# P15
+NET Data<12> LOC = P35;	# P19
+NET Data<13> LOC = P39;	# P20
+NET Data<14> LOC = P50;	# P21
+NET Data<15> LOC = P44;	# P22
+
+NET Rd LOC = P141; # PN28
+NET Wr LOC = P119; # PN23
+NET Dq<0> LOC = P10;	# PN1
+NET Dq<1> LOC = P29;	# PN5
+NET Cs<0> LOC = P48;	# PN11
+NET Cs<1> LOC = P66;	# PN13
+NET Wait LOC = P112; # P55
+NET Wait PULLUP;
+NET Int LOC = P106; # P54
+NET Clk LOC = P128; # PN25
+NET Clk PERIOD = 10 ns;
+
+NET Async LOC = P111; # PN21
+NET Asdo LOC = P101;	# PN19
+NET Arstn LOC = P95;	# PN18
+NET Asdi LOC = P94; # P47
+NET AbitClk LOC = P56; # PN12
+
+NET Data* FAST;
