@@ -1,0 +1,4 @@
+move port selection outside
+ximprove print/deal with debug output to file
+query ports offer selection
+find .dat file in current directory, offer selection
