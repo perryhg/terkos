@@ -1,12 +1,14 @@
 TARGET=fpgac
 CXX=arm-linux-gnueabi-g++
-CFLAGS=-I../../include
-LDFLAGS=-L../../lib -lmmap
+CFLAGS=-I../../../include
+LDFLAGS=-L../../../lib -lmmap
 SRCS=$(wildcard *.cxx)
 OBJECTS=$(SRCS:.cxx=.o)
 
+all: $(TARGET)
+
 install: $(TARGET)
-	cp $(TARGET) ../../bin
+	cp $(TARGET) ../../../bin
 
 $(TARGET): $(OBJECTS)
 	$(CXX) $(OBJECTS) -o $(TARGET) $(LDFLAGS)
