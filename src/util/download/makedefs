@@ -1,0 +1,353 @@
+#*****************************************************************************
+#
+# MAKEDEFS - Common definitions for all makefiles.
+#
+# Copyright (c) 2001,2002,2003,2004 Cirrus Logic, Inc.
+#
+#*****************************************************************************
+
+#*****************************************************************************
+#
+# The default rule.
+#
+#*****************************************************************************
+.PHONY: all
+all: default
+
+#*****************************************************************************
+#
+# The following defines are for using GCC to cross compile ARM code.
+#
+#*****************************************************************************
+ifeq ($(CROSSTOOLS), gcc)
+
+#
+# The names of the various tools.
+#
+CC = arm-elf-gcc
+LD = arm-elf-ld
+NM = arm-elf-nm
+OBJCOPY = arm-elf-objcopy
+
+#
+# The extension used for executables.
+#
+EXEEXT = elf
+
+#
+# The default set of flags for the assembler, compiler, and linker.
+#
+AFLAGS = -MD -Wa,-marm7tdmi -Dgcc
+CFLAGS = -MD -Wall -fno-common -fshort-enums -mcpu=arm7tdmi -fno-builtin -mapcs
+LFLAGS = -q
+
+#
+# Augment the compiler flags based on whether or not a DEBUG version is being
+# built.
+#
+ifdef DEBUG
+AFLAGS += -Wa,--gdwarf2
+CFLAGS += -g
+else
+CFLAGS += -O2
+endif
+
+#
+# Augment the assembler and compiler flags based on the set of pre-defined
+# values.
+#
+ifdef DEFINES
+AFLAGS += $(patsubst %,-D%,$(DEFINES))
+CFLAGS += $(patsubst %,-D%,$(DEFINES))
+endif
+
+#
+# Augment the linker flags based on the read-only and read-write base, if
+# specified.
+#
+ifdef ROBASE
+LFLAGS += --defsym ROBASE=$(ROBASE)
+endif
+ifdef RWBASE
+LFLAGS += --defsym RWBASE=$(RWBASE)
+endif
+
+#
+# A rule to create a ROM image from the object files.
+#
+$(TARGET).rom: $(OBJS) $(LIBS) $(TARGET).lds
+	$(LD) $(LFLAGS) -T $(TARGET).lds -o $(TARGET).elf $(OBJS) $(LIBS)
+	$(NM) -n $(TARGET).elf | awk '$$2 != "a" {print}' > $(TARGET).map
+	$(OBJCOPY) -O binary $(TARGET).elf $@
+
+#
+# The default rule for generating an object file from an assembly source file.
+#
+.S.o:
+	$(CC) $(AFLAGS) -c $(<:.s=.S)
+
+endif
+
+#*****************************************************************************
+#
+# The following defines are for using ARM SDT 2.5.
+#
+#*****************************************************************************
+ifeq ($(CROSSTOOLS), sdt25)
+
+#
+# The names of the various tools.
+#
+AS = armasm
+CC = armcc
+LD = armlink
+FROMELF = fromelf
+
+#
+# The extension used for executables.
+#
+EXEEXT = axf
+
+#
+# The default set of flags for the assembler, compiler, and linker.
+#
+AFLAGS =
+CFLAGS = -MD -Wall -fz -Disallow_tentative_statics -zz0
+LFLAGS = -info size,total -map -noscanlib -remove
+
+#
+# Augment the assembler and compiler flags based on whether or not a DEBUG
+# version is being built.
+#
+ifdef DEBUG
+AFLAGS += -g
+CFLAGS += -g -zpdebug_inlines
+else
+CFLAGS += -O2 -Otime
+endif
+
+#
+# Augment the compiler flags based on the set of pre-defined values.
+#
+ifdef DEFINES
+CFLAGS += $(patsubst %,-D%,$(DEFINES))
+endif
+
+#
+# Augment the linker flags based on the read-only base, read-write base, and
+# first object, if specified.
+#
+ifdef ROBASE
+LFLAGS += -ro-base $(ROBASE)
+endif
+ifdef RWBASE
+LFLAGS += -rw-base $(RWBASE)
+endif
+ifdef FIRST
+LFLAGS += -first $(FIRST)
+endif
+
+#
+# Convert the names of the libraries from their GCC/Unix (.a) names to the
+# SDT/Windows (.alf) names.
+#
+SDT25LIBS = $(LIBS:.a=.alf)
+
+#
+# A rule to extract a ROM image from the executable.
+#
+$(TARGET).rom: $(OBJS) $(SDT25LIBS)
+ifneq ($(OBJS), )
+	@echo $(OBJS) > linker.via
+endif
+ifneq ($(SDT25LIBS), )
+	@echo $(SDT25LIBS) >> linker.via
+endif
+	$(LD) $(LFLAGS) -o $(TARGET).$(EXEEXT) -list $(TARGET).map \
+	  -via linker.via
+	@rm -f linker.via
+	$(FROMELF) -nozeropad $(TARGET).$(EXEEXT) -bin $@
+
+#
+# The default rule for generating an object file from an assembly source file.
+#
+.S.o:
+	@CC="$(CC)" CFLAGS="$(CFLAGS) -Dsdt25" AS="$(AS)" AFLAGS="$(AFLAGS)" \
+	 sh assemble.sh $<
+
+endif
+
+#*****************************************************************************
+#
+# The following defines are for using ARM ADS 1.0/1.1.
+#
+#*****************************************************************************
+ifeq ($(CROSSTOOLS), ads)
+
+#
+# The names of the various tools.
+#
+AS = armasm
+CC = armcc
+LD = armlink
+FROMELF = fromelf
+
+#
+# The extension used for executables.
+#
+EXEEXT = axf
+
+#
+# The default set of flags for the assembler, compiler, and linker.
+#
+AFLAGS =
+CFLAGS = -MD -Wall
+LFLAGS = -info sizes,totals -map -noscanlib -remove
+
+#
+# Augment the assembler and compiler flags based on whether or not a DEBUG
+# version is being built.
+#
+ifdef DEBUG
+AFLAGS += -g
+CFLAGS += -g
+else
+CFLAGS += -O2 -Otime
+endif
+
+#
+# Augment the compiler flags based on the set of pre-defined values.
+#
+ifdef DEFINES
+CFLAGS += $(patsubst %,-D%,$(DEFINES))
+endif
+
+#
+# Augment the linker flags based on the read-only base, read-write base, and
+# first object, if specified.
+#
+ifdef ROBASE
+LFLAGS += -ro-base $(ROBASE)
+endif
+ifdef RWBASE
+LFLAGS += -rw-base $(RWBASE)
+endif
+ifdef FIRST
+LFLAGS += -first $(FIRST)
+endif
+
+#
+# A rule to extract a ROM image from the executable.
+#
+$(TARGET).rom: $(OBJS) $(LIBS)
+ifneq ($(OBJS), )
+	@echo $(OBJS) > linker.via
+endif
+ifneq ($(LIBS), )
+	@echo $(LIBS) >> linker.via
+endif
+	$(LD) $(LFLAGS) -o $(TARGET).$(EXEEXT) -list $(TARGET).map \
+	  -via linker.via
+	@rm -f linker.via
+	$(FROMELF) -bin -o $@ $(TARGET).$(EXEEXT)
+
+#
+# The default rule for generating an object file from an assembly source file.
+#
+.S.o:
+	@CC="$(CC)" CFLAGS="$(CFLAGS) -Dads" AS="$(AS)" AFLAGS="$(AFLAGS)" \
+	 sh assemble.sh $<
+
+endif
+
+#*****************************************************************************
+#
+# The following defines are for using GCC to compile native code.
+#
+#*****************************************************************************
+ifeq ($(NATIVETOOLS), gcc)
+
+#
+# The names of the various tools.
+#
+NATIVECC = gcc -s
+
+#
+# The extension used for executables.
+#
+PROGEXT = $(shell $(NATIVECC) -dumpmachine | grep cygwin)
+ifneq ($(PROGEXT),)
+PROGEXT = .exe
+endif
+
+endif
+
+#*****************************************************************************
+#
+# The following defines are for using MSVC to compile native code.
+#
+#*****************************************************************************
+ifeq ($(NATIVETOOLS), msvc)
+
+#
+# The names of the various tools.
+#
+NATIVECC = cl -nologo
+
+#
+# The extension used for executables.
+#
+PROGEXT = .exe
+
+endif
+
+#*****************************************************************************
+#
+# The following are default rules that are used with any tool set.
+#
+#*****************************************************************************
+
+#
+# The default rule for generating an object file from a C source file.
+#
+.c.o:
+	$(CC) $(CFLAGS) -c $<
+
+#
+# Recursively executes make in each of the subdirectories.
+#
+ifdef DIRS
+.PHONY: $(DIRS)
+$(DIRS):
+	@$(MAKE) -C $@
+endif
+
+#
+# Clean out the source tree.
+#
+.PHONY: clean
+clean::
+ifdef DIRS
+	@for i in $(DIRS); do $(MAKE) -C $$i clean; done
+endif
+ifdef TARGET
+	@rm -f $(TARGET).$(EXEEXT) $(TARGET).rom $(TARGET).map
+endif
+	@rm -f $(wildcard *.o) $(wildcard *.obj) $(wildcard *~) \
+	   $(wildcard *.d)
+
+#*****************************************************************************
+#
+# The following are default dependencies.
+#
+#*****************************************************************************
+
+#
+# All of the objects depend upon the makefile and the files that it includes.
+#
+$(OBJS): Makefile makedefs
+
+#
+# Include the dependencies generated by the build.
+#
+-include $(wildcard *.d) __dummy__
