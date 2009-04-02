@@ -1,26 +1,26 @@
 //  BEGIN LICENSE BLOCK
-// 
+//
 //  Version: MPL 1.1
-// 
+//
 //  The contents of this file are subject to the Mozilla Public License Version
 //  1.1 (the "License"); you may not use this file except in compliance with
 //  the License. You may obtain a copy of the License at
 //  http://www.mozilla.org/MPL/
-// 
+//
 //  Software distributed under the License is distributed on an "AS IS" basis,
 //  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
 //  for the specific language governing rights and limitations under the
 //  License.
-// 
+//
 //  The Original Code is The Xport Software Distribution.
-// 
+//
 //  The Initial Developer of the Original Code is Charmed Labs LLC.
 //  Portions created by the Initial Developer are Copyright (C) 2003
 //  the Initial Developer. All Rights Reserved.
-// 
+//
 //  Contributor(s): Rich LeGrand (rich@charmedlabs.com)
-// 
-//  END LICENSE BLOCK 
+//
+//  END LICENSE BLOCK
 
 #include <stdio.h>
 #include "rcservo.h"
@@ -29,7 +29,21 @@ CRCServo::CRCServo(unsigned char num, unsigned long addr, bool enable) :
   //m_map(addr, 0x100)
   m_map(0x20000000, 0x1000)
 {
-  int i;
+  ::std::vector<RCServoConfig> rcServoConfigVector;
+  Init(rcServoConfigVector, num, addr, enable);
+}
+
+CRCServo::CRCServo(::std::vector<RCServoConfig> servoConfigs, unsigned char num, unsigned long addr, bool enable)
+:
+  //m_map(addr, 0x100)
+  m_map(0x20000000, 0x1000)
+{
+  Init(servoConfigs, num, addr, enable);
+}
+
+void CRCServo::Init(::std::vector<RCServoConfig> servoConfigs, unsigned char num, unsigned long addr, bool enable)
+{
+  unsigned int i;
 
   m_num = num;
   m_addr = (volatile unsigned short *)m_map.GetMap()+(addr>>1);
@@ -38,9 +52,20 @@ CRCServo::CRCServo(unsigned char num, unsigned long addr, bool enable) :
   m_shadowPos = new unsigned char[m_num];
   for (i=0; i<num; i++)
     {
-      m_boundLower[i] = 0x00;
-      m_boundUpper[i] = 0xff;
-      SetPosition(i, 0x80); // set to middle position
+      unsigned char minBound = 0x00;
+      unsigned char maxBound = 0xff;
+      unsigned char initialPosition = 0x80;
+
+      if (servoConfigs.size() >= i+1)
+      {
+        minBound = servoConfigs[i].minBound;
+        maxBound = servoConfigs[i].maxBound;
+        initialPosition = servoConfigs[i].initialPosition;
+      }
+      m_boundLower[i] = minBound;
+      m_boundUpper[i] = maxBound;
+      SetPosition(i, initialPosition);
+      printf("CRCServo::Init(): DEBUG: Initialized servo %2d with bounds [%3d,%3d] and initial position %3d\n",i,minBound,maxBound,initialPosition);
     }
   if (enable)
     Enable();
