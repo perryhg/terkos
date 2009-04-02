@@ -18,7 +18,7 @@ class CQEMotorRec
 {
 public:
   CQEMotorRec(unsigned long size=0, unsigned char axes=0, pthread_mutex_t *pMutex=NULL);
-  ~CQEMotorRec();
+  virtual ~CQEMotorRec();
 
   void Init(unsigned long size, unsigned char axes, pthread_mutex_t *pMutex);
   virtual void Record();

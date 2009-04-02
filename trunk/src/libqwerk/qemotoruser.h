@@ -18,7 +18,7 @@ class CQEMotorUser
 {
 public:
   CQEMotorUser(CQwerkHardware *pQwerk, int axis0, int axis1=-1, int axis2=-1, int axis3=-1);
-  ~CQEMotorUser();
+  virtual ~CQEMotorUser();
 
   unsigned int GetFrequency();
   int          SetFrequency(unsigned int freq);

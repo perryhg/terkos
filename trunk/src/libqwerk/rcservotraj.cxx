@@ -14,12 +14,12 @@ void *CRCServoTraj::TrajThread(void *arg)
 
   while(rcservo->s_threadRun)
     {
-      // wait for next trajectory to start 
+      // wait for next trajectory to start
       pthread_mutex_lock(&rcservo->s_mutex);
-      if (!rcservo->s_trajectory && !rcservo->s_velocityTrajectory) 
+      if (!rcservo->s_trajectory && !rcservo->s_velocityTrajectory)
 	pthread_cond_wait(&rcservo->s_cond, &rcservo->s_mutex);
       pthread_mutex_unlock(&rcservo->s_mutex);
-      
+
       // execute trajectory as long as one is active
       while(1)
 	{
@@ -44,8 +44,19 @@ void *CRCServoTraj::TrajThread(void *arg)
   return NULL;
 }
 
+CRCServoTraj::CRCServoTraj(::std::vector<RCServoConfig> servoConfigs, unsigned char num, unsigned long addr, bool enable) :
+  CRCServo(servoConfigs, num, addr, enable)
+{
+  Init(num, addr, enable);
+}
+
 CRCServoTraj::CRCServoTraj(unsigned char num, unsigned long addr, bool enable) :
   CRCServo(num, addr, enable)
+{
+  Init(num, addr, enable);
+}
+
+void CRCServoTraj::Init(unsigned char num, unsigned long addr, bool enable)
 {
 //  pthread_attr_t attr;
   pthread_mutexattr_t mattr;
@@ -66,8 +77,8 @@ CRCServoTraj::CRCServoTraj(unsigned char num, unsigned long addr, bool enable) :
 
   // initialize and set mutex as recursive
   pthread_mutexattr_init(&mattr);
-  pthread_mutexattr_settype(&mattr, PTHREAD_MUTEX_RECURSIVE_NP); 
-  pthread_mutex_init(&s_mutex, &mattr); 
+  pthread_mutexattr_settype(&mattr, PTHREAD_MUTEX_RECURSIVE_NP);
+  pthread_mutex_init(&s_mutex, &mattr);
 
   // initialize cond variable
   pthread_cond_init(&s_cond, NULL);
@@ -96,7 +107,7 @@ CRCServoTraj::~CRCServoTraj()
 {
   s_threadRun = false;
 
-  // signal thread 
+  // signal thread
   pthread_mutex_lock(&s_mutex);
   pthread_cond_signal(&s_cond);
   pthread_mutex_unlock(&s_mutex);
@@ -112,7 +123,7 @@ bool CRCServoTraj::Done(unsigned int servo)
   pthread_mutex_lock(&s_mutex);
   result = (s_trajectory&QES_BIT(servo))==0;
   pthread_mutex_unlock(&s_mutex);
-  
+
   sched_yield(); // yield cpu
 
   return result;
@@ -135,7 +146,7 @@ void CRCServoTraj::Stop(unsigned int servo)
  * @param velocity Speed at which to move (in ticks/s); sign ignored
  * @param absolute Whether endPosition is absolute
  */
-void CRCServoTraj::Move(unsigned int servo, int endPosition, 
+void CRCServoTraj::Move(unsigned int servo, int endPosition,
 			int velocity, bool absolute)
 {
   unsigned char pos;
@@ -169,13 +180,13 @@ void CRCServoTraj::Move(unsigned int servo, int endPosition,
     s_trajectoryVelocity[servo] = velocity;
   else
     s_trajectoryVelocity[servo] = -velocity;
-  
+
   s_trajectory |= QES_BIT(servo);
   s_velocityTrajectory &= ~QES_BIT(servo);
 
   gettimeofday(&s_startTime[servo], NULL);
 
-  // signal trajectory thread 
+  // signal trajectory thread
   pthread_cond_signal(&s_cond);
   pthread_mutex_unlock(&s_mutex);
 }
@@ -194,7 +205,7 @@ void CRCServoTraj::MoveVelocity(unsigned int servo,
 {
   if (servo >= s_operAxes)
     return;
- 
+
   pthread_mutex_lock(&s_mutex);
 
   s_trajectoryStartPosition[servo] = GetPosition(servo);
@@ -205,7 +216,7 @@ void CRCServoTraj::MoveVelocity(unsigned int servo,
 
   gettimeofday(&s_startTime[servo], NULL);
 
-  // signal trajectory thread 
+  // signal trajectory thread
   pthread_cond_signal(&s_cond);
   pthread_mutex_unlock(&s_mutex);
 }
@@ -221,7 +232,7 @@ void CRCServoTraj::ServoTrajectory()
   gettimeofday(&currtime, NULL);
 
   for (axis=0; axis<s_operAxes; axis++) {
-    if (!((s_trajectory & QES_BIT(axis)) || (s_velocityTrajectory & QES_BIT(axis)))) 
+    if (!((s_trajectory & QES_BIT(axis)) || (s_velocityTrajectory & QES_BIT(axis))))
       continue;
 
     TIMEVAL_SUB(&elapsed, &currtime, &s_startTime[axis]);

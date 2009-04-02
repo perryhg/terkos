@@ -12,6 +12,7 @@ class CRCServoTraj : public CRCServo
 {
 public:
   CRCServoTraj(unsigned char num=QES_DEFAULT_SERVOS, unsigned long addr=QES_DEFAULT_ADDR, bool enable=true);
+  CRCServoTraj(::std::vector<RCServoConfig> servoConfigs, unsigned char num=QES_DEFAULT_SERVOS, unsigned long addr=QES_DEFAULT_ADDR, bool enable=true);
   ~CRCServoTraj();
 
   bool Done(unsigned int servo);
@@ -24,7 +25,7 @@ public:
    * @param endPosition If absolute, final position; else, offset from current pos * @param velocity Speed at which to move (in ticks/s); sign ignored
    * @param absolute Whether endPosition is absolute
    */
-  void Move(unsigned int servo, int endPosition, 
+  void Move(unsigned int servo, int endPosition,
 	    int velocity, bool absolute=false);
   /**
    * Move a servo at a constant velocity
@@ -42,7 +43,7 @@ public:
   pthread_cond_t s_cond;
 
   void ServoTrajectory();
-  
+
 protected:
   pthread_t s_thread;
   unsigned char  s_operAxes;
@@ -54,6 +55,9 @@ protected:
   unsigned char s_trajectoryEndPosition[QES_DEFAULT_SERVOS];
   int s_trajectoryVelocity[QES_DEFAULT_SERVOS];
   struct timeval s_startTime[QES_DEFAULT_SERVOS];
+
+private:
+  void Init(unsigned char num, unsigned long addr, bool enable);
 };
 
 #endif
