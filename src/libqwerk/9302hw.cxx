@@ -1,12 +1,16 @@
 #include <stdio.h>
 #include "9302hw.h"
 
+C9302Hardware *C9302Hardware::m_p9302hw = NULL;
+int C9302Hardware::m_refCount = 0;
+
 C9302Hardware::C9302Hardware() :
   m_scr(0x80080000, 0x44),
   m_gpio(0x80840000, 0xca),
   m_syscon(0x80930000, 0xc4),
   m_fpga(0x20000000, 0x1000),
-  m_adc(0x80900000, 0x28)
+  m_adc(0x80900000, 0x28),
+  m_uart1(0x808c0000, 0x21c)
 {
   // set up A/D converter
   *m_syscon.Uint(0xc0) = 0xaa; // unlock
@@ -25,6 +29,24 @@ C9302Hardware::C9302Hardware() :
 
 C9302Hardware::~C9302Hardware()
 {
+}
+
+C9302Hardware *C9302Hardware::GetObject()
+{
+  if (m_p9302hw==NULL)
+    m_p9302hw = new C9302Hardware();
+  
+  m_refCount++;
+  return m_p9302hw;
+}
+
+void C9302Hardware::ReleaseObject()
+{
+  if (m_refCount)
+    m_refCount--;
+
+  if (m_refCount==0 && m_p9302hw!=NULL)
+    delete m_p9302hw;
 }
 
 unsigned short C9302Hardware::GetAD(unsigned int channel)
