@@ -13,6 +13,9 @@ public:
 
   unsigned short GetAD(unsigned int channel);
 
+  static C9302Hardware *GetObject();
+  static void ReleaseObject();
+
   inline void SetGreenLED(bool state)
   {
     *PortEData() = state ? *PortEData() |= 0x01 : *PortEData() &= ~0x01;
@@ -84,7 +87,11 @@ public:
   CMemMap m_syscon;
   CMemMap m_fpga;
   CMemMap m_adc;
+  CMemMap m_uart1;
 
+private:
+  static C9302Hardware *m_p9302hw;
+  static int m_refCount;
 };
 
 #endif
