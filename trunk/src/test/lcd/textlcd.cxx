@@ -49,15 +49,6 @@ int CTextLcd::printf(char *format, ...)
     PutByte(buf[i]);
 }
 
-void CTextLcd::SetBacklight(bool state)
-{
-  if (state)
-    *m_p9302hw->m_uart1.Uint(0x100) &= ~0x0001;
-  else
-    *m_p9302hw->m_uart1.Uint(0x100) |= 0x0001;
-
-}
-
 // RS eedat portg1
 // R/W egpio10 portb2
 // E egpio11 portb3
@@ -118,4 +109,54 @@ void CTextLcd::Delay(unsigned int us)
   
   us *= 10;
   for (i=0; i<us; i++);
+}
+
+int CTextLcd::GetProperty(int property, long *value)
+{
+  if (value==NULL)
+    return PROP_ERROR;
+
+  switch(property)
+    {
+    case TL_PROP_BACKLIGHT:
+      *value = *m_p9302hw->m_uart1.Uint(0x100) & 0x0001 ? 0 : 1;
+      break;
+
+    case TL_PROP_HEIGHT:
+      *value = TL_HEIGHT;
+      break;
+
+    case TL_PROP_WIDTH:
+      *value = TL_WIDTH;
+      break;
+
+    default:
+      return PROP_ERROR_NOT_SUPPORTED;
+    }
+
+  return PROP_OK;    
+}
+
+int CTextLcd::SetProperty(int property, long value)
+{
+  switch (property)
+    {
+    case TL_PROP_BACKLIGHT:
+      if (value)
+	*m_p9302hw->m_uart1.Uint(0x100) &= ~0x0001;
+      else
+	*m_p9302hw->m_uart1.Uint(0x100) |= 0x0001;
+      break;
+
+    case TL_PROP_HEIGHT:
+      return PROP_ERROR_READ_ONLY;
+
+    case TL_PROP_WIDTH:
+      return PROP_ERROR_READ_ONLY;
+
+    default:
+      return PROP_ERROR_NOT_SUPPORTED;
+    }
+
+  return PROP_OK;
 }
