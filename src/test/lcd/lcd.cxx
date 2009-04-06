@@ -18,8 +18,12 @@ int main(int argc, char **argv)
     }
 #endif
 #if 1
-  lcd.SetBacklight(true);
-  lcd.printf("Hello world!");
+  lcd.SetProperty(TL_PROP_BACKLIGHT, true);
+  lcd.MoveCursor(0, 0);
+  lcd.printf("Hello world %d", 1234);
+  sleep(3);
+  lcd.Clear();
+  lcd.SetProperty(TL_PROP_BACKLIGHT, false);
 #endif
 }
 
