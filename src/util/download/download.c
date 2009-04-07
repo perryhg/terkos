@@ -1031,8 +1031,8 @@ main(int argc, char *argv[])
     // Wait until we read a '<' from the serial port.
     //
         WaitFor('<');
-	//sleep(2);
-	//ReceiveChar(0);
+	sleep(2);
+	ReceiveChar(0);
 
     //
     // Tell the user that we are downloading the boot code.
