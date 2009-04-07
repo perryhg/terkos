@@ -2,15 +2,14 @@ set echo on
 set comecho on
 set senddelay 0.01
 open com "/dev/ttyUSB0"
-set com 57600n81
+set com 460800n81
 #
-print "Waiting for Qwerk to power on..."
-waitfor 100 "+"
+print "Waiting for VEXPro to power on..."
+waitfor 100 "VEXPro 0x0069"
 print "done^m^j"
 #
-print "Erasing flash..."
-waitfor 60 "available"
 send "^c^c^c"
+print "Erasing flash..."
 waitfor 5 "Redboot>"
 send "fis init -f^m"
 waitfor 5 "?"

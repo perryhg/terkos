@@ -7,13 +7,13 @@ CFLAGS = -Wall -g
 $(PROG): dcon.o ymodem.o system.o
 	$(CC) $(CFLAGS) -o $(PROG) dcon.o ymodem.o system.o
 
-firmware.dat:
+terkos.dat:
 	rm -f *~
 	rm -f *#
-	tar cvf ../firmware.dat *
+	tar cvf ../terkos.dat *
 
 fw:	
-	make firmware.dat -C firmware -f $(CURDIR)/Makefile
+	make terkos.dat -C firmware -f $(CURDIR)/Makefile
 
 clean:
 	$(RM) $(PROG)

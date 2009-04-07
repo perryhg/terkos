@@ -18,7 +18,7 @@
 extern unsigned char comecho;
 
 int getonebyte(void);
-void putonebyte(char c);
+inline void putonebyte(char c);
 
 
 int ymodem_getc(void)
