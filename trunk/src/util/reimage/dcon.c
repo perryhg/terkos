@@ -293,14 +293,10 @@ void writecom(char *text) {
   }
 }
 
-void putonebyte(char c) {
-  int res;
-  while(1) {
-    res = write(comfd, &c, 1);
-    if (res==1)
-      break;
-  }
+inline void putonebyte(char c) {
+  while(write(comfd, &c, 1)!=1);
 }
+
 /* Gets a single byte from comm. device.  Return -1 if none avail. */
 int getonebyte(void) {
   fd_set rfds;
@@ -1089,6 +1085,9 @@ void doset(void) {
       case 19200: speed = B19200;break;
       case 38400: speed = B38400;break;
       case 57600: speed = B57600;break;
+      case 115200: speed = B115200;break;
+      case 230400: speed = B230400;break;
+      case 460800: speed = B460800;break;
       default: serror("Invalid baudrate",1);
     }
     setcom();
@@ -1384,7 +1383,6 @@ int doscript(void) {
   char line[STRINGL];
 
   fileout = fopen(FILEOUTNAME, "w");
-
   pc=0;
   while(script[pc]) {
     if(script[pc]=='\n') pc++;
@@ -1565,7 +1563,7 @@ int main(int argc,char **argv) {
   unsigned char ch;
   unsigned char terminator='\n';
 
-  printf("\nq-upgrade -- the firmware utility for qwerk\n\n");
+  printf("\nreimage -- firmware utility for VEXPro\n\n");
 
   hstart=time(0);
   hset=htime();
