@@ -1,3 +1,14 @@
+For VEXPro do the following:
+
+1) Turn off VEXPro
+2) Install jumper J5
+3) Hook up console to USB port
+4) Run from this directory:
+./download -t 9302 -p1 ../../redboot/redboot.bin
+5) Turn on VEXPro
+6) Wait-- it should automatically upload and indicate success 
+7) Don't forget to remove jumper J5
+
 *******************************************************************************
 
 
