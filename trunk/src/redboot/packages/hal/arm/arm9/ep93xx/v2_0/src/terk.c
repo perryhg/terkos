@@ -1,4 +1,7 @@
 #include <cyg/hal/terk.h>
+#include <cyg/hal/textlcd.h>
+
+#include <cyg/infra/diag.h>             // diag_printf
 
 #include <pkgconf/system.h>
 #include <pkgconf/io_flash.h>
@@ -80,14 +83,18 @@ int flash_protect_write(int index, flash_t data)
 
 void terk_init(void)
 {
+    lcdInit();
+    lcdSetBacklight(1);
+    lcdPrint("Booting...");
+
     if (flash_protect_read(8)!=0xc1ab)
 	{
-		diag_printf("Programming protect bits...\n");
-	    flash_protect_write(7, 0x0025); // 32 Mb ram, 8 mb flash, 100K fpga
+	    diag_printf("Programming protect bits...\n");
+	    flash_protect_write(7, 0x0069); // 32 Mb ram, 16 mb flash, 100K fpga vexpro
 	    flash_protect_write(8, 0xc1ab);
-		// protect
+	    // protect
 	    flash_protect_write(0, 0xfffd);
-	}
+	}    
 }
 		
 
