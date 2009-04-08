@@ -172,7 +172,7 @@ void ymodem_send_data_blocks(const unsigned char* data, unsigned int size)
 	  blockno++;
 	  data += send_size;
 	  size -= send_size;
-	  if (blockno%30==0 && comecho)
+	  if (blockno%100==0 && comecho)
 	    {
 	      printf(".");
 	      fflush(stdout);
