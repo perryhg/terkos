@@ -631,6 +631,9 @@ net_init(void)
     flash_get_config("net_debug", &net_debug, CONFIG_BOOL);
     flash_get_config("gdb_port", &gdb_port, CONFIG_INT);
     flash_get_config("bootp", &use_bootp, CONFIG_BOOL);
+
+    use_bootp = false;
+
     if (!use_bootp)
     {
         flash_get_IP("bootp_my_ip", &__local_ip_addr);
