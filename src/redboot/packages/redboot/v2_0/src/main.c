@@ -190,7 +190,13 @@ cyg_start(void)
     int cur;
     struct init_tab_entry *init_entry;
     extern char RedBoot_version[];
+    volatile int d;
 
+#ifdef CYGHWR_HAL_ARM_EDB93XX_BOARD_VARIANT_EDB9302
+    // delay for double reset of Qwerk/VEXPro
+    for (d=0; d<10000000; d++);
+#endif
+    
     // Export version information
     CYGACC_CALL_IF_MONITOR_VERSION_SET(RedBoot_version);
 

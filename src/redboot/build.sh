@@ -3,7 +3,7 @@
 # will capture all output into the log file, and allow informational messages
 # to be displayed during the build via "echo {blah} >&3".
 #
-exec 3>&1 > edb9302.log 2>&1
+exec 3>&1 > build.log 2>&1
 
 #
 # Get the rules for building the various packages.

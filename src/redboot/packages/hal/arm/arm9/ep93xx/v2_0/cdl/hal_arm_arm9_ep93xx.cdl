@@ -49,7 +49,7 @@ cdl_package CYGPKG_HAL_ARM_ARM9_EP93XX {
     description   "This HAL platform package provides generic
         support for the Cirrus Logic EP93xx based boards."
 
-    compile       ep93xx_misc.c hal_diag.c terk.c
+    compile       ep93xx_misc.c hal_diag.c terk.c textlcd.c
 
     implements    CYGINT_HAL_DEBUG_GDB_STUBS
     implements    CYGINT_HAL_DEBUG_GDB_STUBS_BREAK
@@ -114,7 +114,7 @@ cdl_package CYGPKG_HAL_ARM_ARM9_EP93XX {
             puts $::cdl_header "#endif //CYGHWR_HAL_ARM_EDB93XX_BOARD_VARIANT_EDB9301"
             puts $::cdl_header ""
             puts $::cdl_header "#ifdef CYGHWR_HAL_ARM_EDB93XX_BOARD_VARIANT_EDB9302"
-            puts $::cdl_header "#define HAL_PLATFORM_BOARD  \"Cirrus Logic EDB9302 Board\""
+            puts $::cdl_header "#define HAL_PLATFORM_BOARD  \"VEXPro 0x0069 Robot Controller\""
             puts $::cdl_header "#define HAL_PLATFORM_EXTRA  \"Rev A\""
             puts $::cdl_header "#define HAL_PLATFORM_EP9302"
             puts $::cdl_header "#define HAL_PLATFORM_MACHINE_TYPE  538"
@@ -263,8 +263,8 @@ cdl_package CYGPKG_HAL_ARM_ARM9_EP93XX {
     cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_CONSOLE_CHANNEL_BAUD {
         display       "Diagnostic serial port baud rate"
         flavor        data
-        legal_values  9600 19200 38400 57600 115200
-        default_value 57600
+        legal_values  9600 19200 38400 57600 115200 230400 460800
+        default_value 460800
         description   "
             This option selects the baud rate used for the diagnostic port.
             Note: this should match the value chosen for the GDB port if the
