@@ -1,0 +1,3300 @@
+#******************************************************************************
+#
+# buildrules - Procedures to build the various packages that make up the Linux
+#              kernel and ramdisk.
+#
+# Copyright (c) 2004 Cirrus Logic, Inc.
+#
+#******************************************************************************
+
+#
+# ALSA is the location from which the alsa packages are fetched if it 
+#  does not exist
+#
+ALSA=http://arm.cirrus.com/files/linux/packages
+
+#
+# BUSYBOX is the location from which busybox is fetched if it does not exist.
+#
+BUSYBOX=http://arm.cirrus.com/files/linux/packages
+
+#
+# DEBIAN is the location from which the mtd utils are fetched if it does not exist.
+#
+DEBIAN=http://arm.cirrus.com/files/linux/packages
+
+#
+# ECOS is the location of the RedHat mirror to be used for fetching the eCos
+# source.
+#
+ECOS=http://arm.cirrus.com/files/linux/packages
+
+#
+# GNU is the location of the GNU mirror to be used for fetching GNU package
+# source.
+#
+GNU=http://arm.cirrus.com/files/linux/packages
+
+#
+# JPEG is the location from which the jpeg source tarball is fetched if it does
+# not exist.
+#
+JPEG=http://arm.cirrus.com/files/linux/packages
+
+#
+# KERNEL is the location from which the Linux source tarball is fetched if it
+# does not exist.
+#
+KERNEL=http://arm.cirrus.com/files/linux/packages
+
+#
+# PCAP is the location from which the libpcap source tarball is fetched if it
+# does not exist.
+#
+PCAP=http://arm.cirrus.com/files/linux/packages
+
+#
+# OPIE is the location from which the OPIE source tarball is fetched if it does not
+# exist.
+#
+OPIE=http://arm.cirrus.com/files/linux/packages
+
+#
+# QT is the location from which the Qt source tarball is fetched if it does not
+# exist.
+#
+QT=http://arm.cirrus.com/files/linux/packages
+
+#
+# SOURCEFORGE is the location of the SourceForge mirror to be used for fetching
+# SourceForge package source.
+#
+SOURCEFORGE=http://arm.cirrus.com/files/linux/packages
+
+#
+# uClibc is the location where the uClibc library is located
+#
+UCLIBC=http://arm.cirrus.com/files/linux/packages
+
+#
+# WIRELESS is the location from which the wireless tools source tarball is
+# fetched if it does not exist.
+#
+WIRELESS=http://arm.cirrus.com/files/linux/packages
+
+#
+# WLAN_NG is the location from which the wireless LAN next generation tools
+# source tarball is fetched if it does not exist.
+#
+WLAN_NG=http://arm.cirrus.com/files/linux/packages
+
+#
+# ZLIB is the location from which the zlib source tarball is fetched if it does
+# not exist.
+#
+ZLIB=http://arm.cirrus.com/files/linux/packages
+
+#******************************************************************************
+#
+# Bail out because of an error.
+#
+#******************************************************************************
+failure ()
+{
+    #
+    # Indicate that an error occurred.
+    #
+    echo Build step failed! >&3
+
+    #
+    # Exit with a failure return code.
+    #
+    exit 1
+}
+
+#******************************************************************************
+#
+# Execute a command with error checking.  Note that when using this, if a piped
+# command is used, the '|' must be escaped with '\' when calling try (i.e.
+# "try ls \| less").
+#
+#******************************************************************************
+try ()
+{
+    #
+    # Execute the command and fail if it does not return zero.
+    #
+    eval ${*} || failure
+}
+
+#******************************************************************************
+#
+# Check an argument to make sure it was specified and is an absolute path.
+#
+#******************************************************************************
+check_absolute ()
+{
+    #
+    # Make sure that the argument was specified.
+    #
+    if [ x${3} = x ]
+    then
+        echo ${1}: the ${2} must be specified! >&3
+        exit 1
+    fi
+
+    #
+    # Make sure that the argument was specified as an absolute path.
+    #
+    if [ `echo ${3} | cut -c1` != / ]
+    then
+        echo ${1}: the ${2} must be absolute! >&3
+        exit 1
+    fi
+}
+
+#******************************************************************************
+#
+# Fetches a tarball with wget if it does not already exist in the local cache.
+#
+#******************************************************************************
+fetch_tarball ()
+{
+    #
+    # See if the tarball exists.
+    #
+    if [ ! -f tarballs/${2} ]
+    then
+        #
+        # Fetch the tarball since it does not exist.
+        #
+        echo Fetching ${2}... >&3
+        try mkdir -p tarballs
+        try pushd tarballs
+        try wget ${1}/${2}
+        try popd
+    fi
+}
+
+#******************************************************************************
+#
+# Clones a source tree, using symbolic links.
+#
+#******************************************************************************
+clone_tree ()
+{
+    #
+    # Remove the destination tree if it already exists.
+    #
+    try rm -rf ${2}
+
+    #
+    # Switch into the source tree.
+    #
+    try pushd ${1}
+
+    #
+    # Create directories to match the source tree.
+    #
+    try find . -path '\*CVS' -prune -o -type d -exec mkdir -p ${2}/{} \\\;
+
+    #
+    # Create symlinks for each file in the source tree.
+    #
+    try find . -path '\*CVS' -prune -o -type f -exec ln -s ${1}/{} ${2}/{} \\\;
+
+    #
+    # Create symlinks for each symlink in the source tree.
+    #
+    try find . -path '\*CVS' -prune -o -type l -exec ln -s ${1}/{} ${2}/{} \\\;
+
+    #
+    # Return to the original directory.
+    #
+    try popd
+}
+
+#******************************************************************************
+#
+# Creates the compulsory and recommended symlinks in the /dev directory of the
+# target root filesystem.  See linux-2.4.21/Documentation/devices.txt for more
+# information.
+#
+#******************************************************************************
+create_standard_links ()
+{
+    #
+    # Check the output directory argument.
+    #
+    check_absolute create_standard_links 'output directory' ${1}
+
+    #
+    # Create the /dev directory if it does not already exist.
+    #
+    try mkdir -p ${1}/dev
+
+    #
+    # Create the compulsory symlinks.
+    #
+    try ln -sf /proc/self/fd ${1}/dev/fd
+    try ln -sf fd/0 ${1}/dev/stdin
+    try ln -sf fd/1 ${1}/dev/stdout
+    try ln -sf fd/2 ${1}/dev/stderr
+    try ln -sf socksys ${1}/dev/nfsd
+    try ln -sf null ${1}/dev/X0R
+
+    #
+    # Create the appropriate recommended symlinks.
+    #
+    try ln -sf /proc/kcore ${1}/dev/core
+    try ln -sf ram0 ${1}/dev/ramdisk
+}
+
+#*****************************************************************************
+#
+# Build the Alsa libs and tools
+#
+# Uses:
+#     ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.0.9.tar.bz2
+#     ftp://ftp.alsa-project.org/pub/utils/alsa-utils-1.0.9.tar.bz2
+#
+#*****************************************************************************
+build_alsa ()
+{
+    #
+    # Check the output directory argument
+    #
+    check_absolute build_alsa 'output directory' ${1}
+
+    dir=${1}
+    shift   
+
+    #
+    # Switch to the base directory.
+    #
+    try pushd ${BASEDIR}
+
+    #
+    # Fetch the alsa tarballs.
+    #
+    fetch_tarball ${ALSA} alsa-lib-1.0.9.tar.bz2
+    fetch_tarball ${ALSA} alsa-utils-1.0.9.tar.bz2
+    #
+    # See if the alsa-lib/alsa-utils source has been unpacked.
+    #
+    if [ ! -d ${BASEDIR}/alsa-lib-1.0.9 ]
+    then
+        
+    #
+        # Unpack the alsa tarballs.
+        #
+        echo Unpacking alsa-lib... >&3
+        try tar -xjf tarballs/alsa-lib-1.0.9.tar.bz2
+    try tar -xjf tarballs/alsa-utils-1.0.9.tar.bz2
+    fi
+
+    #
+    # Switch into the alsa-lib directory.
+    #
+    try cd alsa-lib-1.0.9
+
+    #
+    # Build alsa-lib.
+    #
+    if [ ! -f Makefile ]
+    then
+        
+    echo Configuring Alsa-lib... >&3
+    try ./configure --host=arm-linux \
+        --build=i686-gnu-linux \
+        --enable-shared=yes \
+        --with-softfloat \
+        --with-versioned=no
+
+    echo Building alsa-lib... >&3
+        try make
+        
+    fi
+
+    #
+    # Install the config file.
+    #
+    echo Installing Alsa-conf... >&3
+    try mkdir -p ${dir}/usr/share/alsa
+    try mkdir -p ${dir}/usr/share/alsa/cards
+    try mkdir -p ${dir}/usr/share/alsa/pcm
+    try cp -dpR src/conf/alsa.conf ${dir}/usr/share/alsa
+    try cp -dpR src/conf/sndo-mixer.alisp ${dir}/usr/share/alsa
+    try cp -dpR src/conf/cards/*.conf ${dir}/usr/share/alsa/cards
+    try cp -dpR src/conf/pcm/*.conf ${dir}/usr/share/alsa/pcm
+    try cp -dpR src/.libs/libasound.so* ${dir}/lib
+    try cp -dpR src/libasound.la ${dir}/lib
+    try arm-linux-uclibc-strip ${dir}/lib/libasound.so.2.0.0
+
+    #
+    # Switch into the BASEDIR directory.
+    #
+    try popd 
+    try pushd ${BASEDIR}
+    #
+    # Patch the alsa-utils source.
+    #
+    if [ ! -f alsa-utils-1.0.9/.patched ]
+    then
+        #
+        # Patch the alsa-utils source.
+        #
+        echo Patching alsa-utils... >&3
+        try bzcat patches/alsa-utils-rint.patch.bz2 2\>\&1 \| \
+        patch -p1 -E -f -d alsa-utils-1.0.9
+	try bzcat patches/alsa-utils-aplay.patch.bz2 2\>\&1 \| \
+	patch -p1 -E -f -d alsa-utils-1.0.9
+    try touch alsa-utils-1.0.9/.patched
+   fi
+
+    try cd alsa-utils-1.0.9
+
+    #
+    # Build alsa-utils.
+    #
+    if [ ! -f Makefile ]
+    then
+           
+    echo Configuring Alsa-utils... >&3
+        
+    try ./configure CC=arm-linux-gcc \
+        CFLAGS=-msoft-float             \
+        LDFLAGS=-lm                 \
+        --build=arm-linux               \
+        --host=i686-gnu-linux               \
+        --prefix=${dir}                 \
+        --without-libintl-prefix            \
+        --without-libiconv-prefix           \
+        --with-alsa-inc-prefix=${BASEDIR}/alsa-lib-1.0.9/include/   \
+        --with-alsa-prefix=${BASEDIR}/alsa-lib-1.0.9/src/.libs/     \
+        --disable-alsatest              \
+        --disable-alsamixer                 \
+        --disable-nls 
+
+        echo Building alsa-utils... >&3
+        try make CC=arm-linux-gcc
+
+    fi
+
+    #
+    # Install alsa-utils.
+    #
+    echo Installing Alsa-utils... >&3
+    try cp -dpR aplay/aplay ${dir}/usr/bin
+    try cp -dpR amixer/amixer ${dir}/usr/bin
+    try ln -s aplay ${dir}/usr/bin/arecord    
+    try cp speaker-test/samples/Noise.wav ${dir}
+
+    #
+    # Switch back to the original directory
+    #
+    try popd
+
+}
+
+
+#******************************************************************************
+#
+# Build busybox for the target.
+#
+# Uses:
+#     http://www.busybox.net/downloads/busybox-1.00.tar.bz2
+#
+#******************************************************************************
+build_busybox ()
+{
+    #
+    # Check the output directory argument.
+    #
+    check_absolute build_busybox 'output directory' ${1}
+
+    #
+    # Check the configuration file argument.
+    #
+    check_absolute build_busybox 'configuration file' ${2}
+
+    #
+    # See if the busybox source has been unpacked.
+    #
+    if [ ! -d ${BASEDIR}/busybox-1.00 ]
+    then
+        #
+        # Switch to the base directory.
+        #
+        try pushd ${BASEDIR}
+
+        #
+        # Fetch the busybox tarball.
+        #
+        fetch_tarball ${BUSYBOX} busybox-1.00.tar.bz2
+
+        #
+        # Unpack the busybox tarball.
+        #
+        echo Unpacking busybox... >&3
+        try tar -xjf tarballs/busybox-1.00.tar.bz2
+
+        #
+        # Patch the busybox source.
+        #
+        echo Patching busybox... >&3
+        try bzcat patches/busybox-1.00.patch.bz2 2\>\&1 \| \
+            patch -p1 -E -d busybox-1.00
+
+        #
+        # Switch back to the original directory.
+        #
+        try popd
+    fi
+
+    #
+    # See if the busybox object directory needs to be created.
+    #
+    if [ ! -f .do_not_edit/busybox-1.00/Makefile ]
+    then
+        #
+        # Create the busybox clone directory.
+        #
+        echo Creating busybox source tree... >&3
+        try mkdir -p .do_not_edit/busybox-1.00
+        try make O=`pwd`/.do_not_edit/busybox-1.00 -C ../busybox-1.00 Makefile
+    fi
+
+    #
+    # Switch into the busybox directory.
+    #
+    try pushd .do_not_edit/busybox-1.00
+
+    #
+    # See if the configuration file is different than the current one.
+    #
+    cmp -s ${2} .config
+    if [ $? != 0 ]
+    then
+        #
+        # Copy the configuration file and configure busybox.
+        #
+        try cp ${2} .config
+        try yes n \| make oldconfig
+        try make clean
+    fi
+
+    #
+    # See if busybox should be configured.
+    #
+    if [ "${3}" = "config" ]
+    then
+        #
+        # Perform the interactive busybox configuration.
+        #
+        make menuconfig < /dev/tty > /dev/tty 2>&1
+        try make oldconfig
+
+        #
+        # If the busybox configuration has changed, then copy it back to the
+        # original location.
+        #
+        cmp -s .config ${2}
+        if [ $? != 0 ]
+        then
+            try cp .config ${2}
+        fi
+
+        #
+        # Erase the busybox executable so that we'll be sure to re-build it.
+        #
+        try rm -f busybox
+    else
+        #
+        # See if busybox needs to be built.
+        #
+        if [ ! -f busybox ]
+        then
+            #
+            # Build busybox.
+            #
+            echo Building busybox... >&3
+            try CROSS=arm-linux-uclibc- CC=arm-linux-uclibc-gcc make
+        fi
+
+        #
+        # Install busybox.
+        #
+        echo Installing busybox... >&3
+        try make PREFIX=${1} install
+    fi
+
+    #
+    # Switch back to the original directory.
+    #
+    try popd
+}
+
+#******************************************************************************
+#
+# Build dosfstools for the target.
+#
+# Uses:
+#     http://ftp.debian.org/debian/pool/main/d/dosfstools/
+#         dosfstools_2.10.orig.tar.gz
+#
+#******************************************************************************
+build_dosfstools ()
+{
+    #
+    # Check the output directory argument.
+    #
+    check_absolute build_dosfstools 'output directory' ${1}
+
+    #
+    # Switch to the base directory.
+    #
+    try pushd ${BASEDIR}
+
+    #
+    # Fetch the dosfstools tarball.
+    #
+    #fetch_tarball ${DEBIAN} dosfstools_2.10.orig.tar.gz
+
+    #
+    # See if the dosfstools source has been unpacked.
+    #
+    if [ ! -d dosfstools-2.10 ]
+    then
+        #
+        # Unpack the dosfstools tarball.
+        #
+        echo Unpacking dosfstools... >&3
+        try tar -xzf tarballs/dosfstools_2.10.orig.tar.gz
+    fi
+
+    #
+    # See if the dosfstools source has been patched.
+    #
+    if [ ! -f dosfstools-2.10/.patched ]
+    then
+        #
+        # Patch the dosfstools source.
+        #
+        echo Patching dosfstools... >&3
+        try bzcat patches/dosfstools-2.10.patch.bz2 2\>\&1 \| \
+            patch -p1 -E -d dosfstools-2.10
+        try touch dosfstools-2.10/.patched
+    fi
+
+    #
+    # Switch into the dosfstools directory.
+    #
+    try cd dosfstools-2.10
+
+    #
+    # See if dosfstools has been built.
+    #
+    if [ ! -f .built ]
+    then
+        #
+        # Build dosfstools.
+        #
+        echo Building dosfstools... >&3
+        try make CC=arm-linux-uclibc-gcc
+        try touch .built
+    fi
+
+    #
+    # Install dosfstools.
+    #
+    echo Installing dosfstools... >&3
+    try mkdir -p ${1}/sbin
+    try cp mkdosfs/mkdosfs ${1}/sbin
+    try arm-linux-strip ${1}/sbin/mkdosfs
+    try ln -sf mkdosfs ${1}/sbin/mkfs.msdos
+    try ln -sf mkdosfs ${1}/sbin/mkfs.vfat
+    try cp dosfsck/dosfsck ${1}/sbin
+    try arm-linux-strip ${1}/sbin/dosfsck
+    try ln -sf dosfsck ${1}/sbin/fsck.msdos
+    try ln -sf dosfsck ${1}/sbin/fsck.vfat
+
+    #
+    # Switch back to the original directory.
+    #
+    try popd
+}
+
+#******************************************************************************
+#
+# Build e2fsprogs for the target.
+#
+# Uses:
+#     http://easynews.dl.sourceforge.net/sourceforge/e2fsprogs/
+#         e2fsprogs-1.34.tar.gz
+#
+#******************************************************************************
+build_e2fsprogs ()
+{
+    #
+    # Check the output directory argument.
+    #
+    check_absolute build_e2fsprogs 'output directory' ${1}
+
+    #
+    # Save the output directory.
+    #
+    dir=${1}
+    shift
+
+    #
+    # Make sure that at least one application was specified.
+    #
+    if [ ${#} = 0 ]
+    then
+        echo build_e2fsprogs: must specify apps to install! >&3
+        exit 1
+    fi
+
+    #
+    # Switch to the base directory.
+    #
+    try pushd ${BASEDIR}
+
+    #
+    # Fetch the e2fsprogs tarball.
+    #
+    #fetch_tarball ${SOURCEFORGE} e2fsprogs-1.34.tar.gz
+
+    #
+    # See if the e2fsprogs source has been unpacked.
+    #
+    if [ ! -d e2fsprogs-1.34 ]
+    then
+        #
+        # Unpack the e2fsprogs tarball.
+        #
+        echo Unpacking e2fsprogs... >&3
+        try tar -xzf tarballs/e2fsprogs-1.34.tar.gz
+        try chmod +w e2fsprogs-1.34/po/*
+    fi
+
+    #
+    # See if a build directory has been created.
+    #
+    if [ ! -d e2fsprogs-1.34/build ]
+    then
+        #
+        # Create a build directory.
+        #
+        try mkdir e2fsprogs-1.34/build
+    fi
+
+    #
+    # Switch into the e2fsprogs build directory.
+    #
+    try cd e2fsprogs-1.34/build
+
+    #
+    # See if e2fsprogs has been configured.
+    #
+    if [ ! -f Makefile ]
+    then
+        #
+        # Configure e2fsprogs.
+        #
+        echo Configuring e2fsprogs... >&3
+        try CC=arm-linux-gcc        \
+            CFLAGS=-O2              \
+            RANLIB=arm-linux-ranlib \
+            STRIP=arm-linux-strip   \
+            MSGFMT=/usr/bin/msgfmt  \
+            GMSGFMT=/usr/bin/msgfmt \
+            ../configure
+    fi
+
+    #
+    # See if e2fsprogs has been built.
+    #
+    if [ ! -f .built ]
+    then
+        #
+        # Build e2fsprogs.
+        #
+        echo Building e2fsprogs... >&3
+        try make
+        try touch .built
+    fi
+
+    #
+    # Install the requested applications.
+    #
+    echo Installing e2fsprogs... >&3
+    while :
+    do
+        #
+        # See if there are more applications to install.
+        #
+        if [ ${#} = 0 ]
+        then
+            #
+            # There are no more applications to install.
+            #
+            break
+        fi
+
+        #
+        # See which application should be installed.
+        #
+        case ${1} in
+            #
+            # The badblocks application.
+            #
+            badblocks)
+                pos=${dir}/sbin
+                src=misc/badblocks
+                dst=${pos}/badblocks
+                ;;
+
+            #
+            # The blkid application.
+            #
+            blkid)
+                pos=${dir}/sbin
+                src=misc/blkid
+                dst=${pos}/blkid
+                ;;
+
+            #
+            # The chattr application.
+            #
+            chattr)
+                pos=${dir}/usr/bin
+                src=misc/chattr
+                dst=${pos}/chattr
+                ;;
+
+            #
+            # The debugfs application.
+            #
+            debugfs)
+                pos=${dir}/sbin
+                src=debugfs/debugfs
+                dst=${pos}/debugfs
+                ;;
+
+            #
+            # The dumpe2fs application.
+            #
+            dumpe2fs)
+                pos=${dir}/sbin
+                src=misc/dumpe2fs
+                dst=${pos}/dumpe2fs
+                ;;
+
+            #
+            # The e2fsck application linked with shared libraries.
+            #
+            e2fsck.shared)
+                pos=${dir}/sbin
+                src=e2fsck/e2fsck.shared
+                dst=${pos}/e2fsck
+                ;;
+
+            #
+            # The e2fsck application statically linked.
+            #
+            e2fsck.static)
+                pos=${dir}/sbin
+                src=e2fsck/e2fsck.static
+                dst=${pos}/e2fsck
+                ;;
+
+            #
+            # The e2image application.
+            #
+            e2image)
+                pos=${dir}/sbin
+                src=misc/e2image
+                dst=${pos}/e2image
+                ;;
+
+            #
+            # The fsck application.
+            #
+            fsck)
+                pos=${dir}/sbin
+                src=misc/fsck
+                dst=${pos}/fsck
+                ;;
+
+            #
+            # The logsave application.
+            #
+            logsave)
+                pos=${dir}/sbin
+                src=misc/logsave
+                dst=${pos}/logsave
+                ;;
+
+            #
+            # The lsattr application.
+            #
+            lsattr)
+                pos=${dir}/usr/bin
+                src=misc/lsattr
+                dst=${pos}/lsattr
+                ;;
+
+            #
+            # The mke2fs application.
+            #
+            mke2fs)
+                pos=${dir}/sbin
+                src=misc/mke2fs
+                dst=${pos}/mke2fs
+                ;;
+
+            #
+            # The mklost+found application.
+            #
+            mklost+found)
+                pos=${dir}/usr/sbin
+                src=misc/mklost+found
+                dst=${pos}/mklost+found
+                ;;
+
+            #
+            # The resize2fs application.
+            #
+            resize2fs)
+                pos=${dir}/sbin
+                src=resize/resize2fs
+                dst=${pos}/resize2fs
+                ;;
+
+            #
+            # The tune2fs application.
+            #
+            tune2fs)
+                pos=${dir}/sbin
+                src=misc/tune2fs
+                dst=${pos}/tune2fs
+                ;;
+
+            #
+            # The uuidgen application.
+            #
+            uuidgen)
+                pos=${dir}/usr/bin
+                src=misc/uuidgen
+                dst=${pos}/uuidgen
+                ;;
+        esac
+
+        #
+        # Create the appropriate directory, copy the application, and strip it.
+        #
+        try mkdir -p ${pos}
+        try cp ${src} ${dst}
+        try arm-linux-strip ${dst}
+
+        #
+        # Create additional links for e2fsck.
+        #
+        if [ ${1} = e2fsck.shared -o ${1} = e2fsck.static ]
+        then
+            try ln -sf e2fsck ${pos}/fsck.ext2
+            try ln -sf e2fsck ${pos}/fsck.ext3
+        fi
+
+        #
+        # Create additional links for mke2fs.
+        #
+        if [ ${1} = mke2fs ]
+        then
+            try ln -sf mke2fs ${pos}/mkfs.ext2
+            try ln -sf mke2fs ${pos}/mkfs.ext3
+        fi
+
+        #
+        # Create additional links for tune2fs.
+        #
+        if [ ${1} = tune2fs ]
+        then
+            try ln -sf tune2fs ${pos}/e2label
+            try ln -sf tune2fs ${pos}/findfs
+        fi
+
+        #
+        # Advance to the next application.
+        #
+        shift
+    done
+
+    #
+    # Switch back to the original directory.
+    #
+    try popd
+}
+
+#******************************************************************************
+#
+# Build gdbserver for the target.
+#
+# Uses:
+#     ftp://ftp.gnu.org/gnu/gdb/gdb-5.3.tar.gz
+#
+#******************************************************************************
+build_gdbserver ()
+{
+    #
+    # Check the output directory argument.
+    #
+    check_absolute build_gdbserver 'output directory' ${1}
+
+    #
+    # Switch to the base directory.
+    #
+    try pushd ${BASEDIR}
+
+    #
+    # Fetch the gdb tarball.
+    #
+    #fetch_tarball ${GNU} gdb-5.3.tar.gz
+
+    #
+    # See if the gdb source has been unpacked.
+    #
+    #if [ ! -d gdb-6.3 ]
+    #then
+    #    #
+    #    # Unpack the gdb tarball.
+    #    #
+    #    echo Unpacking gdb... >&3
+    #    try tar -xzf tarballs/gdb-5.3.tar.gz
+    #fi
+
+    #
+    # See if a build directory has been created.
+    #
+    if [ ! -d gdb-6.3/build ]
+    then
+        #
+        # Create a build directory.
+        #
+        try mkdir gdb-6.3/build
+    fi
+
+    #
+    # Switch into the gdbserver build directory.
+    #
+    try cd gdb-6.3/build
+
+    #
+    # See if gdbserver has been configured.
+    #
+    if [ ! -f Makefile ]
+    then
+        #
+        # Configure gdbserver.
+        #
+        echo Configuring gdbserver... >&3
+        try CC=arm-linux-gcc                                 \
+            CFLAGS=-O2                                       \
+            CXXFLAGS=-O2                                     \
+            sh ../gdb/gdbserver/configure --target=arm-linux \
+                                          --prefix=/
+    fi
+
+    #
+    # See if gdbserver has been built.
+    #
+    if [ ! -f .built ]
+    then
+        #
+        # Build gdbserver.
+        #
+        echo Building gdbserver... >&3
+        try make
+        try touch .built
+    fi
+
+    #
+    # Install gdbserver.
+    #
+    echo Installing gdbserver... >&3
+    try mkdir -p ${1}/bin
+    try cp gdbserver ${1}/bin
+    try arm-linux-strip ${1}/bin/gdbserver
+
+    #
+    # Switch back to the original directory.
+    #
+    try popd
+}
+
+#******************************************************************************
+#
+# Build uClibc for the target.
+#
+# Uses:
+#   http://www.uclibc.org/downloads/uClibc-0.9.27        
+#
+#******************************************************************************
+build_uclibc ()
+{
+    
+    #
+    # Check the output directory argument.
+    #
+    check_absolute build_uclibc 'output directory' ${1}
+
+    #
+    # Save the output directory.
+    #
+    dir=${1}
+    shift
+
+    #
+    # Switch to the base directory.
+    #
+    try pushd ${BASEDIR}
+
+    #
+    # Fetch the uclibc tarball.
+    #
+    #fetch_tarball ${UCLIBC} uClibc-0.9.27.tar.gz
+
+    #
+    # See if the uClibc source has been unpacked.
+    #
+    if [ ! -d uClibc-0.9.27 ]
+    then
+        #
+        # Unpack the uClibc tarball.
+        #
+        echo Unpacking uClibc... >&3
+        try tar -xzf tarballs/uClibc-0.9.27.tar.gz
+    fi
+
+    if [ ! -f uClibc-0.9.27/.built ]
+    then
+    try cd linux-2.6.8.1
+        try make edb9315_defconfig
+    try make
+        try cd ../
+    fi
+
+    #
+    # Switch into the uclibc build directory.
+    #
+    #try pushd ${BASEDIR}
+    try cd uClibc-0.9.27
+   
+    #
+    # Configure uClibc.
+    #
+    try cp ${BASEDIR}/configs/uclibc.config .config
+    echo Configuring uClibc... >&3
+    make oldconfig      
+    echo Building uClibc... >&3
+    try CROSS=arm-linux- \
+        CC=arm-linux-gcc \
+        BASEDIR=${BASEDIR} \
+        make
+    echo Installing uClibc... >&3
+    try make PREFIX=${dir} install
+    try rm -Rf ${dir}/include
+    try cp -dpR /usr/local/arm/3.4/lib/libgcc_s* ${dir}/lib
+    try cp -dpR /usr/local/arm/3.4/lib/libstdc++.so* ${dir}/lib
+    try arm-linux-strip ${dir}/lib/libstdc++.so.6.0.3
+    try touch .built    
+    #
+    # Switch back to the original directory.
+    #
+    try popd
+}
+
+#******************************************************************************
+#
+# Build the JPEG library.
+#
+# Uses:
+#     http://www.ijg.org/files/jpegsrc.v6b.tar.gz
+#
+#******************************************************************************
+build_libjpeg()
+{
+    #
+    # Check the output directory argument.
+    #
+    check_absolute build_libjpeg 'output directory' ${1}
+
+    #
+    # Switch to the base directory.
+    #
+    try pushd ${BASEDIR}
+
+    #
+    # Fetch the libjpeg tarball.
+    #
+    fetch_tarball ${JPEG} jpegsrc.v6b.tar.gz
+
+    #
+    # See if the libjpeg source has been unpacked.
+    #
+    if [ ! -d jpeg-6b ]
+    then
+        #
+        # Unpack the libjpeg tarball.
+        #
+        echo Unpacking libjpeg... >&3
+        try tar -xzf tarballs/jpegsrc.v6b.tar.gz
+
+        #
+        # Patch the libjpeg source.
+        #
+        echo Patching libjpeg... >&3
+        try perl -i -p -e \'s/ltmain\\.sh/ltmain.sh \\\$target/\' \
+                 jpeg-6b/configure
+    fi
+
+    #
+    # Switch into the libjpeg directory.
+    #
+    try cd jpeg-6b
+
+    #
+    # See if libjpeg has been configured.
+    #
+    if [ ! -f Makefile ]
+    then
+        #
+        # Configure libjpeg.
+        #
+        echo Configuring libjpeg... >&3
+        try AR=arm-linux-ar                \
+            CC=arm-linux-gcc               \
+            RANLIB=arm-linux-ranlib        \
+        CFLAGS=-msoft-float        \
+            ./configure --prefix=/usr      \
+                        --enable-shared    \
+                        --enable-static    \
+                        --target=arm-linux
+    fi
+
+    #
+    # Build libjpeg.
+    #
+    if [ ! -f .built ]
+    then
+        echo Building libjpeg... >&3
+        try make libjpeg.la
+        try touch .built
+    fi
+
+    #
+    # Install libjpeg.
+    #
+    echo Installing libjpeg... >&3
+    try mkdir -p ${1}/lib
+    try \(cd .libs\; tar -cf - libjpeg.so\*\) \| tar -xf - -C ${1}/lib
+
+    #
+    # Switch back to the original directory.
+    #
+    try popd
+}
+
+#******************************************************************************
+#
+# Build the LIBPCAP library.
+#
+# Uses:
+#     http://arm.cirrus.com/files/linux/packages/libpacp-0.9.1.tar.bz2
+#
+#******************************************************************************
+build_libpcap()
+{
+    #
+    # Check the output directory argument.
+    #
+    check_absolute build_libpcap 'output directory' ${1}
+
+    #
+    # Switch to the base directory.
+    #
+    try pushd ${BASEDIR}
+
+    #
+    # Fetch the zlib tarball.
+    #
+    fetch_tarball ${PCAP} libpcap-0.9.1.tar.bz2
+
+    #
+    # See if the zlib source has been unpacked.
+    #
+    if [ ! -d libpcap-0.9.1 ]
+    then
+        #
+        # Unpack the libpcap tarball.
+        #
+        echo Unpacking libpcap... >&3
+        try tar -xjf tarballs/libpcap-0.9.1.tar.bz2
+    fi
+
+    #
+    # Switch into the zlib directory.
+    #
+    try cd libpcap-0.9.1
+
+    #
+    # See if libpcap has been configured.
+    #
+    if [ ! -f .configured ]
+    then
+        #
+        # Configure libpcap.
+        #
+        echo Configuring libpcap... >&3
+        try ./configure CC=arm-linux-gcc CFLAGS=-msoft-float \
+        --target=arm-linux --host=i686-linux --with-pcap=linux
+        try touch .configured
+    fi
+
+    #
+    # Build libpcap.
+    #
+    if [ ! -f .built ]
+    then
+        echo Building libpcap... >&3
+        try make 
+        try touch .built
+    fi
+
+    #
+    # Switch back to the original directory.
+    #
+    try popd
+}
+
+#******************************************************************************
+#
+# Build the PNG library.
+#
+# Uses:
+#     http://easynews.dl.sourceforge.net/sourceforge/libpng/
+#         libpng-1.2.5.tar.bz2
+#
+#******************************************************************************
+build_libpng()
+{
+    #
+    # Check the output directory argument.
+    #
+    check_absolute build_libpng 'output directory' ${1}
+
+    #
+    # Switch to the base directory.
+    #
+    try pushd ${BASEDIR}
+
+    #
+    # Fetch the libpng tarball.
+    #
+    fetch_tarball ${SOURCEFORGE} libpng-1.2.5.tar.bz2
+
+    #
+    # See if the libpng source has been unpacked.
+    #
+    if [ ! -d libpng-1.2.5 ]
+    then
+        #
+        # Unpack the libpng tarball.
+        #
+        echo Unpacking libpng... >&3
+        try tar -xjf tarballs/libpng-1.2.5.tar.bz2
+    fi
+
+    #
+    # Switch into the libpng build directory.
+    #
+    try cd libpng-1.2.5
+
+    #
+    # See if the libpng source has been configured.
+    #
+    if [ ! -f makefile ]
+    then
+        #
+        # Configure libpng.
+        #
+        echo Configuring libpng... >&3
+        try cp scripts/makefile.linux makefile
+        try perl -i -p -e \'s/^CC.\*=.\*/CC = arm-linux-gcc/\' makefile
+        try perl -i -p -e \'s/^RANLIB.\*=.\*/RANLIB=arm-linux-ranlib/\' \
+                 makefile
+        try perl -i -p -e \'s/^RANLIB/AR = arm-linux-ar\\nRANLIB/\' makefile
+        try perl -i -p -e \'s/ar /\\\$\(AR\) /\' makefile
+        try perl -i -p -e \'s/\\.\\.\\/zlib/..\\/zlib-1.2.1/\' makefile
+    fi
+
+    #
+    # Build libpng.
+    #
+    if [ ! -f libpng.so.3.1.2.5 ]
+    then
+        echo Building libpng... >&3
+        try make libpng.a libpng.so.3.1.2.5
+    fi
+
+    #
+    # Install libpng.
+    #
+    echo Installing libpng... >&3
+    try mkdir -p ${1}/lib
+    try cp libpng.so.3.1.2.5 ${1}/lib
+    try ln -sf libpng.so.3.1.2.5 ${1}/lib/libpng.so.3
+    try ln -sf libpng.so.3 ${1}/lib/libpng.so
+
+    #
+    # Switch back to the original directory.
+    #
+    try popd
+}
+
+
+#******************************************************************************
+#
+# Build a jffs2 filesystem image
+#
+#
+#
+#******************************************************************************
+build_jffs2 ()
+{
+    echo Building jffs... >&3
+
+    check_absolute build_jffs2 'output directory' ${1}
+
+    try pushd ${BASEDIR}
+    try cd mtd-20050122.orig/util
+    if [ ! -f mkfs.jffs2 ]
+    then
+    try make clean
+    try rm -f .built
+    try make CC=gcc mkfs.jffs2
+    fi
+    try ${BASEDIR}/mtd-20050122.orig/util/mkfs.jffs2 --pad=0xe00000 -d ${1} \
+    -o ${BASEDIR}/${2}/image.jffs2 -D ${BASEDIR}/${2}/device.txt
+     
+    try popd
+}
+
+build_rwfs ()
+{
+    echo Building the read/write fs... >&3
+
+    check_absolute build_jffs2 'output directory' ${1}
+
+    try pushd ${BASEDIR}
+    try cd mtd-20050122.orig/util
+    if [ ! -f mkfs.jffs2 ]
+    then
+    try make clean
+    try rm -f .built
+    try make CC=gcc mkfs.jffs2
+    fi
+    try ${BASEDIR}/mtd-20050122.orig/util/mkfs.jffs2 -d ${1} \
+    -o ${BASEDIR}/${2}/optfs.out
+     
+    try popd
+}
+
+build_IceE ()
+{
+    try pushd ${BASEDIR}
+    try cd ../share/src/IceE-1.0.0
+    try mkdir -p lib
+    try make
+    try popd
+}
+
+build_firmware ()
+{
+    try pushd ${BASEDIR}
+    try mkdir -p ../embed/lib
+    try mkdir -p ../embed/include
+    try popd
+
+    try pushd ${BASEDIR}
+    try cd ../embed/src/libqwerk
+    try make
+    try popd
+
+    try pushd ${BASEDIR}
+    try cd ../embed/src/libtc
+    try make
+    try popd
+
+    try pushd ${BASEDIR}
+    try cd ../embed/util/fpgac
+    try make
+    try popd
+
+    try pushd ${BASEDIR}
+    try cd ../embed/src/terkapi
+    try make
+    try popd
+
+    try pushd ${BASEDIR}
+    try cd ../embed/test/leds
+    try make
+    try popd
+}
+
+#******************************************************************************
+#
+# Build a linux kernel for the target.
+#
+# Uses:
+#     ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-2.6.8.1.tar.bz2
+#     ftp://ftp.kernel.org/pub/linux/utils/kernel/module-init-tools/module-init-tools-3.1.tar.gz
+#     
+#******************************************************************************
+build_linux ()
+{
+    #
+    # Check the output directory argument.
+    #
+    check_absolute build_linux 'output directory' ${1}
+
+    #
+    # Save the output directory.
+    #
+    dir=${1}
+    shift
+
+    #
+    # Check the configuration file argument.
+    #
+    check_absolute build_linux 'configuration file' ${1}
+
+    #
+    # Save the configuration file.
+    #
+    config=${1}
+    shift
+
+    #
+    # Make sure that the kernel image name was specified.
+    #
+    if [ x${1} = x ]
+    then
+        echo build_linux: the kernel image must be specified! >&3
+        exit 1
+    fi
+
+    #
+    # Make sure that a valid kernel image name was specified.
+    #
+    if [ ${1} != Image -a ${1} != zImage -a ${1} != bootpImage -a \
+         ${1} != modules -a ${1} != config ]
+    then
+        echo -n build_linux: the kernel image must be Image, zImage, >&3
+        echo \ bootpImage, modules, or config! >&3
+        exit 1
+    fi
+
+    #
+    # Save the kernel image name.
+    #
+    image=${1}
+    shift
+
+    #
+    # See if the linux source has been unpacked.
+    #
+    if [ ! -d ${BASEDIR}/linux-2.6.8.1 ]
+    then
+        #
+        # Switch to the base directory.
+        #
+        try pushd ${BASEDIR}
+
+        #
+        # Fetch the Linux tarball.
+        #
+        fetch_tarball ${KERNEL} linux-2.6.8.1.tar.bz2
+
+        #
+        # Unpack the base linux-2.6.8.1 tarball.
+        #
+        echo Unpacking linux... >&3
+        try tar -xjf tarballs/linux-2.6.8.1.tar.bz2
+
+        #
+        # Apply the Cirrus kernel patch.
+        #
+        try bzcat patches/linux-2.6.8.1-crus*.bz2 2\>\&1 \| \
+            patch -p1 -E -d linux-2.6.8.1
+
+        #
+        # Switch back to the original directory.
+        #
+        try popd
+    fi
+
+    #
+    # See if the linux clone directory needs to be created.
+    #
+    if [ ! -f .do_not_edit/.linux ]
+    then
+        #
+        # Create the linux clone directory.
+        #
+        echo Creating linux source tree... >&3
+        clone_tree ${BASEDIR}/linux-2.6.8.1 `pwd`/.do_not_edit/linux-2.6.8.1
+        try touch .do_not_edit/.linux
+    fi
+
+    #
+    # Switch into the linux directory.
+    #
+    try pushd .do_not_edit/linux-2.6.8.1
+
+    #
+    # See if the kernel is being configured.
+    #
+    if [ ${image} = config ]
+    then
+        #
+        # See if the configuration file is different than the current one.
+        #
+        cmp -s ${config} .config
+        if [ $? != 0 ]
+        then
+            #
+            # Copy the configuration file.
+            #
+            try make mrproper
+            try cp ${config} .config
+        fi
+
+        #
+        # Perform the interactive kernel configuration.
+        #
+        make menuconfig < /dev/tty > /dev/tty 2>&1
+        try make oldconfig
+
+        #
+        # If the kernel configuration has changed, then copy it back to the
+        # original location.
+        #
+        cmp -s .config ${config}
+        if [ $? != 0 ]
+        then
+            try cp .config ${config}
+        fi
+    else
+        #
+        # See if the configuration file is different than the current one.
+        #
+        cmp -s ${config} .config
+        if [ $? != 0 ]
+        then
+            #
+            # Copy the configuration file and configure the kernel.
+            #
+            echo Configuring linux... >&3
+            try make mrproper
+            try cp ${config} .config
+            try yes n \| make oldconfig
+
+        fi
+
+        #
+        # Build the kernel.
+        #
+        echo Building linux ${image}... >&3
+        try make ${image} ${*}
+
+        #
+        # See if the kernel modules were being built.
+        #
+        if [ ${image} = modules ]
+        then
+            #
+            # See if the module utilities exist.
+            #
+            if [ ! -f ${BASEDIR}/module-init-tools-3.1/depmod ]
+            then
+                #
+                # Go back to the base directory.
+                #
+                try pushd ${BASEDIR}
+
+                #
+                # Fetch the modutils tarball.
+                #
+                #fetch_tarball ${KERNEL} module-init-tools-3.1.tar.gz
+
+                #
+                # See if the modutils source has been unpacked.
+                #
+                #if [ ! -d module-init-tools-3.1/build ]
+                #then
+                    #
+                    # Unpack the modutils tarball.
+                    #
+                #    echo Unpacking modutils... >&3
+                #    try tar -xzf tarballs/module-init-tools-3.1.tar.gz
+                #fi
+
+                #
+                # See if a build directory has been created.
+                #
+                if [ ! -d module-init-tools-3.1/build ]
+                then
+                    #
+                    # Create a build directory.
+                    #
+                    try mkdir module-init-tools-3.1/build
+                fi
+
+                #
+                # Switch into the modutils build directory.
+                #
+                try cd module-init-tools-3.1/build
+
+                #
+                # See if modutils has been configured.
+                #
+                if [ ! -f Makefile ]
+                then
+                    #
+                    # Configure modutils.
+                    #
+                    echo Configuring module-init-tools... >&3
+                    
+            try ../configure --target=arm-linux 
+                fi
+
+                #
+                # Build module-init-tools.
+                #
+                echo Building module-init-tools... >&3
+                try make
+        
+                #
+                # Switch back to the original directory.
+                #
+                try popd
+            fi
+
+            #
+            # Copy the kernel modules to the output directory.
+            #
+            echo Installing linux modules... >&3
+            try make DEPMOD=${BASEDIR}/module-init-tools-3.1/build/depmod \
+                     INSTALL_MOD_PATH=${dir} modules_install
+            try rm -Rf ${dir}/lib/modules/*/source
+        try rm -Rf ${dir}/lib/modlues/*/build
+        else
+            #
+            # Copy the kernel image to the output directory.
+            #
+            echo Copying linux... >&3
+            try cp arch/arm/boot/${image} ${dir}
+        fi
+    fi
+    
+    #
+    # Switch back to the original directory.
+    #
+    try popd
+}
+
+#******************************************************************************
+#
+# Build the LIRC application.
+#
+# Uses:
+#     http://easynews.dl.sourceforge.net/sourceforge/lirc/lirc-0.7.2.tar.bz2
+#
+#******************************************************************************
+build_lirc ()
+{
+    #
+    # Check the output directory argument.
+    #
+    check_absolute build_lirc 'output directory' ${1}
+
+    #
+    # Check the target type argument.
+    #
+    if [ x${2} != xedb9307 -a x${2} != xedb9312 -a x${2} != xedb9315 -a x${2} != xedb9315A ]
+    then
+        echo build_lirc: Unknown target \'${2}\'! >&3
+        exit 1
+    fi
+
+    #
+    # Make sure that a modular kernel is present so that the build will
+    # succeed.
+    #
+    if [ x`grep ^CONFIG_MODULES .do_not_edit/linux-2.6.8.1/.config` = x ]
+    then
+        echo build_lirc: The kernel must be configured for modules.
+        exit 1
+    fi
+
+    #
+    # See if the lirc source has been unpacked.
+    #
+    if [ ! -d ${BASEDIR}/lirc-0.7.2 ]
+    then
+        #
+        # Switch to the base directory.
+        #
+        try pushd ${BASEDIR}
+
+        #
+        # Fetch the lirc tarball.
+        #
+        fetch_tarball ${SOURCEFORGE} lirc-0.7.2.tar.bz2
+
+        #
+        # Unpack the lirc tarball.
+        #
+        echo Unpacking lirc... >&3
+        try tar -xjf tarballs/lirc-0.7.2.tar.bz2
+
+        #
+        # Patch lirc.
+        #
+        echo Patching lirc... >&3
+        try bzcat patches/lirc-0.7.2-patch-crus*.bz2 2\>\&1 \| \
+            patch -p1 -E -d lirc-0.7.2
+
+        #
+        # Switch back to the original directory.
+        #
+        try popd
+    fi
+
+    #
+    # See if the lirc clone directory needs to be created.
+    #
+    if [ ! -f .do_not_edit/.lirc ]
+    then
+        #
+        # Create the lirc clone directory.
+        #
+        echo Creating lirc source tree... >&3
+        clone_tree ${BASEDIR}/lirc-0.7.2 `pwd`/.do_not_edit/lirc-0.7.2
+        try touch .do_not_edit/.lirc
+    fi
+
+    #
+    # Switch into the lirc build directory.
+    #
+    try pushd .do_not_edit/lirc-0.7.2
+
+    #
+    # See if lirc has been configured.
+    #
+    if [ ! -f Makefile ]
+    then
+        #
+        # Configure lirc.
+        #
+        echo Configuring lirc... >&3
+        try ./configure --with-kerneldir=`cd ..;pwd`/linux-2.6.8.1 \
+                        --host=arm-linux                                 \
+                        --without-x                                      \
+                        --with-driver=${2}                               \
+                        --with-syslog
+    fi
+
+    #
+    # See if lirc has been built.
+    #
+    if [ ! -f drivers/lirc_${2}/lirc_${2}.ko ]
+    then
+        #
+        # Build lirc.
+        #
+        echo Building lirc... >&3
+        try make
+        try arm-linux-strip daemons/irrecord daemons/lircd daemons/lircmd
+    fi
+
+    #
+    # Install lirc.
+    #
+    echo Installing lirc... >&3
+    try DIR=`cd ${1}/lib/modules; find * -type d -maxdepth 0 -print`
+    try mkdir -p ${1}/lib/modules/${DIR}/misc ${1}/usr/bin ${1}/usr/sbin
+    try cp daemons/irrecord ${1}/usr/bin
+    try cp daemons/lircd daemons/lircmd ${1}/usr/sbin
+    try cp drivers/lirc_${2}/lirc_${2}.ko ${1}/lib/modules/${DIR}/misc
+
+    #
+    # Switch back to the original directory.
+    #
+    try popd
+}
+
+#******************************************************************************
+#
+# Build the MP3 player demo.
+#
+#******************************************************************************
+build_mp3demo ()
+{
+    #
+    # Check the output directory argument.
+    #
+    check_absolute build_mp3demo 'output directory' ${1}
+    
+    #
+    # Install the MP3 demo.
+    #
+    echo Installing MP3 demo... >&3
+    try cp ${BASEDIR}/playmp3/playmp3 ${1}/usr/bin
+    try cp ${BASEDIR}/playmp3/funky.mp3 ${1}
+}
+
+#*****************************************************************************
+# 
+# Build Module-init-tools for the target
+#
+#*****************************************************************************
+build_module_tools ()
+{
+  
+   check_absolute build_module_tools 'output directory' ${1}
+
+   #
+   # Save the output directory.
+   #
+   dir=${1}
+   shift
+
+
+   try pushd ${BASEDIR}
+
+   #
+   # Switch into the modutils build directory.
+   #
+   try cd module-init-tools-3.1
+
+   #
+   # See if modutils has been configured.
+   #
+   if [ ! -f Makefile ]
+   then
+    #
+        # Configure modutils.
+        #
+        echo Configuring module-init-tools... >&3
+        
+        try CC=arm-linux-gcc ./configure --host=arm-linux \
+                      --build=i686 \
+                      --with-moddir=/lib/modules \
+                      
+   fi
+
+   #
+   # Build module-init-tools.
+   #
+   echo Building module-init-tools... >&3
+   try make
+   try arm-linux-strip depmod ; cp depmod ${dir}/sbin
+   try arm-linux-strip insmod ; cp insmod ${dir}/sbin
+   try arm-linux-strip lsmod ; cp lsmod ${dir}/sbin
+   try arm-linux-strip modinfo ; cp modinfo ${dir}/sbin
+   try arm-linux-strip modprobe ; cp modprobe ${dir}/sbin
+   try arm-linux-strip rmmod ; cp rmmod ${dir}/sbin
+   #
+   # Switch back to the original directory.
+   #
+   try popd
+}
+
+
+#******************************************************************************
+#
+# Build mtd for the target.
+#
+# Uses:
+#     http://ftp.debian.org/debian/pool/main/m/mtd/mtd_20050122.orig.tar.gz
+#
+#******************************************************************************
+build_mtd ()
+{
+    #
+    # Check the output directory argument.
+    #
+    check_absolute build_mtd 'output directory' ${1}
+
+    #
+    # Switch to the base directory.
+    #
+    try pushd ${BASEDIR}
+
+    #
+    # Fetch the mtd tarball.
+    #
+    #fetch_tarball ${DEBIAN} mtd_20050122.orig.tar.gz
+
+    #
+    # See if the mtd source has been unpacked.
+    #
+    if [ ! -d mtd-20050122.orig ]
+    then
+        #
+        # Unpack the mtd tarball.
+        #
+        echo Unpacking mtd... >&3
+        try tar -xzf tarballs/mtd_20050122.orig.tar.gz
+    fi
+
+    #
+    # Switch into the mtd directory.
+    #
+    try cd mtd-20050122.orig/util
+
+    #
+    # See if mtd has been built.
+    #
+    if [ ! -f .built ]
+    then
+        #
+        # Build mtd.
+        #
+        echo Building mtd... >&3
+        try make clean
+    try make CC=arm-linux-gcc LDFLAGS=-s flash_eraseall mtd_debug flashcp
+        try touch .built
+    fi
+
+    #
+    # Install mtd.
+    #
+    try mkdir -p ${1}/sbin
+    try cp flash_eraseall mtd_debug ${1}/sbin
+
+    #
+    # Switch back to the original directory.
+    #
+    popd
+}
+
+#******************************************************************************
+#
+# Build the PCMCIA card services.
+#
+# Uses:
+#     http://easynews.dl.sourceforge.net/sourceforge/pcmcia-cs/
+#         pcmcia-cs-3.2.7.tar.gz
+#
+#******************************************************************************
+build_pcmcia ()
+{
+    #
+    # Check the output directory argument.
+    #
+    check_absolute build_pcmcia 'output directory' ${1}
+
+    #
+    # Save the output directory.
+    #
+    dir=${1}
+    shift
+
+    #
+    # Make sure that at least one driver was specified.
+    #
+    if [ ${#} = 0 ]
+    then
+        echo build_pcmcia: must specify drivers to install! >&3
+        exit 1
+    fi
+
+    #
+    # See if the pcmcia-cs source has been unpacked.
+    #
+    if [ ! -d ${BASEDIR}/pcmcia-cs-3.2.7 ]
+    then
+        #
+        # Switch to the base directory.
+        #
+        try pushd ${BASEDIR}
+
+        #
+        # Fetch the pcmcia-cs tarball.
+        #
+        fetch_tarball ${SOURCEFORGE} pcmcia-cs-3.2.7.tar.gz
+
+        #
+        # Unpack the pcmcia-cs tarball.
+        #
+        echo Unpacking pcmcia-cs... >&3
+        try tar -xzf tarballs/pcmcia-cs-3.2.7.tar.gz
+
+        #
+        # Patch pcmcia-cs.
+        #
+        echo Patching pcmcia-cs... >&3
+        try bzcat patches/pcmcia-cs-3.2.7-patch-crus*.bz2 2\>\&1 \| \
+            patch -p1 -E -d pcmcia-cs-3.2.7
+
+        #
+        # Switch back to the original directory.
+        #
+        try popd
+    fi
+
+    #
+    # See if the pcmcia-cs clone directory needs to be created.
+    #
+    if [ ! -f .do_not_edit/.pcmcia-cs ]
+    then
+        #
+        # Create the pcmcia-cs clone directory.
+        #
+        echo Creating pcmcia-cs source tree... >&3
+        clone_tree ${BASEDIR}/pcmcia-cs-3.2.7 \
+                   `pwd`/.do_not_edit/pcmcia-cs-3.2.7
+        try touch .do_not_edit/.pcmcia-cs
+    fi
+
+    #
+    # Switch into the pcmcia-cs build directory.
+    #
+    try pushd .do_not_edit/pcmcia-cs-3.2.7
+
+    #
+    # See if pcmcia-cs needs to be configured.
+    #
+    cmp -s ../linux-2.6.8.1/.config linux.config
+    if [ $? != 0 ]
+    then
+        #
+        # Configure pcmcia-cs.
+        #
+        echo Configuring pcmcia-cs... >&3
+        try make realclean
+        try ./Configure --noprompt                        \
+                        --kernel=`cd ..;pwd`/linux-2.6.8.1 \
+                        --target=${dir}                   \
+                        --arch=arm                        \
+                        --cc=arm-linux-gcc                \
+                        --ld=arm-linux-ld                 \
+                        --notrust                         \
+                        --nocardbus                       \
+                        --bsd                             \
+                        --srctree
+        try cp ../linux-2.6.8.1/.config linux.config
+    fi
+
+    #
+    # See if pcmcia-cs needs to be built.
+    #
+    if [ ! -f cardmgr/cardmgr ]
+    then
+        #
+        # Build pcmcia-cs.
+        #
+        echo Building pcmcia-cs... >&3
+        try make all
+    fi
+
+    #
+    # Install pcmcia-cs.
+    #
+    echo Installing pcmcia-cs... >&3
+    try mkdir -p ${dir}/etc/pcmcia/cis
+    try cp etc/config etc/ftl etc/ide etc/ieee1394 etc/memory etc/network     \
+           etc/parport etc/scsi etc/serial etc/shared etc/wireless etc/*.opts \
+           etc/rc.pcmcia ${dir}/etc/pcmcia
+    try chmod +x ${dir}/etc/pcmcia/ftl ${dir}/etc/pcmcia/ide         \
+                 ${dir}/etc/pcmcia/ieee1394 ${dir}/etc/pcmcia/memory \
+                 ${dir}/etc/pcmcia/network ${dir}/etc/pcmcia/parport \
+                 ${dir}/etc/pcmcia/scsi ${dir}/etc/pcmcia/serial     \
+                 ${dir}/etc/pcmcia/wireless
+    try rm -f ${dir}/etc/pcmcia/config.opts
+    try echo include memory 0xd0000000-0xdfffffff \> \
+        ${dir}/etc/pcmcia/config.opts
+    try cp etc/cis/*.dat ${dir}/etc/pcmcia/cis
+    try mkdir -p ${dir}/sbin
+    try cp cardmgr/cardmgr cardmgr/cardctl cardmgr/ifuser ${dir}/sbin
+    eval `grep MODDIR config.mk`
+    try mkdir -p ${dir}/${MODDIR}/pcmcia
+    try cp modules/ds.o            \
+           modules/pcmcia_core.o   \
+           modules/ep93xx_pcmcia.o \
+           ${dir}/${MODDIR}/pcmcia
+
+    #
+    # Install pcmcia-cs drivers.
+    #
+    while :
+    do
+        #
+        # See if there are more drivers to install.
+        #
+        if [ ${#} = 0 ]
+        then
+            #
+            # There are no more drivers to install.
+            #
+            break
+        fi
+
+        #
+        # See which driver should be installed.
+        #
+        case ${1} in
+            #
+            # The ide_cs driver.
+            #
+            ide-cs)
+                try cp clients/ide-cs.o ${dir}/${MODDIR}/pcmcia
+                ;;
+
+            #
+            # The orinoco_cs driver.
+            #
+            orinoco_cs)
+                try cp wireless/hermes.o       \
+                       wireless/orinoco.o      \
+                       wireless/orinoco_cs.o   \
+                       ${dir}/${MODDIR}/pcmcia
+                ;;
+        esac
+
+        #
+        # Advance to the next driver.
+        #
+        shift
+    done
+
+    #
+    # Switch back to the original directory.
+    #
+    try popd
+}
+
+#******************************************************************************
+#
+# Build Qt Embedded.
+#
+# Uses:
+#     ftp://ftp.trolltech.com/pub/qt/source/qt-embedded-2.3.10-free.tar.gz
+#
+#******************************************************************************
+build_qt ()
+{
+    #
+    # Check the output directory argument.
+    #
+    check_absolute build_qt 'output directory' ${1}
+
+    #
+    # Save the output directory.
+    #
+    dir=${1}
+    shift
+
+    #
+    # Switch to the base directory.
+    #
+    try pushd ${BASEDIR}
+
+    #
+    # Fetch the qt tarball.
+    #
+    fetch_tarball ${QT} qt-embedded-2.3.10-free.tar.gz
+
+    #
+    # See if the qt source has been unpacked.
+    #
+    if [ ! -d qt-2.3.10 ]
+    then
+        #
+        # Unpack the qt tarball.
+        #
+        echo Unpacking Qt... >&3
+        try tar -xzf tarballs/qt-embedded-2.3.10-free.tar.gz
+
+        #
+        # Apply the Cirrus qt patch.
+        #
+        echo Patching Qt... >&3
+        try bzcat patches/qt-2.3.10-patch-crus*.bz2 2\>\&1 \| \
+            patch -p1 -E -d qt-2.3.10
+    fi
+
+    if [ ! -d opie-1.2.0 ]
+    then
+	if [ ! -f tarballs/opie-1.2.0.tar.bz2 ]
+	then
+		#
+		# Fetch the qt tarball.
+    		#
+    		fetch_tarball ${OPIE} opie-1.22.0.tar.bz2
+	fi
+	try tar xjf tarballs/opie-1.2.0.tar.bz2
+    fi
+
+    #
+    # Switch into the qt directory.
+    #
+    try cd qt-2.3.10
+    export QTDIR=`pwd`
+
+    if [ ! -d include ]
+    then 
+	try mkdir include
+    fi
+
+    if [ ! -f .patched ]
+    then
+    echo Patching QT for OPIE... >&3
+        try patch -p1 < ../opie-1.2.0/qt/qt-2.3.10.patch/qt-2.3.10-all.patch
+    try touch .patched
+    fi
+
+    #
+    # Configure qt.
+    #
+    if [ ! -f .buildopts ]
+    then
+        echo Configuring Qt... >&3
+        QTFLAGS='-xplatform linux-arm-g++
+                 -no-qvfb
+                 -depths 32,16
+         -accel-ep93xx
+                 -thread
+                 -gif
+                 -no-xft
+                 -system-jpeg
+                 -system-libpng
+                 -system-zlib
+                 -qconfig qpe 
+                 -I${BASEDIR}/zlib-1.2.1
+                 -I${BASEDIR}/libpng-1.2.5
+         -I${BASEDIR}/tslib-0.1.1/src
+                 -I${BASEDIR}/jpeg-6b'
+        try ./configure ${QTFLAGS} >&3
+    fi
+
+    #
+    # Build qt.
+    #
+    if [ ! -f lib/libqte-mt.so.2.3.10 ]
+    then
+        echo Building Qt... >&3
+        try make LIBS+=${BASEDIR}/libpng-1.2.5/libpng.a         \
+                 LIBS+=${BASEDIR}/jpeg-6b/.libs/libjpeg.a       \
+                 LIBS+=${BASEDIR}/zlib-1.2.1/libz.a             \
+         LIBS+=${BASEDIR}/tslib-0.1.1/src/.libs/libts.a \
+                 LIBS+=-lm                                      \
+         LIBS+=-lstdc++
+                 
+        try arm-linux-strip lib/libqte-mt.so.2.3.10
+    fi
+
+    #
+    # Install qt.
+    #
+    echo Installing Qt... >&3
+    try mkdir -p ${dir}/lib
+    try cp -dpR lib/libqte-mt.* ${dir}/lib
+    try mkdir -p ${dir}/usr/qt/lib/fonts
+    try cp -dpR lib/fonts/*fixed*       \
+                lib/fonts/fontdir       \
+                ${dir}/usr/qt/lib/fonts
+
+    #
+    # Switch back to the original directory.
+    #
+    try popd
+}
+
+
+#******************************************************************************
+#
+# Build OPIE.
+#
+# Uses:
+#     http://arm.cirrus.com/files/linux/packages/opie-1.2.0.tar.bz2
+#
+#******************************************************************************
+
+build_opie ()
+{
+    #
+    # Check the output directory argument.
+    #
+    check_absolute build_opie 'output directory' ${1}
+
+    #
+    # Save the output directory.
+    #
+    dir=${1}
+    shift
+
+    #
+    # Switch to the base directory.
+    #
+    try pushd ${BASEDIR}
+
+    #
+    # Fetch the opie tarball.
+    #
+    fetch_tarball ${OPIE} opie-1.2.0.tar.bz2
+
+    #
+    # See if the opie source has been unpacked.
+    #
+    if [ ! -d opie-1.2.0 ]
+    then
+        #
+        # Unpack the opie tarball.
+        #
+        echo Unpacking OPIE... >&3
+        try tar -xjf tarballs/opie-1.2.0.tar.bz2
+
+    fi
+ 
+    if [ ! -f qt-2.3.10/bin/uic ]
+    then
+    try cp tools/uic qt-2.3.10/bin
+    fi
+
+    #
+    # Switch into the OPIE directory.
+    #
+    try cd opie-1.2.0
+    export OPIEDIR=`pwd`
+    export LD_LIBRARY_PATH=$OPIEDIR/lib:$LD_LIBRARY_PATH
+    export QTDIR=${BASEDIR}/qt-2.3.10
+    export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+
+    #
+    # Configure/Make OPIE.
+    #
+    if [ ! -f .built ]
+    then
+    try cp ${BASEDIR}/configs/opie.config .config
+        echo Configuring OPIE... >&3
+        try make mrproper
+    try make oldconfig LIBPCAP_LIB_DIR=${BASEDIR}/libpcap-0.9.1 LIBPCAP_INC_DIR=${BASEDIR}/libpcap-0.9.1
+        echo Building OPIE... >&3
+        try make 
+        try touch .built
+    fi
+ 
+    # 
+    # Install OPIE
+    #
+    echo Installing OPIE... >&3
+    
+    try cp -dpR ../opie-base/* ${dir}
+    try find ${dir} -name CVS -print \| xargs rm -rf
+    try find ${dir} -name PLACEHOLDER -print \| xargs rm -rf
+    # Strip and copy libraries to image
+    try arm-linux-strip lib/lib*
+    try cp -dpR lib/lib* ${dir}/opt/QtPalmtop/lib/
+
+    # Strip and copy binaries to image
+    try cd bin
+    try arm-linux-strip advancedfm kbill opie-eye opieplayer \
+        qpe sysinfo drawpad networksettings opie-eye_slave \
+        opie-sheet opierec ubrowser addressbook opie-console patience sound
+    try cp advancedfm kbill opie-eye opie-sh-howto.sh opieplayer qpe sysinfo \
+        drawpad networksettings opie-eye_slave opie-sheet opierec \
+        qpe-reorgfiles ubrowser addressbook getprofile opie-console \
+        opie-reorgfiles opie-update-symlinks patience sound ${dir}/opt/QtPalmtop/bin
+    try cd ../
+    
+    #
+    # Copy plugins/applets to image
+    #
+    try cd plugins/applets
+    try arm-linux-strip libirdaapplet.so.1.0.0     \
+            libvmemoapplet.so.1.0.0    \
+            libhomeapplet.so.1.0.0     \
+            libnetworkapplet.so.0.1.0  \  
+            libwirelessapplet.so.0.1.1 \
+            libaboutapplet.so.1.0.0    \
+            libmemoryapplet.so.1.0.1   \
+            libvolumeapplet.so.1.0.0
+    
+    try cp -dpR libhomeapplet.so.1 libirdaapplet.so.1.0.0 libnetworkapplet.so.0 libvmemoapplet.so.1.0.0 \
+        libwirelessapplet.so.0 libaboutapplet.so libhomeapplet.so.1.0 libmemoryapplet.so \
+            libnetworkapplet.so.0.1 libvolumeapplet.so libwirelessapplet.so.0.1 libaboutapplet.so.1 \
+        libhomeapplet.so.1.0.0 libmemoryapplet.so.1 libnetworkapplet.so.0.1.0 libvolumeapplet.so.1 \
+        libwirelessapplet.so.0.1.1 libaboutapplet.so.1.0 libirdaapplet.so libmemoryapplet.so.1.0 \
+        libvmemoapplet.so libvolumeapplet.so.1.0 libaboutapplet.so.1.0.0 libirdaapplet.so.1 \
+        libmemoryapplet.so.1.0.1 libvmemoapplet.so.1 libvolumeapplet.so.1.0.0 libhomeapplet.so \
+        libirdaapplet.so.1.0 libnetworkapplet.so libvmemoapplet.so.1.0 libwirelessapplet.so \
+        ${dir}/opt/QtPalmtop/plugins/applets
+    try cd ../../
+    
+    #
+    # Copy plugins/codecs to image
+    #
+    try cd plugins/codecs
+    try arm-linux-strip libmadplugin.so.1.0.0 libwavplugin.so.1.0.0
+    try cp -dpR libmadplugin.so.1 libmadplugin.so.1.0.0 libwavplugin.so.1 \
+        libwavplugin.so.1.0.0 libmadplugin.so libmadplugin.so.1.0 \
+        libwavplugin.so libwavplugin.so.1.0 \
+        ${dir}/opt/QtPalmtop/plugins/codecs
+    try cd ../../
+    
+    #
+    # Copy plugins/decorations to image
+    #
+    try cd plugins/decorations
+    try arm-linux-strip libpolished.so.1.0.0
+    try cp -dpR libpolished.so libpolished.so.1.0 \
+        libpolished.so.1 libpolished.so.1.0.0 \
+        ${dir}/opt/QtPalmtop/plugins/decorations
+    try cd ../../
+    
+    #
+    # Copy plugins/inputmethods to image
+    #
+    try cd plugins/inputmethods
+    try arm-linux-strip libqhandwriting.so.1.0.0 libqjumpx.so.1.0.0 \
+            libqkeyboard.so.1.0.0 libqmultikey.so.1.0.0 \
+            libqpickboard.so.1.0.0
+    try cp -dpR libqhandwriting.so libqjumpx.so.1.0.0 libqmultikey.so.1.0 \
+        libqhandwriting.so.1 libqkeyboard.so libqmultikey.so.1.0.0 \
+        libqhandwriting.so.1.0 libqkeyboard.so.1 libqpickboard.so \
+        libqhandwriting.so.1.0.0 libqkeyboard.so.1.0 libqpickboard.so.1 \
+        libqjumpx.so libqkeyboard.so.1.0.0 libqpickboard.so.1.0 \
+        libqjumpx.so.1 libqmultikey.so libqpickboard.so.1.0.0 \
+        libqjumpx.so.1.0 libqmultikey.so.1 \
+        ${dir}/opt/QtPalmtop/plugins/inputmethods
+    try cd ../../
+
+    #
+    # Copy plugins/networksettings to image
+    #
+    try cd plugins/networksettings
+    try arm-linux-strip libkppp.so.1.0.0 libwlan.so.1.0.0
+    try cp -dpR libkppp.so libkppp.so.1.0 libwlan.so libwlan.so.1.0 \
+        libkppp.so.1 libkppp.so.1.0.0 libwlan.so.1 libwlan.so.1.0.0 \
+        ${dir}/opt/QtPalmtop/plugins/networksettings
+    try cd ../../
+
+    #
+    # Copy plugins/networksettings2 to image
+    #
+    try cd plugins/networksettings2
+    try arm-linux-strip libirda.so.1.0.0 liblancard.so.1.0.0 \
+            libnetwork.so.1.0.0 libusb.so.1.0.0 libwlan.so.1.0.0 
+    try cp -dpR libirda.so liblancard.so.1.0.0 libusb.so.1.0 \
+        libirda.so.1 libnetwork.so libusb.so.1.0.0 \
+        libirda.so.1.0 libnetwork.so.1 libwlan.so \
+        libirda.so.1.0.0 libnetwork.so.1.0 libwlan.so.1 \
+        liblancard.so libnetwork.so.1.0.0 libwlan.so.1.0 \
+        liblancard.so.1 libusb.so libwlan.so.1.0.0 \
+        liblancard.so.1.0 libusb.so.1 \
+        ${dir}/opt/QtPalmtop/plugins/networksettings2
+    try cd ../../
+
+    #
+    # Copy plugins/obex to image
+    #
+    try cd plugins/obex
+    try arm-linux-strip libopieobex.so.0.0.2
+    try cp -dpR libopieobex.so libopieobex.so.0.0 \
+        libopieobex.so.0 libopieobex.so.0.0.2 \
+        ${dir}/opt/QtPalmtop/plugins/obex
+    try cd ../../
+
+    #
+    # Copy plugins/styles to image
+    #
+    try cd plugins/styles
+    try arm-linux-strip libfreshstyle.so.1.0.0
+    try cp -dpR libfreshstyle.so libfreshstyle.so.1.0 \
+        pixmaps libfreshstyle.so.1 \
+        libfreshstyle.so.1.0.0  themes \
+        ${dir}/opt/QtPalmtop/plugins/styles
+    try cd ../../
+    
+    #
+    # Switch back to the original directory.
+    #
+    try popd
+}
+
+#******************************************************************************
+#
+# Build a ramdisk image.
+#
+# Uses:
+#     http://ftp.debian.org/debian/pool/main/g/genext2fs/
+#         genext2fs_1.3.orig.tar.gz
+#
+#******************************************************************************
+build_ramdisk ()
+{
+    #
+    # Parse through the arguments.
+    #
+    args=
+    dir=
+    nodepmod=false
+    while [ ${#} != 0 ]
+    do
+        #
+        # See what this argument is.
+        #
+        case ${1} in
+            #
+            # This is a -d, which specifies the base directory of the input
+            # root file system image.
+            #
+            -d*)
+                #
+                # See if the base directory is specified in this argument or
+                # the next.
+                #
+                if [ ${1} = -d ]
+                then
+                    #
+                    # The base directory is the next argument.
+                    #
+                    dir=${2}
+                else
+                    #
+                    # The base directory is in this argument.
+                    #
+                    dir=`echo ${1} | cut -c3-`
+                fi
+
+                #
+                # Add this argument to the argument list and advance to the
+                # next.
+                #
+                args="${args} ${1}"
+                shift
+                ;;
+
+            #
+            # This is -nodepmod, meaning that depmod should not be run on the
+            # root file system image before calling genext2fs.
+            #
+            -nodepmod)
+                #
+                # Indicate that -nodepmod was specified, and blast the argument
+                # so it does not get passed to genext2fs.
+                #
+                nodepmod=true
+                shift
+                ;;
+
+            #
+            # All other arguments.
+            #
+            *)
+                #
+                # Add this argument to the argument list and advance to the
+                # next.
+                #
+                args="${args} ${1}"
+                shift
+                ;;
+        esac
+    done
+
+    #
+    # Make sure that a root file system directory was specified.
+    #
+    if [ x${dir} = x ]
+    then
+        echo build_ramdisk: must specify a root file system directory! >&3
+        exit 1
+    fi
+
+    #
+    # Switch to the base directory.
+    #
+    try pushd ${BASEDIR}
+
+    #
+    # Fetch the genext2fs tarball.
+    #
+    #fetch_tarball ${DEBIAN} genext2fs-1.4rc1.tar.gz
+
+    #
+    # See if the genext2fs source has been unpacked.
+    #
+    if [ ! -d genext2fs-1.4rc1 ]
+    then
+        #
+        # Unpack the genext2fs source.
+        #
+        echo Unpacking genext2fs... >&3
+        try tar -xzf tarballs/genext2fs-1.4rc1.tar.gz
+    fi
+
+    #
+    # Switch into the genext2fs directory.
+    #
+    try cd genext2fs-1.4rc1
+
+    #
+    # See if genext2fs has been built.
+    #
+    if [ ! -f .built ]
+    then
+        #
+        # Build genext2fs.
+        #
+        echo Building genext2fs... >&3
+        try ./configure
+    try make
+        try touch .built
+    fi
+
+    #
+    # Switch back to the original directory.
+    #
+    try popd
+
+    #
+    # See if there is a modules directory on the ramdisk.
+    #
+    if [ -d ${dir}/lib/modules -a ${nodepmod} != true ]
+    then
+        #
+        # Make sure that the module dependencies are up to date.
+        #
+        #echo Generating module dependencies... >&3
+        try moddir=`cd ${dir}/lib/modules; find * -type d -maxdepth 0 -print`
+        cp ${BASEDIR}/linux-2.6.8.1/System.map .do_not_edit/linux-2.6.8.1
+        try ${BASEDIR}/module-init-tools-3.1/build/depmod \
+            -ae -F .do_not_edit/linux-2.6.8.1/System.map    \
+            -b ${dir} -r ${moddir}
+    fi
+
+    #
+    # Generate the ramdisk image.
+    #
+    echo Generating ramdisk image... >&3
+    try ${BASEDIR}/genext2fs-1.4rc1/genext2fs ${args}
+}
+
+#******************************************************************************
+#
+# Build redboot for the target.
+#
+# Uses:
+#     http://mirrors.rcn.net/pub/sourceware/ecos/releases/ecos-2.0/
+#         ecos-2.0.i386linux.tar.bz2
+#
+#******************************************************************************
+build_redboot ()
+{
+    #
+    # Check the output directory argument.
+    #
+    check_absolute build_redboot 'output directory' ${1}
+
+    #
+    # Save the output directory.
+    #
+    dir=${1}
+    shift
+
+    #
+    # Check the target type.
+    #
+    case ${1} in
+        #
+        # A RAM version for the EDB7312.
+        #
+        edb7312_RAM)
+            PROC=edb7xxx
+            ECM=hal/arm/edb7xxx/v2_0/misc/edb7312_redboot_RAM.ecm
+            ;;
+
+        #
+        # A ROM version for the EDB7312.
+        #
+        edb7312_ROM)
+            PROC=edb7xxx
+            ECM=hal/arm/edb7xxx/v2_0/misc/edb7312_redboot_ROM.ecm
+            ;;
+
+        #
+        # A ROMRAM version for the EDB7312.
+        #
+        edb7312_ROMRAM)
+            PROC=edb7xxx
+            ECM=hal/arm/edb7xxx/v2_0/misc/edb7312_redboot_ROMRAM.ecm
+            ;;
+
+        #
+        # A ROMRAM version for the EDB9301.
+        #
+        edb9301_ROMRAM)
+            PROC=edb9301
+            ECM=hal/arm/arm9/ep93xx/v2_0/misc/redboot_ROMRAM.ecm
+            ;;
+
+        #
+        # A ROMRAM version for the EDB9302.
+        #
+        edb9302_ROMRAM)
+            PROC=edb9302
+            ECM=hal/arm/arm9/ep93xx/v2_0/misc/redboot_ROMRAM.ecm
+            ;;
+
+        #
+        # A ROMRAM version for the EDB9307.
+        #
+        edb9307_ROMRAM)
+            PROC=edb9307
+            ECM=hal/arm/arm9/ep93xx/v2_0/misc/redboot_ROMRAM.ecm
+            ;;
+
+        #
+        # A ROMRAM version for the EDB9307, with FLASH in x16 mode.
+        #
+        edb9307_16_ROMRAM)
+            PROC=edb9307_16
+            ECM=hal/arm/arm9/ep93xx/v2_0/misc/redboot_ROMRAM.ecm
+            ;;
+
+        #
+        # A ROMRAM version for the EBD9312.
+        #
+        edb9312_ROMRAM)
+            PROC=edb9312
+            ECM=hal/arm/arm9/ep93xx/v2_0/misc/redboot_ROMRAM.ecm
+            ;;
+
+        #
+        # A ROMRAM version for the EBD9312, with FLASH in x16 mode.
+        #
+        edb9312_16_ROMRAM)
+            PROC=edb9312_16
+            ECM=hal/arm/arm9/ep93xx/v2_0/misc/redboot_ROMRAM.ecm
+            ;;
+
+        #
+        # A ROMRAM version for the EBD9315.
+        #
+        edb9315_ROMRAM)
+            PROC=edb9315
+            ECM=hal/arm/arm9/ep93xx/v2_0/misc/redboot_ROMRAM.ecm
+            ;;
+
+        #
+        # A ROMRAM version for the EBD9315, with FLASH in x16 mode.
+        #
+        edb9315_16_ROMRAM)
+            PROC=edb9315_16
+            ECM=hal/arm/arm9/ep93xx/v2_0/misc/redboot_ROMRAM.ecm
+            ;;
+    
+    #
+        # A ROMRAM version for the EBD9315A.
+        #
+        edb9315_a_ROMRAM)
+            PROC=edb9315_a
+            ECM=hal/arm/arm9/ep93xx/v2_0/misc/redboot_ROMRAM.ecm
+            ;;
+
+        #
+        # An unknown target type.
+        #
+        *)
+            echo build_redboot: Unknown target \'${1}\'! >&3
+            exit 1
+    esac
+    shift
+
+    #
+    # See if the target already exists.
+    #
+    if [ ! -f .do_not_edit/ecos-2.0/install/bin/redboot.bin ]
+    then
+        #
+        # Export the base path to the eCos package repository.
+        #
+        export ECOS_REPOSITORY=${BASEDIR}/packages
+
+        #
+        # Add the eCos tool directory to the search path.
+        #
+        PATH=${BASEDIR}/tools/bin:$PATH
+
+        #
+        # See if a build directory has been created.
+        #
+        if [ ! -d .do_not_edit/ecos-2.0 ]
+        then
+            #
+            # Create a build directory.
+            #
+            try mkdir -p .do_not_edit/ecos-2.0
+        fi
+
+        #
+        # Switch into the redboot build directory.
+        #
+        try pushd .do_not_edit/ecos-2.0
+
+        #
+        # Create the redboot source tree.
+        #
+        echo Creating redboot source tree... >&3
+        try rm -rf *
+        try ecosconfig new ${PROC} redboot
+        try ecosconfig import ${ECOS_REPOSITORY}/${ECM}
+        while :
+        do
+            if [ ${#} = 0 ]
+            then
+                break
+            fi
+            try ecosconfig ${1}
+            shift
+        done
+        try ecosconfig tree
+
+        #
+        # Build redboot.
+        #
+        echo Building redboot... >&3
+        try make clean
+        try make
+        try popd
+    fi
+
+    #
+    # Install redboot.
+    #
+    echo Installing redboot... >&3
+    try cp .do_not_edit/ecos-2.0/install/bin/redboot.bin ${dir}
+}
+
+#******************************************************************************
+#
+# Build the wireless tools.
+#
+# Uses:
+#     http://pcmcia-cs.sourceforge.net/ftp/contrib/wireless_tools.26.tar.gz
+#
+#******************************************************************************
+build_wireless()
+{
+    #
+    # Check the output directory argument.
+    #
+    check_absolute build_wireless 'output directory' ${1}
+
+    #
+    # Switch to the base directory.
+    #
+    try pushd ${BASEDIR}
+
+    #
+    # Fetch the wireless tools tarball.
+    #
+    #fetch_tarball ${WIRELESS} wireless_tools.26.tar.gz
+
+    #
+    # See if the wireless tools source has been unpacked.
+    #
+    if [ ! -d wireless_tools.26 ]
+    then
+        #
+        # Unpack the wireless tools tarball.
+        #
+        echo Unpacking wireless_tools... >&3
+        try tar -xzf tarballs/wireless_tools.26.tar.gz
+    fi
+
+    #
+    # Switch into the wireless tools directory.
+    #
+    try cd wireless_tools.26
+
+    #
+    # See if the wireless tools have been built.
+    #
+    if [ ! -f iwconfig ]
+    then
+        #
+        # Build the wireless tools.
+        #
+        echo Building wireless_tools... >&3
+        try make CC=arm-linux-gcc KERNEL_SRC=`cd ..;pwd`/linux-2.6.8.1
+        try arm-linux-strip iwconfig iwlist iwpriv iwspy iwgetid iwevent
+    fi
+
+    #
+    # Install the wireless tools.
+    #
+    echo Installing wireless_tools... >&3
+    try cp iwconfig iwlist iwpriv iwspy iwgetid iwevent ${1}/sbin
+
+    #
+    # Switch back to the original directory.
+    #
+    try popd
+}
+
+#******************************************************************************
+#
+# Build the wireless LAN next generation tools.
+#
+# Uses:
+#     ftp://ftp.linux-wlan.org/pub/linux-wlan-ng/
+#         linux-wlan-ng-0.2.1-pre20.tar.bz2
+#
+#******************************************************************************
+build_wlan_ng()
+{
+    #
+    # Check the output directory argument.
+    #
+    check_absolute build_wlan_ng 'output directory' ${1}
+
+    dir=${1}
+    shift
+
+    #
+    # See if the wlan-ng source has been unpacked.
+    #
+    if [ ! -d ${BASEDIR}/linux-wlan-ng-0.2.1-pre20 ]
+    then
+        #
+        # Switch to the base directory.
+        #
+        try pushd ${BASEDIR}
+
+        #
+        # Fetch the wlan-ng tools tarball.
+        #
+        fetch_tarball ${WLAN_NG} linux-wlan-ng-0.2.1-pre20.tar.bz2
+
+        #
+        # Unpack the wlan-ng tools tarball.
+        #
+        echo Unpacking linux-wlan-ng... >&3
+        try tar -xjf tarballs/linux-wlan-ng-0.2.1-pre20.tar.bz2
+
+        #
+        # Switch back to the original directory.
+        #
+        try popd
+    fi
+    
+    #
+    # Patch the wlan-ng source.
+    #
+    if [ ! -f ${BASEDIR}/linux-wlan-ng-0.2.1-pre20/.patched ]
+    then
+        #
+        # Patch the wlan-ng source.
+        #
+        echo Patching linux-wlan-ng... >&3
+        try pushd ${BASEDIR}
+    try bzcat patches/wlan-prism_usb.patch.bz2 2\>\&1 \| \
+        patch -p1 -E -f -d linux-wlan-ng-0.2.1-pre20
+        try touch linux-wlan-ng-0.2.1-pre20/.patched
+        try popd
+    fi
+    
+    #
+    # See if the wlan-ng clone directory needs to be created.
+    #
+    if [ ! -f .do_not_edit/.linux-wlan-ng ]
+    then
+        #
+        # Create the wlan-ng clone directory.
+        #
+        echo Creating linux-wlan-ng source tree... >&3
+        clone_tree ${BASEDIR}/linux-wlan-ng-0.2.1-pre20 \
+                   `pwd`/.do_not_edit/linux-wlan-ng-0.2.1-pre20
+        try touch .do_not_edit/.linux-wlan-ng
+    fi
+
+    #
+    # Switch into the wlan-ng tools directory.
+    #
+    try pushd .do_not_edit/linux-wlan-ng-0.2.1-pre20
+
+    #
+    # See if the wlan-ng tools need to be configured.
+    #
+    cmp -s ../linux-2.6.8.1/.config linux.config
+    if [ $? != 0 ]
+    then
+        #
+        # Configure the wlan-ng tools.
+        #
+        echo Configuring linux-wlan-ng... >&3
+        try make clean
+        try echo PRISM2_PCMCIA=n > default.config
+        try echo PRISM2_PLX=n >> default.config
+        try echo PRISM2_PCI=n >> default.config
+        try echo PRISM2_USB=y >> default.config
+        try echo LINUX_SRC=`cd ..;pwd`/linux-2.6.8.1 >> default.config
+        try echo MODDIR=${dir}/lib/modules/2.6.8.1
+    try echo TARGET_ROOT_ON_HOST=`pwd`/install >> default.config
+        try make default_config
+        try cp `cd ..;pwd`/linux-2.6.8.1/.config linux.config
+    fi
+
+    #
+    # See if the wlan-ng tools need to be built.
+    #
+    if [ ! -f src/wlancfg/wlancfg ]
+    then
+        #
+        # Build the wlan-ng tools.
+        #
+        echo Building linux-wlan-ng... >&3
+        try make all
+        try rm -rf install
+        try make install
+        try arm-linux-strip install/sbin/*
+    fi
+
+    #
+    # Install the wlan-ng tools.
+    #
+    echo Installing linux-wlan-ng... >&3
+    try mkdir -p ${dir}/sbin
+    try cp install/sbin/* ${dir}/sbin
+    try mkdir -p ${dir}/lib
+    try cp -R install/lib/* ${dir}/lib
+
+    #
+    # Switch back to the original directory.
+    #
+    try popd
+}
+
+#******************************************************************************
+#
+# Build the zlib library.
+#
+# Uses:
+#     http://www.zlib.net/zlib-1.2.1.tar.bz2
+#
+#******************************************************************************
+build_zlib()
+{
+    #
+    # Check the output directory argument.
+    #
+    check_absolute build_zlib 'output directory' ${1}
+
+    #
+    # Switch to the base directory.
+    #
+    try pushd ${BASEDIR}
+
+    #
+    # Fetch the zlib tarball.
+    #
+    fetch_tarball ${ZLIB} zlib-1.2.1.tar.bz2
+
+    #
+    # See if the zlib source has been unpacked.
+    #
+    if [ ! -d zlib-1.2.1 ]
+    then
+        #
+        # Unpack the zlib tarball.
+        #
+        echo Unpacking zlib... >&3
+        try tar -xjf tarballs/zlib-1.2.1.tar.bz2
+    fi
+
+    #
+    # Switch into the zlib directory.
+    #
+    try cd zlib-1.2.1
+
+    #
+    # See if zlib has been configured.
+    #
+    if [ ! -f .configured ]
+    then
+        #
+        # Configure zlib.
+        #
+        echo Configuring zlib... >&3
+        try AR=arm-linux-ar\\ rc      \
+            CC=arm-linux-gcc          \
+            CFLAGS=-msoft-float       \
+        ./configure --prefix=/usr \
+                        --shared
+        try touch .configured
+    fi
+
+    #
+    # Build zlib.
+    #
+    if [ ! -f .built ]
+    then
+        echo Building zlib... >&3
+        try make libz.a libz.so.1.2.1
+        try touch .built
+    fi
+
+    #
+    # Install zlib.
+    #
+    echo Installing zlib... >&3
+    try mkdir -p ${1}/lib
+    try \(tar -cf - libz.so\*\) \| tar -xf - -C ${1}/lib
+
+    #
+    # Switch back to the original directory.
+    #
+    try popd
+}
+
+#******************************************************************************
+#
+# Build the tslib library.
+#
+# Uses:
+#     http://arm.cirrus.com/files/linux/packages/tslib-0.1.1.tar.bz2
+#
+#******************************************************************************
+build_tslib()
+{
+    #
+    # Check the output directory argument.
+    #
+    check_absolute build_tslib 'output directory' ${1}
+
+    #
+    # Switch to the base directory.
+    #
+    try pushd ${BASEDIR}
+
+    #
+    # Fetch the tslib tarball.
+    #
+    fetch_tarball ${ZLIB} tslib-0.1.1.tar.bz2
+
+    #
+    # See if the tslib source has been unpacked.
+    #
+    if [ ! -d tslib-0.1.1 ]
+    then
+        #
+        # Unpack the tslib tarball.
+        #
+        echo Unpacking tslib... >&3
+        try tar -xjf tarballs/tslib-0.1.1.tar.bz2
+     
+        #
+        # Apply the Cirrus tslib patch.
+        #
+        echo Patching tslib... >&3
+        try bzcat patches/tslib-0.1.1.patch.bz2 2\>\&1 \| \
+            patch -p1 -E -d tslib-0.1.1
+    fi
+
+    #
+    # Switch into the tslib directory.
+    #
+    try cd tslib-0.1.1
+
+    #
+    # See if tslib has been configured.
+    #
+    if [ ! -f .configured ]
+    then
+        #
+        # Configure tslib.
+        #
+        echo Configuring tslib... >&3
+    try chmod 0777 autogen.sh
+        try ./autogen.sh
+    
+    try CC=arm-linux-gcc           \
+            CFLAGS=-msoft-float    \
+            ./configure --prefix= --target=arm-linux \
+            --host=i686-linux 
+        try touch .configured
+    fi
+
+    #
+    # Build tslib.
+    #
+    if [ ! -f .built ]
+    then
+        echo Building tslib... >&3
+        try make 
+        try touch .built
+    fi
+
+    #
+    # Install tslib.
+    #
+    echo Installing tslib... >&3
+
+    # Install the tslib config file...
+    try cp etc/ts.conf ${1}/etc
+
+    # Install the tslib libraries to root filesystem...
+    try cp src/.libs/libts.so ${1}/lib
+    try cp src/.libs/libts-0.0.so.0* ${1}/lib
+    try arm-linux-strip ${1}/lib/libts-0.0.so.0.1.1
+
+    # Install the tslib screen plugins....
+    try mkdir ${1}/lib/ts
+    
+    try arm-linux-strip plugins/.libs/ep93xx.so
+    try cp plugins/.libs/ep93xx.so ${1}/lib/ts
+    
+    try arm-linux-strip plugins/.libs/dejitter.so
+    try cp plugins/.libs/dejitter.so ${1}/lib/ts
+    
+    try arm-linux-strip plugins/.libs/input.so
+    try cp plugins/.libs/input.so ${1}/lib/ts
+    
+    try arm-linux-strip plugins/.libs/variance.so
+    try cp plugins/.libs/variance.so ${1}/lib/ts
+    
+    try arm-linux-strip plugins/.libs/pthres.so
+    try cp plugins/.libs/pthres.so ${1}/lib/ts
+    
+    try arm-linux-strip plugins/.libs/linear.so
+    try cp plugins/.libs/linear.so ${1}/lib/ts
+    
+    # Install the tslib example progs...
+    try cp tests/.libs/ts_calibrate ${1}/usr/bin
+    try cp tests/.libs/ts_harvest ${1}/usr/bin
+    try cp tests/.libs/ts_print_raw ${1}/usr/bin
+    try cp tests/.libs/ts_test ${1}/usr/bin
+
+    #
+    # Switch back to the original directory.
+    #
+    try popd
+}
+
