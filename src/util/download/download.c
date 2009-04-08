@@ -498,8 +498,8 @@ ReceiveChar(long lTimeout)
         //
         // Try to read a character from the serial port.
         //
-        res = read(lSerialPort, &cChar, 1);
-        if(res == 1)
+        res = read(lSerialPort, &cChar, 1); 
+       if(res == 1)
         {
             //
             // We read a character, so break out of the loop.
@@ -516,7 +516,7 @@ ReceiveChar(long lTimeout)
         //
         // See if the timeout has expired.
         //
-        if(lTimeout && ((tStart + lTimeout) < tNow))
+        if(lTimeout==0 || (lTimeout && ((tStart + lTimeout) < tNow)))
         {
             cChar = 0;
             break;
@@ -1031,7 +1031,7 @@ main(int argc, char *argv[])
     // Wait until we read a '<' from the serial port.
     //
         WaitFor('<');
-	sleep(2);
+       	sleep(2);
 	ReceiveChar(0);
 
     //
