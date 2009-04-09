@@ -12,10 +12,10 @@ int main(int argc, char **argv)
   while(1)
     {
       printf("backlight on\n");
-      lcd.SetBacklight(true);
+      lcd.SetProperty(TL_PROP_BACKLIGHT, true);
       sleep(1);
       printf("backlight off\n");
-      lcd.SetBacklight(false);
+      lcd.SetProperty(TL_PROP_BACKLIGHT, false);
       sleep(1);
     }
 #endif
@@ -25,7 +25,7 @@ int main(int argc, char **argv)
   lcd.printf("Hello world %d", 1234);
   sleep(3);
   lcd.Clear();
-  lcd.SetProperty(TL_PROP_BACKLIGHT, false);
+  //  lcd.SetProperty(TL_PROP_BACKLIGHT, false);
 #endif
 }
 
