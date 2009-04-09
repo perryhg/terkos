@@ -29,7 +29,6 @@ public:
   int printf(char *format, ...);
   // Save(CContext *context);
   // Restore(CContext context);
-  void SetBacklight(bool state);
 
   // IProperty
   virtual int GetProperty(int property, long *value);
