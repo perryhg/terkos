@@ -42,8 +42,8 @@ module MotorLogic(Control, Pwm, Measure, Enable, Phase);
 
 endmodule			 
 
-module Qwerk(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk, 
-   Async, Asdo, Arstn, Asdi, AbitClk, 
+module Vexpro(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk, 
+   Async, Asdo, Arstn, Asdi, AbitClk, Audio,
 	P, PIn, PClkIn);
 
 	input  [11:0] Addr;
@@ -61,7 +61,8 @@ module Qwerk(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
 	input  Arstn;
 	output Asdi;
 	input  AbitClk;
-
+	output Audio;
+	
 	inout  [52:0] P;
 	input  [4:0] PIn;
 	input  PClkIn;
@@ -82,8 +83,8 @@ module Qwerk(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
 	wire TestIntReset;
 	Primary InstPrimary(.Addr(Addr), .Data(Data), .RdN(RdN), .WrN(WrN), .Dq(Dq), 
 	   .CsN(CsN), .Wait(Wait), .Int(Int), .Clk(Clk), 
-      .Async(Async), .Asdo(Asdo), .Arstn(Arstn), .Asdi(Asdi), .AbitClk(AbitClk), .AudioOut(P[24]),
-		.Rd(Rd), .Wr(Wr), .Cs(Cs), .DataRd(DataRd), .Identifier(16'ha001), .Reset(Reset),
+      .Async(Async), .Asdo(Asdo), .Arstn(Arstn), .Asdi(Asdi), .AbitClk(AbitClk), .AudioOut(Audio),
+		.Rd(Rd), .Wr(Wr), .Cs(Cs), .DataRd(DataRd), .Identifier(16'hc001), .Reset(Reset),
 		.IntStatus({GpioIntStatus, 7'h00, BemfIntStatus}), 
 		.IntReset({GpioIntReset, IntDummy, BemfIntReset}));
 
@@ -92,14 +93,22 @@ module Qwerk(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
    wire [3:0] PwmOut;
    wire [7:0] PwmCont;
 	wire [3:0] Active;
+	wire AdcDir;
+   wire AdcOut;
+	
+	assign P[41] = AdcDir ? AdcOut : 1'bz;
 	assign BemfEn = Cs & Addr[11:10]==2'b00;
-
+	
+	assign P[28] = PwmOut[0];
+	assign P[29] = 1'b0;
+	assign P[30] = 1'b0;
+	
    BemfCont4 InstBemfCont4(.Addr(Addr[9:1]), .DataRd(BemfDataRd), .DataWr(Data), .En(BemfEn), 
 	   .Rd(Rd), .Wr(Wr), .PwmOut(PwmOut), .PwmCont(PwmCont), .AxisActive(Active), 
-		.AdcIn(P[42]), .AdcCs(P[45]), .AdcClk(P[40]), .AdcMux({P[36], P[34]}), .AdcSel(P[31]), .AdcDiv(P[38]), 
+		.AdcIn(P[41]), .AdcOut(AdcOut), .AdcDir(AdcDir), .AdcCs(P[42]), .AdcClk(P[40]), 
 		.IntStatus(BemfIntStatus), .IntReset(BemfIntReset), 
 		.Reset(Reset), .Clk(Clk)); // .Measure0(P[12]
-
+		
 	//assign P[8] = Active[0];
 
 	// ME0 P13
@@ -111,6 +120,8 @@ module Qwerk(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
 	// ME3 P20
 	// MP3 P15
 
+`ifdef foo
+
 	MotorLogic Inst0MotorLogic(.Control(PwmCont[1:0]), .Pwm(PwmOut[0]), .Measure(~Active[0]),
 		.Enable(P[13]), .Phase(P[18]));
 	MotorLogic Inst1MotorLogic(.Control(PwmCont[3:2]), .Pwm(PwmOut[1]), .Measure(~Active[1]),
@@ -119,6 +130,7 @@ module Qwerk(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
 		.Enable(P[29]), .Phase(P[25]));
 	MotorLogic Inst3MotorLogic(.Control(PwmCont[7:6]), .Pwm(PwmOut[3]), .Measure(~Active[3]),
 		.Enable(P[20]), .Phase(P[15]));
+
 
 	// RC Servo
 	wire RcsEn;
@@ -163,5 +175,5 @@ module Qwerk(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
 		   default: DataRd = 16'hxxxx;
 		endcase
 		end
-		 
+`endif		 
 endmodule
