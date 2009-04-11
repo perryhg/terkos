@@ -1,8 +1,11 @@
 
-module Exchange(DataOut, SerialIn, Cs, Start, Busy, DivClk, Clk, Reset);
+module Exchange(DataIn, DataOut, SerialIn, SerialOut, SerialDir, Cs, Start, Busy, DivClk, Clk, Reset);
 
+   input  [3:0] DataIn;
    output [12:0] DataOut;
    input  SerialIn;
+   output SerialOut;
+	output SerialDir;
    output Cs;
    input  Start;
    output Busy;
@@ -11,14 +14,18 @@ module Exchange(DataOut, SerialIn, Cs, Start, Busy, DivClk, Clk, Reset);
    input  Reset;
 
    reg  [2:0] State;
+   reg  SerialOut;
    wire PositiveEdge;
+   wire NegativeEdge;
    reg  DivClkPrev;
    reg  [3:0] Count;
    reg  [12:0] DataOut;
 
    assign PositiveEdge = ~DivClkPrev & DivClk; 
+   assign NegativeEdge = DivClkPrev & ~DivClk; 
    assign Busy = State!=0;
-   assign Cs = State==0;
+   assign Cs = State<2;
+	assign SerialDir = ~State[2];
 
    always @(posedge Clk)
       DivClkPrev <= DivClk;
@@ -37,41 +44,67 @@ module Exchange(DataOut, SerialIn, Cs, Start, Busy, DivClk, Clk, Reset);
                State <= 1;
             end
 
-         1: // wait
-            begin
-            if (PositiveEdge)
+         1: // wait for NegativeEdge
+            begin 
+            if (NegativeEdge)
                State <= 2;
             end
 
-         2: // wait
+         2: // send start bit
             begin
-            if (PositiveEdge)
+            Count <= 3;
+            if (NegativeEdge)
                State <= 3;
             end
 
-         3: // wait
+         3: // send  bits
             begin
-            Count <= 12;
-            if (PositiveEdge)
-               State <= 4;
+            if (NegativeEdge)
+               begin
+               Count <= Count - 1;
+               if (Count==0)
+                  State <= 4;
+               end
             end
 
-			4: // receive bits
-           begin
-           if (PositiveEdge)
-              begin
-              DataOut[Count] <= SerialIn;
-              if (Count==0)
-                 State <= 0;
-              Count <= Count - 1;
-              end
-           end
-         endcase
-         end 
+          4: // wait
+             begin
+             if (PositiveEdge)
+                State <= 5;
+             end
+
+          5: // wait
+             begin
+             Count <= 12;
+             if (PositiveEdge)
+                State <= 6;
+             end
+
+          6: // receive bits
+            begin
+            if (PositiveEdge)
+               begin
+               DataOut[Count] <= SerialIn;
+               if (Count==0)
+                  State <= 0;
+               Count <= Count - 1;
+               end
+            end
+          endcase
+          end 
+      end
+
+   always @(State or DataIn or Count)
+      begin
+      if (State==2)
+         SerialOut = 1'b1;
+      else if (State==3)
+         SerialOut = DataIn[Count];
+      else
+         SerialOut = 1'b0;
       end
 
    endmodule   
-
 
  module BemfBlockRam(Addr, DataRd, DataWr, En, Wr, Clk);
 
@@ -136,7 +169,7 @@ module PwmLogic(PwmReg, PwmOut, ClkDiv, Clk,
 endmodule
 
 module BemfCont4(Addr, DataRd, DataWr, En, Rd, Wr, PwmOut, PwmCont, AxisActive, 
-   AdcIn, AdcCs, AdcClk, AdcMux, AdcSel, AdcDiv, 
+   AdcIn, AdcOut, AdcDir, AdcCs, AdcClk,  
 	IntStatus, IntReset, Reset, Clk, Measure0);
 
    input  [8:0] Addr;
@@ -149,11 +182,10 @@ module BemfCont4(Addr, DataRd, DataWr, En, Rd, Wr, PwmOut, PwmCont, AxisActive,
    output [7:0] PwmCont;
 	output [3:0] AxisActive;
    input  AdcIn;
+	output AdcOut;
+	output AdcDir;
    output AdcCs;
    output AdcClk;
-	output [1:0] AdcMux;
-	output AdcSel;
-	output AdcDiv;
 	output IntStatus;
 	input  IntReset;
    input  Reset;
@@ -179,6 +211,7 @@ module BemfCont4(Addr, DataRd, DataWr, En, Rd, Wr, PwmOut, PwmCont, AxisActive,
 
    reg  AdcClk;
    wire AdcStart;
+	wire [3:0] AdcDataIn;
    wire [12:0] AdcDataOut;
    wire AdcBusy;
    wire RamWr;
@@ -189,9 +222,10 @@ module BemfCont4(Addr, DataRd, DataWr, En, Rd, Wr, PwmOut, PwmCont, AxisActive,
    reg  [3:0] BemfDisable;
    wire Active;
    wire Idle;
-	reg  [3:0] ClkDiv;
+	reg  [5:0] ClkDiv;
 	reg  AdcDivReg;
 
+	assign AdcDataIn = AdcState>=4 ? {1'b1, Count[2:0]} : {1'b0, Axis, 1'b0}; // **
    assign AdcStart = AdcState==1 | AdcState==7;
    assign RamWr = AdcState==3 | AdcState==9;
    assign Idle = AdcState==0;
@@ -201,14 +235,11 @@ module BemfCont4(Addr, DataRd, DataWr, En, Rd, Wr, PwmOut, PwmCont, AxisActive,
    assign AxisActive[1] = Active | Axis!=1 | BemfDisable[1];
    assign AxisActive[2] = Active | Axis!=2 | BemfDisable[2];
    assign AxisActive[3] = Active | Axis!=3 | BemfDisable[3];
-	assign AdcSel = AdcState<5 ? 1'b0 : 1'b1; 
-	assign AdcDiv = AdcState<5 ? 1'b0 : AdcDivReg; 
-   assign AdcMux = Axis;
 
    EdgePos InstEdgePos(.In(PwmClkDiv), .Out(PwmClkDivPosEdge), .Clk(Clk));
-   PwmLogic #(4) InstPwmLogic(.PwmReg(PwmReg), .PwmOut(PrePwmOut), .ClkDiv(ClkDiv[3]), .Clk(Clk), .ClkDivOut6(PwmClkDiv));
+   PwmLogic #(4) InstPwmLogic(.PwmReg(PwmReg), .PwmOut(PrePwmOut), .ClkDiv(ClkDiv[5]), .Clk(Clk), .ClkDivOut6(PwmClkDiv));
 
-   Exchange InstExchange(.DataOut(AdcDataOut), .SerialIn(AdcIn),  
+   Exchange InstExchange(.DataIn(AdcDataIn), .DataOut(AdcDataOut), .SerialIn(AdcIn), .SerialOut(AdcOut), .SerialDir(AdcDir),  
 	   .Cs(AdcCs), .Start(AdcStart), .Busy(AdcBusy), .DivClk(AdcClk), .Clk(Clk), .Reset(Reset));
 
    BemfBlockRam InstBlockRam(.Addr({2'b00, RamAddr}), .DataRd(RamDataRd), .DataWr({AdcDataOut, 3'b000}), //.DataWr({2'b00, AdcState, Axis, Count}),
@@ -219,7 +250,7 @@ module BemfCont4(Addr, DataRd, DataWr, En, Rd, Wr, PwmOut, PwmCont, AxisActive,
 
    always @(posedge Clk)
       begin
-      PwmOut <= PrePwmOut & (AxisActive | BemfDisable);
+      PwmOut <= PrePwmOut; // & (AxisActive | BemfDisable);
       Measure0 <= AdcState>6 & ~BemfDisable & Axis==0;
       end
 
