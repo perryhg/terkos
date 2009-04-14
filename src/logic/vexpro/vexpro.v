@@ -5,38 +5,44 @@
 // 1 0 reverse   1 1    1 0    0 0
 // 1 1 reserved  1 1    1 0    0 0   
 
-module MotorLogic(Control, Pwm, Measure, Enable, Phase);
+module MotorLogic(Control, Pwm, Measure, MotorA, MotorB, MotorC);
 
    input  [1:0]Control;
 	input  Pwm;
 	input  Measure;
-	output Enable;
-	output Phase;
+	output MotorA;
+	output MotorB;
+	output MotorC;
 
-	reg Enable;
-	reg Phase;
+	reg MotorA;
+	reg MotorB;
+	reg MotorC;
 
    always @(Control or Pwm or Measure)
 	   begin
       if (Measure | Control==2'b00) // fast decay, coast
 		   begin
-			Enable = 1'b0;
-			Phase = 1'b0;
+			MotorA = 1'b0;
+			MotorB = 1'b0;
+			MotorC = 1'b1;
 			end
-		else if (~Pwm) // slow decay, brake
+		else if (~Pwm | Control==2'b11) // slow decay, brake
 		   begin
-			Enable = 1'b0;
-			Phase = 1'b1;
+			MotorA = 1'b0;
+			MotorB = 1'b0;
+			MotorC = 1'b0;
 			end
       else if (Control==2'b01) // forward
 		   begin
-			Enable = 1'b1;
-			Phase = 1'b1;
+			MotorA = 1'b1;
+			MotorB = 1'b0;
+			MotorC = 1'b0;
 			end
       else // reverse 
 		   begin
-			Enable = 1'b1;
-			Phase = 1'b0;
+			MotorA = 1'b0;
+			MotorB = 1'b1;
+			MotorC = 1'b0;
 			end
       end
 
@@ -98,11 +104,7 @@ module Vexpro(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
 	
 	assign P[41] = AdcDir ? AdcOut : 1'bz;
 	assign BemfEn = Cs & Addr[11:10]==2'b00;
-	
-	assign P[28] = PwmOut[0];
-	assign P[29] = 1'b0;
-	assign P[30] = 1'b0;
-	
+		
    BemfCont4 InstBemfCont4(.Addr(Addr[9:1]), .DataRd(BemfDataRd), .DataWr(Data), .En(BemfEn), 
 	   .Rd(Rd), .Wr(Wr), .PwmOut(PwmOut), .PwmCont(PwmCont), .AxisActive(Active), 
 		.AdcIn(P[41]), .AdcOut(AdcOut), .AdcDir(AdcDir), .AdcCs(P[42]), .AdcClk(P[40]), 
@@ -120,18 +122,16 @@ module Vexpro(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
 	// ME3 P20
 	// MP3 P15
 
-`ifdef foo
-
 	MotorLogic Inst0MotorLogic(.Control(PwmCont[1:0]), .Pwm(PwmOut[0]), .Measure(~Active[0]),
-		.Enable(P[13]), .Phase(P[18]));
+		.MotorA(P[28]), .MotorB(P[29]), .MotorC(P[30]));
 	MotorLogic Inst1MotorLogic(.Control(PwmCont[3:2]), .Pwm(PwmOut[1]), .Measure(~Active[1]),
-		.Enable(P[22]), .Phase(P[27]));
+		.MotorA(P[31]), .MotorB(P[32]), .MotorC(P[33]));
 	MotorLogic Inst2MotorLogic(.Control(PwmCont[5:4]), .Pwm(PwmOut[2]), .Measure(~Active[2]),
-		.Enable(P[29]), .Phase(P[25]));
+		.MotorA(P[34]), .MotorB(P[35]), .MotorC(P[36]));
 	MotorLogic Inst3MotorLogic(.Control(PwmCont[7:6]), .Pwm(PwmOut[3]), .Measure(~Active[3]),
-		.Enable(P[20]), .Phase(P[15]));
+		.MotorA(P[37]), .MotorB(P[38]), .MotorC(P[39]));
 
-
+`ifdef foo
 	// RC Servo
 	wire RcsEn;
 	wire [15:0] RcsDataRd;
