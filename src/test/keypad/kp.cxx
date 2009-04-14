@@ -6,11 +6,11 @@ int main(int argc, char **argv)
 {
   CKeypad kp;
 
-#if 0
+#if 1
   while(1)
     printf("%x\n", kp.GetKey());
 #endif
-#if 1
+#if 0
   while(1)
     {
       if (kp.KeyDown())
