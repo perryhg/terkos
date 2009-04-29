@@ -8,7 +8,7 @@ int main(int argc, char **argv)
   int i = 0;
   
   
-#if 0
+#if 1
   C9302Hardware hw;
   printf("%x\n", *hw.m_fpga.Ushort(0xfd0));
 
@@ -16,7 +16,7 @@ int main(int argc, char **argv)
   *hw.m_fpga.Ushort(0x008) = 0x0700 | 0x0030; 
   *hw.m_fpga.Ushort(0x00a) = 0x0009;
 #endif
-#if 0
+#if 1
   while(1)
     {
       i++;
