@@ -192,12 +192,13 @@ void CQwerkHardware::SetLEDs(unsigned char stateMask)
 
 void CQwerkHardware::SetAudioEnable(bool state)
 {
+#if Q1
   *m_p9302hw->PortHData() &= ~0x0010;
   if (!state) // low going
     *m_p9302hw->PortHData() |= 0x0010;
   else
     usleep(100); // wait for audio amp to power up
-  
+#endif  
 }
 
 void CQwerkHardware::SetMotorVoltageScale(EQHWDivScale scale)
