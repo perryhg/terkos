@@ -42,6 +42,7 @@ NET "Asdi" LOC = "P94";
 NET "AbitClk" LOC = "P56"; 
 NET "I2CClkIn" LOC = "P84";
 NET "I2CClkOut" LOC = "P116";
+NET "I2CDataIn" LOC = "P107";
 NET "I2CDataOut" LOC = "P122";
 NET "Audio" LOC = "P123";
 

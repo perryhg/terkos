@@ -120,7 +120,7 @@ module Exchange(DataIn, DataOut, SerialIn, SerialOut, SerialDir, Cs, Start, Busy
 endmodule
 
 module PwmLogic(PwmReg, PwmOut, ClkDiv, Clk,
-   ClkDivOut4, ClkDivOut5, ClkDivOut6, ClkDivOut7);
+   ClkDivOut2, ClkDivOut3, ClkDivOut4, ClkDivOut5);
 
    parameter NUM_PWM = 1;
   
@@ -128,10 +128,10 @@ module PwmLogic(PwmReg, PwmOut, ClkDiv, Clk,
    output [NUM_PWM-1:0] PwmOut;
    input  ClkDiv;
    input  Clk;
+	output ClkDivOut2;
+	output ClkDivOut3;
 	output ClkDivOut4;
 	output ClkDivOut5;
-	output ClkDivOut6;
-	output ClkDivOut7;
 
    reg     [NUM_PWM-1:0] PwmOut;
    reg     [NUM_PWM-1:0] PreOut;
@@ -141,10 +141,10 @@ module PwmLogic(PwmReg, PwmOut, ClkDiv, Clk,
    integer i;
    integer j;
 
+	assign ClkDivOut2 = Counter[2];
+	assign ClkDivOut3 = Counter[3];
 	assign ClkDivOut4 = Counter[4];
 	assign ClkDivOut5 = Counter[5];
-	assign ClkDivOut6 = Counter[6];
-	assign ClkDivOut7 = Counter[7];
 
 	EdgePos InstEdgePos(.In(ClkDiv), .Out(PosClkDiv), .Clk(Clk));
  
@@ -168,9 +168,9 @@ module PwmLogic(PwmReg, PwmOut, ClkDiv, Clk,
              
 endmodule
 
-module BemfCont4(Addr, DataRd, DataWr, En, Rd, Wr, PwmOut, PwmCont, AxisActive, 
+module BemfCont4(Addr, DataRd, DataWr, En, Rd, Wr, PwmOut, PwmCont, AxisActive, AxisMeasure,
    AdcIn, AdcOut, AdcDir, AdcCs, AdcClk,  
-	IntStatus, IntReset, Reset, Clk, Measure0);
+	IntStatus, IntReset, Reset, Clk);
 
    input  [8:0] Addr;
    output [15:0] DataRd;
@@ -181,6 +181,7 @@ module BemfCont4(Addr, DataRd, DataWr, En, Rd, Wr, PwmOut, PwmCont, AxisActive,
    output [3:0] PwmOut;
    output [7:0] PwmCont;
 	output [3:0] AxisActive;
+	output [3:0] AxisMeasure;
    input  AdcIn;
 	output AdcOut;
 	output AdcDir;
@@ -190,18 +191,15 @@ module BemfCont4(Addr, DataRd, DataWr, En, Rd, Wr, PwmOut, PwmCont, AxisActive,
 	input  IntReset;
    input  Reset;
    input  Clk;
-	output Measure0;
 
    reg  DataRd;
    reg  [7:0] AdcDivCount;
-   reg  [6:0] ActiveInterval;
+   reg  [7:0] ActiveInterval;
    reg  [7:0] WaitInterval;
    reg  [3:0] BemfReadings;
-   reg  [3:0] CurrentReadings;
    reg  [31:0] PwmReg;
    wire [3:0] PrePwmOut;
    reg  [3:0] PwmOut;
-   reg  Measure0;
    wire PwmClkDiv;
    reg  [7:0] PwmCont;
    reg  [7:0] Count;
@@ -215,29 +213,30 @@ module BemfCont4(Addr, DataRd, DataWr, En, Rd, Wr, PwmOut, PwmCont, AxisActive,
    wire [12:0] AdcDataOut;
    wire AdcBusy;
    wire RamWr;
-   reg  [4:0] AdcState;
+   reg  [3:0] AdcState;
    reg  [7:0] RamCount;
    wire [15:0] RamDataRd;
    wire [7:0] RamAddr;
    reg  [3:0] BemfDisable;
    wire Active;
-   wire Idle;
-	reg  [5:0] ClkDiv;
-	reg  AdcDivReg;
+	reg  [7:0] ClkDiv;
 
-	assign AdcDataIn = AdcState>=4 ? {1'b1, Count[2:0]} : {1'b0, Axis, 1'b0}; // **
-   assign AdcStart = AdcState==1 | AdcState==7;
-   assign RamWr = AdcState==3 | AdcState==9;
-   assign Idle = AdcState==0;
-   assign Active = AdcState<6;
-   assign RamAddr = Idle ? Addr[7:0] : RamCount;
+	assign AdcDataIn = {1'b0, Axis, 1'b0};
+   assign AdcStart = AdcState==2;
+   assign RamWr = AdcState==4;
+   assign Active = AdcState==0;
+   assign RamAddr = Active ? Addr[7:0] : RamCount;
    assign AxisActive[0] = Active | Axis!=0 | BemfDisable[0];
    assign AxisActive[1] = Active | Axis!=1 | BemfDisable[1];
    assign AxisActive[2] = Active | Axis!=2 | BemfDisable[2];
    assign AxisActive[3] = Active | Axis!=3 | BemfDisable[3];
+   assign AxisMeasure[0] = AdcState>1 & Axis==0;
+   assign AxisMeasure[1] = AdcState>1 & Axis==1;
+   assign AxisMeasure[2] = AdcState>1 & Axis==2;
+   assign AxisMeasure[3] = AdcState>1 & Axis==3;
 
    EdgePos InstEdgePos(.In(PwmClkDiv), .Out(PwmClkDivPosEdge), .Clk(Clk));
-   PwmLogic #(4) InstPwmLogic(.PwmReg(PwmReg), .PwmOut(PrePwmOut), .ClkDiv(ClkDiv[5]), .Clk(Clk), .ClkDivOut6(PwmClkDiv));
+   PwmLogic #(4) InstPwmLogic(.PwmReg(PwmReg), .PwmOut(PrePwmOut), .ClkDiv(ClkDiv[7]), .Clk(Clk), .ClkDivOut3(PwmClkDiv));
 
    Exchange InstExchange(.DataIn(AdcDataIn), .DataOut(AdcDataOut), .SerialIn(AdcIn), .SerialOut(AdcOut), .SerialDir(AdcDir),  
 	   .Cs(AdcCs), .Start(AdcStart), .Busy(AdcBusy), .DivClk(AdcClk), .Clk(Clk), .Reset(Reset));
@@ -251,12 +250,11 @@ module BemfCont4(Addr, DataRd, DataWr, En, Rd, Wr, PwmOut, PwmCont, AxisActive,
    always @(posedge Clk)
       begin
       PwmOut <= PrePwmOut; // & (AxisActive | BemfDisable);
-      Measure0 <= AdcState>6 & ~BemfDisable & Axis==0;
       end
 
    always @(posedge Clk)
       begin
-      if (AdcDivCount==50)
+      if (AdcDivCount==40)
          begin
          AdcDivCount <= 0;
          AdcClk <= ~AdcClk;
@@ -278,7 +276,7 @@ module BemfCont4(Addr, DataRd, DataWr, En, Rd, Wr, PwmOut, PwmCont, AxisActive,
 
 			if (IntReset)
 			   IntStatus <= 1'b0;
-         else if  (AdcState==10 & Count=={BemfReadings, 2'b11} & Axis==3)
+         else if  (AdcState==5 & Count=={BemfReadings, 2'b11} & Axis==3)
 			   IntStatus <= 1'b1;
 
          case (AdcState)
@@ -295,81 +293,34 @@ module BemfCont4(Addr, DataRd, DataWr, En, Rd, Wr, PwmOut, PwmCont, AxisActive,
                Count <= Count + 1;
             end
 
-         1: // assert start
-            begin
-            AdcState <= 2;
-            end
-
-         2: // wait for adc exchange
-            begin
-            if (~AdcBusy)
-               AdcState <= 3;
-            end 
-
-         3: // write to memory
-            begin
-            AdcState <= 4;
-            end
-
-         4: // increment
-            begin
-            Count <= Count + 1;
-            RamCount <= RamCount + 1;
-            if (Count=={CurrentReadings, 2'b11})
-               begin
-               Count <= 0;
-		  	      if (Axis==3)
-                  AdcState <= 5;
-               else
-			         begin
-                  Axis <= Axis + 1;
-                  AdcState <= 1;
-			         end
-               end
-            else
-               AdcState <= 1;
-            end
-
-         5: // wait for active period to end
-            begin
-            Axis <= 0;
-            if (Count==ActiveInterval)
-               begin
-               Count <= 0;
-               AdcState <= 6;
-               end
-            else if (PwmClkDivPosEdge)
-               Count <= Count + 1;
-            end
-
-         6: // wait for wait period to end
+			1: // wait for wait period to end
             begin
             if (Count==WaitInterval)
                begin
                Count <= 0;
-               AdcState <= 7;
+               AdcState <= 2;
                end
             else if (PwmClkDivPosEdge)
                Count <= Count + 1;
             end
-
-         7: // assert start
+				
+         2: // assert start
             begin
-            AdcState <= 8;
+            AdcState <= 3;
             end
 
-         8: // wait for adc exchange
+         3: // wait for adc exchange
             begin
             if (~AdcBusy)
-               AdcState <= 9;
-            end
+               AdcState <= 4;
+            end 
 
-         9: // write to memory
+         4: // write to memory
             begin
-            AdcState <= 10;
+            AdcState <= 5;
             end
 
-        10: 
+         5: // increment
             begin
             Count <= Count + 1;
             RamCount <= RamCount + 1;
@@ -381,11 +332,11 @@ module BemfCont4(Addr, DataRd, DataWr, En, Rd, Wr, PwmOut, PwmCont, AxisActive,
                else
 			         begin
                   Axis <= Axis + 1;
-                  AdcState <= 6;
+                  AdcState <= 1;
 			         end
                end
             else
-               AdcState <= 7;
+               AdcState <= 2;
             end
 
          endcase
@@ -422,21 +373,19 @@ module BemfCont4(Addr, DataRd, DataWr, En, Rd, Wr, PwmOut, PwmCont, AxisActive,
             end
          else if (Addr[2:0]==4)
             begin
-            ActiveInterval <= DataWr[7:1];
+            ActiveInterval <= DataWr[7:0];
             BemfReadings <= DataWr[11:8];
-            CurrentReadings <= DataWr[15:12];
             end
          else if (Addr[2:0]==5)
 			   begin
             WaitInterval <= DataWr[7:0];
-				AdcDivReg <= DataWr[8];			
 				end	
          end
       end
 
    always @(Addr or AdcBusy or PwmReg or RamCount or RamDataRd or 
-      BemfReadings or CurrentReadings or WaitInterval or ActiveInterval or 
-		PwmCont or Idle or BemfDisable or AdcDivReg)
+      BemfReadings or WaitInterval or ActiveInterval or 
+		PwmCont or Active or BemfDisable)
       begin
       if (Addr[8])
          DataRd = RamDataRd;
@@ -451,11 +400,11 @@ module BemfCont4(Addr, DataRd, DataWr, En, Rd, Wr, PwmOut, PwmCont, AxisActive,
          else if (Addr[2:0]==3)
             DataRd = {5'h00, BemfDisable[3], PwmCont[7:6], PwmReg[31:24]};
          else if (Addr[2:0]==4)
-            DataRd = {CurrentReadings, BemfReadings, ActiveInterval, 1'b0}; 
+            DataRd = {4'h0, BemfReadings, ActiveInterval}; 
          else if (Addr[2:0]==5)
-            DataRd = {7'h00, AdcDivReg, WaitInterval};
+            DataRd = {8'h00, WaitInterval};
          else if (Addr[2:0]==6)
-            DataRd = {15'h0000, Idle}; 
+            DataRd = {15'h0000, Active}; 
          else
             DataRd = 16'hxxxx;
          end

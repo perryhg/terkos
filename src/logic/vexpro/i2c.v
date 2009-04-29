@@ -4,7 +4,7 @@
 //	   1        0     0
 //	   1        1     0
 
-module I2cCont(Addr, DataRd, DataWr, En, Rd, Wr, SdaOut, SdaIn, Scl, 
+module I2cCont(Addr, DataRd, DataWr, En, Rd, Wr, SdaOut, SdaIn, SclOut, SclIn, 
    // IntStatus, IntReset, 
    Reset, Clk);
 
@@ -16,7 +16,8 @@ module I2cCont(Addr, DataRd, DataWr, En, Rd, Wr, SdaOut, SdaIn, Scl,
 	input  Wr;
 	output SdaOut;
 	input  SdaIn;
-	output Scl;
+	output SclOut;
+	input  SclIn;
 //	output IntStatus;
 //	input  IntReset;
 	input  Reset;
@@ -28,7 +29,7 @@ module I2cCont(Addr, DataRd, DataWr, En, Rd, Wr, SdaOut, SdaIn, Scl,
 	reg    [15:0] DataRd;
 	
 	assign SdaOut = SdaDir & ~SdaOutReg;
-	assign Scl = ~SclReg;
+	assign SclOut = ~SclReg;
 	
    always @(posedge Clk)
       begin
@@ -42,7 +43,7 @@ module I2cCont(Addr, DataRd, DataWr, En, Rd, Wr, SdaOut, SdaIn, Scl,
    always @(Addr or SdaDir or Scl or SdaIn)
       begin
 	   if (Addr[2:0]==0)
-		   DataRd = {13'h0000, SdaDir, SclReg, SdaIn};
+		   DataRd = {13'h0000, SdaDir, SclIn, SdaIn};
 		else 
 		   DataRd = 16'hxxxx;
 		end
