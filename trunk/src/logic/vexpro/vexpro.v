@@ -3,7 +3,7 @@
 // 0 0 coast     0 0    1 0    0 0
 // 0 1 forward   0 1    1 0    0 0
 // 1 0 reverse   1 1    1 0    0 0
-// 1 1 reserved  1 1    1 0    0 0   
+// 1 1 brake     1 1    1 0    0 0   
 
 module MotorLogic(Control, Pwm, Measure, MotorA, MotorB, MotorC);
 
@@ -30,7 +30,6 @@ module MotorLogic(Control, Pwm, Measure, MotorA, MotorB, MotorC);
 		   begin
 			MotorA = 1'b0;
 			MotorB = 1'b0;
-			MotorC = 1'b0;
 			end
       else if (Control==2'b01) // forward
 		   begin
@@ -73,7 +72,7 @@ module Vexpro(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
 	input  [4:0] PIn;
 	input  PClkIn;
 
-	reg    [15:0] DataRd;
+	wire   [15:0] DataRd;
 
    wire   Rd;
 	wire   Wr;
@@ -90,7 +89,7 @@ module Vexpro(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
 	Primary InstPrimary(.Addr(Addr), .Data(Data), .RdN(RdN), .WrN(WrN), .Dq(Dq), 
 	   .CsN(CsN), .Wait(Wait), .Int(Int), .Clk(Clk), 
       .Async(Async), .Asdo(Asdo), .Arstn(Arstn), .Asdi(Asdi), .AbitClk(AbitClk), .AudioOut(Audio),
-		.Rd(Rd), .Wr(Wr), .Cs(Cs), .DataRd(DataRd), .Identifier(16'hc001), .Reset(Reset),
+		.Rd(Rd), .Wr(Wr), .Cs(Cs), .DataRd(DataRd), .Identifier(16'hc002), .Reset(Reset),
 		.IntStatus({GpioIntStatus, 7'h00, BemfIntStatus}), 
 		.IntReset({GpioIntReset, IntDummy, BemfIntReset}));
 
@@ -99,6 +98,7 @@ module Vexpro(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
    wire [3:0] PwmOut;
    wire [7:0] PwmCont;
 	wire [3:0] Active;
+	wire [3:0] Measure;
 	wire AdcDir;
    wire AdcOut;
 	
@@ -106,12 +106,19 @@ module Vexpro(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
 	assign BemfEn = Cs & Addr[11:10]==2'b00;
 		
    BemfCont4 InstBemfCont4(.Addr(Addr[9:1]), .DataRd(BemfDataRd), .DataWr(Data), .En(BemfEn), 
-	   .Rd(Rd), .Wr(Wr), .PwmOut(PwmOut), .PwmCont(PwmCont), .AxisActive(Active), 
+	   .Rd(Rd), .Wr(Wr), .PwmOut(PwmOut), .PwmCont(PwmCont), .AxisActive(Active), .AxisMeasure(Measure), 
 		.AdcIn(P[41]), .AdcOut(AdcOut), .AdcDir(AdcDir), .AdcCs(P[42]), .AdcClk(P[40]), 
 		.IntStatus(BemfIntStatus), .IntReset(BemfIntReset), 
-		.Reset(Reset), .Clk(Clk)); // .Measure0(P[12]
+		.Reset(Reset), .Clk(Clk)); 
 		
-	//assign P[8] = Active[0];
+	assign P[0] = Active[0];
+	assign P[1] = Active[1];
+	assign P[2] = Active[2];
+	assign P[3] = Active[3];
+	assign P[4] = Measure[0];
+	assign P[5] = Measure[1];
+	assign P[6] = Measure[2];
+	assign P[7] = Measure[3];
 
 	// ME0 P13
 	// MP0 P18
@@ -158,7 +165,7 @@ module Vexpro(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
    assign I2cEn = Cs & Addr[11:6]==6'b010010;
 
 	I2cCont InstI2cCont(.Addr(Addr[3:1]), .DataRd(I2cDataRd), .DataWr(Data), .En(I2cEn), .Rd(Rd), .Wr(Wr), 
-	   .SdaOut(P[49]), .SdaIn(PIn[4]), .Scl(P[47]), 
+	   .SdaOut(P[49]), .SdaIn(PIn[4]), .SclOut(P[47]), .SclIn(), 
 //		.IntStatus(I2cIntStatus), .IntReset(I2cIntReset), 
 	   .Reset(Reset), .Clk(Clk));
 
@@ -175,5 +182,7 @@ module Vexpro(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
 		   default: DataRd = 16'hxxxx;
 		endcase
 		end
-`endif		 
+`endif
+	assign DataRd = BemfEn ? BemfDataRd : 16'hxxxx;
+		 
 endmodule
