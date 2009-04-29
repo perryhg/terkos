@@ -8,7 +8,7 @@
 #define QEM_OFFSET_WINDOW_SCALE         9
 #define QEM_OFFSET_WINDOW               (1<<QEM_OFFSET_WINDOW_SCALE)
 #define QEM_INIT_TIMEOUT                (1<<(QEM_OFFSET_WINDOW_SCALE+2))
-#define QEM_DELAY                       65
+#define QEM_DELAY                       9
 #define QEM_PERIOD                      110
 #define QEM_WRITE_QUEUE_SIZE            5*sizeof(long)
 

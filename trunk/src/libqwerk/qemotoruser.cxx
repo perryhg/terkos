@@ -25,6 +25,7 @@ CQEMotorUser::CQEMotorUser(CQwerkHardware *pQwerk, int axis0, int axis1, int axi
       m_allocated = false;
     }
 
+#if Q1
   // set voltage divider
   motorVoltage = m_pQwerk->GetBattVoltage();  
   if (motorVoltage<10000)
@@ -33,6 +34,7 @@ CQEMotorUser::CQEMotorUser(CQwerkHardware *pQwerk, int axis0, int axis1, int axi
     m_pQwerk->SetMotorVoltageScale(QHW_DIV_91TH);
   else
     m_pQwerk->SetMotorVoltageScale(QHW_DIV_108TH);
+#endif
   
   // open motor device
   strcpy(dev, QEM_DEVICE);
