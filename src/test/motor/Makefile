@@ -8,7 +8,7 @@ OBJECTS=$(SRCS:.cxx=.o)
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
-	$(CXX) $(OBJECTS) -o $(TARGET) $(LDFLAGS)
+	$(CXX) -g $(OBJECTS) -o $(TARGET) $(LDFLAGS)
 
 clean:
 	-rm *.o
