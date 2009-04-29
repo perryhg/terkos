@@ -235,8 +235,13 @@ void mot_init(void *addr)
 
   mot_reg_pwm_control = (volatile unsigned short *)addr;
   mot_reg_status = (volatile unsigned short *)addr + 6;
+#if Q1
   mot_reg_mcurrent_measurement = (volatile unsigned short *)addr + 256;
   mot_reg_bemf_measurement = (volatile short *)addr + 256 + QEMOT_NUM_MOTORS*MOT_MCURRENT_MEASUREMENTS;
+#else
+  mot_reg_bemf_measurement = (volatile unsigned short *)addr + 256;
+#endif
+
   mot_reg_wait_interval = (volatile unsigned short *)addr + 5;
   mot_reg_timing = (volatile unsigned short *)addr + 4;
 }
@@ -251,7 +256,9 @@ void mot_exit()
 void mot_periodic()
 {
   mot_handle_bemf();
+#if Q1
   mot_handle_current();
+#endif
   mot_handle_write();
   mot_handle_read();
   mot_handle_pid_control();
