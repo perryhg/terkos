@@ -5,6 +5,9 @@ KERNELDIR ?= /home/rich/oe/EMAC-OE/tmp/work/IPAC9302-linux-gnueabi/IPAC9302-kern
 PWD := $(shell pwd)
 
 modules:
+	$(MAKE) ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- modules2
+
+modules2:
 	$(MAKE) -C $(KERNELDIR) M=$(PWD) modules
 
 modules_install:
