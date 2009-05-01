@@ -40,7 +40,7 @@ module I2cCont(Addr, DataRd, DataWr, En, Rd, Wr, SdaOut, SdaIn, SclOut, SclIn,
 			end
       end
 
-   always @(Addr or SdaDir or Scl or SdaIn)
+   always @(Addr or SdaDir or SclIn or SdaIn)
       begin
 	   if (Addr[2:0]==0)
 		   DataRd = {13'h0000, SdaDir, SclIn, SdaIn};

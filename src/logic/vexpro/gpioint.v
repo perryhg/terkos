@@ -1,4 +1,4 @@
-module GpioInt(Addr, DataRd, DataWr, En, Rd, Wr, PortIn, PortOut, IntStatus, IntReset, Reset, Clk);
+module GpioInt(Addr, DataRd, DataWr, En, Rd, Wr, Port, IntStatus, IntReset, Reset, Clk);
 
    input  [2:0] Addr;
 	output [15:0] DataRd;
@@ -6,65 +6,85 @@ module GpioInt(Addr, DataRd, DataWr, En, Rd, Wr, PortIn, PortOut, IntStatus, Int
 	input  En;
 	input  Rd;
 	input  Wr;
-	input  [7:0] PortIn;
-	output [7:0] PortOut;
-	output [7:0] IntStatus;
-	input  [7:0] IntReset;
+	inout  [15:0] Port;
+	output IntStatus;
+	input  IntReset;
 	input  Reset;
 	input  Clk;
 
 	reg  [15:0] DataRd;
-	reg  [7:0] PortOut;
-	reg  [7:0] IntStatus;
-	reg  [7:0] IntMask;
-	reg  [7:0] IntEdge;
-	reg  [7:0] PortInSync;
-	reg  [7:0] PortInPrev;
-	wire [7:0] PortInPos;
+	reg  [15:0] DataDir;
+	reg  [15:0] DataOut;
+	reg  IntStatus;
+	reg  [15:0] IntFilt;
+	reg  [15:0] IntMask;
+	reg  [15:0] IntEdge;
 
-	assign PortInPos = (PortInPrev^IntEdge)&(~PortInSync^IntEdge);
+	//assign PortInPos = (PortInPrev^IntEdge)&(~PortInSync^IntEdge);
+	
+	assign Port[0]  = DataDir[0]  ? DataOut[0]  : 1'bZ;
+	assign Port[1]  = DataDir[1]  ? DataOut[1]  : 1'bZ;
+	assign Port[2]  = DataDir[2]  ? DataOut[2]  : 1'bZ;
+	assign Port[3]  = DataDir[3]  ? DataOut[3]  : 1'bZ;
+	assign Port[4]  = DataDir[4]  ? DataOut[4]  : 1'bZ;
+	assign Port[5]  = DataDir[5]  ? DataOut[5]  : 1'bZ;
+	assign Port[6]  = DataDir[6]  ? DataOut[6]  : 1'bZ;
+	assign Port[7]  = DataDir[7]  ? DataOut[7]  : 1'bZ;
+	assign Port[8]  = DataDir[8]  ? DataOut[8]  : 1'bZ;
+	assign Port[9]  = DataDir[9]  ? DataOut[9]  : 1'bZ;
+	assign Port[10] = DataDir[10] ? DataOut[10] : 1'bZ;
+	assign Port[11] = DataDir[11] ? DataOut[11] : 1'bZ;
+	assign Port[12] = DataDir[12] ? DataOut[12] : 1'bZ;
+	assign Port[13] = DataDir[13] ? DataOut[13] : 1'bZ;
+	assign Port[14] = DataDir[14] ? DataOut[14] : 1'bZ;
+	assign Port[15] = DataDir[15] ? DataOut[15] : 1'bZ;
 
 	always @(posedge Clk)
 	   begin
-		PortInSync <= PortIn;
-		PortInPrev <= PortInSync;
+//		PortInSync <= PortIn;
+//		PortInPrev <= PortInSync;
 
 		if (Reset)
 		   begin
-			PortOut <= 0;
+			DataDir <= 0;
+			DataOut <= 0;
 			IntStatus <= 0;
 			IntMask <= 0;
 			IntEdge <= 0;
 			end
       else
 		   begin
-			if (IntReset!=0) // reset status bits
-			   IntStatus <= IntStatus & ~IntReset;
-		   else
-			   IntStatus <= (IntStatus | PortInPos)&IntMask;	 // IntMask will reset interrupt
+//			if (IntReset!=0) // reset status bits
+//			   IntState <= IntStatus & ~IntReset;
+//		   else
+//			   IntState <= (IntStatus | PortInPos)&IntMask;	 // IntMask will reset interrupt
          
 			if (En & Wr)
 			   begin
 			   if (Addr==0)
-				   PortOut <= DataWr[15:8];
+				   DataOut <= DataWr;
         		else if (Addr==1)
-				   IntMask <= DataWr[7:0];
+				   DataDir <= DataWr;
         		else if (Addr==2)
-				   IntEdge <= DataWr[7:0];
+				   IntMask <= DataWr;
+        		else if (Addr==3)
+				   IntEdge <= DataWr;
 				end
 			end
       end
 
-   always @(En or Addr or PortIn or PortOut or IntMask or IntEdge or IntStatus)
+   always @(En or Addr or Port or DataDir or IntMask or IntEdge or IntFilt)
 	   begin
 	   if (En & Addr==0)
-	      DataRd = {PortOut, PortIn};
-      else if (En & Addr==1)
-	      DataRd = {8'h00, IntMask};
+			DataRd = Port;
+	   else if (En & Addr==1)
+	      DataRd = DataDir;
       else if (En & Addr==2)
-	      DataRd = {8'h00, IntEdge};
+	      DataRd = IntMask;
       else if (En & Addr==3)
-	      DataRd = {8'h00, IntStatus};
+	      DataRd = IntEdge;
+      else if (En & Addr==4)
+	      DataRd = IntFilt;
 		else 
 		   DataRd = 16'hxxxx;      
 		end

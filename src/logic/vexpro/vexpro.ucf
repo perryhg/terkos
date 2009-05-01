@@ -35,15 +35,18 @@ NET "CsN<1>" LOC = "P66";
 NET "Wait" LOC = "P112"; 
 NET "Int" LOC = "P106"; 
 NET "Clk" LOC = "P128"; 
+NET "I2CClkIn" LOC = "P84";
+NET "I2CClkOut" LOC = "P116";
+NET "I2CDataOut" LOC = "P122";
+NET "I2CDataIn" LOC = "P107";
+
 NET "Async" LOC = "P111"; 
 NET "Asdo" LOC = "P101"; 
 NET "Arstn" LOC = "P95"; 
 NET "Asdi" LOC = "P94";
 NET "AbitClk" LOC = "P56"; 
-NET "I2CClkIn" LOC = "P84";
-NET "I2CClkOut" LOC = "P116";
-NET "I2CDataIn" LOC = "P107";
-NET "I2CDataOut" LOC = "P122";
+
+
 NET "Audio" LOC = "P123";
 
 NET P<0> LOC = "P143"; 
@@ -102,6 +105,23 @@ NET PIn<1> LOC = "P36";
 NET PIn<2> LOC = "P78";
 
 NET PClkIn LOC = "P89";
+
+NET P<0> PULLUP;
+NET P<1> PULLUP;
+NET P<2> PULLUP;
+NET P<3> PULLUP;
+NET P<4> PULLUP;
+NET P<5> PULLUP;
+NET P<6> PULLUP;
+NET P<7> PULLUP;
+NET P<8> PULLUP;
+NET P<9> PULLUP;
+NET P<10> PULLUP;
+NET P<11> PULLUP;
+NET P<12> PULLUP;
+NET P<13> PULLUP;
+NET P<14> PULLUP;
+NET P<15> PULLUP;
 
 NET Wait PULLUP;
 NET Data<*> FAST;
