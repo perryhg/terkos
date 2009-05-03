@@ -5,7 +5,7 @@ LIB_DIR=$(BUILD_DIR)/libraries
 EXE_DIR=$(BUILD_DIR)/executables
 DIST_DIR=dist
 
-TINY_XML_DIR=../tinyxml++
+TINY_XML_DIR=../../tinyxml++
 TINY_XML_SRC_DIR=$(TINY_XML_DIR)/ticpp
 TINY_XML_DIST_DIR=$(TINY_XML_DIR)/dist
 TINY_XML_LIB_SHORT_NAME=ticppd
