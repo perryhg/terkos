@@ -6,6 +6,7 @@
 #define FIRMWAREVERSIONMENUITEMACTION_H_
 
 #include <algorithm>
+#include <string.h>
 #include "CharacterDisplay.h"
 #include "CharacterDisplayMenuItemAction.h"
 
