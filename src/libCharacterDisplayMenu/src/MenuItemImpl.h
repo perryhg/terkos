@@ -44,7 +44,8 @@ class MenuItemImpl : public MenuItem
          // delete the action, if any
          if (action != NULL)
             {
-            delete action;
+            // TODO: I think I need to delete using action->deleteSelf() or somesuch.
+            //delete action;
             }
 
          // TODO: delete each of the children (I think I can just call children.clear())
