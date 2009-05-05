@@ -60,9 +60,23 @@ FirmwareVersionMenuItemAction.o: init $(SRC_DIR)/FirmwareVersionMenuItemAction.c
 	@echo 'Finished building target: $@'
 	@echo ' '
 	
-FirmwareVersionMenuItemAction.so: libCharacterDisplayMenu.so FirmwareVersionMenuItemAction.o
+libFirmwareVersionMenuItemAction.so: libCharacterDisplayMenu.so FirmwareVersionMenuItemAction.o
 	@echo 'Building target: $@'
 	$(CXX) -shared -Wl,-soname,libFirmwareVersionMenuItemAction.so -o $(LIB_DIR)/libFirmwareVersionMenuItemAction.so $(OBJ_DIR)/FirmwareVersionMenuItemAction.o
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+HardwareVersionMenuItemAction.o: init $(SRC_DIR)/HardwareVersionMenuItemAction.cpp
+	@echo 'Building target: $@'
+	$(CXX) $(CFLAGS) $(SRC_DIR)/HardwareVersionMenuItemAction.cpp -o $(OBJ_DIR)/HardwareVersionMenuItemAction.o
+	@echo 'Finished building target: $@'
+	@echo ' '
+	
+libHardwareVersionMenuItemAction.so: libCharacterDisplayMenu.so HardwareVersionMenuItemAction.o
+	@echo 'Building target: $@'
+	$(CXX) -shared -Wl,-soname,libHardwareVersionMenuItemAction.so -o $(LIB_DIR)/libHardwareVersionMenuItemAction.so $(OBJ_DIR)/HardwareVersionMenuItemAction.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -83,7 +97,8 @@ LCDMenu.o: init $(SRC_DIR)/LCDMenu.cpp
 	@echo ' '
 
 LCDMenu: libCharacterDisplayMenu.so \
-         FirmwareVersionMenuItemAction.so \
+         libFirmwareVersionMenuItemAction.so \
+         libHardwareVersionMenuItemAction.so \
          LCDCharacterDisplay.o \
          LCDMenu.o
 	@echo 'Building target: $@'
