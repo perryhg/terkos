@@ -38,6 +38,13 @@ int main(int argc, char** argv)
    // do a little testing
    menuStatusManager->handleDownEvent();
    menuStatusManager->handleDownEvent();
+   menuStatusManager->handleStartEvent();
+   menuStatusManager->handleStartEvent();
+   menuStatusManager->handleStopEvent();
+   menuStatusManager->handleDownEvent();
+   menuStatusManager->handleStartEvent();
+   menuStatusManager->handleStopEvent();
+   menuStatusManager->handleStopEvent();
 
    // TODO: go into a loop here which checks the button pad and sends events to the menuStatusManager
 
