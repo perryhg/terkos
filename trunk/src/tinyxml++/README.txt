@@ -29,7 +29,7 @@ Here's what I did to build the TinyXML shared library:
       
 7) Ran make:
 
-      make CONFIG=Release CXX=arm-linux-g++
+      make CONFIG=Debug CXX=arm-linux-gnueabi-g++
 
 Note that you can fully clean everything by doing:
 

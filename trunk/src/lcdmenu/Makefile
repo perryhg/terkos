@@ -21,9 +21,18 @@ TINY_XML_SRC_DIR=$(TINY_XML_DIR)/ticpp
 TINY_XML_DIST_DIR=$(TINY_XML_DIR)/dist
 TINY_XML_LIB_SHORT_NAME=ticppd
 
-#CXX=arm-linux-g++
-CFLAGS=-fPIC -c -Wall -I$(LIB_CHARACTER_DISPLAY_MENU_SRC_DIR) -I$(LIB_DYNAMIC_CLASS_LOADER_SRC_DIR) -I$(TINY_XML_SRC_DIR) -D "TIXML_USE_TICPP" -D "UNICODE" -D "_UNICODE" -D "DEBUG" -D "_DEBUG"
-LDFLAGS=
+#CXX=arm-linux-gnueabi-g++
+
+CFLAGS=-fPIC -c -Wall \
+       -I$(LIB_CHARACTER_DISPLAY_MENU_SRC_DIR) \
+       -I$(LIB_DYNAMIC_CLASS_LOADER_SRC_DIR) \
+       -I$(TINY_XML_SRC_DIR) \
+       -D "TIXML_USE_TICPP" -D "UNICODE" -D "_UNICODE" -D "DEBUG" -D "_DEBUG"
+LDFLAGS=-L$(LIB_DIR) \
+        -l$(LIB_CHARACTER_DISPLAY_MENU_LIB_SHORT_NAME) \
+        -l$(LIB_DYNAMIC_CLASS_LOADER_LIB_SHORT_NAME) \
+        -l$(TINY_XML_LIB_SHORT_NAME) \
+        -ldl
 
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -47,13 +56,13 @@ init:
 
 FirmwareVersionMenuItemAction.o: init $(SRC_DIR)/FirmwareVersionMenuItemAction.cpp
 	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/FirmwareVersionMenuItemAction.cpp -o $(OBJ_DIR)/FirmwareVersionMenuItemAction.o -L$(LIB_DIR)
+	$(CXX) $(CFLAGS) $(SRC_DIR)/FirmwareVersionMenuItemAction.cpp -o $(OBJ_DIR)/FirmwareVersionMenuItemAction.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 	
 FirmwareVersionMenuItemAction.so: libCharacterDisplayMenu.so FirmwareVersionMenuItemAction.o
 	@echo 'Building target: $@'
-	$(CXX) -shared -Wl,-soname,libFirmwareVersionMenuItemAction.so -o $(LIB_DIR)/libFirmwareVersionMenuItemAction.so $(OBJ_DIR)/FirmwareVersionMenuItemAction.o -L$(LIB_DIR) -lCharacterDisplayMenu
+	$(CXX) -shared -Wl,-soname,libFirmwareVersionMenuItemAction.so -o $(LIB_DIR)/libFirmwareVersionMenuItemAction.so $(OBJ_DIR)/FirmwareVersionMenuItemAction.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -61,7 +70,7 @@ FirmwareVersionMenuItemAction.so: libCharacterDisplayMenu.so FirmwareVersionMenu
 
 LCDCharacterDisplay.o: init $(SRC_DIR)/LCDCharacterDisplay.cpp
 	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/LCDCharacterDisplay.cpp -o $(OBJ_DIR)/LCDCharacterDisplay.o -L$(LIB_DIR)
+	$(CXX) $(CFLAGS) $(SRC_DIR)/LCDCharacterDisplay.cpp -o $(OBJ_DIR)/LCDCharacterDisplay.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -69,22 +78,18 @@ LCDCharacterDisplay.o: init $(SRC_DIR)/LCDCharacterDisplay.cpp
 
 LCDMenu.o: init $(SRC_DIR)/LCDMenu.cpp
 	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/LCDMenu.cpp -o $(OBJ_DIR)/LCDMenu.o -L$(LIB_DIR)
+	$(CXX) $(CFLAGS) $(SRC_DIR)/LCDMenu.cpp -o $(OBJ_DIR)/LCDMenu.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 LCDMenu: libCharacterDisplayMenu.so \
-			FirmwareVersionMenuItemAction.so \
-			LCDCharacterDisplay.o \
-			LCDMenu.o
+         FirmwareVersionMenuItemAction.so \
+         LCDCharacterDisplay.o \
+         LCDMenu.o
 	@echo 'Building target: $@'
 	$(CXX) -o $(EXE_DIR)/LCDMenu $(OBJ_DIR)/LCDCharacterDisplay.o \
                                 $(OBJ_DIR)/LCDMenu.o \
-                                -L$(LIB_DIR) \
-                                -l$(LIB_CHARACTER_DISPLAY_MENU_LIB_SHORT_NAME) \
-                                -l$(LIB_DYNAMIC_CLASS_LOADER_LIB_SHORT_NAME) \
-                                -l$(TINY_XML_LIB_SHORT_NAME) \
-                                -ldl
+                                $(LDFLAGS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
