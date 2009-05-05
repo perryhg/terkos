@@ -5,9 +5,9 @@ LIB_DIR=$(BUILD_DIR)/libraries
 DIST_DIR=dist
 LIBRARY_NAME=libDynamicClassLoader.so
 
-#CXX=arm-linux-g++
+#CXX=arm-linux-gnueabi-g++
+
 CFLAGS=-fPIC -c -Wall
-LDFLAGS=
 
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -54,7 +54,7 @@ DynamicLoader.o: init $(SRC_DIR)/DynamicLoader.cpp
 
 $(LIBRARY_NAME): DynamicObject.o DynamicLibrary.o DynamicLoader.o 
 	@echo 'Building target: $@'
-	$(CXX) -shared -Wl,-soname,$(LIBRARY_NAME) -o $(LIB_DIR)/$(LIBRARY_NAME) $(OBJ_DIR)/DynamicObject.o $(OBJ_DIR)/DynamicLibrary.o $(OBJ_DIR)/DynamicLoader.o -L$(LIB_DIR)
+	$(CXX) -shared -Wl,-soname,$(LIBRARY_NAME) -o $(LIB_DIR)/$(LIBRARY_NAME) $(OBJ_DIR)/*.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 

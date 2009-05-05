@@ -16,9 +16,12 @@ TINY_XML_SRC_DIR=$(TINY_XML_DIR)/ticpp
 TINY_XML_DIST_DIR=$(TINY_XML_DIR)/dist
 TINY_XML_LIB_SHORT_NAME=ticppd
 
-#CXX=arm-linux-g++
-CFLAGS=-fPIC -c -Wall -I$(LIB_DYNAMIC_CLASS_LOADER_SRC_DIR) -I$(TINY_XML_SRC_DIR) -D "TIXML_USE_TICPP" -D "UNICODE" -D "_UNICODE" -D "DEBUG" -D "_DEBUG"
-LDFLAGS=
+#CXX=arm-linux-gnueabi-g++
+
+CFLAGS=-fPIC -c -Wall \
+       -I$(LIB_DYNAMIC_CLASS_LOADER_SRC_DIR) \
+       -I$(TINY_XML_SRC_DIR) \
+       -D "TIXML_USE_TICPP" -D "UNICODE" -D "_UNICODE" -D "DEBUG" -D "_DEBUG"
 
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -53,13 +56,13 @@ DefaultMenuStatusManager.o: init $(SRC_DIR)/DefaultMenuStatusManager.cpp
 
 CharacterDisplayMenuItemAction.o: init $(SRC_DIR)/CharacterDisplayMenuItemAction.cpp
 	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/CharacterDisplayMenuItemAction.cpp -o $(OBJ_DIR)/CharacterDisplayMenuItemAction.o -L$(LIB_DIR)
+	$(CXX) $(CFLAGS) $(SRC_DIR)/CharacterDisplayMenuItemAction.cpp -o $(OBJ_DIR)/CharacterDisplayMenuItemAction.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 TwoOptionMenuItemAction.o: init $(SRC_DIR)/TwoOptionMenuItemAction.cpp
 	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/TwoOptionMenuItemAction.cpp -o $(OBJ_DIR)/TwoOptionMenuItemAction.o -L$(LIB_DIR)
+	$(CXX) $(CFLAGS) $(SRC_DIR)/TwoOptionMenuItemAction.cpp -o $(OBJ_DIR)/TwoOptionMenuItemAction.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -72,23 +75,19 @@ CharacterDisplayMenu.o: init $(SRC_DIR)/CharacterDisplayMenu.cpp
 #-----------------------------------------------------------------------------------------------------------------------
 
 $(LIBRARY_NAME): libDynamicClassLoader.so \
-      			  libticpp.so \
-         		  DefaultMenuItemAction.o \
-         		  DefaultMenuStatusManager.o \
-         		  CharacterDisplayMenuItemAction.o \
-         		  TwoOptionMenuItemAction.o \
-         		  CharacterDisplayMenu.o
+                 libticpp.so \
+                 DefaultMenuItemAction.o \
+                 DefaultMenuStatusManager.o \
+                 CharacterDisplayMenuItemAction.o \
+                 TwoOptionMenuItemAction.o \
+                 CharacterDisplayMenu.o
 	@echo 'Building target: $@'
 	$(CXX) -shared -Wl,-soname,$(LIBRARY_NAME) -o $(LIB_DIR)/$(LIBRARY_NAME) \
-                           						    $(OBJ_DIR)/DefaultMenuItemAction.o \
+                                                 $(OBJ_DIR)/DefaultMenuItemAction.o \
                                                  $(OBJ_DIR)/DefaultMenuStatusManager.o \
                                                  $(OBJ_DIR)/CharacterDisplayMenuItemAction.o \
                                                  $(OBJ_DIR)/TwoOptionMenuItemAction.o \
-                                                 $(OBJ_DIR)/CharacterDisplayMenu.o \
-                                                 -L$(LIB_DIR) \
-                                                 -l$(LIB_DYNAMIC_CLASS_LOADER_LIB_SHORT_NAME) \
-                                                 -l$(TINY_XML_LIB_SHORT_NAME) \
-                                                 -ldl
+                                                 $(OBJ_DIR)/CharacterDisplayMenu.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 

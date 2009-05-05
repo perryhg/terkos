@@ -10,9 +10,14 @@ LIB_DYNAMIC_CLASS_LOADER_SRC_DIR=$(LIB_DYNAMIC_CLASS_LOADER_DIR)/src
 LIB_DYNAMIC_CLASS_LOADER_DIST_DIR=$(LIB_DYNAMIC_CLASS_LOADER_DIR)/dist
 LIB_DYNAMIC_CLASS_LOADER_LIB_SHORT_NAME=DynamicClassLoader
 
-#CXX=arm-linux-g++
-CFLAGS=-fPIC -c -Wall -I$(LIB_DYNAMIC_CLASS_LOADER_SRC_DIR)
-LDFLAGS=
+#CXX=arm-linux-gnueabi-g++
+
+CFLAGS=-fPIC -c -Wall \
+       -I$(LIB_DYNAMIC_CLASS_LOADER_SRC_DIR)
+LDFLAGS=-L$(LIB_DIR) \
+        -l$(LIB_DYNAMIC_CLASS_LOADER_LIB_SHORT_NAME) \
+        -lFilter \
+        -ldl
 
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -42,7 +47,7 @@ Filter.o: init $(SRC_DIR)/Filter.cpp
 
 Filter.so: Filter.o
 	@echo 'Building target: $@'
-	$(CXX) -shared -Wl,-soname,libFilter.so -o $(LIB_DIR)/libFilter.so $(OBJ_DIR)/Filter.o -L$(LIB_DIR)
+	$(CXX) -shared -Wl,-soname,libFilter.so -o $(LIB_DIR)/libFilter.so $(OBJ_DIR)/Filter.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -56,7 +61,7 @@ HighPassFilter.o: init $(SRC_DIR)/HighPassFilter.cpp
 
 HighPassFilter.so: Filter.so HighPassFilter.o
 	@echo 'Building target: $@'
-	$(CXX) -shared -Wl,-soname,libHighPassFilter.so -o $(LIB_DIR)/libHighPassFilter.so $(OBJ_DIR)/HighPassFilter.o -L$(LIB_DIR)
+	$(CXX) -shared -Wl,-soname,libHighPassFilter.so -o $(LIB_DIR)/libHighPassFilter.so $(OBJ_DIR)/HighPassFilter.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -70,7 +75,7 @@ LowPassFilter.o: init $(SRC_DIR)/LowPassFilter.cpp
 
 LowPassFilter.so: Filter.so LowPassFilter.o
 	@echo 'Building target: $@'
-	$(CXX) -shared -Wl,-soname,libLowPassFilter.so -o $(LIB_DIR)/libLowPassFilter.so $(OBJ_DIR)/LowPassFilter.o -L$(LIB_DIR)
+	$(CXX) -shared -Wl,-soname,libLowPassFilter.so -o $(LIB_DIR)/libLowPassFilter.so $(OBJ_DIR)/LowPassFilter.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -84,7 +89,7 @@ AudioProcessor.o: init $(SRC_DIR)/AudioProcessor.cpp
 
 AudioProcessor: libDynamicClassLoader.so Filter.so HighPassFilter.so LowPassFilter.so AudioProcessor.o
 	@echo 'Building target: $@'
-	$(CXX) -o $(EXE_DIR)/AudioProcessor $(OBJ_DIR)/AudioProcessor.o -L$(LIB_DIR) -l$(LIB_DYNAMIC_CLASS_LOADER_LIB_SHORT_NAME) -lFilter -ldl
+	$(CXX) -o $(EXE_DIR)/AudioProcessor $(OBJ_DIR)/AudioProcessor.o $(LDFLAGS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
