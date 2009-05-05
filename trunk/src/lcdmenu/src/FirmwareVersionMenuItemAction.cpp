@@ -8,6 +8,7 @@ const string FirmwareVersionMenuItemAction::CLASS_NAME = "FirmwareVersionMenuIte
 
 void FirmwareVersionMenuItemAction::activate()
    {
+   // TODO: get this version number from the proper place
    getCharacterDisplay()->setLine(0, "Firmware");
    getCharacterDisplay()->setLine(1, "version 1.0.0f");
    }
