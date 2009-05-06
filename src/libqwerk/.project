@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>LCDMenu</name>
+	<name>libqwerk</name>
 	<comment></comment>
 	<projects>
-		<project>LibCharacterDisplayMenu</project>
-		<project>TinyXML</project>
-		<project>LibDynamicClassLoader</project>
-		<project>libqwerk</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
 			<name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>
 			<triggers>clean,full,incremental,</triggers>
 			<arguments>
-				<dictionary>
-					<key>?children?</key>
-					<value>?name?=outputEntries\|?children?=?name?=entry\\\\\\\\\\\\\\\|\\\\\\\|\||</value>
-				</dictionary>
 				<dictionary>
 					<key>?name?</key>
 					<value></value>
