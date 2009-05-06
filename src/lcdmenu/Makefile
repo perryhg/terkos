@@ -21,17 +21,26 @@ TINY_XML_SRC_DIR=$(TINY_XML_DIR)/ticpp
 TINY_XML_DIST_DIR=$(TINY_XML_DIR)/dist
 TINY_XML_LIB_SHORT_NAME=ticppd
 
+LIB_QWERK_DIR=../libqwerk
+LIB_QWERK_SRC_DIR=$(LIB_QWERK_DIR)
+LIB_QWERK_DIST_DIR=$(LIB_QWERK_DIR)
+LIB_QWERK_LIB_SHORT_NAME=qwerk
+
 #CXX=arm-linux-gnueabi-g++
 
 CFLAGS=-fPIC -c -Wall \
        -I$(LIB_CHARACTER_DISPLAY_MENU_SRC_DIR) \
        -I$(LIB_DYNAMIC_CLASS_LOADER_SRC_DIR) \
        -I$(TINY_XML_SRC_DIR) \
-       -D "TIXML_USE_TICPP" -D "UNICODE" -D "_UNICODE" -D "DEBUG" -D "_DEBUG"
+       -D "TIXML_USE_TICPP" -D "UNICODE" -D "_UNICODE" -D "DEBUG" -D "_DEBUG" \
+       -I$(LIB_QWERK_SRC_DIR)
+       
 LDFLAGS=-L$(LIB_DIR) \
+        -L$(LIB_QWERK_DIST_DIR) \
         -l$(LIB_CHARACTER_DISPLAY_MENU_LIB_SHORT_NAME) \
         -l$(LIB_DYNAMIC_CLASS_LOADER_LIB_SHORT_NAME) \
         -l$(TINY_XML_LIB_SHORT_NAME) \
+        -l$(LIB_QWERK_LIB_SHORT_NAME) \
         -ldl
 
 #-----------------------------------------------------------------------------------------------------------------------

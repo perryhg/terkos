@@ -27,7 +27,6 @@ class CharacterDisplay
       virtual void setLine(const unsigned int lineNumber, const string& text) = 0;;
       virtual void setLine(const unsigned int lineNumber, const string& text, const bool willClearLineFirst) = 0;;
       virtual void setCharacter(const unsigned int row, const unsigned int col, const char character) = 0;;
-      virtual void setCharacter(const unsigned int row, const unsigned int col, const string& character) = 0;;
       virtual void clear() = 0;;
       virtual void clearLine(const unsigned int lineNumber) = 0;;
 };

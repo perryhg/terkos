@@ -1,6 +1,7 @@
-#include <unistd.h>
-#include <stdio.h>
+
 #include "textlcd.h"
+
+const string CTextLcd::BLANK_LINE(TL_WIDTH, ' ');
 
 CTextLcd::CTextLcd()
 {
@@ -12,26 +13,38 @@ CTextLcd::~CTextLcd()
 {
   C9302Hardware::ReleaseObject();
 }
- 
+
 void CTextLcd::Clear()
 {
   // RS low
   *m_p9302hw->PortGDataDR() |= 0x02;
   TL_DELAY();
-  
+
   PutByte(1);
 }
 
-void CTextLcd::MoveCursor(int x, int y)
-{
-  // RS low
-  *m_p9302hw->PortGDataDR() |= 0x02;
-  TL_DELAY();
+void CTextLcd::ClearLine(unsigned int lineNumber)
+   {
+   if (IsValidRow(lineNumber))
+      {
+      MoveCursor(lineNumber, 0);
+      printf("%s",CTextLcd::BLANK_LINE.c_str());
+      }
+   }
 
-  PutByte(0x80 | (x&0x0f) + (y ? 0x40 : 0)); 
+void CTextLcd::MoveCursor(const unsigned int row, const unsigned int col)
+{
+   if (IsValidPosition(row, col))
+      {
+      // RS low
+      *m_p9302hw->PortGDataDR() |= 0x02;
+      TL_DELAY();
+
+      PutByte(0x80 | (col&0x0f) + (row ? 0x40 : 0));
+      }
 }
 
-int CTextLcd::printf(char *format, ...)
+int CTextLcd::printf(const char *format, ...)
 {
   int i;
   char buf[256];
@@ -50,6 +63,31 @@ int CTextLcd::printf(char *format, ...)
 
   return i;
 }
+
+void CTextLcd::SetCharacter(const unsigned int row, const unsigned int col, const char character)
+   {
+   if (IsValidPosition(row, col))
+      {
+      MoveCursor(row, col);
+      printf("%c", character);
+      }
+   }
+
+void CTextLcd::SetLine(const unsigned int lineNumber, const string& text, const bool willClearLineFirst)
+   {
+   if (IsValidRow(lineNumber))
+      {
+      if (willClearLineFirst)
+         {
+         ClearLine(lineNumber);
+         }
+      if (text.length() > 0)
+         {
+         MoveCursor(lineNumber, 0);
+         printf("%s",text.substr(0,TL_WIDTH).c_str());
+         }
+      }
+   }
 
 // RS eedat portg1
 // R/W egpio10 portb2
@@ -94,7 +132,7 @@ void CTextLcd::DefineChars()
   TL_DELAY();
   *m_p9302hw->PortBDataDR() |= 0x08;
   TL_DELAY();
-  
+
   *m_p9302hw->PortBDataDR() &= ~0xf0;
 }
 
@@ -108,7 +146,7 @@ void CTextLcd::PutByte(unsigned char c)
 void CTextLcd::Delay(unsigned int us)
 {
   volatile unsigned int i;
-  
+
   us *= 10;
   for (i=0; i<us; i++);
 }
@@ -136,7 +174,7 @@ int CTextLcd::GetProperty(int property, long *value)
       return PROP_ERROR_NOT_SUPPORTED;
     }
 
-  return PROP_OK;    
+  return PROP_OK;
 }
 
 int CTextLcd::SetProperty(int property, long value)
