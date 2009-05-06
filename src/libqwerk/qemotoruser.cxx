@@ -12,7 +12,6 @@ CQEMotorUser::CQEMotorUser(CQwerkHardware *pQwerk, int axis0, int axis1, int axi
   char dev[0x10];
   int len;
   unsigned int axis;
-  unsigned short motorVoltage;
 
   if (pQwerk==NULL)
     {
@@ -27,7 +26,7 @@ CQEMotorUser::CQEMotorUser(CQwerkHardware *pQwerk, int axis0, int axis1, int axi
 
 #if Q1
   // set voltage divider
-  motorVoltage = m_pQwerk->GetBattVoltage();  
+  unsigned short motorVoltage = m_pQwerk->GetBattVoltage();
   if (motorVoltage<10000)
     m_pQwerk->SetMotorVoltageScale(QHW_DIV_365TH);
   else if (motorVoltage>20000)
@@ -76,7 +75,7 @@ CQEMotorUser::CQEMotorUser(CQwerkHardware *pQwerk, int axis0, int axis1, int axi
 
 CQEMotorUser::~CQEMotorUser()
 {
-  int axis;
+  unsigned int axis;
 
   for (axis=0; axis<m_servoAxes; axis++)
     {
@@ -109,9 +108,9 @@ int CQEMotorUser::ConstructCall(int axis, int findex, ...)
 void CQEMotorUser::HandleOffset()
 {
   unsigned short status;
-  int axis;
+  unsigned int axis;
   int axes;
-  int i;
+  // int i;
   int j;
   int k;
   long bemf;

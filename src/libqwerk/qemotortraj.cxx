@@ -52,7 +52,6 @@ CQEMotorTraj::CQEMotorTraj(CQwerkHardware *pQwerk, int axis0, int axis1, int axi
   CQEMotorUser(pQwerk, axis0, axis1, axis2, axis3),
   CQEMotorRec()	 
 {
-  pthread_attr_t attr;
   pthread_mutexattr_t mattr;
   unsigned int axis;
 
@@ -86,6 +85,7 @@ CQEMotorTraj::CQEMotorTraj(CQwerkHardware *pQwerk, int axis0, int axis1, int axi
 #if 0
   // this code tries to set worker thread to higher priority
   // but it isn't clear if it works
+  pthread_attr_t attr;
   pthread_t this_thread = pthread_self();
   struct sched_param param;
   int policy = SCHED_RR;
@@ -334,7 +334,7 @@ void CQEMotorTraj::WriteTrajectory()
 void CQEMotorTraj::ReadPosition()
 {
   unsigned int axis;
-  Axis_position pos[m_servoAxes];
+  // Axis_position pos[m_servoAxes];
 
   for (axis=0; axis<m_servoAxes; axis++)
     read(m_handle[axis], (char *)&m_readPositionUs[axis], sizeof(long));

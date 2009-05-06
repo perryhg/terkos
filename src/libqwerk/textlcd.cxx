@@ -47,6 +47,8 @@ int CTextLcd::printf(char *format, ...)
 
   for (i=0; buf[i]; i++)
     PutByte(buf[i]);
+
+  return i;
 }
 
 // RS eedat portg1
