@@ -9,6 +9,7 @@
 #include <iostream>
 #include <string>
 #include "CharacterDisplay.h"
+#include "textlcd.h"
 
 using namespace std;
 
@@ -49,26 +50,32 @@ class LCDCharacterDisplay : public CharacterDisplay
       void setLine(const unsigned int lineNumber, const string& text);
       void setLine(const unsigned int lineNumber, const string& text, const bool willClearLineFirst);
       void setCharacter(const unsigned int row, const unsigned int col, const char character);
-      void setCharacter(const unsigned int row, const unsigned int col, const string& character);
       void clear();
       void clearLine(const unsigned int lineNumber);
 
    private:
 
+      CTextLcd lcd;
       const unsigned int numRows;
       const unsigned int numColumns;
       const unsigned int totalCharacterCount;
       const unsigned int numColumnsWhenInScrollingMode;
+
+      const bool isValidRow(const unsigned int row) const
+         {
+         return (row >= 0 && row < numRows);
+         }
 
       const bool isValidColumn(const unsigned int col) const
          {
          return (col >= 0 && col < numColumns);
          }
 
-      const bool isValidRow(const unsigned int row) const
+      const bool isValidPosition(const unsigned int row, const unsigned int col)
          {
-         return (row >= 0 && row < numRows);
+         return isValidRow(row) && isValidColumn(col);
          }
+
    };
 
 #endif /* LCDCHARACTERDISPLAY_H_ */

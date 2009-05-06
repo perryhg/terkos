@@ -84,42 +84,28 @@ void LCDCharacterDisplay::setLine(const unsigned int lineNumber, const string& t
    {
    if (this->isValidRow(lineNumber))
       {
-      if (willClearLineFirst)
-         {
-         this->clearLine(lineNumber);
-         }
-      if (text.length() > 0)
-         {
-         const char* chars = text.c_str();
-         for (unsigned int charIndex = 0; charIndex < std::min(text.length(), numColumns); charIndex++)
-            {
-            this->setCharacter(lineNumber, charIndex, chars[charIndex]);
-            }
-         }
+      lcd.SetLine(lineNumber, text, willClearLineFirst);
       }
    }
 
 void LCDCharacterDisplay::setCharacter(const unsigned int row, const unsigned int col, const char character)
    {
-   // TODO: implement me
-   std::cout << "LCD: (" << row << "," << col << "," << character << ")" << std::endl;
-   }
-
-void LCDCharacterDisplay::setCharacter(const unsigned int row, const unsigned int col, const string& character)
-   {
-   // TODO: implement me
-   std::cout << "LCD: (" << row << "," << col << "," << character << ")" << std::endl;
+   if (isValidPosition(row, col))
+      {
+      lcd.SetCharacter(row, col, character);
+      }
    }
 
 void LCDCharacterDisplay::clear()
    {
-   // TODO: implement me
-   std::cout << "LCD: Cleared!" << std::endl;
+   lcd.Clear();
    }
 
 void LCDCharacterDisplay::clearLine(const unsigned int lineNumber)
    {
-   // TODO: implement me
-   std::cout << "LCD: Cleared line " << lineNumber << std::endl;
+   if (isValidRow(lineNumber))
+      {
+      lcd.ClearLine(lineNumber);
+      }
    }
 
