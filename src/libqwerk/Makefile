@@ -1,5 +1,6 @@
 TARGET=libqwerk
 CXX=arm-linux-gnueabi-g++
+AR=arm-linux-gnueabi-ar
 CFLAGS=-g -Wall
 SRCS=$(wildcard *.cxx)
 OBJECTS=$(SRCS:.cxx=.o)
@@ -13,7 +14,7 @@ install: $(TARGET).a
 	cp *.h ../../include
 
 $(TARGET).a: $(OBJECTS)
-	arm-linux-gnueabi-ar rvs $(TARGET).a $(OBJECTS)
+	$(AR) rvs $(TARGET).a $(OBJECTS)
 
 clean:
 	-rm -f $(TARGET)
