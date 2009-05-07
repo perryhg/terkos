@@ -13,9 +13,6 @@
 
 using namespace std;
 
-#define TL_HEIGHT           2
-#define TL_WIDTH            16
-
 // Properties
 #define TL_OBJECT           1
 #define TL_PROP_BACKLIGHT   PROP_ID(TL_OBJECT, 0)
@@ -26,52 +23,57 @@ using namespace std;
 #define TL_DELAYL()         Delay(2000)
 
 class CTextLcd : public IProperty
-{
-public:
+   {
+   public:
 
-  CTextLcd();
-  ~CTextLcd();
+      static const unsigned int NUM_ROWS;
+      static const unsigned int NUM_COLUMNS;
 
-  void Clear();
-  void ClearLine(unsigned int lineNumber);
-  void MoveCursor(const unsigned int row, const unsigned int col);
-  int printf(const char *format, ...);
-  void SetCharacter(const unsigned int row, const unsigned int col, const char character);
-  void SetLine(const unsigned int lineNumber, const string& text, const bool willClearLineFirst = true);
+      CTextLcd();
+      ~CTextLcd();
 
-  // Save(CContext *context);
-  // Restore(CContext context);
+      void Clear();
+      void ClearLine(unsigned int lineNumber);
+      void MoveCursor(const unsigned int row, const unsigned int col);
+      int printf(const char *format, ...);
+      void SetCharacter(const unsigned int row, const unsigned int col, const char character);
+      void SetLine(const unsigned int lineNumber, const string& text, const bool willClearLineFirst = true);
+      void SetText(const string& text, const bool willClearFirst = true);
+      void SetBacklight(const bool isOn);
 
-  // IProperty
-  virtual int GetProperty(int property, long *value);
-  virtual int SetProperty(int property, long value);
+      // Save(CContext *context);
+      // Restore(CContext context);
 
-private:
+      // IProperty
+      virtual int GetProperty(int property, long *value);
+      virtual int SetProperty(int property, long value);
 
-  static const string BLANK_LINE;
+   private:
 
-  void Init();
-  void DefineChars();
-  void PutNibble(unsigned char c);
-  void PutByte(unsigned char c);
-  void Delay(unsigned int us);
+      static const string BLANK_LINE;
 
-  const bool IsValidRow(const unsigned int row) const
-     {
-     return (row < TL_HEIGHT);
-     }
+      void Init();
+      void DefineChars();
+      void PutNibble(unsigned char c);
+      void PutByte(unsigned char c);
+      void Delay(unsigned int us);
 
-  const bool IsValidColumn(const unsigned int col) const
-     {
-     return (col < TL_WIDTH);
-     }
+      const bool IsValidRow(const unsigned int row) const
+         {
+         return (row < CTextLcd::NUM_ROWS);
+         }
 
-  const bool IsValidPosition(const unsigned int row, const unsigned int col)
-     {
-     return IsValidRow(row) && IsValidColumn(col);
-     }
+      const bool IsValidColumn(const unsigned int col) const
+         {
+         return (col < CTextLcd::NUM_COLUMNS);
+         }
 
-  C9302Hardware *m_p9302hw;
-};
+      const bool IsValidPosition(const unsigned int row, const unsigned int col) const
+         {
+         return IsValidRow(row) && IsValidColumn(col);
+         }
+
+      C9302Hardware *m_p9302hw;
+   };
 
 #endif

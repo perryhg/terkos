@@ -1,7 +1,9 @@
 
 #include "textlcd.h"
 
-const string CTextLcd::BLANK_LINE(TL_WIDTH, ' ');
+const unsigned int CTextLcd::NUM_ROWS = 2;
+const unsigned int CTextLcd::NUM_COLUMNS = 16;
+const string CTextLcd::BLANK_LINE(CTextLcd::NUM_COLUMNS, ' ');
 
 CTextLcd::CTextLcd()
 {
@@ -28,7 +30,7 @@ void CTextLcd::ClearLine(unsigned int lineNumber)
    if (IsValidRow(lineNumber))
       {
       MoveCursor(lineNumber, 0);
-      printf("%s",CTextLcd::BLANK_LINE.c_str());
+      printf("%s", CTextLcd::BLANK_LINE.c_str());
       }
    }
 
@@ -84,9 +86,35 @@ void CTextLcd::SetLine(const unsigned int lineNumber, const string& text, const 
       if (text.length() > 0)
          {
          MoveCursor(lineNumber, 0);
-         printf("%s",text.substr(0,TL_WIDTH).c_str());
+         printf("%s", text.substr(0, CTextLcd::NUM_COLUMNS).c_str());
          }
       }
+   }
+
+void CTextLcd::SetText(const string& text, const bool willClearFirst)
+   {
+   if (willClearFirst)
+      {
+      Clear();
+      }
+
+   if (text.length() > 0)
+      {
+      string theText = text;
+      int lineNumber = 0;
+      do
+         {
+         string textPiece = theText.substr(0, CTextLcd::NUM_COLUMNS);
+         theText = theText.substr(textPiece.length());
+         SetLine(lineNumber++, textPiece, false);
+         }
+      while (!theText.empty() && IsValidRow(lineNumber));
+      }
+   }
+
+void CTextLcd::SetBacklight(const bool isOn)
+   {
+   SetProperty(TL_PROP_BACKLIGHT, isOn);
    }
 
 // RS eedat portg1
@@ -163,11 +191,11 @@ int CTextLcd::GetProperty(int property, long *value)
       break;
 
     case TL_PROP_HEIGHT:
-      *value = TL_HEIGHT;
+      *value = CTextLcd::NUM_ROWS;
       break;
 
     case TL_PROP_WIDTH:
-      *value = TL_WIDTH;
+      *value = CTextLcd::NUM_COLUMNS;
       break;
 
     default:
