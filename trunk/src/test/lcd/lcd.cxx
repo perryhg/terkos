@@ -11,20 +11,51 @@ int main(int argc, char **argv)
    {
    CTextLcd lcd;
 
+   long width = -1;
+   long height = -1;
+   lcd.GetProperty(TL_PROP_HEIGHT, &height);
+   lcd.GetProperty(TL_PROP_WIDTH, &width);
+   printf("Dimensions (via properties): (%d,%d)\n", width, height);
+   printf("Dimensions (via consts):     (%d,%d)\n", CTextLcd::NUM_COLUMNS, CTextLcd::NUM_ROWS);
+
    printf("Clearing LCD\n");
    lcd.Clear();
    sleep(1);
 
-   printf("backlight on\n");
-   lcd.SetProperty(TL_PROP_BACKLIGHT, true);
+   printf("Setting text ''\n");
+   lcd.SetText("");
    sleep(1);
 
-   printf("backlight off\n");
+   printf("Setting text 'Hello there'\n");
+   lcd.SetText("Hello there");
+   sleep(1);
+
+   printf("Setting text 'Hello there.    How are you?'\n");
+   lcd.SetText("Hello there.    How are you?");
+   sleep(1);
+
+   printf("Setting text 'This is some really long text that will not fit'\n");
+   lcd.SetText("This is some really long text that will not fit.");
+   sleep(1);
+
+   printf("backlight off (via property)\n");
    lcd.SetProperty(TL_PROP_BACKLIGHT, false);
    sleep(1);
 
-   printf("backlight on\n");
+   printf("backlight on (via property)\n");
    lcd.SetProperty(TL_PROP_BACKLIGHT, true);
+   sleep(1);
+
+   printf("backlight off (via method)\n");
+   lcd.SetBacklight(false);
+   sleep(1);
+
+   printf("backlight on (via method)\n");
+   lcd.SetBacklight(true);
+   sleep(1);
+
+   printf("Clearing LCD\n");
+   lcd.Clear();
    sleep(1);
 
    printf("Printing 'Hello World' on line 0\n");
@@ -90,7 +121,7 @@ int main(int argc, char **argv)
    lcd.SetCharacter(1, 13, 'P');
    lcd.SetCharacter(1, 15, 'Q');
    lcd.SetCharacter(1, 17, 'R');
-   sleep(4);
+   sleep(5);
 
    printf("Clearing LCD and quitting\n");
    lcd.Clear();
