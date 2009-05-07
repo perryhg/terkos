@@ -19,7 +19,7 @@ class CKeypad
 
       // returns 0 if no key is being pressed
       // or waits until key is pressed and returns key value
-      unsigned int GetKey(bool wait = true);
+      const unsigned int GetKey(bool wait = true);
 
       // wait for key to be released-- can be used with methods below
       void KeyRelease();

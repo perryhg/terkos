@@ -22,7 +22,7 @@ CKeypad::~CKeypad()
   C9302Hardware::ReleaseObject();
 }
 
-unsigned int CKeypad::GetKey(bool wait)
+const unsigned int CKeypad::GetKey(bool wait)
 {
   unsigned int key;
 
