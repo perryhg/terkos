@@ -11,6 +11,7 @@
 #include "DefaultMenuStatusManager.h"
 #include "CharacterDisplayMenu.h"
 #include "Menu.h"
+#include "keypad.h"
 
 using namespace std;
 
@@ -35,18 +36,30 @@ int main(int argc, char** argv)
    std::cout << "Setting initial menu item" << std::endl;
    menuStatusManager->setActiveMenuItem(menu->getDefaultMenuItem());
 
-   // do a little testing
-   menuStatusManager->handleDownEvent();
-   menuStatusManager->handleDownEvent();
-   menuStatusManager->handleStartEvent();
-   menuStatusManager->handleStartEvent();
-   menuStatusManager->handleStopEvent();
-   menuStatusManager->handleDownEvent();
-   menuStatusManager->handleStartEvent();
-   menuStatusManager->handleStopEvent();
-   menuStatusManager->handleStopEvent();
+   // create a map of keypad codes to event handler method pointers
+   typedef void (DefaultMenuStatusManager::*methodPtr)();
+   map<const unsigned int, methodPtr> eventHandlers;
+   eventHandlers[CKeypad::KEY_OK] = &DefaultMenuStatusManager::handleStartEvent;
+   eventHandlers[CKeypad::KEY_CANCEL] = &DefaultMenuStatusManager::handleStopEvent;
+   eventHandlers[CKeypad::KEY_UP] = &DefaultMenuStatusManager::handleUpEvent;
+   eventHandlers[CKeypad::KEY_DOWN] = &DefaultMenuStatusManager::handleDownEvent;
+   eventHandlers[CKeypad::KEY_LEFT] = &DefaultMenuStatusManager::handleLeftEvent;
+   eventHandlers[CKeypad::KEY_RIGHT] = &DefaultMenuStatusManager::handleRightEvent;
 
-   // TODO: go into a loop here which checks the button pad and sends events to the menuStatusManager
+   // loop forever getting the current key press and passing to the appropriate event handler
+   CKeypad keypad;
+   while (true)
+      {
+      const unsigned int key = keypad.GetKey();
+      if (eventHandlers[key])
+         {
+         (menuStatusManager->*eventHandlers[key])();
+         }
+      else
+         {
+         std::cerr << "Unexpected key [" << key << "]" << std::endl;
+         }
+      }
 
    return 0;
    }
