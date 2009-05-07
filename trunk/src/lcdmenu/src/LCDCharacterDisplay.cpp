@@ -18,21 +18,7 @@ void LCDCharacterDisplay::setText(const string& text)
 
 void LCDCharacterDisplay::setText(const string& text, const bool willClearFirst)
    {
-   if (text.length() > 0)
-      {
-      if (willClearFirst)
-         {
-         this->clear();
-         }
-
-      const char* chars = text.c_str();
-      for (unsigned int charIndex = 0; charIndex < std::min(text.length(), totalCharacterCount); charIndex++)
-         {
-         unsigned int row = charIndex / numColumns;
-         unsigned int col = charIndex % numColumns;
-         this->setCharacter(row, col, chars[charIndex]);
-         }
-      }
+   lcd.SetText(text, willClearFirst);
    }
 
 void LCDCharacterDisplay::setTextWithScrollArrows(const string& text)
