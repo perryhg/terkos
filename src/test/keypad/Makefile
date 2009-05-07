@@ -1,7 +1,7 @@
 TARGET=kp
 CXX=arm-linux-gnueabi-g++
-CFLAGS=-g -I../../../include
-LDFLAGS=-L../../../lib -lqwerk
+CFLAGS=-g -I../../libqwerk
+LDFLAGS=-L../../libqwerk -lqwerk
 SRCS=$(wildcard *.cxx)
 OBJECTS=$(SRCS:.cxx=.o)
 
@@ -11,10 +11,10 @@ $(TARGET): $(OBJECTS)
 	$(CXX) $(OBJECTS) -o $(TARGET) $(LDFLAGS)
 
 clean:
-	-rm *.o
-	-rm $(TARGET)
-	-rm *~
-	-rm *#
+	-rm -f *.o
+	-rm -f $(TARGET)
+	-rm -f *~
+	-rm -f *#
 
 %.o: %.cxx
 	$(CXX) -c $(CFLAGS) $<
