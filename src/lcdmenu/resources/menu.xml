@@ -21,6 +21,17 @@
       </item>
    </item>
    <item text="Factory Reset">
+      <item text="Reset Audio">
+         <item text="">
+            <implementation-class name="ResetAudioMenuItemAction">
+               <property key="action.prompt">Reset Audio?</property>
+               <property key="choice.option1">OK  </property>
+               <property key="choice.option2">Cancel</property>
+               <property key="action.option1">Audio reset to  factory defaults</property>
+               <property key="action.option2">Cancelled!</property>
+            </implementation-class>
+         </item>
+      </item>
       <item text="Reset Motors">
          <item text="">
             <implementation-class name="ResetMotorsMenuItemAction">

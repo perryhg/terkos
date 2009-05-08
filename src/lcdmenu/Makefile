@@ -138,6 +138,20 @@ libSetVolumeMenuItemAction.so: SetVolumeMenuItemAction.o
 
 #-----------------------------------------------------------------------------------------------------------------------
 
+ResetAudioMenuItemAction.o: init $(SRC_DIR)/ResetAudioMenuItemAction.cpp
+	@echo 'Building target: $@'
+	$(CXX) $(CFLAGS) $(SRC_DIR)/ResetAudioMenuItemAction.cpp -o $(OBJ_DIR)/ResetAudioMenuItemAction.o
+	@echo 'Finished building target: $@'
+	@echo ' '
+	
+libResetAudioMenuItemAction.so: ResetAudioMenuItemAction.o
+	@echo 'Building target: $@'
+	$(CXX) -shared -Wl,-soname,libResetAudioMenuItemAction.so -o $(LIB_DIR)/libResetAudioMenuItemAction.so $(OBJ_DIR)/ResetAudioMenuItemAction.o
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+#-----------------------------------------------------------------------------------------------------------------------
+
 LCDCharacterDisplay.o: init $(SRC_DIR)/LCDCharacterDisplay.cpp
 	@echo 'Building target: $@'
 	$(CXX) $(CFLAGS) $(SRC_DIR)/LCDCharacterDisplay.cpp -o $(OBJ_DIR)/LCDCharacterDisplay.o
@@ -158,6 +172,7 @@ LCDMenu: LibConfigFile \
          libHardwareVersionMenuItemAction.so \
          libToggleAudioAlertsMenuItemAction.so \
          libSetVolumeMenuItemAction.so \
+         libResetAudioMenuItemAction.so \
          LCDCharacterDisplay.o \
          LCDMenu.o
 	@echo 'Building target: $@'
