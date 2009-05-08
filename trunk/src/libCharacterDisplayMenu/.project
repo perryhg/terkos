@@ -3,7 +3,7 @@
 	<name>LibCharacterDisplayMenu</name>
 	<comment></comment>
 	<projects>
-		<project>TinyXml++</project>
+		<project>TinyXML</project>
 		<project>LibDynamicClassLoader</project>
 	</projects>
 	<buildSpec>
