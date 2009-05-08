@@ -6,6 +6,7 @@
 #define TOGGLEAUDIOALERTSMENUITEMACTION_H_
 
 #include "TwoOptionMenuItemAction.h"
+#include "AudioConfig.h"
 
 class ToggleAudioAlertsMenuItemAction : public TwoOptionMenuItemAction
    {
@@ -17,7 +18,7 @@ class ToggleAudioAlertsMenuItemAction : public TwoOptionMenuItemAction
                                       CharacterDisplay* characterDisplay, map<string, string>& properties) :
          TwoOptionMenuItemAction(delObj, menuItem, menuStatusManager, characterDisplay, properties)
          {
-         isAlertsEnabled = false;
+         // nothing to do
          }
 
       virtual ~ToggleAudioAlertsMenuItemAction()
@@ -35,7 +36,8 @@ class ToggleAudioAlertsMenuItemAction : public TwoOptionMenuItemAction
 
    private:
 
-      bool isAlertsEnabled;
+      AudioConfig config;
+      bool areAlertsEnabled;
 
       void setAlertsEnabled(const bool isAlertsEnabled);
    };

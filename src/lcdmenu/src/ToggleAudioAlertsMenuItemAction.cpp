@@ -8,8 +8,7 @@ const string ToggleAudioAlertsMenuItemAction::CLASS_NAME = "ToggleAudioAlertsMen
 
 bool ToggleAudioAlertsMenuItemAction::shouldOption1BeSelectedUponActivation() const
    {
-   // TODO: fetch this from wherever we do persistence
-   return isAlertsEnabled;
+   return config.areAlertsEnabled();
    }
 
 void ToggleAudioAlertsMenuItemAction::executeOption1Action()
@@ -22,10 +21,9 @@ void ToggleAudioAlertsMenuItemAction::executeOption2Action()
    setAlertsEnabled(false);
    }
 
-void ToggleAudioAlertsMenuItemAction::setAlertsEnabled(const bool isAlertsEnabled)
+void ToggleAudioAlertsMenuItemAction::setAlertsEnabled(const bool isEnabled)
    {
-   // TODO: write this to wherever we do persistence
-   this->isAlertsEnabled = isAlertsEnabled;
+   config.setAlertsEnabled(isEnabled);
    }
 
 // required definitions for dynamic loading
