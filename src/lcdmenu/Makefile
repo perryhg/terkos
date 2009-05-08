@@ -69,7 +69,7 @@ FirmwareVersionMenuItemAction.o: init $(SRC_DIR)/FirmwareVersionMenuItemAction.c
 	@echo 'Finished building target: $@'
 	@echo ' '
 	
-libFirmwareVersionMenuItemAction.so: libCharacterDisplayMenu.so FirmwareVersionMenuItemAction.o
+libFirmwareVersionMenuItemAction.so: FirmwareVersionMenuItemAction.o
 	@echo 'Building target: $@'
 	$(CXX) -shared -Wl,-soname,libFirmwareVersionMenuItemAction.so -o $(LIB_DIR)/libFirmwareVersionMenuItemAction.so $(OBJ_DIR)/FirmwareVersionMenuItemAction.o
 	@echo 'Finished building target: $@'
@@ -83,11 +83,26 @@ HardwareVersionMenuItemAction.o: init $(SRC_DIR)/HardwareVersionMenuItemAction.c
 	@echo 'Finished building target: $@'
 	@echo ' '
 	
-libHardwareVersionMenuItemAction.so: libCharacterDisplayMenu.so HardwareVersionMenuItemAction.o
+libHardwareVersionMenuItemAction.so: HardwareVersionMenuItemAction.o
 	@echo 'Building target: $@'
 	$(CXX) -shared -Wl,-soname,libHardwareVersionMenuItemAction.so -o $(LIB_DIR)/libHardwareVersionMenuItemAction.so $(OBJ_DIR)/HardwareVersionMenuItemAction.o
 	@echo 'Finished building target: $@'
 	@echo ' '
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+ToggleAudioAlertsMenuItemAction.o: init $(SRC_DIR)/ToggleAudioAlertsMenuItemAction.cpp
+	@echo 'Building target: $@'
+	$(CXX) $(CFLAGS) $(SRC_DIR)/ToggleAudioAlertsMenuItemAction.cpp -o $(OBJ_DIR)/ToggleAudioAlertsMenuItemAction.o
+	@echo 'Finished building target: $@'
+	@echo ' '
+	
+libToggleAudioAlertsMenuItemAction.so: ToggleAudioAlertsMenuItemAction.o
+	@echo 'Building target: $@'
+	$(CXX) -shared -Wl,-soname,libToggleAudioAlertsMenuItemAction.so -o $(LIB_DIR)/libToggleAudioAlertsMenuItemAction.so $(OBJ_DIR)/ToggleAudioAlertsMenuItemAction.o
+	@echo 'Finished building target: $@'
+	@echo ' '
+
 
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -108,6 +123,7 @@ LCDMenu.o: init $(SRC_DIR)/LCDMenu.cpp
 LCDMenu: libCharacterDisplayMenu.so \
          libFirmwareVersionMenuItemAction.so \
          libHardwareVersionMenuItemAction.so \
+         libToggleAudioAlertsMenuItemAction.so \
          LCDCharacterDisplay.o \
          LCDMenu.o
 	@echo 'Building target: $@'
