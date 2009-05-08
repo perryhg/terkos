@@ -23,13 +23,13 @@
 <tool id="org.eclipse.cdt.build.core.settings.holder.libs.1569617407" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs">
 <option id="org.eclipse.cdt.build.core.settings.holder.libfiles.785360000" name="Library Files" superClass="org.eclipse.cdt.build.core.settings.holder.libfiles" valueType="libFiles">
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibDynamicClassLoader/dist/libDynamicClassLoader.so}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/TinyXml++/dist/libticppd.so}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/TinyXML/dist/libticppd.so}&quot;"/>
 </option>
 </tool>
 <tool id="org.eclipse.cdt.build.core.settings.holder.1364485420" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
 <option id="org.eclipse.cdt.build.core.settings.holder.incpaths.1336274841" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibDynamicClassLoader/src}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/TinyXml++/ticpp}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/TinyXML/ticpp}&quot;"/>
 </option>
 <inputType id="org.eclipse.cdt.build.core.settings.holder.inType.2123614585" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 </tool>
@@ -210,9 +210,11 @@
 </scannerConfigBuildInfo>
 </storageModule>
 <storageModule moduleId="org.eclipse.cdt.core.externalSettings">
-<externalSettings containerId="TinyXml++;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
 <externalSettings containerId="LibDynamicClassLoader;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
+<externalSettings containerId="TinyXML;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
 </storageModule>
+<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 </cconfiguration>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
