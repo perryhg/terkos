@@ -103,6 +103,19 @@ libToggleAudioAlertsMenuItemAction.so: ToggleAudioAlertsMenuItemAction.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 
+#-----------------------------------------------------------------------------------------------------------------------
+
+SetVolumeMenuItemAction.o: init $(SRC_DIR)/SetVolumeMenuItemAction.cpp
+	@echo 'Building target: $@'
+	$(CXX) $(CFLAGS) $(SRC_DIR)/SetVolumeMenuItemAction.cpp -o $(OBJ_DIR)/SetVolumeMenuItemAction.o
+	@echo 'Finished building target: $@'
+	@echo ' '
+	
+libSetVolumeMenuItemAction.so: SetVolumeMenuItemAction.o
+	@echo 'Building target: $@'
+	$(CXX) -shared -Wl,-soname,libSetVolumeMenuItemAction.so -o $(LIB_DIR)/libSetVolumeMenuItemAction.so $(OBJ_DIR)/SetVolumeMenuItemAction.o
+	@echo 'Finished building target: $@'
+	@echo ' '
 
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -124,6 +137,7 @@ LCDMenu: libCharacterDisplayMenu.so \
          libFirmwareVersionMenuItemAction.so \
          libHardwareVersionMenuItemAction.so \
          libToggleAudioAlertsMenuItemAction.so \
+         libSetVolumeMenuItemAction.so \
          LCDCharacterDisplay.o \
          LCDMenu.o
 	@echo 'Building target: $@'
