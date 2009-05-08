@@ -5,6 +5,7 @@
 	<projects>
 		<project>LibCharacterDisplayMenu</project>
 		<project>TinyXML</project>
+		<project>LibConfigFile</project>
 		<project>LibDynamicClassLoader</project>
 		<project>libqwerk</project>
 	</projects>
