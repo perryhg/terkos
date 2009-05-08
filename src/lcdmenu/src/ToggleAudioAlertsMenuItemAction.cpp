@@ -24,7 +24,7 @@ void ToggleAudioAlertsMenuItemAction::executeOption2Action()
 
 void ToggleAudioAlertsMenuItemAction::setAlertsEnabled(const bool isAlertsEnabled)
    {
-   // TODO: write this this to wherever we do persistence
+   // TODO: write this to wherever we do persistence
    this->isAlertsEnabled = isAlertsEnabled;
    }
 
