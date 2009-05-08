@@ -1,5 +1,6 @@
 SRC_DIR=src
 BUILD_DIR=build
+RESOURCES_DIR=resources
 OBJ_DIR=$(BUILD_DIR)/objects
 LIB_DIR=$(BUILD_DIR)/libraries
 DIST_DIR=dist
@@ -80,6 +81,10 @@ dist:
 	ln -s lib$(LIB_CONFIG_LIB_SHORT_NAME).so $(DIST_DIR)/lib$(LIB_CONFIG_LIB_SHORT_NAME).so.8
 	ln -s lib$(LIB_CONFIG_LIB_SHORT_NAME).so $(DIST_DIR)/lib$(LIB_CONFIG_LIB_SHORT_NAME).so.8.0.0
 	@echo 'Finished copying shared libraries'
+	@echo ' '
+	@echo 'Copying resources to $(DIST_DIR)...'
+	cp $(RESOURCES_DIR)/* $(DIST_DIR)/.
+	@echo 'Finished copying resources'
 	@echo ' '
 
 #-----------------------------------------------------------------------------------------------------------------------
