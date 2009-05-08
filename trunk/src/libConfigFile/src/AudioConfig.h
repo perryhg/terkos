@@ -14,6 +14,7 @@ class AudioConfig : public ConfigFile
    {
    public:
 
+      static const unsigned int MIN_VOLUME;
       static const unsigned int MAX_VOLUME;
 
       AudioConfig() :

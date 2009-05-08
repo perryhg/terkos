@@ -4,6 +4,7 @@
 
 #include "AudioConfig.h"
 
+const unsigned int AudioConfig::MIN_VOLUME = 0;
 const unsigned int AudioConfig::MAX_VOLUME = 10;
 const string AudioConfig::CONFIG_FILENAME = "audio.cfg";
 const string AudioConfig::DEFAULT_CONFIG_FILENAME = "audio.default.cfg";
