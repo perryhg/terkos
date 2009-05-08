@@ -11,6 +11,9 @@ CharacterDisplayMenu::CharacterDisplayMenu(const string& xmlFilename, MenuStatus
    {
    menuItem = NULL;
 
+   // Turn off condensing of white space
+   TiXmlBase::SetCondenseWhiteSpace(false);
+
    // First find the root element in the XML document
    ticpp::Element* rootElement = NULL;
 
@@ -178,13 +181,6 @@ MenuItemAction* CharacterDisplayMenu::instantiateMenuItemAction(const string& sh
       args[1] = menuStatusManager;
       args[2] = characterDisplay;
       args[3] = &properties;
-
-      // TODO: Remove this debug info
-      printf("CharacterDisplayMenu::instantiateMenuItemAction()\n");
-      printf("argv[0]=%p\n",menuItem);
-      printf("argv[1]=%p\n",menuStatusManager);
-      printf("argv[2]=%p\n",characterDisplay);
-      printf("argv[3]=%p\n",&properties);
 
       // create the MenuItemAction
       MenuItemAction

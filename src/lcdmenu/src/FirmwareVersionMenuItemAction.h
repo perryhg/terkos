@@ -22,13 +22,6 @@ class FirmwareVersionMenuItemAction : public CharacterDisplayMenuItemAction
                                     CharacterDisplay* characterDisplay, map<string, string>& properties) :
          CharacterDisplayMenuItemAction(delObj, menuItem, menuStatusManager, characterDisplay, properties)
          {
-         // TODO: Remove this debug info
-         printf("FirmwareVersionMenuItemAction::FirmwareVersionMenuItemAction()\n");
-         printf("argv[0]=%p\n", menuItem);
-         printf("argv[1]=%p\n", menuStatusManager);
-         printf("argv[2]=%p\n", characterDisplay);
-         printf("argv[3]=%p\n", &properties);
-
          // nothing to do
          }
 
