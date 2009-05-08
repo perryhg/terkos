@@ -1,0 +1,9 @@
+This is libconfig version 1.3.2.  I downloaded it from:
+
+   http://www.hyperrealm.com/libconfig/
+
+I built it by doing the following:
+
+$ ./configure --prefix=/home/terk/terkos/trunk/src/libconfig-1.3.2/dist --host=arm-linux CXX=arm-oe-linux-uclibcgnueabi-g++ CC=arm-oe-linux-uclibcgnueabi-gcc
+$ make
+$ make install
