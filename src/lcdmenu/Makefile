@@ -26,6 +26,19 @@ LIB_QWERK_SRC_DIR=$(LIB_QWERK_DIR)
 LIB_QWERK_DIST_DIR=$(LIB_QWERK_DIR)
 LIB_QWERK_LIB_SHORT_NAME=qwerk
 
+LIB_CONFIG_DIR=../libconfig/dist
+LIB_CONFIG_SRC_DIR=$(LIB_CONFIG_DIR)/include
+LIB_CONFIG_LIB_SHORT_NAME=config++
+
+LIB_CONFIG_FILE_DIR=../libConfigFile
+LIB_CONFIG_FILE_SRC_DIR=$(LIB_CONFIG_FILE_DIR)/src
+LIB_CONFIG_FILE_DIST_DIR=$(LIB_CONFIG_FILE_DIR)/dist
+LIB_CONFIG_FILE_LIB_SHORT_NAME=ConfigFile
+
+LIB_AUDIO_CONFIG_DIR=../libConfigFile
+LIB_AUDIO_CONFIG_SRC_DIR=$(LIB_AUDIO_CONFIG_DIR)/src
+LIB_AUDIO_CONFIG_LIB_SHORT_NAME=AudioConfig
+
 #CXX=arm-linux-gnueabi-g++
 
 CFLAGS=-fPIC -c -Wall \
@@ -33,7 +46,10 @@ CFLAGS=-fPIC -c -Wall \
        -I$(LIB_DYNAMIC_CLASS_LOADER_SRC_DIR) \
        -I$(TINY_XML_SRC_DIR) \
        -D "TIXML_USE_TICPP" -D "UNICODE" -D "_UNICODE" -D "DEBUG" -D "_DEBUG" \
-       -I$(LIB_QWERK_SRC_DIR)
+       -I$(LIB_QWERK_SRC_DIR) \
+       -I$(LIB_CONFIG_SRC_DIR) \
+       -I$(LIB_CONFIG_FILE_SRC_DIR) \
+       -I$(LIB_AUDIO_CONFIG_SRC_DIR)
        
 LDFLAGS=-L$(LIB_DIR) \
         -L$(LIB_QWERK_DIST_DIR) \
@@ -41,8 +57,11 @@ LDFLAGS=-L$(LIB_DIR) \
         -l$(LIB_DYNAMIC_CLASS_LOADER_LIB_SHORT_NAME) \
         -l$(TINY_XML_LIB_SHORT_NAME) \
         -l$(LIB_QWERK_LIB_SHORT_NAME) \
-        -ldl
-
+        -ldl \
+        -l$(LIB_CONFIG_LIB_SHORT_NAME) \
+        -l$(LIB_CONFIG_FILE_LIB_SHORT_NAME) \
+        -l$(LIB_AUDIO_CONFIG_LIB_SHORT_NAME)
+        
 #-----------------------------------------------------------------------------------------------------------------------
 
 default: all
@@ -133,7 +152,8 @@ LCDMenu.o: init $(SRC_DIR)/LCDMenu.cpp
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-LCDMenu: libCharacterDisplayMenu.so \
+LCDMenu: LibConfigFile \
+         libCharacterDisplayMenu.so \
          libFirmwareVersionMenuItemAction.so \
          libHardwareVersionMenuItemAction.so \
          libToggleAudioAlertsMenuItemAction.so \
@@ -158,10 +178,21 @@ libCharacterDisplayMenu.so: init
 
 #-----------------------------------------------------------------------------------------------------------------------
 
+LibConfigFile: init
+	@echo 'Building target: $@'
+	$(MAKE) -C $(LIB_CONFIG_FILE_DIR) CXX=$(CXX)
+	cp $(LIB_CONFIG_FILE_DIST_DIR)/*.so $(LIB_DIR)/.
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+#-----------------------------------------------------------------------------------------------------------------------
+
 dist: 
 	mkdir -p $(DIST_DIR)
 	@echo 'Copying shared libraries to $(DIST_DIR)...'
 	cp $(LIB_DIR)/*.so $(DIST_DIR)/.
+	ln -s lib$(LIB_CONFIG_LIB_SHORT_NAME).so $(DIST_DIR)/lib$(LIB_CONFIG_LIB_SHORT_NAME).so.8
+	ln -s lib$(LIB_CONFIG_LIB_SHORT_NAME).so $(DIST_DIR)/lib$(LIB_CONFIG_LIB_SHORT_NAME).so.8.0.0
 	@echo 'Finished copying shared libraries'
 	@echo ' '
 	@echo 'Copying executables to $(DIST_DIR)...'
@@ -170,6 +201,7 @@ dist:
 	@echo ' '
 	@echo 'Copying resources to $(DIST_DIR)...'
 	cp $(RESOURCES_DIR)/menu.xml $(DIST_DIR)/.
+	cp $(LIB_CONFIG_FILE_DIST_DIR)/*.cfg $(DIST_DIR)/.
 	@echo 'Finished copying resources'
 	@echo ' '
 

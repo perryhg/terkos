@@ -5,8 +5,8 @@
 #include "SetVolumeMenuItemAction.h"
 
 const string SetVolumeMenuItemAction::CLASS_NAME = "SetVolumeMenuItemAction";
-const int SetVolumeMenuItemAction::MIN_VOLUME = 0;
-const int SetVolumeMenuItemAction::MAX_VOLUME = 10;
+const int SetVolumeMenuItemAction::MIN_VOLUME = AudioConfig::MIN_VOLUME;
+const int SetVolumeMenuItemAction::MAX_VOLUME = AudioConfig::MAX_VOLUME;
 const string SetVolumeMenuItemAction::DEFAULT_LABEL_VOLUME = "Volume";
 const string SetVolumeMenuItemAction::DEFAULT_LABEL_LOW = "Lo";
 const string SetVolumeMenuItemAction::DEFAULT_LABEL_HIGH = "Hi";
@@ -24,14 +24,14 @@ const string SetVolumeMenuItemAction::PROPERTY_ACTION_CANCELLED = "action.cancel
 
 void SetVolumeMenuItemAction::activate()
    {
-   tempVolume = getCurrentVolume();
+   volume = getCurrentVolume();
    getCharacterDisplay()->setLine(0, generateVolumeLine());
    getCharacterDisplay()->setLine(1, generateVolumeGraphLine());
    }
 
 void SetVolumeMenuItemAction::start()
    {
-   setCurrentVolume(tempVolume);
+   setCurrentVolume(volume);
    getCharacterDisplay()->setText(getActionPerformedText());
    sleepThenPopUpToParentMenuItem();
    }
@@ -54,10 +54,10 @@ void SetVolumeMenuItemAction::downEvent()
 
 void SetVolumeMenuItemAction::rightEvent()
    {
-   tempVolume++;
-   if (tempVolume > MAX_VOLUME)
+   volume++;
+   if (volume > MAX_VOLUME)
       {
-      tempVolume = MAX_VOLUME;
+      volume = MAX_VOLUME;
       }
    getCharacterDisplay()->setLine(0, generateVolumeLine());
    getCharacterDisplay()->setLine(1, generateVolumeGraphLine());
@@ -65,10 +65,10 @@ void SetVolumeMenuItemAction::rightEvent()
 
 void SetVolumeMenuItemAction::leftEvent()
    {
-   tempVolume--;
-   if (tempVolume < MIN_VOLUME)
+   volume--;
+   if (volume < MIN_VOLUME)
       {
-      tempVolume = MIN_VOLUME;
+      volume = MIN_VOLUME;
       }
    getCharacterDisplay()->setLine(0, generateVolumeLine());
    getCharacterDisplay()->setLine(1, generateVolumeGraphLine());
@@ -76,7 +76,7 @@ void SetVolumeMenuItemAction::leftEvent()
 
 const string SetVolumeMenuItemAction::getActionPerformedText()
    {
-   return getProperty(PROPERTY_ACTION_PERFORMED, DEFAULT_LABEL_ACTION_PERFORMED) + SetVolumeMenuItemAction::convertIntToString(volume);
+   return getProperty(PROPERTY_ACTION_PERFORMED, DEFAULT_LABEL_ACTION_PERFORMED) + SetVolumeMenuItemAction::convertIntToString(getCurrentVolume());
    }
 
 const string SetVolumeMenuItemAction::getActionCancelledText()
@@ -86,21 +86,19 @@ const string SetVolumeMenuItemAction::getActionCancelledText()
 
 const int SetVolumeMenuItemAction::getCurrentVolume() const
    {
-   // TODO: fetch from wherever we're persisting this
-   return volume;
+   return config.getVolumeLevel();
    }
 
 void SetVolumeMenuItemAction::setCurrentVolume(const int newVolume)
    {
-   // TODO: persist this
-   volume = newVolume;
+   config.setVolumeLevel(newVolume);
    }
 
 const string SetVolumeMenuItemAction::generateVolumeLine()
    {
    const string volumeLabel = getProperty(PROPERTY_LABEL_VOLUME, DEFAULT_LABEL_VOLUME);
    const string volumeValue =
-            (tempVolume == 0 ? getProperty(PROPERTY_LABEL_OFF, DEFAULT_LABEL_OFF) : SetVolumeMenuItemAction::convertIntToString(tempVolume));
+            (volume == 0 ? getProperty(PROPERTY_LABEL_OFF, DEFAULT_LABEL_OFF) : SetVolumeMenuItemAction::convertIntToString(volume));
    return volumeLabel + ": " + volumeValue;
    }
 
@@ -109,11 +107,11 @@ const string SetVolumeMenuItemAction::generateVolumeGraphLine()
    const string graphCharacter = getProperty(PROPERTY_GRAPH_CHARACTER, DEFAULT_VOLUME_GRAPH_CHARACTER);
 
    string s;
-   for (int i = 0; i < tempVolume; i++)
+   for (int i = 0; i < volume; i++)
       {
       s += graphCharacter;
       }
-   for (int i = tempVolume; i < MAX_VOLUME; i++)
+   for (int i = volume; i < MAX_VOLUME; i++)
       {
       s += " ";
       }

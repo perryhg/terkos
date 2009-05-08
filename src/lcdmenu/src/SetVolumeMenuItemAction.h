@@ -19,6 +19,7 @@
 #include <unistd.h>
 #include "CharacterDisplay.h"
 #include "CharacterDisplayMenuItemAction.h"
+#include "AudioConfig.h"
 
 using namespace std;
 
@@ -48,8 +49,7 @@ class SetVolumeMenuItemAction : public CharacterDisplayMenuItemAction
                               map<string, string>& properties) :
          CharacterDisplayMenuItemAction(delObj, menuItem, menuStatusManager, characterDisplay, properties)
          {
-         volume = 5;
-         tempVolume = 5;
+         // nothing to do
          }
 
       virtual ~SetVolumeMenuItemAction()
@@ -58,38 +58,25 @@ class SetVolumeMenuItemAction : public CharacterDisplayMenuItemAction
          }
 
       void activate();
-
       void start();
-
       void stop();
-
       void upEvent();
-
       void downEvent();
-
       void rightEvent();
-
       void leftEvent();
 
    private:
 
+      AudioConfig config;
       int volume;
-      int tempVolume;
 
       const string getActionPerformedText();
-
       const string getActionCancelledText();
-
       const int getCurrentVolume() const;
-
       void setCurrentVolume(const int newVolume);
-
       const string generateVolumeLine();
-
       const string generateVolumeGraphLine();
-
       void sleepThenPopUpToParentMenuItem();
-
       static const string convertIntToString(const int val);
    };
 
