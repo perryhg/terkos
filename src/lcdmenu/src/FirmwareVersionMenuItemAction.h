@@ -1,4 +1,9 @@
-/*
+/**
+ * The FirmwareVersionMenuItemAction class is a CharacterDisplayMenuItemAction for viewing the firmware version.
+ *
+ * Users and subclasses can override the default label ("Firmware version") by constructing the instance with a map
+ * containing the key "label".  The value for that key will be used instead of the default.
+ *
  * Chris Bartley (bartley@cmu.edu)
  */
 
@@ -17,6 +22,8 @@ class FirmwareVersionMenuItemAction : public CharacterDisplayMenuItemAction
    public:
 
       static const string CLASS_NAME;
+      static const string PROPERTY_LABEL;
+      static const string DEFAULT_LABEL;
 
       FirmwareVersionMenuItemAction(void(*delObj)(void*), MenuItem* menuItem, MenuStatusManager* menuStatusManager,
                                     CharacterDisplay* characterDisplay, map<string, string>& properties) :

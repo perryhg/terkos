@@ -40,6 +40,7 @@ LIB_AUDIO_CONFIG_SRC_DIR=$(LIB_AUDIO_CONFIG_DIR)/src
 LIB_AUDIO_CONFIG_LIB_SHORT_NAME=AudioConfig
 
 #CXX=arm-linux-gnueabi-g++
+AR=arm-oe-linux-uclibcgnueabi-ar
 
 CFLAGS=-fPIC -c -Wall \
        -I$(LIB_CHARACTER_DISPLAY_MENU_SRC_DIR) \
@@ -52,11 +53,11 @@ CFLAGS=-fPIC -c -Wall \
        -I$(LIB_AUDIO_CONFIG_SRC_DIR)
        
 LDFLAGS=-L$(LIB_DIR) \
-        -L$(LIB_QWERK_DIST_DIR) \
         -l$(LIB_CHARACTER_DISPLAY_MENU_LIB_SHORT_NAME) \
         -l$(LIB_DYNAMIC_CLASS_LOADER_LIB_SHORT_NAME) \
         -l$(TINY_XML_LIB_SHORT_NAME) \
         -l$(LIB_QWERK_LIB_SHORT_NAME) \
+        -lpthread \
         -ldl \
         -l$(LIB_CONFIG_LIB_SHORT_NAME) \
         -l$(LIB_CONFIG_FILE_LIB_SHORT_NAME) \
@@ -168,6 +169,7 @@ LCDMenu.o: init $(SRC_DIR)/LCDMenu.cpp
 
 LCDMenu: LibConfigFile \
          libCharacterDisplayMenu.so \
+         libqwerk.so \
          libFirmwareVersionMenuItemAction.so \
          libHardwareVersionMenuItemAction.so \
          libToggleAudioAlertsMenuItemAction.so \
@@ -188,6 +190,15 @@ libCharacterDisplayMenu.so: init
 	@echo 'Building target: $@'
 	$(MAKE) -C $(LIB_CHARACTER_DISPLAY_MENU_DIR) CXX=$(CXX)
 	cp $(LIB_CHARACTER_DISPLAY_MENU_DIST_DIR)/*.so $(LIB_DIR)/.
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+libqwerk.so: init
+	@echo 'Building target: $@'
+	$(MAKE) -C $(LIB_QWERK_DIR) CXX=$(CXX) AR=$(AR)
+	cp $(LIB_QWERK_DIST_DIR)/*.a $(LIB_DIR)/.          # TODO: switch to .so
 	@echo 'Finished building target: $@'
 	@echo ' '
 
