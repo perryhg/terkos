@@ -2,7 +2,7 @@
  * The SetVolumeMenuItemAction class is a CharacterDisplayMenuItemAction for setting the current volume.
  *
  * Users and subclasses can override the default volume label ("Volume") and the default "Lo", "Hi", and "Off" labels by
- * constructing the instance with a {@link Map} containing keys "label.volume", "label.low", "label.high", and
+ * constructing the instance with a map containing keys "label.volume", "label.low", "label.high", and
  * "label.off".  The values for those keys will be used instead of the defaults. The messages displayed upon action
  * success or cancel can be similarly customized by specifying "action.performed" and "action.cancelled".  Finally, the
  * character used in the bar graph can be customized by setting the "graph.character" property.
