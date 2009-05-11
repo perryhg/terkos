@@ -39,6 +39,7 @@ CharacterDisplayMenu::CharacterDisplayMenu(const string& xmlFilename, MenuStatus
       // now build the tree
       if (rootElement != NULL)
          {
+         welcomeText = rootElement->GetAttribute("welcome-text");
          menuItem = this->buildMenuItemTree(rootElement, menuStatusManager, characterDisplay);
          }
       }

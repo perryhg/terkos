@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <map>
+#include <string>
 #include <ticpp.h>
 #include <tinyxml.h>
 
@@ -48,9 +49,20 @@ class CharacterDisplayMenu : public Menu
          return menuItem->getFirstChild();
          }
 
+      const bool hasWelcomeText() const
+         {
+         return welcomeText.length() > 0;
+         }
+
+      const string getWelcomeText() const
+         {
+         return welcomeText;
+         }
+
    private:
 
       MenuItem* menuItem;
+      string welcomeText;
       vector<DynamicLibrary*> dynamicLibraries;
 
       MenuItemImpl* buildMenuItemTree(ticpp::Element* parentElement, MenuStatusManager* menuStatusManager, CharacterDisplay* characterDisplay);
