@@ -80,12 +80,16 @@
    <item text="System Info">
       <item text="Firmware             Version">
          <item text="">
-            <implementation-class name="FirmwareVersionMenuItemAction"/>
+            <implementation-class name="FirmwareVersionMenuItemAction">
+               <property key="label">Firmware version</property>
+            </implementation-class>
          </item>
       </item>
       <item text="Hardware             Version">
          <item text="">
-            <implementation-class name="HardwareVersionMenuItemAction"/>
+            <implementation-class name="HardwareVersionMenuItemAction">
+               <property key="label">Hardware version</property>
+            </implementation-class>
          </item>
       </item>
    </item>
