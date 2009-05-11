@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE menu PUBLIC "-//CREATE Lab//TeRK//Menu//EN" "http://www.createlab.ri.cmu.edu/dtd/terk/menu/menu.dtd">
 
-<menu>
+<menu welcome-text="Welcome to Vex!    IFI, Inc.">
    <item text="Audio">
       <item text="Set Volume">
          <item text="">

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!ELEMENT menu (item+)>
+<!ATTLIST menu
+   welcome-text CDATA        #IMPLIED
+>
+
 <!ELEMENT item (item+|implementation-class)>
 <!ATTLIST item
    text CDATA        #REQUIRED

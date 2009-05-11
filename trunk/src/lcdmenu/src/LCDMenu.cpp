@@ -29,9 +29,12 @@ int main(int argc, char** argv)
    std::cout << "Creating CharacterDisplayMenu" << std::endl;
    Menu* menu = new CharacterDisplayMenu(xmlFilename, menuStatusManager, lcdPanel);
 
-   // display welcome text
-   lcdPanel->setText("Welcome to Vex!    IFI, Inc.");
-   sleep(2);
+   // If there's welcome text, then display it and then sleep for a couple seconds so it's visible to the user
+   if (menu->hasWelcomeText())
+      {
+      lcdPanel->setText(menu->getWelcomeText());
+      sleep(2);
+      }
 
    std::cout << "Setting initial menu item" << std::endl;
    menuStatusManager->setActiveMenuItem(menu->getDefaultMenuItem());
