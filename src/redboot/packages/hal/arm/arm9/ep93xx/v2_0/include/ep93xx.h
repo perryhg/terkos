@@ -47,7 +47,8 @@
 
 // System control registers
 #define EP9312_SYSCON                   0x80930000
-#define EP9312_SYSCON_LOCK              0x00c0
+#define EP9312_SYSCON_LOCK              (EP9312_SYSCON + 0x00c0)
+#define EP9312_SYSCON_DEVCFG            (EP9312_SYSCON + 0x0080)
 
 // Clock control registers
 #define EP9312_CLKSET1                  (EP9312_SYSCON + 0x0020)

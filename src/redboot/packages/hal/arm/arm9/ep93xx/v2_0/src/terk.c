@@ -9,6 +9,8 @@
 #include <cyg/hal/hal_arch.h>
 #include <cyg/hal/hal_intr.h>
 #include <cyg/hal/hal_cache.h>
+#include <cyg/hal/hal_io.h>
+#include <cyg/hal/ep93xx.h>
 #include <cyg/io/edb9301_strataflash.inl>
 
 flash_t flash_protect_read(int index)

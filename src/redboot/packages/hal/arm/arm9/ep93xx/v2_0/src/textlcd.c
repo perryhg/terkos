@@ -54,6 +54,10 @@ void lcdInit(void)
 {
   unsigned int reg;
 
+  // backlight-- output
+  HAL_READ_UINT32(EP9312_GPIO_PADDR, reg);
+  HAL_WRITE_UINT32(EP9312_GPIO_PADDR, reg | 0x08);
+
   // R/W and E low
   HAL_READ_UINT32(EP9312_GPIO_PBDR, reg);
   HAL_WRITE_UINT32(EP9312_GPIO_PBDR, reg & ~0xfc);
@@ -115,13 +119,13 @@ void lcdSetBacklight(int state)
 
   if (state)
     {
-      HAL_READ_UINT32(EP9312_UART1+EP9312_UART_MCR, reg);
-      HAL_WRITE_UINT32(EP9312_UART1+EP9312_UART_MCR,  reg & ~0x0001);
+      HAL_READ_UINT32(EP9312_GPIO_PADR, reg);
+      HAL_WRITE_UINT32(EP9312_GPIO_PADR, reg | 0x08);
     }
   else
     {
-      HAL_READ_UINT32(EP9312_UART1+EP9312_UART_MCR, reg);
-      HAL_WRITE_UINT32(EP9312_UART1+EP9312_UART_MCR,  reg | 0x0001);
+      HAL_READ_UINT32(EP9312_GPIO_PADR, reg);
+      HAL_WRITE_UINT32(EP9312_GPIO_PADR, reg & ~0x08);      
     }
 }
 

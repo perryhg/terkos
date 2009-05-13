@@ -71,6 +71,8 @@
 #endif
 
 #ifdef CYGHWR_HAL_ARM_EDB93XX_BOARD_VARIANT_EDB9302
+#include <cyg/hal/hal_io.h>
+#include <cyg/hal/ep93xx.h>
 #include <cyg/hal/terk.h>
 #endif
 
@@ -190,11 +192,26 @@ cyg_start(void)
     int cur;
     struct init_tab_entry *init_entry;
     extern char RedBoot_version[];
-    volatile int d;
 
 #ifdef CYGHWR_HAL_ARM_EDB93XX_BOARD_VARIANT_EDB9302
-    // delay for double reset of Qwerk/VEXPro
-    for (d=0; d<10000000; d++);
+
+  volatile int d;  
+  unsigned int reg;
+
+  HAL_WRITE_UINT32(EP9312_SYSCON_LOCK, 0xaa);
+  HAL_READ_UINT32(EP9312_SYSCON_DEVCFG, reg);
+
+  HAL_WRITE_UINT32(EP9312_SYSCON_LOCK, 0xaa);
+  HAL_WRITE_UINT32(EP9312_SYSCON_DEVCFG, reg | 0x08020800);
+
+  // hold up power line
+  HAL_READ_UINT32(EP9312_GPIO_PCDDR, reg);
+  HAL_WRITE_UINT32(EP9312_GPIO_PCDDR, reg | 0x01);
+  HAL_READ_UINT32(EP9312_GPIO_PCDR, reg);
+  HAL_WRITE_UINT32(EP9312_GPIO_PCDR, reg | 0x01);
+
+  // delay for double reset of Qwerk/VEXPro
+    for (d=0; d<3000000; d++);
 #endif
     
     // Export version information
