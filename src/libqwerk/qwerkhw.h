@@ -7,12 +7,20 @@
 #define NULL               (void *)0
 #endif
 
+#if Q1
 #define QHW_AD_CHANNELS               8
 #define QHW_AD_ANALOG_IN_CHANNEL      0
 #define QHW_AD_BATT_CHANNEL           1
 #define QHW_AD_MOTOR_CHANNEL          2
 #define QHW_AD_TEMP_CHANNEL           3
 #define QHW_AD_5V_CHANNEL             4
+#else
+#define QHW_AD_CHANNELS               24
+#define QHW_AD_ANALOG_IN_CHANNEL0_7   1
+#define QHW_AD_ANALOG_IN_CHANNEL8_15  2
+#define QHW_AD_ANALOG_IN_CHANNEL16_23 3
+#define QHW_AD_BATT_CHANNEL           0
+#endif
 
 #define QHW_AD_ANALOG_IN_NUMERATOR    1134
 #define QHW_AD_ANALOG_IN_DENOMINATOR  10000
@@ -40,7 +48,7 @@ enum EQHWDivScale
 class CQwerkHardware
 {
 public:
-  CQwerkHardware(C9302Hardware *hw=NULL);
+  CQwerkHardware();
   ~CQwerkHardware();
 
   unsigned int   GetVersion();

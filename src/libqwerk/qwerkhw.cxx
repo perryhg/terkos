@@ -3,23 +3,15 @@
 #include "qwerkhw.h"
 #include "9302hw.h"
 
-CQwerkHardware::CQwerkHardware(C9302Hardware *hw)
+CQwerkHardware::CQwerkHardware()
 {
-  if (hw==NULL)
-    {
-      m_p9302hw = new C9302Hardware();
-      m_allocated = true;
-    }
-  else
-    {
-      m_p9302hw = hw;
-      m_allocated = false;
-    }
+  m_p9302hw = C9302Hardware::GetObject();
 
   // set FPGA PROG to high and PHY power to high
   *m_p9302hw->PortAData() = 0x0008;
   *m_p9302hw->PortADataDR() = 0x006a;
 
+#if Q1
   // turn LEDs off 
   *m_p9302hw->PortBData() = 0x0000;
   *m_p9302hw->PortBDataDR() = 0x00ff;
@@ -35,13 +27,12 @@ CQwerkHardware::CQwerkHardware(C9302Hardware *hw)
   *m_p9302hw->PortHDataDR() |= 0x00010;
 
   SetMotorVoltageScale(QHW_DIV_365TH);
-
+#endif
 }
 
 CQwerkHardware::~CQwerkHardware()
 {
-  if (m_allocated)
-    delete m_p9302hw;
+  C9302Hardware::ReleaseObject();
 }
 
 unsigned short CQwerkHardware::GetADRaw(unsigned int channel)
@@ -50,10 +41,24 @@ unsigned short CQwerkHardware::GetADRaw(unsigned int channel)
     return 0;
 
   // set mux
+#if Q1
   *m_p9302hw->PortFDataDR() = 0x000e;
   *m_p9302hw->PortFData() = channel << 1;
-  
+
   return m_p9302hw->GetAD(QHW_AD_ANALOG_IN_CHANNEL);
+#else
+  *m_p9302hw->PortHDataDR() |= 0x001c;
+  *m_p9302hw->PortHData() &= ~0x001c;
+  *m_p9302hw->PortHData() |= (channel&7)<<2;
+
+  if (channel<=7)
+    return m_p9302hw->GetAD(QHW_AD_ANALOG_IN_CHANNEL0_7);
+  else if (channel>=8 && channel<=15)
+    return m_p9302hw->GetAD(QHW_AD_ANALOG_IN_CHANNEL8_15);
+  else
+    return m_p9302hw->GetAD(QHW_AD_ANALOG_IN_CHANNEL16_23);    
+#endif
+  
 }
 
 unsigned short CQwerkHardware::GetADVoltage(unsigned int channel)
@@ -85,6 +90,7 @@ unsigned short CQwerkHardware::GetBattVoltage()
 
 unsigned short CQwerkHardware::GetMotorVoltage()
 {
+#if Q1
   unsigned int val;
 
   val = m_p9302hw->GetAD(QHW_AD_MOTOR_CHANNEL);
@@ -93,10 +99,14 @@ unsigned short CQwerkHardware::GetMotorVoltage()
   val /= QHW_AD_MOTOR_DENOMINATOR;
 
   return (unsigned short)val;
+#else
+  return 0;
+#endif
 }
 
 unsigned short CQwerkHardware::GetTemp()
 {
+#if Q1
   unsigned int val;
 
   val = m_p9302hw->GetAD(QHW_AD_TEMP_CHANNEL);
@@ -105,18 +115,25 @@ unsigned short CQwerkHardware::GetTemp()
   val /= QHW_AD_TEMP_DENOMINATOR;
 
   return (unsigned short)val;
+#else
+  return 0;
+#endif
 }
 
 unsigned short CQwerkHardware::Get5VVoltage()
 {
   unsigned int val;
 
+#if Q1
   val = m_p9302hw->GetAD(QHW_AD_5V_CHANNEL);
 
   val *= QHW_AD_5V_NUMERATOR;
   val /= QHW_AD_5V_DENOMINATOR;
 
   return (unsigned short)val;
+#else
+  return 0;
+#endif
 }
 
 unsigned int CQwerkHardware::GetVersion()

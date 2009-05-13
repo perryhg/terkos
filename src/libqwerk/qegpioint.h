@@ -15,12 +15,13 @@ public:
 	     unsigned int vectorStart=QEG_DEFAULT_VECTOR_START);
   ~CQEGpioInt();
 
-
-  // Each bit in this register reflects the state of corresponding pins.  
-  // Bits 0 thru 7 are input.  Bits 8 thru 15 are output
   inline volatile unsigned short *Data()
   {
     return m_map.Ushort(m_base + 0x00);
+  }
+  inline volatile unsigned short *DataDir()
+  {
+    return m_map.Ushort(m_base + 0x02);
   }
 
 
@@ -31,7 +32,7 @@ public:
   // edge.
   inline volatile unsigned short *IntMask()
   {
-    return m_map.Ushort(m_base + 0x02);
+    return m_map.Ushort(m_base + 0x04);
   }
 
   // Bits 0 thru 7 in this register determines which edge (rising or falling) 
@@ -43,7 +44,7 @@ public:
   // An interrupt is only generated for pins that are unmasked.
   inline volatile unsigned short *IntEdge()
   {
-    return m_map.Ushort(m_base + 0x04);
+    return m_map.Ushort(m_base + 0x06);
   }
 
 private:
