@@ -1,3 +1,0 @@
-mkdir /mnt/net;
-mount -o nolock 192.168.0.26:/qwerknfs/lcd /mnt/net;
-export LD_LIBRARY_PATH=/mnt/net;
