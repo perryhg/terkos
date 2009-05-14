@@ -21,17 +21,24 @@ LIB_AUDIO_CONFIG_SRC_DIR=$(LIB_AUDIO_CONFIG_DIR)/src
 LIB_AUDIO_CONFIG_DIST_DIR=$(LIB_AUDIO_CONFIG_DIR)/dist
 LIB_AUDIO_CONFIG_LIB_SHORT_NAME=AudioConfig
 
+LIB_SERVO_CONFIG_DIR=../../libConfigFile
+LIB_SERVO_CONFIG_SRC_DIR=$(LIB_SERVO_CONFIG_DIR)/src
+LIB_SERVO_CONFIG_DIST_DIR=$(LIB_SERVO_CONFIG_DIR)/dist
+LIB_SERVO_CONFIG_LIB_SHORT_NAME=ServoConfig
+
 #CXX=arm-oe-linux-uclibcgnueabi-g++
 
 CFLAGS=-fPIC -c -Wall \
        -I$(LIB_CONFIG_SRC_DIR) \
        -I$(LIB_CONFIG_FILE_SRC_DIR) \
-       -I$(LIB_AUDIO_CONFIG_SRC_DIR)
+       -I$(LIB_AUDIO_CONFIG_SRC_DIR) \
+       -I$(LIB_SERVO_CONFIG_SRC_DIR)
        
 LDFLAGS=-L$(LIB_DIR) \
         -l$(LIB_CONFIG_LIB_SHORT_NAME) \
         -l$(LIB_CONFIG_FILE_LIB_SHORT_NAME) \
-        -l$(LIB_AUDIO_CONFIG_LIB_SHORT_NAME)
+        -l$(LIB_AUDIO_CONFIG_LIB_SHORT_NAME) \
+        -l$(LIB_SERVO_CONFIG_LIB_SHORT_NAME)
         
 
 #-----------------------------------------------------------------------------------------------------------------------

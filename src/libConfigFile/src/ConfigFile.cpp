@@ -110,6 +110,44 @@ const bool ConfigFile::setBooleanValue(const string& propertyName, const bool va
    return false;
    }
 
+const unsigned int ConfigFile::getIndexedUnsignedIntValue(const string& propertyName, const unsigned int index, const unsigned int defaultValue) const
+   {
+   Config config;
+   if (load(config))
+      {
+      try
+         {
+         Setting& setting = config.lookup(propertyName);
+         return setting[index];
+         }
+      catch (...)
+         {
+         cerr << "ConfigFile::getIndexedUnsignedIntValue(): failed to find property [" << propertyName << "]!" << endl;
+         }
+      }
+   return defaultValue;
+   }
+
+const bool ConfigFile::setIndexedUnsignedIntValue(const string& propertyName, const unsigned int index, const unsigned int value)
+   {
+   Config config;
+   if (load(config))
+      {
+      try
+         {
+         Setting& setting = config.lookup(propertyName);
+         setting[index] = (int) value;
+         return save(config);
+         }
+      catch (...)
+         {
+         cerr << "ConfigFile::setIndexedUnsignedIntValue(): failed to set index [" << index << "] on property [" << propertyName << "] to value [" << value << "]!" << endl;
+         }
+      }
+
+   return false;
+   }
+
 const bool ConfigFile::load(Config& config) const
    {
    try
