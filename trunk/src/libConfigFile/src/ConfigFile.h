@@ -51,6 +51,10 @@ class ConfigFile
       const bool getBooleanValue(const string& propertyName, const bool defaultValue = false) const;
       const bool setBooleanValue(const string& propertyName, const bool value);
 
+      const unsigned int getIndexedUnsignedIntValue(const string& propertyName, const unsigned int index, const unsigned int defaultValue = 0) const;
+      const bool setIndexedUnsignedIntValue(const string& propertyName, const unsigned int index, const unsigned int value);
+
+
    private:
 
       const string configFilename;

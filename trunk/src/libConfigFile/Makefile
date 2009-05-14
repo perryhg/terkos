@@ -26,7 +26,8 @@ default: all
 build: init \
        libconfig++.so \
        libConfigFile.so \
-       libAudioConfig.so
+       libAudioConfig.so \
+       libServoConfig.so
 
 all: build dist
 
@@ -61,6 +62,20 @@ AudioConfig.o: init $(SRC_DIR)/AudioConfig.cpp
 libAudioConfig.so: AudioConfig.o 
 	@echo 'Building target: $@'
 	$(CXX) -shared -Wl,-soname,libAudioConfig.so -o $(LIB_DIR)/libAudioConfig.so $(OBJ_DIR)/AudioConfig.o
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+ServoConfig.o: init $(SRC_DIR)/ServoConfig.cpp
+	@echo 'Building target: $@'
+	$(CXX) $(CFLAGS) $(SRC_DIR)/ServoConfig.cpp -o $(OBJ_DIR)/ServoConfig.o
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+libServoConfig.so: ServoConfig.o 
+	@echo 'Building target: $@'
+	$(CXX) -shared -Wl,-soname,libServoConfig.so -o $(LIB_DIR)/libServoConfig.so $(OBJ_DIR)/ServoConfig.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 
