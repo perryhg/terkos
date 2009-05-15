@@ -122,9 +122,9 @@ unsigned short CQwerkHardware::GetTemp()
 
 unsigned short CQwerkHardware::Get5VVoltage()
 {
+#if Q1
   unsigned int val;
 
-#if Q1
   val = m_p9302hw->GetAD(QHW_AD_5V_CHANNEL);
 
   val *= QHW_AD_5V_NUMERATOR;
