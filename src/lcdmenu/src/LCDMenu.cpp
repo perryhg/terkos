@@ -1,5 +1,5 @@
 /*
- * Author: Chris Bartley (bartley@cmu.edu)
+ * Chris Bartley (bartley@cmu.edu)
  */
 
 #include <iostream>
