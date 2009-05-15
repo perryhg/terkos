@@ -2,8 +2,8 @@
  * Chris Bartley (bartley@cmu.edu)
  */
 
-#ifndef SERVOCONFIG_H_
-#define SERVOCONFIG_H_
+#ifndef SERVOCONFIGMANAGER_H_
+#define SERVOCONFIGMANAGER_H_
 
 #include <algorithm>
 #include "ConfigFile.h"
@@ -49,4 +49,4 @@ class ServoConfigManager : public ConfigFile
 
    };
 
-#endif /* SERVOCONFIG_H_ */
+#endif /* SERVOCONFIGMANAGER_H_ */
