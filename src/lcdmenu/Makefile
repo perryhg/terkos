@@ -30,16 +30,12 @@ LIB_CONFIG_DIR=../libconfig/dist
 LIB_CONFIG_SRC_DIR=$(LIB_CONFIG_DIR)/include
 LIB_CONFIG_LIB_SHORT_NAME=config++
 
-LIB_CONFIG_FILE_DIR=../libConfigFile
-LIB_CONFIG_FILE_SRC_DIR=$(LIB_CONFIG_FILE_DIR)/src
-LIB_CONFIG_FILE_DIST_DIR=$(LIB_CONFIG_FILE_DIR)/dist
-LIB_CONFIG_FILE_LIB_SHORT_NAME=ConfigFile
+LIB_CONFIGURATION_MANAGEMENT_DIR=../libConfigurationManagement
+LIB_CONFIGURATION_MANAGEMENT_SRC_DIR=$(LIB_CONFIGURATION_MANAGEMENT_DIR)/src
+LIB_CONFIGURATION_MANAGEMENT_DIST_DIR=$(LIB_CONFIGURATION_MANAGEMENT_DIR)/dist
+LIB_CONFIGURATION_MANAGEMENT_LIB_SHORT_NAME=ConfigurationManagement
 
-LIB_AUDIO_CONFIG_DIR=../libConfigFile
-LIB_AUDIO_CONFIG_SRC_DIR=$(LIB_AUDIO_CONFIG_DIR)/src
-LIB_AUDIO_CONFIG_LIB_SHORT_NAME=AudioConfig
-
-#CXX=arm-linux-gnueabi-g++
+CXX=arm-oe-linux-uclibcgnueabi-g++
 AR=arm-oe-linux-uclibcgnueabi-ar
 
 CFLAGS=-fPIC -c -Wall \
@@ -49,8 +45,7 @@ CFLAGS=-fPIC -c -Wall \
        -D "TIXML_USE_TICPP" -D "UNICODE" -D "_UNICODE" -D "DEBUG" -D "_DEBUG" \
        -I$(LIB_QWERK_SRC_DIR) \
        -I$(LIB_CONFIG_SRC_DIR) \
-       -I$(LIB_CONFIG_FILE_SRC_DIR) \
-       -I$(LIB_AUDIO_CONFIG_SRC_DIR)
+       -I$(LIB_CONFIGURATION_MANAGEMENT_SRC_DIR)
        
 LDFLAGS=-L$(LIB_DIR) \
         -l$(LIB_CHARACTER_DISPLAY_MENU_LIB_SHORT_NAME) \
@@ -60,8 +55,7 @@ LDFLAGS=-L$(LIB_DIR) \
         -lpthread \
         -ldl \
         -l$(LIB_CONFIG_LIB_SHORT_NAME) \
-        -l$(LIB_CONFIG_FILE_LIB_SHORT_NAME) \
-        -l$(LIB_AUDIO_CONFIG_LIB_SHORT_NAME)
+        -l$(LIB_CONFIGURATION_MANAGEMENT_LIB_SHORT_NAME)
         
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -167,7 +161,7 @@ LCDMenu.o: init $(SRC_DIR)/LCDMenu.cpp
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-LCDMenu: LibConfigFile \
+LCDMenu: libConfigurationManagement.so \
          libCharacterDisplayMenu.so \
          libqwerk.so \
          libFirmwareVersionMenuItemAction.so \
@@ -204,10 +198,10 @@ libqwerk.so: init
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-LibConfigFile: init
+libConfigurationManagement.so: init
 	@echo 'Building target: $@'
-	$(MAKE) -C $(LIB_CONFIG_FILE_DIR) CXX=$(CXX)
-	cp $(LIB_CONFIG_FILE_DIST_DIR)/*.so $(LIB_DIR)/.
+	$(MAKE) -C $(LIB_CONFIGURATION_MANAGEMENT_DIR) CXX=$(CXX)
+	cp $(LIB_CONFIGURATION_MANAGEMENT_DIST_DIR)/*.so $(LIB_DIR)/.
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -227,7 +221,7 @@ dist:
 	@echo ' '
 	@echo 'Copying resources to $(DIST_DIR)...'
 	cp $(RESOURCES_DIR)/menu.xml $(DIST_DIR)/.
-	cp $(LIB_CONFIG_FILE_DIST_DIR)/*.cfg $(DIST_DIR)/.
+	cp $(LIB_CONFIGURATION_MANAGEMENT_DIST_DIR)/*.cfg $(DIST_DIR)/.
 	@echo 'Finished copying resources'
 	@echo ' '
 

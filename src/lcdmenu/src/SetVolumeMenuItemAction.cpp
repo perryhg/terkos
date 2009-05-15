@@ -5,8 +5,8 @@
 #include "SetVolumeMenuItemAction.h"
 
 const string SetVolumeMenuItemAction::CLASS_NAME = "SetVolumeMenuItemAction";
-const int SetVolumeMenuItemAction::MIN_VOLUME = AudioConfig::MIN_VOLUME;
-const int SetVolumeMenuItemAction::MAX_VOLUME = AudioConfig::MAX_VOLUME;
+const int SetVolumeMenuItemAction::MIN_VOLUME = AudioConfigManager::MIN_VOLUME;
+const int SetVolumeMenuItemAction::MAX_VOLUME = AudioConfigManager::MAX_VOLUME;
 const string SetVolumeMenuItemAction::DEFAULT_LABEL_VOLUME = "Volume";
 const string SetVolumeMenuItemAction::DEFAULT_LABEL_LOW = "Lo";
 const string SetVolumeMenuItemAction::DEFAULT_LABEL_HIGH = "Hi";
@@ -86,12 +86,12 @@ const string SetVolumeMenuItemAction::getActionCancelledText()
 
 const int SetVolumeMenuItemAction::getCurrentVolume() const
    {
-   return config.getVolumeLevel();
+   return configManager.getVolumeLevel();
    }
 
 void SetVolumeMenuItemAction::setCurrentVolume(const int newVolume)
    {
-   config.setVolumeLevel(newVolume);
+   configManager.setVolumeLevel(newVolume);
    }
 
 const string SetVolumeMenuItemAction::generateVolumeLine()
