@@ -15,11 +15,11 @@
 
 #include <algorithm>
 #include <string.h>
-#include <sstream>
 #include <unistd.h>
 #include "CharacterDisplay.h"
 #include "CharacterDisplayMenuItemAction.h"
 #include "AudioConfigManager.h"
+#include "StringUtilities.h"
 
 using namespace std;
 
@@ -77,7 +77,6 @@ class SetVolumeMenuItemAction : public CharacterDisplayMenuItemAction
       const string generateVolumeLine();
       const string generateVolumeGraphLine();
       void sleepThenPopUpToParentMenuItem();
-      static const string convertIntToString(const int val);
    };
 
 #endif /* SETVOLUMEMENUITEMACTION_H_ */

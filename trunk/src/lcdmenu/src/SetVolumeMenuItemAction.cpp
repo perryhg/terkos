@@ -76,7 +76,7 @@ void SetVolumeMenuItemAction::leftEvent()
 
 const string SetVolumeMenuItemAction::getActionPerformedText()
    {
-   return getProperty(PROPERTY_ACTION_PERFORMED, DEFAULT_LABEL_ACTION_PERFORMED) + SetVolumeMenuItemAction::convertIntToString(getCurrentVolume());
+   return getProperty(PROPERTY_ACTION_PERFORMED, DEFAULT_LABEL_ACTION_PERFORMED) + StringUtilities::convertIntToString(getCurrentVolume());
    }
 
 const string SetVolumeMenuItemAction::getActionCancelledText()
@@ -98,7 +98,7 @@ const string SetVolumeMenuItemAction::generateVolumeLine()
    {
    const string volumeLabel = getProperty(PROPERTY_LABEL_VOLUME, DEFAULT_LABEL_VOLUME);
    const string volumeValue =
-            (volume == 0 ? getProperty(PROPERTY_LABEL_OFF, DEFAULT_LABEL_OFF) : SetVolumeMenuItemAction::convertIntToString(volume));
+            (volume == 0 ? getProperty(PROPERTY_LABEL_OFF, DEFAULT_LABEL_OFF) : StringUtilities::convertIntToString(volume));
    return volumeLabel + ": " + volumeValue;
    }
 
@@ -122,13 +122,6 @@ void SetVolumeMenuItemAction::sleepThenPopUpToParentMenuItem()
    {
    sleep(2);
    CharacterDisplayMenuItemAction::stop();
-   }
-
-const string SetVolumeMenuItemAction::convertIntToString(const int val)
-   {
-   std::stringstream out;
-   out << val;
-   return out.str();
    }
 
 // required definitions for dynamic loading
