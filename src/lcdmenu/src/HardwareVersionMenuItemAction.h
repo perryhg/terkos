@@ -15,7 +15,8 @@
 #include <string.h>
 #include "CharacterDisplay.h"
 #include "CharacterDisplayMenuItemAction.h"
-//#include "qwerkhw.h"
+#include "qwerkhw.h"
+#include "StringUtilities.h"
 
 using namespace std;
 
@@ -43,7 +44,7 @@ class HardwareVersionMenuItemAction : public CharacterDisplayMenuItemAction
 
    private:
 
-      //CQwerkHardware hardware;
+      CQwerkHardware hardware;
    };
 
 #endif /* HARDWAREVERSIONMENUITEMACTION_H_ */

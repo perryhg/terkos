@@ -10,11 +10,8 @@ const string HardwareVersionMenuItemAction::PROPERTY_LABEL = "label";
 
 void HardwareVersionMenuItemAction::activate()
    {
-   // TODO: user properties instead of hardcoded english
    getCharacterDisplay()->setLine(0, getProperty(PROPERTY_LABEL, DEFAULT_LABEL));
-   getCharacterDisplay()->setLine(1, "1.0.0h");
-   // TODO: use this once CQwerkHardware is working
-   // getCharacterDisplay()->setLine(1, "" + hardware.GetVersion());
+   getCharacterDisplay()->setLine(1, StringUtilities::convertIntToString(hardware.GetVersion()));
    }
 
 // required definitions for dynamic loading

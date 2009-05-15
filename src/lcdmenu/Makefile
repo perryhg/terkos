@@ -55,7 +55,8 @@ LDFLAGS=-L$(LIB_DIR) \
         -lpthread \
         -ldl \
         -l$(LIB_CONFIG_LIB_SHORT_NAME) \
-        -l$(LIB_CONFIGURATION_MANAGEMENT_LIB_SHORT_NAME)
+        -l$(LIB_CONFIGURATION_MANAGEMENT_LIB_SHORT_NAME) \
+        -lStringUtilities
         
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -75,6 +76,20 @@ init:
 	mkdir -p $(LIB_DIR)
 	mkdir -p $(EXE_DIR)
 
+#-----------------------------------------------------------------------------------------------------------------------
+
+StringUtilities.o: init $(SRC_DIR)/StringUtilities.cpp
+	@echo 'Building target: $@'
+	$(CXX) $(CFLAGS) $(SRC_DIR)/StringUtilities.cpp -o $(OBJ_DIR)/StringUtilities.o
+	@echo 'Finished building target: $@'
+	@echo ' '
+	
+libStringUtilities.so: StringUtilities.o
+	@echo 'Building target: $@'
+	$(CXX) -shared -Wl,-soname,libStringUtilities.so -o $(LIB_DIR)/libStringUtilities.so $(OBJ_DIR)/StringUtilities.o
+	@echo 'Finished building target: $@'
+	@echo ' '
+	
 #-----------------------------------------------------------------------------------------------------------------------
 
 FirmwareVersionMenuItemAction.o: init $(SRC_DIR)/FirmwareVersionMenuItemAction.cpp
@@ -99,7 +114,7 @@ HardwareVersionMenuItemAction.o: init $(SRC_DIR)/HardwareVersionMenuItemAction.c
 	
 libHardwareVersionMenuItemAction.so: HardwareVersionMenuItemAction.o
 	@echo 'Building target: $@'
-	$(CXX) -shared -Wl,-soname,libHardwareVersionMenuItemAction.so -o $(LIB_DIR)/libHardwareVersionMenuItemAction.so $(OBJ_DIR)/HardwareVersionMenuItemAction.o
+	$(CXX) -shared -Wl,-soname,libHardwareVersionMenuItemAction.so -o $(LIB_DIR)/libHardwareVersionMenuItemAction.so $(OBJ_DIR)/HardwareVersionMenuItemAction.o -L$(LIB_DIR) -l$(LIB_QWERK_LIB_SHORT_NAME) -lpthread
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -161,7 +176,8 @@ LCDMenu.o: init $(SRC_DIR)/LCDMenu.cpp
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-LCDMenu: libConfigurationManagement.so \
+LCDMenu: libStringUtilities.so \
+         libConfigurationManagement.so \
          libCharacterDisplayMenu.so \
          libqwerk.so \
          libFirmwareVersionMenuItemAction.so \
