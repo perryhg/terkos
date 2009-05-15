@@ -3,8 +3,8 @@
 
 <cproject>
 <storageModule moduleId="org.eclipse.cdt.core.settings">
-<cconfiguration id="0.1521754426">
-<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="0.1521754426" moduleId="org.eclipse.cdt.core.settings" name="Default">
+<cconfiguration id="0.182140338">
+<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="0.182140338" moduleId="org.eclipse.cdt.core.settings" name="Default">
 <externalSettings/>
 <extensions>
 <extension id="org.eclipse.cdt.core.VCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
@@ -15,39 +15,33 @@
 </extensions>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
-<configuration artifactName="LibConfigTest" buildProperties="" description="" id="0.1521754426" name="Default" parent="org.eclipse.cdt.build.core.prefbase.cfg">
-<folderInfo id="0.1521754426." name="/" resourcePath="">
-<toolChain id="org.eclipse.cdt.build.core.prefbase.toolchain.1216297226" name="No ToolChain" resourceTypeBasedDiscovery="false" superClass="org.eclipse.cdt.build.core.prefbase.toolchain">
-<targetPlatform id="org.eclipse.cdt.build.core.prefbase.toolchain.1216297226.248424683" name=""/>
-<builder id="org.eclipse.cdt.build.core.settings.default.builder.234986606" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
-<tool id="org.eclipse.cdt.build.core.settings.holder.libs.325393409" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs">
-<option id="org.eclipse.cdt.build.core.settings.holder.libfiles.1295688707" name="Library Files" superClass="org.eclipse.cdt.build.core.settings.holder.libfiles" valueType="libFiles">
+<configuration artifactName="LibConfigFile" buildProperties="" description="" id="0.182140338" name="Default" parent="org.eclipse.cdt.build.core.prefbase.cfg">
+<folderInfo id="0.182140338." name="/" resourcePath="">
+<toolChain id="org.eclipse.cdt.build.core.prefbase.toolchain.1481779561" name="No ToolChain" resourceTypeBasedDiscovery="false" superClass="org.eclipse.cdt.build.core.prefbase.toolchain">
+<targetPlatform id="org.eclipse.cdt.build.core.prefbase.toolchain.1481779561.1379567971" name=""/>
+<builder id="org.eclipse.cdt.build.core.settings.default.builder.842056604" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
+<tool id="org.eclipse.cdt.build.core.settings.holder.libs.2108174274" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs">
+<option id="org.eclipse.cdt.build.core.settings.holder.libfiles.340735455" name="Library Files" superClass="org.eclipse.cdt.build.core.settings.holder.libfiles" valueType="libFiles">
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfig/dist/lib/libconfig++.so}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfigFile/dist/libConfigFile.so}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfigFile/dist/libAudioConfig.so}&quot;"/>
 </option>
 </tool>
-<tool id="org.eclipse.cdt.build.core.settings.holder.1507105335" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
-<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.985118591" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+<tool id="org.eclipse.cdt.build.core.settings.holder.877284142" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
+<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.129060822" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfig/dist/include}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfigFile/src}&quot;"/>
 </option>
-<option id="org.eclipse.cdt.build.core.settings.holder.undef.incpaths.158057997" name="Undefined Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.undef.incpaths" valueType="undefIncludePath">
-<listOptionValue builtIn="false" value="/Users/chris/Documents/Work/Projects/TerkOS/trunk/src/libconfig/dist/include"/>
-</option>
-<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1067246919" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.665006174" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 </tool>
-<tool id="org.eclipse.cdt.build.core.settings.holder.1569303412" name="GNU C" superClass="org.eclipse.cdt.build.core.settings.holder">
-<option id="org.eclipse.cdt.build.core.settings.holder.undef.incpaths.1313695736" name="Undefined Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.undef.incpaths" valueType="undefIncludePath">
+<tool id="org.eclipse.cdt.build.core.settings.holder.695674460" name="GNU C" superClass="org.eclipse.cdt.build.core.settings.holder">
+<option id="org.eclipse.cdt.build.core.settings.holder.undef.incpaths.1844716157" name="Undefined Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.undef.incpaths" valueType="undefIncludePath">
 <listOptionValue builtIn="false" value="/Users/chris/Documents/Work/Projects/TerkOS/trunk/src/libconfig/dist/include"/>
 </option>
-<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.213599291" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.8095727" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 </tool>
-<tool id="org.eclipse.cdt.build.core.settings.holder.653015606" name="Assembly" superClass="org.eclipse.cdt.build.core.settings.holder">
-<option id="org.eclipse.cdt.build.core.settings.holder.undef.incpaths.104120247" name="Undefined Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.undef.incpaths" valueType="undefIncludePath">
+<tool id="org.eclipse.cdt.build.core.settings.holder.1149547023" name="Assembly" superClass="org.eclipse.cdt.build.core.settings.holder">
+<option id="org.eclipse.cdt.build.core.settings.holder.undef.incpaths.1345298438" name="Undefined Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.undef.incpaths" valueType="undefIncludePath">
 <listOptionValue builtIn="false" value="/Users/chris/Documents/Work/Projects/TerkOS/trunk/src/libconfig/dist/include"/>
 </option>
-<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1960689829" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1541887" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 </tool>
 </toolChain>
 </folderInfo>
@@ -135,7 +129,7 @@
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
-<scannerConfigBuildInfo instanceId="0.1521754426">
+<scannerConfigBuildInfo instanceId="0.182140338">
 <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile"/>
 <profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 <buildOutputProvider>
@@ -219,14 +213,12 @@
 </profile>
 </scannerConfigBuildInfo>
 </storageModule>
-<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
-<externalSettings containerId="LibConfig;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
-</storageModule>
-<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
+<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 <storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 </cconfiguration>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
-<project id="LibConfigTest.null.963499171" name="LibConfigTest"/>
+<project id="LibConfigFile.null.1436699371" name="LibConfigFile"/>
 </storageModule>
 </cproject>

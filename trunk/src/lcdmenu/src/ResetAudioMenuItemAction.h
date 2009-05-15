@@ -6,7 +6,7 @@
 #define RESETAUDIOMENUITEMACTION_H_
 
 #include "TwoOptionMenuItemAction.h"
-#include "AudioConfig.h"
+#include "AudioConfigManager.h"
 
 class ResetAudioMenuItemAction : public TwoOptionMenuItemAction
    {
@@ -36,7 +36,7 @@ class ResetAudioMenuItemAction : public TwoOptionMenuItemAction
 
    private:
 
-      AudioConfig config;
+      AudioConfigManager configManager;
       bool areAlertsEnabled;
 
       void setAlertsEnabled(const bool isAlertsEnabled);

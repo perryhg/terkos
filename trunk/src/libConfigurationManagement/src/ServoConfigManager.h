@@ -10,7 +10,7 @@
 
 using namespace std;
 
-class ServoConfig : public ConfigFile
+class ServoConfigManager : public ConfigFile
    {
    public:
 
@@ -20,13 +20,13 @@ class ServoConfig : public ConfigFile
       static const unsigned int DEFAULT_MAX_BOUND;
       static const unsigned int DEFAULT_INITIAL_POSITION;
 
-      ServoConfig() :
+      ServoConfigManager() :
          ConfigFile(CONFIG_FILENAME, DEFAULT_CONFIG_FILENAME)
          {
          // nothing to do
          }
 
-      virtual ~ServoConfig()
+      virtual ~ServoConfigManager()
          {
          // nothing to do
          }

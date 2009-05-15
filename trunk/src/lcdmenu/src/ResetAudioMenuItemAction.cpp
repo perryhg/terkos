@@ -13,7 +13,7 @@ bool ResetAudioMenuItemAction::shouldOption1BeSelectedUponActivation() const
 
 void ResetAudioMenuItemAction::executeOption1Action()
    {
-   config.revertToDefault();
+   configManager.revertToDefault();
    }
 
 void ResetAudioMenuItemAction::executeOption2Action()
@@ -23,7 +23,7 @@ void ResetAudioMenuItemAction::executeOption2Action()
 
 void ResetAudioMenuItemAction::setAlertsEnabled(const bool isEnabled)
    {
-   config.setAlertsEnabled(isEnabled);
+   configManager.setAlertsEnabled(isEnabled);
    }
 
 // required definitions for dynamic loading

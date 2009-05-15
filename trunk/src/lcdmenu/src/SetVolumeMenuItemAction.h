@@ -19,7 +19,7 @@
 #include <unistd.h>
 #include "CharacterDisplay.h"
 #include "CharacterDisplayMenuItemAction.h"
-#include "AudioConfig.h"
+#include "AudioConfigManager.h"
 
 using namespace std;
 
@@ -67,7 +67,7 @@ class SetVolumeMenuItemAction : public CharacterDisplayMenuItemAction
 
    private:
 
-      AudioConfig config;
+      AudioConfigManager configManager;
       int volume;
 
       const string getActionPerformedText();

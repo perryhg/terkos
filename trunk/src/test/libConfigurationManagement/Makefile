@@ -11,35 +11,20 @@ LIB_CONFIG_SRC_DIR=$(LIB_CONFIG_DIR)/include
 LIB_CONFIG_DIST_DIR=$(LIB_CONFIG_DIR)/lib
 LIB_CONFIG_LIB_SHORT_NAME=config++
 
-LIB_CONFIG_FILE_DIR=../../libConfigFile
-LIB_CONFIG_FILE_SRC_DIR=$(LIB_CONFIG_FILE_DIR)/src
-LIB_CONFIG_FILE_DIST_DIR=$(LIB_CONFIG_FILE_DIR)/dist
-LIB_CONFIG_FILE_LIB_SHORT_NAME=ConfigFile
+LIB_CONFIGURATION_MANAGEMENT_DIR=../../libConfigurationManagement
+LIB_CONFIGURATION_MANAGEMENT_SRC_DIR=$(LIB_CONFIGURATION_MANAGEMENT_DIR)/src
+LIB_CONFIGURATION_MANAGEMENT_DIST_DIR=$(LIB_CONFIGURATION_MANAGEMENT_DIR)/dist
+LIB_CONFIGURATION_MANAGEMENT_LIB_SHORT_NAME=ConfigurationManagement
 
-LIB_AUDIO_CONFIG_DIR=../../libConfigFile
-LIB_AUDIO_CONFIG_SRC_DIR=$(LIB_AUDIO_CONFIG_DIR)/src
-LIB_AUDIO_CONFIG_DIST_DIR=$(LIB_AUDIO_CONFIG_DIR)/dist
-LIB_AUDIO_CONFIG_LIB_SHORT_NAME=AudioConfig
-
-LIB_SERVO_CONFIG_DIR=../../libConfigFile
-LIB_SERVO_CONFIG_SRC_DIR=$(LIB_SERVO_CONFIG_DIR)/src
-LIB_SERVO_CONFIG_DIST_DIR=$(LIB_SERVO_CONFIG_DIR)/dist
-LIB_SERVO_CONFIG_LIB_SHORT_NAME=ServoConfig
-
-#CXX=arm-oe-linux-uclibcgnueabi-g++
+CXX=arm-oe-linux-uclibcgnueabi-g++
 
 CFLAGS=-fPIC -c -Wall \
        -I$(LIB_CONFIG_SRC_DIR) \
-       -I$(LIB_CONFIG_FILE_SRC_DIR) \
-       -I$(LIB_AUDIO_CONFIG_SRC_DIR) \
-       -I$(LIB_SERVO_CONFIG_SRC_DIR)
+       -I$(LIB_CONFIGURATION_MANAGEMENT_SRC_DIR)
        
 LDFLAGS=-L$(LIB_DIR) \
         -l$(LIB_CONFIG_LIB_SHORT_NAME) \
-        -l$(LIB_CONFIG_FILE_LIB_SHORT_NAME) \
-        -l$(LIB_AUDIO_CONFIG_LIB_SHORT_NAME) \
-        -l$(LIB_SERVO_CONFIG_LIB_SHORT_NAME)
-        
+        -l$(LIB_CONFIGURATION_MANAGEMENT_LIB_SHORT_NAME)
 
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -48,7 +33,7 @@ default: all
 #-----------------------------------------------------------------------------------------------------------------------
 
 build: init \
-       LibConfigFileTest
+       LibConfigurationManagementTest
 
 all: build dist
 
@@ -61,24 +46,24 @@ init:
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-LibConfigFileTest.o: init $(SRC_DIR)/LibConfigFileTest.cpp
+LibConfigurationManagementTest.o: init $(SRC_DIR)/LibConfigurationManagementTest.cpp
 	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/LibConfigFileTest.cpp -o $(OBJ_DIR)/LibConfigFileTest.o
+	$(CXX) $(CFLAGS) $(SRC_DIR)/LibConfigurationManagementTest.cpp -o $(OBJ_DIR)/LibConfigurationManagementTest.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-LibConfigFileTest: LibConfigFile LibConfigFileTest.o
+LibConfigurationManagementTest: libConfigurationManagement.so LibConfigurationManagementTest.o
 	@echo 'Building target: $@'
-	$(CXX) -o $(EXE_DIR)/LibConfigFileTest $(OBJ_DIR)/LibConfigFileTest.o $(LDFLAGS)
+	$(CXX) -o $(EXE_DIR)/LibConfigurationManagementTest $(OBJ_DIR)/LibConfigurationManagementTest.o $(LDFLAGS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-LibConfigFile: init
+libConfigurationManagement.so: init
 	@echo 'Building target: $@'
-	$(MAKE) -C $(LIB_CONFIG_FILE_DIR) CXX=$(CXX)
-	cp $(LIB_CONFIG_FILE_DIST_DIR)/*.so $(LIB_DIR)/.
+	$(MAKE) -C $(LIB_CONFIGURATION_MANAGEMENT_DIR) CXX=$(CXX)
+	cp $(LIB_CONFIGURATION_MANAGEMENT_DIST_DIR)/*.so $(LIB_DIR)/.
 	@echo 'Finished building target: $@'
 	@echo ' '
 

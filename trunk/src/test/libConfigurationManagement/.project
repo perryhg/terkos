@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>LibConfigFile</name>
+	<name>LibConfigurationManagementTest</name>
 	<comment></comment>
 	<projects>
+		<project>LibConfig</project>
+		<project>LibConfigurationManagement</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

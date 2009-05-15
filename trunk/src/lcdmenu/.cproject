@@ -26,15 +26,14 @@
 </builder>
 <tool id="org.eclipse.cdt.build.core.settings.holder.libs.1208699766" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs">
 <option id="org.eclipse.cdt.build.core.settings.holder.libfiles.1950958346" name="Library Files" superClass="org.eclipse.cdt.build.core.settings.holder.libfiles" valueType="libFiles">
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibCharacterDisplayMenu/dist/libCharacterDisplayMenu.so}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibDynamicClassLoader/dist/libDynamicClassLoader.so}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libqwerk/libqwerk.a}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/TinyXML/dist/libticppd.so}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfigFile/dist/libconfig++.so}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfigFile/dist/libConfigFile.so}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfigFile/dist/libAudioConfig.so}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LCDMenu/LibCharacterDisplayMenu/dist/libCharacterDisplayMenu.so}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LCDMenu/LibDynamicClassLoader/dist/libDynamicClassLoader.so}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LCDMenu/libqwerk/libqwerk.a}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LCDMenu/TinyXML/dist/libticppd.so}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfigurationManagement/dist/libconfig++.so}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfigurationManagement/dist/libConfigurationManagement.so}&quot;"/>
 </option>
-<option id="org.eclipse.cdt.build.core.settings.holder.libpaths.2025180437" name="Library Paths" superClass="org.eclipse.cdt.build.core.settings.holder.libpaths" valueType="libPaths"/>
+<option id="org.eclipse.cdt.build.core.settings.holder.libpaths.2025180437" name="Library Paths" superClass="org.eclipse.cdt.build.core.settings.holder.libpaths"/>
 </tool>
 <tool id="org.eclipse.cdt.build.core.settings.holder.95126482" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
 <option id="org.eclipse.cdt.build.core.settings.holder.incpaths.443492601" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
@@ -42,19 +41,19 @@
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibDynamicClassLoader/src}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/libqwerk}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/TinyXML/ticpp}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfigFile/src}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfigurationManagement/src}&quot;"/>
 </option>
-<option id="org.eclipse.cdt.build.core.settings.holder.undef.incpaths.1483332923" name="Undefined Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.undef.incpaths" valueType="undefIncludePath"/>
+<option id="org.eclipse.cdt.build.core.settings.holder.undef.incpaths.1483332923" name="Undefined Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.undef.incpaths"/>
 <inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1565130371" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 </tool>
 <tool id="org.eclipse.cdt.build.core.settings.holder.187475254" name="GNU C" superClass="org.eclipse.cdt.build.core.settings.holder">
-<option id="org.eclipse.cdt.build.core.settings.holder.undef.incpaths.1359554434" name="Undefined Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.undef.incpaths" valueType="undefIncludePath"/>
-<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.1773607006" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath"/>
+<option id="org.eclipse.cdt.build.core.settings.holder.undef.incpaths.1359554434" name="Undefined Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.undef.incpaths"/>
+<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.1773607006" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths"/>
 <inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1988164695" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 </tool>
 <tool id="org.eclipse.cdt.build.core.settings.holder.1764806867" name="Assembly" superClass="org.eclipse.cdt.build.core.settings.holder">
-<option id="org.eclipse.cdt.build.core.settings.holder.undef.incpaths.806949366" name="Undefined Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.undef.incpaths" valueType="undefIncludePath"/>
-<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.1418624178" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath"/>
+<option id="org.eclipse.cdt.build.core.settings.holder.undef.incpaths.806949366" name="Undefined Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.undef.incpaths"/>
+<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.1418624178" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths"/>
 <inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1304255078" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 </tool>
 </toolChain>
@@ -230,7 +229,7 @@
 <storageModule moduleId="org.eclipse.cdt.core.externalSettings">
 <externalSettings containerId="libqwerk;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
 <externalSettings containerId="LibDynamicClassLoader;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
-<externalSettings containerId="LibConfigFile;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
+<externalSettings containerId="LibConfigurationManagement;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
 <externalSettings containerId="LibCharacterDisplayMenu;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
 <externalSettings containerId="TinyXML;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
 </storageModule>

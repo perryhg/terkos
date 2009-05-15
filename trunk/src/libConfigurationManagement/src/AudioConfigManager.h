@@ -2,28 +2,28 @@
  * Chris Bartley (bartley@cmu.edu)
  */
 
-#ifndef AUDIOCONFIG_H_
-#define AUDIOCONFIG_H_
+#ifndef AUDIOCONFIGMANAGER_H_
+#define AUDIOCONFIGMANAGER_H_
 
 #include <algorithm>
 #include "ConfigFile.h"
 
 using namespace std;
 
-class AudioConfig : public ConfigFile
+class AudioConfigManager : public ConfigFile
    {
    public:
 
       static const unsigned int MIN_VOLUME;
       static const unsigned int MAX_VOLUME;
 
-      AudioConfig() :
+      AudioConfigManager() :
          ConfigFile(CONFIG_FILENAME, DEFAULT_CONFIG_FILENAME)
          {
          // nothing to do
          }
 
-      virtual ~AudioConfig()
+      virtual ~AudioConfigManager()
          {
          // nothing to do
          }
@@ -45,4 +45,4 @@ class AudioConfig : public ConfigFile
 
    };
 
-#endif /* AUDIOCONFIG_H_ */
+#endif /* AUDIOCONFIGMANAGER_H_ */

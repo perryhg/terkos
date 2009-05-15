@@ -10,7 +10,10 @@ LIB_CONFIG_SRC_DIR=$(LIB_CONFIG_DIR)/include
 LIB_CONFIG_DIST_DIR=$(LIB_CONFIG_DIR)/lib
 LIB_CONFIG_LIB_SHORT_NAME=config++
 
-#CXX=arm-oe-linux-uclibcgnueabi-g++
+CXX=arm-oe-linux-uclibcgnueabi-g++
+
+SRCS=$(wildcard $(SRC_DIR)/*.cpp)
+OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(SRCS)))
 
 CFLAGS=-fPIC -c -Wall \
        -I$(LIB_CONFIG_SRC_DIR)
@@ -23,11 +26,7 @@ default: all
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-build: init \
-       libconfig++.so \
-       libConfigFile.so \
-       libAudioConfig.so \
-       libServoConfig.so
+build: libConfigurationManagement.so
 
 all: build dist
 
@@ -39,43 +38,14 @@ init:
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-ConfigFile.o: init $(SRC_DIR)/ConfigFile.cpp
-	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/ConfigFile.cpp -o $(OBJ_DIR)/ConfigFile.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-
-libConfigFile.so: ConfigFile.o 
-	@echo 'Building target: $@'
-	$(CXX) -shared -Wl,-soname,libConfigFile.so -o $(LIB_DIR)/libConfigFile.so $(OBJ_DIR)/ConfigFile.o
-	@echo 'Finished building target: $@'
-	@echo ' '
+$(OBJECTS): %.o: $(SRC_DIR)/%.cpp
+	$(CXX) $(CFLAGS) -c $< -o $(OBJ_DIR)/$@
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-AudioConfig.o: init $(SRC_DIR)/AudioConfig.cpp
+libConfigurationManagement.so: init libconfig++.so $(OBJECTS)
 	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/AudioConfig.cpp -o $(OBJ_DIR)/AudioConfig.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-
-libAudioConfig.so: AudioConfig.o 
-	@echo 'Building target: $@'
-	$(CXX) -shared -Wl,-soname,libAudioConfig.so -o $(LIB_DIR)/libAudioConfig.so $(OBJ_DIR)/AudioConfig.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-
-#-----------------------------------------------------------------------------------------------------------------------
-
-ServoConfig.o: init $(SRC_DIR)/ServoConfig.cpp
-	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/ServoConfig.cpp -o $(OBJ_DIR)/ServoConfig.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-
-libServoConfig.so: ServoConfig.o 
-	@echo 'Building target: $@'
-	$(CXX) -shared -Wl,-soname,libServoConfig.so -o $(LIB_DIR)/libServoConfig.so $(OBJ_DIR)/ServoConfig.o
+	$(CXX) -shared -Wl,-soname,libConfigurationManagement.so -o $(LIB_DIR)/libConfigurationManagement.so $(OBJ_DIR)/*.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 

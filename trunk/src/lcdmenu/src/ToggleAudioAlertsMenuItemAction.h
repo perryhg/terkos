@@ -6,7 +6,7 @@
 #define TOGGLEAUDIOALERTSMENUITEMACTION_H_
 
 #include "TwoOptionMenuItemAction.h"
-#include "AudioConfig.h"
+#include "AudioConfigManager.h"
 
 class ToggleAudioAlertsMenuItemAction : public TwoOptionMenuItemAction
    {
@@ -36,7 +36,7 @@ class ToggleAudioAlertsMenuItemAction : public TwoOptionMenuItemAction
 
    private:
 
-      AudioConfig config;
+      AudioConfigManager configManager;
       bool areAlertsEnabled;
 
       void setAlertsEnabled(const bool isAlertsEnabled);
