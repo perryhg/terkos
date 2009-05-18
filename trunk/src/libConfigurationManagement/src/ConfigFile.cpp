@@ -122,7 +122,7 @@ const unsigned int ConfigFile::getIndexedUnsignedIntValue(const string& property
          }
       catch (...)
          {
-         cerr << "ConfigFile::getIndexedUnsignedIntValue(): failed to find property [" << propertyName << "]!" << endl;
+         cerr << "ConfigFile::getIndexedUnsignedIntValue(): failed to find property [" << propertyName << "] for index [" << index << "]!" << endl;
          }
       }
    return defaultValue;
