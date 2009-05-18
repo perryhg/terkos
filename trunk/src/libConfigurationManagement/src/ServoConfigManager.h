@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include "ConfigFile.h"
+#include "rcservo.h"
 
 using namespace std;
 
@@ -14,6 +15,7 @@ class ServoConfigManager : public ConfigFile
    {
    public:
 
+      static const unsigned int NUM_SERVOS;
       static const unsigned int MIN_POSITION;
       static const unsigned int MAX_POSITION;
       static const unsigned int DEFAULT_MIN_BOUND;
