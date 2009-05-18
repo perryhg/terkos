@@ -111,7 +111,8 @@ HardwareVersionMenuItemAction.o: init $(SRC_DIR)/HardwareVersionMenuItemAction.c
 	$(CXX) $(CFLAGS) $(SRC_DIR)/HardwareVersionMenuItemAction.cpp -o $(OBJ_DIR)/HardwareVersionMenuItemAction.o
 	@echo 'Finished building target: $@'
 	@echo ' '
-	
+
+# TODO: I can (probably?) get rid of these lib flags once libqwerk is a shared object	
 libHardwareVersionMenuItemAction.so: HardwareVersionMenuItemAction.o
 	@echo 'Building target: $@'
 	$(CXX) -shared -Wl,-soname,libHardwareVersionMenuItemAction.so -o $(LIB_DIR)/libHardwareVersionMenuItemAction.so $(OBJ_DIR)/HardwareVersionMenuItemAction.o -L$(LIB_DIR) -l$(LIB_QWERK_LIB_SHORT_NAME) -lpthread
@@ -162,6 +163,20 @@ libResetAudioMenuItemAction.so: ResetAudioMenuItemAction.o
 
 #-----------------------------------------------------------------------------------------------------------------------
 
+ViewAndEditServoConfigsMenuItemAction.o: init $(SRC_DIR)/ViewAndEditServoConfigsMenuItemAction.cpp
+	@echo 'Building target: $@'
+	$(CXX) $(CFLAGS) $(SRC_DIR)/ViewAndEditServoConfigsMenuItemAction.cpp -o $(OBJ_DIR)/ViewAndEditServoConfigsMenuItemAction.o
+	@echo 'Finished building target: $@'
+	@echo ' '
+	
+libViewAndEditServoConfigsMenuItemAction.so: ViewAndEditServoConfigsMenuItemAction.o
+	@echo 'Building target: $@'
+	$(CXX) -shared -Wl,-soname,libViewAndEditServoConfigsMenuItemAction.so -o $(LIB_DIR)/libViewAndEditServoConfigsMenuItemAction.so $(OBJ_DIR)/ViewAndEditServoConfigsMenuItemAction.o
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+#-----------------------------------------------------------------------------------------------------------------------
+
 LCDCharacterDisplay.o: init $(SRC_DIR)/LCDCharacterDisplay.cpp
 	@echo 'Building target: $@'
 	$(CXX) $(CFLAGS) $(SRC_DIR)/LCDCharacterDisplay.cpp -o $(OBJ_DIR)/LCDCharacterDisplay.o
@@ -185,6 +200,7 @@ LCDMenu: libStringUtilities.so \
          libToggleAudioAlertsMenuItemAction.so \
          libSetVolumeMenuItemAction.so \
          libResetAudioMenuItemAction.so \
+         libViewAndEditServoConfigsMenuItemAction.so \
          LCDCharacterDisplay.o \
          LCDMenu.o
 	@echo 'Building target: $@'
@@ -205,10 +221,11 @@ libCharacterDisplayMenu.so: init
 
 #-----------------------------------------------------------------------------------------------------------------------
 
+# TODO: switch to .so
 libqwerk.so: init
 	@echo 'Building target: $@'
 	$(MAKE) -C $(LIB_QWERK_DIR) CXX=$(CXX) AR=$(AR)
-	cp $(LIB_QWERK_DIST_DIR)/*.a $(LIB_DIR)/.          # TODO: switch to .so
+	cp $(LIB_QWERK_DIST_DIR)/*.a $(LIB_DIR)/.
 	@echo 'Finished building target: $@'
 	@echo ' '
 
