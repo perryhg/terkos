@@ -34,7 +34,7 @@
    <item text="Servos">
       <item text="View/Edit     Servo Configs">
          <item text="">
-            <implementation-class name="ConfigureServosMenuItemAction"/>
+            <implementation-class name="ViewAndEditServoConfigsMenuItemAction"/>
          </item>
       </item>
       <item text="Reset Servos">

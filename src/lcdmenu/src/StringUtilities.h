@@ -13,7 +13,12 @@ class StringUtilities
    {
    public:
 
-      static const string convertIntToString(const int val);
+      /**
+       * Converts the given int value to a string, optionally left-padding the created string to the given
+       * desiredPaddedLength with the given paddingChar.  Padding is only performed if the desiredPaddedLength
+       * is greater than the length of the string representation of the int.
+       */
+      static const string convertIntToString(const int val, const unsigned int desiredPaddedLength=0, const char paddingChar=' ');
 
    private:
 
