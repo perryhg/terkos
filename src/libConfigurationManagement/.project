@@ -3,6 +3,8 @@
 	<name>LibConfigurationManagement</name>
 	<comment></comment>
 	<projects>
+		<project>LibConfig</project>
+		<project>libqwerk</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
