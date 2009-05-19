@@ -18,7 +18,6 @@ LIB_CONFIGURATION_MANAGEMENT_LIB_SHORT_NAME=ConfigurationManagement
 
 LIB_QWERK_DIR=../../libqwerk
 LIB_QWERK_SRC_DIR=$(LIB_QWERK_DIR)
-LIB_QWERK_DIST_DIR=$(LIB_QWERK_DIR)
 LIB_QWERK_LIB_SHORT_NAME=qwerk
 
 CXX=arm-oe-linux-uclibcgnueabi-g++
@@ -61,7 +60,6 @@ LibConfigurationManagementTest.o: init $(SRC_DIR)/LibConfigurationManagementTest
 	@echo ' '
 
 LibConfigurationManagementTest: libConfigurationManagement.so \
-                                libqwerk.so \
                                 LibConfigurationManagementTest.o
 	@echo 'Building target: $@'
 	$(CXX) -o $(EXE_DIR)/LibConfigurationManagementTest $(OBJ_DIR)/LibConfigurationManagementTest.o $(LDFLAGS)
@@ -74,17 +72,6 @@ libConfigurationManagement.so: init
 	@echo 'Building target: $@'
 	$(MAKE) -C $(LIB_CONFIGURATION_MANAGEMENT_DIR) CXX=$(CXX)
 	cp $(LIB_CONFIGURATION_MANAGEMENT_DIST_DIR)/*.so $(LIB_DIR)/.
-	@echo 'Finished building target: $@'
-	@echo ' '
-
-#-----------------------------------------------------------------------------------------------------------------------
-
-# TODO: switch to .so, then I can get rid of this target and just copy libqwerk.so from
-# the libConfigurationManagement.so's dist directory
-libqwerk.so: init
-	@echo 'Building target: $@'
-	$(MAKE) -C $(LIB_QWERK_DIR) CXX=$(CXX) AR=$(AR)
-	cp $(LIB_QWERK_DIST_DIR)/*.a $(LIB_DIR)/.
 	@echo 'Finished building target: $@'
 	@echo ' '
 
