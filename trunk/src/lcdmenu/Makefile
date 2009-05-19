@@ -23,7 +23,7 @@ TINY_XML_LIB_SHORT_NAME=ticppd
 
 LIB_QWERK_DIR=../libqwerk
 LIB_QWERK_SRC_DIR=$(LIB_QWERK_DIR)
-LIB_QWERK_DIST_DIR=$(LIB_QWERK_DIR)
+LIB_QWERK_DIST_DIR=$(LIB_QWERK_DIR)/dist
 LIB_QWERK_LIB_SHORT_NAME=qwerk
 
 LIB_CONFIG_DIR=../libconfig/dist
@@ -112,10 +112,9 @@ HardwareVersionMenuItemAction.o: init $(SRC_DIR)/HardwareVersionMenuItemAction.c
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-# TODO: I can (probably?) get rid of these lib flags once libqwerk is a shared object	
 libHardwareVersionMenuItemAction.so: HardwareVersionMenuItemAction.o
 	@echo 'Building target: $@'
-	$(CXX) -shared -Wl,-soname,libHardwareVersionMenuItemAction.so -o $(LIB_DIR)/libHardwareVersionMenuItemAction.so $(OBJ_DIR)/HardwareVersionMenuItemAction.o -L$(LIB_DIR) -l$(LIB_QWERK_LIB_SHORT_NAME) -lpthread
+	$(CXX) -shared -Wl,-soname,libHardwareVersionMenuItemAction.so -o $(LIB_DIR)/libHardwareVersionMenuItemAction.so $(OBJ_DIR)/HardwareVersionMenuItemAction.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -221,11 +220,10 @@ libCharacterDisplayMenu.so: init
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-# TODO: switch to .so
 libqwerk.so: init
 	@echo 'Building target: $@'
 	$(MAKE) -C $(LIB_QWERK_DIR) CXX=$(CXX) AR=$(AR)
-	cp $(LIB_QWERK_DIST_DIR)/*.a $(LIB_DIR)/.
+	cp $(LIB_QWERK_DIST_DIR)/*.so $(LIB_DIR)/.
 	@echo 'Finished building target: $@'
 	@echo ' '
 

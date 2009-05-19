@@ -12,7 +12,7 @@ LIB_CONFIG_LIB_SHORT_NAME=config++
 
 LIB_QWERK_DIR=../libqwerk
 LIB_QWERK_SRC_DIR=$(LIB_QWERK_DIR)
-LIB_QWERK_DIST_DIR=$(LIB_QWERK_DIR)
+LIB_QWERK_DIST_DIR=$(LIB_QWERK_DIR)/dist
 LIB_QWERK_LIB_SHORT_NAME=qwerk
 
 CXX=arm-oe-linux-uclibcgnueabi-g++
@@ -52,10 +52,9 @@ $(OBJECTS): %.o: $(SRC_DIR)/%.cpp
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-# TODO: I can (probably?) get rid of these lib flags once libqwerk is a shared object
 libConfigurationManagement.so: init libconfig++.so libqwerk.so $(OBJECTS)
 	@echo 'Building target: $@'
-	$(CXX) -shared -Wl,-soname,libConfigurationManagement.so -o $(LIB_DIR)/libConfigurationManagement.so $(OBJ_DIR)/*.o -L$(LIB_DIR) -l$(LIB_QWERK_LIB_SHORT_NAME) -lpthread
+	$(CXX) -shared -Wl,-soname,libConfigurationManagement.so -o $(LIB_DIR)/libConfigurationManagement.so $(OBJ_DIR)/*.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -69,11 +68,10 @@ libconfig++.so: init
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-# TODO: switch to .so
 libqwerk.so: init
 	@echo 'Building target: $@'
 	$(MAKE) -C $(LIB_QWERK_DIR) CXX=$(CXX) AR=$(AR)
-	cp $(LIB_QWERK_DIST_DIR)/*.a $(LIB_DIR)/.
+	cp $(LIB_QWERK_DIST_DIR)/*.so $(LIB_DIR)/.
 	@echo 'Finished building target: $@'
 	@echo ' '
 
