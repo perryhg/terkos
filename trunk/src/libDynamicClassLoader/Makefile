@@ -5,56 +5,40 @@ LIB_DIR=$(BUILD_DIR)/libraries
 DIST_DIR=dist
 LIBRARY_NAME=libDynamicClassLoader.so
 
-#CXX=arm-linux-gnueabi-g++
+CXX=arm-oe-linux-uclibcgnueabi-g++
 
 CFLAGS=-fPIC -c -Wall
+
+SRCS=$(wildcard $(SRC_DIR)/*.cpp)
+OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(SRCS)))
+OBJECTS := $(addprefix $(OBJ_DIR)/,$(OBJECTS))
 
 #-----------------------------------------------------------------------------------------------------------------------
 
 default: all
 
-#-----------------------------------------------------------------------------------------------------------------------
-
-build: init \
-       $(LIBRARY_NAME)
+build: $(LIBRARY_NAME)
 
 all: build dist
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-init:
-	mkdir -p $(OBJ_DIR)
-	mkdir -p $(LIB_DIR)
+$(OBJ_DIR):
+	mkdir -p $@
+
+$(LIB_DIR): 
+	mkdir -p $@
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-DynamicObject.o: init $(SRC_DIR)/DynamicObject.cpp
-	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/DynamicObject.cpp -o $(OBJ_DIR)/DynamicObject.o
-	@echo 'Finished building target: $@'
-	@echo ' '
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CXX) $(CFLAGS) -c $< -o $@
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-DynamicLibrary.o: init $(SRC_DIR)/DynamicLibrary.cpp
+$(LIBRARY_NAME):  $(OBJ_DIR) $(LIB_DIR) $(OBJECTS)
 	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/DynamicLibrary.cpp -o $(OBJ_DIR)/DynamicLibrary.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-
-#-----------------------------------------------------------------------------------------------------------------------
-
-DynamicLoader.o: init $(SRC_DIR)/DynamicLoader.cpp
-	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/DynamicLoader.cpp -o $(OBJ_DIR)/DynamicLoader.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-
-#-----------------------------------------------------------------------------------------------------------------------
-
-$(LIBRARY_NAME): DynamicObject.o DynamicLibrary.o DynamicLoader.o 
-	@echo 'Building target: $@'
-	$(CXX) -shared -Wl,-soname,$(LIBRARY_NAME) -o $(LIB_DIR)/$(LIBRARY_NAME) $(OBJ_DIR)/*.o
+	$(CXX) -shared -Wl,-soname,$(LIBRARY_NAME) -o $(LIB_DIR)/$(LIBRARY_NAME) $(OBJECTS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
