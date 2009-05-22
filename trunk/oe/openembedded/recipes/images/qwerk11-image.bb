@@ -43,6 +43,8 @@ IMAGE_INSTALL = " \
 	wpa-supplicant \
 	   "
 
+ONLINE_PACKAGE_MANAGEMENT = "none"
+
 export IMAGE_BASENAME = "qwerk11-image"
 IMAGE_LINGUAS = ""
 
