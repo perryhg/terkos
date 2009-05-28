@@ -16,7 +16,7 @@ TINY_XML_SRC_DIR=$(TINY_XML_DIR)/ticpp
 TINY_XML_DIST_DIR=$(TINY_XML_DIR)/dist
 TINY_XML_LIB_SHORT_NAME=ticppd
 
-#CXX=arm-linux-gnueabi-g++
+CXX=arm-oe-linux-uclibcgnueabi-g++
 
 CFLAGS=-fPIC -c -Wall \
        -I$(LIB_DYNAMIC_CLASS_LOADER_SRC_DIR) \
