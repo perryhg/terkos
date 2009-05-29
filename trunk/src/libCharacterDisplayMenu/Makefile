@@ -23,77 +23,42 @@ CFLAGS=-fPIC -c -Wall \
        -I$(TINY_XML_SRC_DIR) \
        -D "TIXML_USE_TICPP" -D "UNICODE" -D "_UNICODE" -D "DEBUG" -D "_DEBUG"
 
+SRCS=$(wildcard $(SRC_DIR)/*.cpp)
+OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(SRCS)))
+OBJECTS := $(addprefix $(OBJ_DIR)/,$(OBJECTS))
+
 #-----------------------------------------------------------------------------------------------------------------------
 
 default: all
 
-#-----------------------------------------------------------------------------------------------------------------------
-
-build: init \
-       $(LIBRARY_NAME)
+build: $(LIBRARY_NAME)
 
 all: build dist
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-init:
-	mkdir -p $(OBJ_DIR)
-	mkdir -p $(LIB_DIR)
+$(OBJ_DIR):
+	mkdir -p $@
+
+$(LIB_DIR):
+	mkdir -p $@
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-DefaultMenuItemAction.o: init $(SRC_DIR)/DefaultMenuItemAction.cpp
-	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/DefaultMenuItemAction.cpp -o $(OBJ_DIR)/DefaultMenuItemAction.o
-	@echo 'Finished building target: $@'
-	@echo ' '
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CXX) $(CFLAGS) -c $< -o $@
 
-DefaultMenuStatusManager.o: init $(SRC_DIR)/DefaultMenuStatusManager.cpp
-	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/DefaultMenuStatusManager.cpp -o $(OBJ_DIR)/DefaultMenuStatusManager.o
-	@echo 'Finished building target: $@'
-	@echo ' '
+#-----------------------------------------------------------------------------------------------------------------------
 
-CharacterDisplayMenuItemAction.o: init $(SRC_DIR)/CharacterDisplayMenuItemAction.cpp
+$(LIBRARY_NAME): $(OBJ_DIR) $(LIB_DIR) $(OBJECTS) libDynamicClassLoader.so libticpp.so
 	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/CharacterDisplayMenuItemAction.cpp -o $(OBJ_DIR)/CharacterDisplayMenuItemAction.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-
-TwoOptionMenuItemAction.o: init $(SRC_DIR)/TwoOptionMenuItemAction.cpp
-	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/TwoOptionMenuItemAction.cpp -o $(OBJ_DIR)/TwoOptionMenuItemAction.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-
-CharacterDisplayMenu.o: init $(SRC_DIR)/CharacterDisplayMenu.cpp
-	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/CharacterDisplayMenu.cpp -o $(OBJ_DIR)/CharacterDisplayMenu.o
+	$(CXX) -shared -Wl,-soname,$(LIBRARY_NAME) -o $(LIB_DIR)/$(LIBRARY_NAME) $(OBJECTS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-$(LIBRARY_NAME): libDynamicClassLoader.so \
-                 libticpp.so \
-                 DefaultMenuItemAction.o \
-                 DefaultMenuStatusManager.o \
-                 CharacterDisplayMenuItemAction.o \
-                 TwoOptionMenuItemAction.o \
-                 CharacterDisplayMenu.o
-	@echo 'Building target: $@'
-	$(CXX) -shared -Wl,-soname,$(LIBRARY_NAME) -o $(LIB_DIR)/$(LIBRARY_NAME) \
-                                                 $(OBJ_DIR)/DefaultMenuItemAction.o \
-                                                 $(OBJ_DIR)/DefaultMenuStatusManager.o \
-                                                 $(OBJ_DIR)/CharacterDisplayMenuItemAction.o \
-                                                 $(OBJ_DIR)/TwoOptionMenuItemAction.o \
-                                                 $(OBJ_DIR)/CharacterDisplayMenu.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-
-#-----------------------------------------------------------------------------------------------------------------------
-
-libDynamicClassLoader.so: init
+libDynamicClassLoader.so: $(LIB_DIR)
 	@echo 'Building target: $@'
 	$(MAKE) -C $(LIB_DYNAMIC_CLASS_LOADER_DIR) CXX=$(CXX)
 	cp $(LIB_DYNAMIC_CLASS_LOADER_DIST_DIR)/*.so $(LIB_DIR)/.
@@ -102,7 +67,7 @@ libDynamicClassLoader.so: init
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-libticpp.so: init
+libticpp.so: $(LIB_DIR)
 	@echo 'Building target: $@'
 	$(MAKE) -C $(TINY_XML_SRC_DIR) CXX=$(CXX)
 	cp $(TINY_XML_DIST_DIR)/*.so $(LIB_DIR)/.
