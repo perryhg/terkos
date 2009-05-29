@@ -22,16 +22,16 @@
 <builder id="org.eclipse.cdt.build.core.settings.default.builder.234986606" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
 <tool id="org.eclipse.cdt.build.core.settings.holder.libs.325393409" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs">
 <option id="org.eclipse.cdt.build.core.settings.holder.libfiles.1295688707" name="Library Files" superClass="org.eclipse.cdt.build.core.settings.holder.libfiles" valueType="libFiles">
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfig/dist/lib/libconfig++.so}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfigurationManagement/dist/libConfigurationManagement.so}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/JsonCpp/dist/arm-oe-linux-uclibcgnueabi/libjsoncpp.so}&quot;"/>
 </option>
 </tool>
 <tool id="org.eclipse.cdt.build.core.settings.holder.1507105335" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
 <option id="org.eclipse.cdt.build.core.settings.holder.incpaths.985118591" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfig/dist/include}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfigurationManagement/src}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/JsonCpp/jsoncpp/include}&quot;"/>
 </option>
-<option id="org.eclipse.cdt.build.core.settings.holder.undef.incpaths.158057997" name="Undefined Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.undef.incpaths" valueType="undefIncludePath"/>
+<option id="org.eclipse.cdt.build.core.settings.holder.undef.incpaths.158057997" name="Undefined Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.undef.incpaths"/>
 <inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1067246919" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 </tool>
 <tool id="org.eclipse.cdt.build.core.settings.holder.1569303412" name="GNU C" superClass="org.eclipse.cdt.build.core.settings.holder">
@@ -218,7 +218,7 @@
 </storageModule>
 <storageModule moduleId="org.eclipse.cdt.core.externalSettings">
 <externalSettings containerId="LibConfigurationManagement;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
-<externalSettings containerId="LibConfig;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
+<externalSettings containerId="JsonCpp;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
 </storageModule>
 <storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 <storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>

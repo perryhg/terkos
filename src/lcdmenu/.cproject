@@ -30,8 +30,8 @@
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/LCDMenu/LibDynamicClassLoader/dist/libDynamicClassLoader.so}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/LCDMenu/libqwerk/libqwerk.a}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/LCDMenu/TinyXML/dist/libticppd.so}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfigurationManagement/dist/libconfig++.so}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfigurationManagement/dist/libConfigurationManagement.so}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibUtilities/dist/libUtilities.so}&quot;"/>
 </option>
 <option id="org.eclipse.cdt.build.core.settings.holder.libpaths.2025180437" name="Library Paths" superClass="org.eclipse.cdt.build.core.settings.holder.libpaths"/>
 </tool>
@@ -42,6 +42,7 @@
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/libqwerk}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/TinyXML/ticpp}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfigurationManagement/src}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibUtilities/src}&quot;"/>
 </option>
 <option id="org.eclipse.cdt.build.core.settings.holder.undef.incpaths.1483332923" name="Undefined Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.undef.incpaths"/>
 <inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1565130371" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
@@ -231,6 +232,7 @@
 <externalSettings containerId="LibDynamicClassLoader;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
 <externalSettings containerId="LibConfigurationManagement;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
 <externalSettings containerId="LibCharacterDisplayMenu;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
+<externalSettings containerId="LibUtilities;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
 <externalSettings containerId="TinyXML;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
 </storageModule>
 <storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>

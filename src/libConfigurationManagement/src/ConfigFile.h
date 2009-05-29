@@ -5,21 +5,24 @@
 #ifndef CONFIGFILE_H_
 #define CONFIGFILE_H_
 
+#include <fstream>
 #include <iostream>
-#include <libconfig.h++>
 #include <string>
+#include <json/json.h>
+#include <StringUtilities.h>
 
 using namespace std;
-using namespace libconfig;
 
 class ConfigFile
    {
    public:
 
+      static const char CHAINED_PROPERTY_NAME_DELIMITER;
+
       ConfigFile(const string& configFilename, const string& defaultConfigFilename) :
          configFilename(configFilename), defaultConfigFilename(defaultConfigFilename)
          {
-         Config config;
+         Json::Value config;
          if (!load(config))
             {
             cerr << "ConfigFile::ConfigFile(): failed to load config file [" << configFilename << "], reverting to default file ["
@@ -60,10 +63,12 @@ class ConfigFile
       const string configFilename;
       const string defaultConfigFilename;
 
-      // TODO: For safety, load and save should default to loading from and saving to a particular directory such as /opt/config
-      const bool load(Config& config) const;
-      const bool save(Config& config) const;
+      Json::Value* findProperty(Json::Value& root, const string& propertyName, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER) const;
 
+      // TODO: For safety, load and save should default to loading from and saving to a particular directory such as /opt/config
+      const bool load(Json::Value& config) const;
+      const bool load(Json::Value& config, const string& filename) const;
+      const bool save(Json::Value& config) const;
    };
 
 #endif /* CONFIGFILE_H_ */

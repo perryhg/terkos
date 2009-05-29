@@ -6,8 +6,8 @@
 
 const unsigned int AudioConfigManager::MIN_VOLUME = 0;
 const unsigned int AudioConfigManager::MAX_VOLUME = 10;
-const string AudioConfigManager::CONFIG_FILENAME = "audio.cfg";
-const string AudioConfigManager::DEFAULT_CONFIG_FILENAME = "audio.default.cfg";
+const string AudioConfigManager::CONFIG_FILENAME = "audio_config.json";
+const string AudioConfigManager::DEFAULT_CONFIG_FILENAME = "audio_config.default.json";
 const string AudioConfigManager::VOLUME_PROPERTY = "volume.level";
 const string AudioConfigManager::ARE_ALERTS_ENABLED_PROPERTY = "alerts.enabled";
 
