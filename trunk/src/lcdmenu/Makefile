@@ -65,124 +65,95 @@ LDFLAGS=-L$(LIB_DIR) \
         -l$(LIB_UTILITIES_LIB_SHORT_NAME) \
         -l$(LIB_CONFIGURATION_MANAGEMENT_LIB_SHORT_NAME)
 
+SYSTEM_INFO_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/FirmwareVersionMenuItemAction.cpp \
+                                   $(SRC_DIR)/HardwareVersionMenuItemAction.cpp 
+SYSTEM_INFO_MENU_ITEM_ACTIONS_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(SYSTEM_INFO_MENU_ITEM_ACTIONS_SRCS)))
+SYSTEM_INFO_MENU_ITEM_ACTIONS_OBJECTS := $(addprefix $(OBJ_DIR)/,$(SYSTEM_INFO_MENU_ITEM_ACTIONS_OBJECTS))
+
+AUDIO_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/ToggleAudioAlertsMenuItemAction.cpp \
+                             $(SRC_DIR)/SetVolumeMenuItemAction.cpp \
+                             $(SRC_DIR)/ResetAudioMenuItemAction.cpp
+AUDIO_MENU_ITEM_ACTIONS_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(AUDIO_MENU_ITEM_ACTIONS_SRCS)))
+AUDIO_MENU_ITEM_ACTIONS_OBJECTS := $(addprefix $(OBJ_DIR)/,$(AUDIO_MENU_ITEM_ACTIONS_OBJECTS))
+
+SERVO_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/ViewAndEditServoConfigsMenuItemAction.cpp
+SERVO_MENU_ITEM_ACTIONS_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(SERVO_MENU_ITEM_ACTIONS_SRCS)))
+SERVO_MENU_ITEM_ACTIONS_OBJECTS := $(addprefix $(OBJ_DIR)/,$(SERVO_MENU_ITEM_ACTIONS_OBJECTS))
+
+LCD_MENU_SRCS=$(SRC_DIR)/LCDCharacterDisplay.cpp \
+              $(SRC_DIR)/LCDMenu.cpp
+LCD_MENU_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(LCD_MENU_SRCS)))
+LCD_MENU_OBJECTS := $(addprefix $(OBJ_DIR)/,$(LCD_MENU_OBJECTS))
+
 #-----------------------------------------------------------------------------------------------------------------------
 
 default: all
 
-#-----------------------------------------------------------------------------------------------------------------------
-
-build: init \
-       LCDMenu
+build: LCDMenu
 
 all: build dist
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-init:
-	mkdir -p $(OBJ_DIR)
-	mkdir -p $(LIB_DIR)
-	mkdir -p $(EXE_DIR)
+$(OBJ_DIR):
+	mkdir -p $@
+
+$(LIB_DIR):
+	mkdir -p $@
+
+$(EXE_DIR): 
+	mkdir -p $@
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-FirmwareVersionMenuItemAction.o: init $(SRC_DIR)/FirmwareVersionMenuItemAction.cpp
-	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/FirmwareVersionMenuItemAction.cpp -o $(OBJ_DIR)/FirmwareVersionMenuItemAction.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-	
-HardwareVersionMenuItemAction.o: init $(SRC_DIR)/HardwareVersionMenuItemAction.cpp
-	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/HardwareVersionMenuItemAction.cpp -o $(OBJ_DIR)/HardwareVersionMenuItemAction.o
-	@echo 'Finished building target: $@'
-	@echo ' '
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CXX) $(CFLAGS) -c $< -o $@
 
-libSystemInfoMenuItemActions.so: FirmwareVersionMenuItemAction.o HardwareVersionMenuItemAction.o
+#-----------------------------------------------------------------------------------------------------------------------
+
+libSystemInfoMenuItemActions.so: $(OBJ_DIR) $(LIB_DIR) $(SYSTEM_INFO_MENU_ITEM_ACTIONS_OBJECTS)
 	@echo 'Building target: $@'
 	$(CXX) -shared -Wl,-soname,libSystemInfoMenuItemActions.so -o $(LIB_DIR)/libSystemInfoMenuItemActions.so \
-	                                                              $(OBJ_DIR)/FirmwareVersionMenuItemAction.o \
-	                                                              $(OBJ_DIR)/HardwareVersionMenuItemAction.o
+	                                                              $(SYSTEM_INFO_MENU_ITEM_ACTIONS_OBJECTS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-ToggleAudioAlertsMenuItemAction.o: init $(SRC_DIR)/ToggleAudioAlertsMenuItemAction.cpp
-	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/ToggleAudioAlertsMenuItemAction.cpp -o $(OBJ_DIR)/ToggleAudioAlertsMenuItemAction.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-	
-SetVolumeMenuItemAction.o: init $(SRC_DIR)/SetVolumeMenuItemAction.cpp
-	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/SetVolumeMenuItemAction.cpp -o $(OBJ_DIR)/SetVolumeMenuItemAction.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-
-ResetAudioMenuItemAction.o: init $(SRC_DIR)/ResetAudioMenuItemAction.cpp
-	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/ResetAudioMenuItemAction.cpp -o $(OBJ_DIR)/ResetAudioMenuItemAction.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-	
-libAudioMenuItemActions.so: ToggleAudioAlertsMenuItemAction.o SetVolumeMenuItemAction.o ResetAudioMenuItemAction.o
+libAudioMenuItemActions.so: $(OBJ_DIR) $(LIB_DIR) $(AUDIO_MENU_ITEM_ACTIONS_OBJECTS)
 	@echo 'Building target: $@'
 	$(CXX) -shared -Wl,-soname,libAudioMenuItemActions.so -o $(LIB_DIR)/libAudioMenuItemActions.so \
-	                                                         $(OBJ_DIR)/ToggleAudioAlertsMenuItemAction.o \
-	                                                         $(OBJ_DIR)/SetVolumeMenuItemAction.o \
-	                                                         $(OBJ_DIR)/ResetAudioMenuItemAction.o
+	                                                         $(AUDIO_MENU_ITEM_ACTIONS_OBJECTS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-ViewAndEditServoConfigsMenuItemAction.o: init $(SRC_DIR)/ViewAndEditServoConfigsMenuItemAction.cpp
-	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/ViewAndEditServoConfigsMenuItemAction.cpp -o $(OBJ_DIR)/ViewAndEditServoConfigsMenuItemAction.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-	
-libServoMenuItemActions.so: ViewAndEditServoConfigsMenuItemAction.o
+libServoMenuItemActions.so: $(OBJ_DIR) $(LIB_DIR) $(SERVO_MENU_ITEM_ACTIONS_OBJECTS)
 	@echo 'Building target: $@'
 	$(CXX) -shared -Wl,-soname,libServoMenuItemActions.so -o $(LIB_DIR)/libServoMenuItemActions.so \
-	                                                         $(OBJ_DIR)/ViewAndEditServoConfigsMenuItemAction.o
+	                                                         $(SERVO_MENU_ITEM_ACTIONS_OBJECTS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-LCDCharacterDisplay.o: init $(SRC_DIR)/LCDCharacterDisplay.cpp
-	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/LCDCharacterDisplay.cpp -o $(OBJ_DIR)/LCDCharacterDisplay.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-
-#-----------------------------------------------------------------------------------------------------------------------
-
-LCDMenu.o: init $(SRC_DIR)/LCDMenu.cpp
-	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/LCDMenu.cpp -o $(OBJ_DIR)/LCDMenu.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-
-LCDMenu: libConfigurationManagement.so \
+LCDMenu: $(EXE_DIR) \
+         libConfigurationManagement.so \
          libCharacterDisplayMenu.so \
          libqwerk.so \
          libSystemInfoMenuItemActions.so \
          libAudioMenuItemActions.so \
          libServoMenuItemActions.so \
-         LCDCharacterDisplay.o \
-         LCDMenu.o
+         $(LCD_MENU_OBJECTS)
 	@echo 'Building target: $@'
-	$(CXX) -o $(EXE_DIR)/LCDMenu $(OBJ_DIR)/LCDCharacterDisplay.o \
-                                $(OBJ_DIR)/LCDMenu.o \
-                                $(LDFLAGS)
+	$(CXX) -o $(EXE_DIR)/LCDMenu $(LCD_MENU_OBJECTS) $(LDFLAGS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-libCharacterDisplayMenu.so: init
+libCharacterDisplayMenu.so: $(LIB_DIR)
 	@echo 'Building target: $@'
 	$(MAKE) -C $(LIB_CHARACTER_DISPLAY_MENU_DIR) CXX=$(CXX)
 	cp $(LIB_CHARACTER_DISPLAY_MENU_DIST_DIR)/*.so $(LIB_DIR)/.
@@ -191,7 +162,7 @@ libCharacterDisplayMenu.so: init
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-libqwerk.so: init
+libqwerk.so: $(LIB_DIR)
 	@echo 'Building target: $@'
 	$(MAKE) -C $(LIB_QWERK_DIR) CXX=$(CXX) AR=$(AR)
 	cp $(LIB_QWERK_DIST_DIR)/*.so $(LIB_DIR)/.
@@ -200,7 +171,7 @@ libqwerk.so: init
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-libConfigurationManagement.so: init
+libConfigurationManagement.so: $(LIB_DIR)
 	@echo 'Building target: $@'
 	$(MAKE) -C $(LIB_CONFIGURATION_MANAGEMENT_DIR) CXX=$(CXX)
 	cp $(LIB_CONFIGURATION_MANAGEMENT_DIST_DIR)/*.so $(LIB_DIR)/.
