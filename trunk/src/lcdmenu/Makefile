@@ -91,23 +91,17 @@ FirmwareVersionMenuItemAction.o: init $(SRC_DIR)/FirmwareVersionMenuItemAction.c
 	@echo 'Finished building target: $@'
 	@echo ' '
 	
-libFirmwareVersionMenuItemAction.so: FirmwareVersionMenuItemAction.o
-	@echo 'Building target: $@'
-	$(CXX) -shared -Wl,-soname,libFirmwareVersionMenuItemAction.so -o $(LIB_DIR)/libFirmwareVersionMenuItemAction.so $(OBJ_DIR)/FirmwareVersionMenuItemAction.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-
-#-----------------------------------------------------------------------------------------------------------------------
-
 HardwareVersionMenuItemAction.o: init $(SRC_DIR)/HardwareVersionMenuItemAction.cpp
 	@echo 'Building target: $@'
 	$(CXX) $(CFLAGS) $(SRC_DIR)/HardwareVersionMenuItemAction.cpp -o $(OBJ_DIR)/HardwareVersionMenuItemAction.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-libHardwareVersionMenuItemAction.so: HardwareVersionMenuItemAction.o
+libSystemInfoMenuItemActions.so: FirmwareVersionMenuItemAction.o HardwareVersionMenuItemAction.o
 	@echo 'Building target: $@'
-	$(CXX) -shared -Wl,-soname,libHardwareVersionMenuItemAction.so -o $(LIB_DIR)/libHardwareVersionMenuItemAction.so $(OBJ_DIR)/HardwareVersionMenuItemAction.o
+	$(CXX) -shared -Wl,-soname,libSystemInfoMenuItemActions.so -o $(LIB_DIR)/libSystemInfoMenuItemActions.so \
+	                                                              $(OBJ_DIR)/FirmwareVersionMenuItemAction.o \
+	                                                              $(OBJ_DIR)/HardwareVersionMenuItemAction.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -119,27 +113,11 @@ ToggleAudioAlertsMenuItemAction.o: init $(SRC_DIR)/ToggleAudioAlertsMenuItemActi
 	@echo 'Finished building target: $@'
 	@echo ' '
 	
-libToggleAudioAlertsMenuItemAction.so: ToggleAudioAlertsMenuItemAction.o
-	@echo 'Building target: $@'
-	$(CXX) -shared -Wl,-soname,libToggleAudioAlertsMenuItemAction.so -o $(LIB_DIR)/libToggleAudioAlertsMenuItemAction.so $(OBJ_DIR)/ToggleAudioAlertsMenuItemAction.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-
-#-----------------------------------------------------------------------------------------------------------------------
-
 SetVolumeMenuItemAction.o: init $(SRC_DIR)/SetVolumeMenuItemAction.cpp
 	@echo 'Building target: $@'
 	$(CXX) $(CFLAGS) $(SRC_DIR)/SetVolumeMenuItemAction.cpp -o $(OBJ_DIR)/SetVolumeMenuItemAction.o
 	@echo 'Finished building target: $@'
 	@echo ' '
-	
-libSetVolumeMenuItemAction.so: SetVolumeMenuItemAction.o
-	@echo 'Building target: $@'
-	$(CXX) -shared -Wl,-soname,libSetVolumeMenuItemAction.so -o $(LIB_DIR)/libSetVolumeMenuItemAction.so $(OBJ_DIR)/SetVolumeMenuItemAction.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-
-#-----------------------------------------------------------------------------------------------------------------------
 
 ResetAudioMenuItemAction.o: init $(SRC_DIR)/ResetAudioMenuItemAction.cpp
 	@echo 'Building target: $@'
@@ -147,9 +125,12 @@ ResetAudioMenuItemAction.o: init $(SRC_DIR)/ResetAudioMenuItemAction.cpp
 	@echo 'Finished building target: $@'
 	@echo ' '
 	
-libResetAudioMenuItemAction.so: ResetAudioMenuItemAction.o
+libAudioMenuItemActions.so: ToggleAudioAlertsMenuItemAction.o SetVolumeMenuItemAction.o ResetAudioMenuItemAction.o
 	@echo 'Building target: $@'
-	$(CXX) -shared -Wl,-soname,libResetAudioMenuItemAction.so -o $(LIB_DIR)/libResetAudioMenuItemAction.so $(OBJ_DIR)/ResetAudioMenuItemAction.o
+	$(CXX) -shared -Wl,-soname,libAudioMenuItemActions.so -o $(LIB_DIR)/libAudioMenuItemActions.so \
+	                                                         $(OBJ_DIR)/ToggleAudioAlertsMenuItemAction.o \
+	                                                         $(OBJ_DIR)/SetVolumeMenuItemAction.o \
+	                                                         $(OBJ_DIR)/ResetAudioMenuItemAction.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -161,9 +142,10 @@ ViewAndEditServoConfigsMenuItemAction.o: init $(SRC_DIR)/ViewAndEditServoConfigs
 	@echo 'Finished building target: $@'
 	@echo ' '
 	
-libViewAndEditServoConfigsMenuItemAction.so: ViewAndEditServoConfigsMenuItemAction.o
+libServoMenuItemActions.so: ViewAndEditServoConfigsMenuItemAction.o
 	@echo 'Building target: $@'
-	$(CXX) -shared -Wl,-soname,libViewAndEditServoConfigsMenuItemAction.so -o $(LIB_DIR)/libViewAndEditServoConfigsMenuItemAction.so $(OBJ_DIR)/ViewAndEditServoConfigsMenuItemAction.o
+	$(CXX) -shared -Wl,-soname,libServoMenuItemActions.so -o $(LIB_DIR)/libServoMenuItemActions.so \
+	                                                         $(OBJ_DIR)/ViewAndEditServoConfigsMenuItemAction.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -186,12 +168,9 @@ LCDMenu.o: init $(SRC_DIR)/LCDMenu.cpp
 LCDMenu: libConfigurationManagement.so \
          libCharacterDisplayMenu.so \
          libqwerk.so \
-         libFirmwareVersionMenuItemAction.so \
-         libHardwareVersionMenuItemAction.so \
-         libToggleAudioAlertsMenuItemAction.so \
-         libSetVolumeMenuItemAction.so \
-         libResetAudioMenuItemAction.so \
-         libViewAndEditServoConfigsMenuItemAction.so \
+         libSystemInfoMenuItemActions.so \
+         libAudioMenuItemActions.so \
+         libServoMenuItemActions.so \
          LCDCharacterDisplay.o \
          LCDMenu.o
 	@echo 'Building target: $@'

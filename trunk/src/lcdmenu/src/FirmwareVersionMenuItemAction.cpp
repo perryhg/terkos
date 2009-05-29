@@ -18,18 +18,18 @@ void FirmwareVersionMenuItemAction::activate()
 // required definitions for dynamic loading
 extern "C"
    {
-   void deleteObject(void* obj)
+   void deleteFirmwareVersionMenuItemActionObject(void* obj)
       {
       delete reinterpret_cast<DynamicObject*> (obj);
       }
 
-   void* loadObject(const char* name, int argc, void** argv)
+   void* loadFirmwareVersionMenuItemActionObject(const char* name, int argc, void** argv)
       {
       int numCharsToCompare = std::min(strlen(name), strlen(FirmwareVersionMenuItemAction::CLASS_NAME.c_str()));
       if (strncmp(name, FirmwareVersionMenuItemAction::CLASS_NAME.c_str(), numCharsToCompare) == 0)
          {
          map<string, string> properties;
-         return new FirmwareVersionMenuItemAction(deleteObject, (MenuItem*) argv[0], (MenuStatusManager*) argv[1], (CharacterDisplay*) argv[2], *((map<
+         return new FirmwareVersionMenuItemAction(deleteFirmwareVersionMenuItemActionObject, (MenuItem*) argv[0], (MenuStatusManager*) argv[1], (CharacterDisplay*) argv[2], *((map<
                   string, string>*) argv[3]));
          }
 

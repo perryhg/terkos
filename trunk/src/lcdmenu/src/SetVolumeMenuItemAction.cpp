@@ -127,18 +127,18 @@ void SetVolumeMenuItemAction::sleepThenPopUpToParentMenuItem()
 // required definitions for dynamic loading
 extern "C"
    {
-   void deleteObject(void* obj)
+   void deleteSetVolumeMenuItemActionObject(void* obj)
       {
       delete reinterpret_cast<DynamicObject*> (obj);
       }
 
-   void* loadObject(const char* name, int argc, void** argv)
+   void* loadSetVolumeMenuItemActionObject(const char* name, int argc, void** argv)
       {
       int numCharsToCompare = std::min(strlen(name), strlen(SetVolumeMenuItemAction::CLASS_NAME.c_str()));
       if (strncmp(name, SetVolumeMenuItemAction::CLASS_NAME.c_str(), numCharsToCompare) == 0)
          {
          map<string, string> properties;
-         return new SetVolumeMenuItemAction(deleteObject, (MenuItem*) argv[0], (MenuStatusManager*) argv[1], (CharacterDisplay*) argv[2], *((map<
+         return new SetVolumeMenuItemAction(deleteSetVolumeMenuItemActionObject, (MenuItem*) argv[0], (MenuStatusManager*) argv[1], (CharacterDisplay*) argv[2], *((map<
                   string, string>*) argv[3]));
          }
 

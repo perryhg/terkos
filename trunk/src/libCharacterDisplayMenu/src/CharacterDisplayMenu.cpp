@@ -134,13 +134,17 @@ MenuItemImpl* CharacterDisplayMenu::buildMenuItemTree(ticpp::Element* parentElem
             // fetch the implementation class name
             string menuItemActionImplementationClassName = implementationClassElement->GetAttribute("name");
 
+            // fetch the implementation class's library name (if not specified, default to the class name)
+            string menuItemActionLibraryName = implementationClassElement->GetAttributeOrDefault("library", "lib"
+                     + menuItemActionImplementationClassName + ".so");
+
             // instantiate the class
             if (menuItemActionImplementationClassName != CharacterDisplayMenu::EMPTY_STRING)
                {
-               cout << "impl class='" << menuItemActionImplementationClassName << "'" << endl;
+               cout << "impl class='" << menuItemActionImplementationClassName << "' and library='" << menuItemActionLibraryName << "'" << endl;
 
                menuItemAction
-                        = this->instantiateMenuItemAction("lib" + menuItemActionImplementationClassName + ".so", menuItemActionImplementationClassName, menuItem, menuStatusManager, characterDisplay, properties);
+                        = this->instantiateMenuItemAction(menuItemActionLibraryName, menuItemActionImplementationClassName, menuItem, menuStatusManager, characterDisplay, properties);
                }
             }
 
