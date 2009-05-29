@@ -33,12 +33,12 @@ void ConfigFile::revertToDefault()
       }
    }
 
-const unsigned int ConfigFile::getUnsignedIntValue(const string& propertyName, const unsigned int defaultValue) const
+const unsigned int ConfigFile::getUnsignedIntValue(const string& propertyName, const unsigned int defaultValue, const char chainedPropertyNameDelimiter) const
    {
    Json::Value root;
    if (load(root))
       {
-      Json::Value* property = findProperty(root, propertyName);
+      Json::Value* property = findProperty(root, propertyName, chainedPropertyNameDelimiter);
       if (property != NULL)
          {
          return property->asUInt();
@@ -47,17 +47,17 @@ const unsigned int ConfigFile::getUnsignedIntValue(const string& propertyName, c
    return defaultValue;
    }
 
-const bool ConfigFile::setUnsignedIntValue(const string& propertyName, const unsigned int value)
+const bool ConfigFile::setUnsignedIntValue(const string& propertyName, const unsigned int value, const char chainedPropertyNameDelimiter)
    {
-   return setIntValue(propertyName, value);
+   return setIntValue(propertyName, value, chainedPropertyNameDelimiter);
    }
 
-const int ConfigFile::getIntValue(const string& propertyName, const int defaultValue) const
+const int ConfigFile::getIntValue(const string& propertyName, const int defaultValue, const char chainedPropertyNameDelimiter) const
    {
    Json::Value root;
    if (load(root))
       {
-      Json::Value* property = findProperty(root, propertyName);
+      Json::Value* property = findProperty(root, propertyName, chainedPropertyNameDelimiter);
       if (property != NULL)
          {
          return property->asInt();
@@ -66,14 +66,14 @@ const int ConfigFile::getIntValue(const string& propertyName, const int defaultV
    return defaultValue;
    }
 
-const bool ConfigFile::setIntValue(const string& propertyName, const int value)
+const bool ConfigFile::setIntValue(const string& propertyName, const int value, const char chainedPropertyNameDelimiter)
    {
    Json::Value root;
    if (load(root))
       {
       try
          {
-         Json::Value* property = findProperty(root, propertyName);
+         Json::Value* property = findProperty(root, propertyName, chainedPropertyNameDelimiter);
          if (property != NULL)
             {
             (*property) = (int) value;
@@ -88,12 +88,12 @@ const bool ConfigFile::setIntValue(const string& propertyName, const int value)
    return false;
    }
 
-const bool ConfigFile::getBooleanValue(const string& propertyName, const bool defaultValue) const
+const bool ConfigFile::getBooleanValue(const string& propertyName, const bool defaultValue, const char chainedPropertyNameDelimiter) const
    {
    Json::Value root;
    if (load(root))
       {
-      Json::Value* property = findProperty(root, propertyName);
+      Json::Value* property = findProperty(root, propertyName, chainedPropertyNameDelimiter);
       if (property != NULL)
          {
          return property->asBool();
@@ -102,14 +102,14 @@ const bool ConfigFile::getBooleanValue(const string& propertyName, const bool de
    return defaultValue;
    }
 
-const bool ConfigFile::setBooleanValue(const string& propertyName, const bool value)
+const bool ConfigFile::setBooleanValue(const string& propertyName, const bool value, const char chainedPropertyNameDelimiter)
    {
    Json::Value root;
    if (load(root))
       {
       try
          {
-         Json::Value* property = findProperty(root, propertyName);
+         Json::Value* property = findProperty(root, propertyName, chainedPropertyNameDelimiter);
          if (property != NULL)
             {
             (*property) = (bool) value;
@@ -124,12 +124,12 @@ const bool ConfigFile::setBooleanValue(const string& propertyName, const bool va
    return false;
    }
 
-const unsigned int ConfigFile::getIndexedUnsignedIntValue(const string& propertyName, const unsigned int index, const unsigned int defaultValue) const
+const unsigned int ConfigFile::getIndexedUnsignedIntValue(const string& propertyName, const unsigned int index, const unsigned int defaultValue, const char chainedPropertyNameDelimiter) const
    {
    Json::Value root;
    if (load(root))
       {
-      Json::Value* property = findProperty(root, propertyName);
+      Json::Value* property = findProperty(root, propertyName, chainedPropertyNameDelimiter);
       if (property != NULL && property->isValidIndex(index))
          {
          return (*property)[index].asUInt();
@@ -138,14 +138,14 @@ const unsigned int ConfigFile::getIndexedUnsignedIntValue(const string& property
    return defaultValue;
    }
 
-const bool ConfigFile::setIndexedUnsignedIntValue(const string& propertyName, const unsigned int index, const unsigned int value)
+const bool ConfigFile::setIndexedUnsignedIntValue(const string& propertyName, const unsigned int index, const unsigned int value, const char chainedPropertyNameDelimiter)
    {
    Json::Value root;
    if (load(root))
       {
       try
          {
-         Json::Value* property = findProperty(root, propertyName);
+         Json::Value* property = findProperty(root, propertyName, chainedPropertyNameDelimiter);
          if (property != NULL)
             {
             (*property)[index] = (unsigned int) value;
@@ -161,13 +161,13 @@ const bool ConfigFile::setIndexedUnsignedIntValue(const string& propertyName, co
    return false;
    }
 
-Json::Value* ConfigFile::findProperty(Json::Value& root, const string& propertyName, const char propertyNameDelimiter) const
+Json::Value* ConfigFile::findProperty(Json::Value& root, const string& propertyName, const char chainedPropertyNameDelimiter) const
    {
    try
       {
       Json::Value* currentProperty = &root;
       vector<string> propertyNames;
-      StringUtilities::tokenizeString(propertyName, propertyNames, propertyNameDelimiter);
+      StringUtilities::tokenizeString(propertyName, propertyNames, chainedPropertyNameDelimiter);
 
       if (propertyNames.size() > 0 && currentProperty->type() == Json::objectValue)
          {

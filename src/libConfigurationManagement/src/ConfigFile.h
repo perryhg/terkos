@@ -45,18 +45,17 @@ class ConfigFile
 
    protected:
 
-      const unsigned int getUnsignedIntValue(const string& propertyName, const unsigned int defaultValue = 0) const;
-      const bool setUnsignedIntValue(const string& propertyName, const unsigned int value);
+      const unsigned int getUnsignedIntValue(const string& propertyName, const unsigned int defaultValue = 0, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER) const;
+      const bool setUnsignedIntValue(const string& propertyName, const unsigned int value, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER);
 
-      const int getIntValue(const string& propertyName, const int defaultValue = 0) const;
-      const bool setIntValue(const string& propertyName, const int value);
+      const int getIntValue(const string& propertyName, const int defaultValue = 0, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER) const;
+      const bool setIntValue(const string& propertyName, const int value, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER);
 
-      const bool getBooleanValue(const string& propertyName, const bool defaultValue = false) const;
-      const bool setBooleanValue(const string& propertyName, const bool value);
+      const bool getBooleanValue(const string& propertyName, const bool defaultValue = false, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER) const;
+      const bool setBooleanValue(const string& propertyName, const bool value, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER);
 
-      const unsigned int getIndexedUnsignedIntValue(const string& propertyName, const unsigned int index, const unsigned int defaultValue = 0) const;
-      const bool setIndexedUnsignedIntValue(const string& propertyName, const unsigned int index, const unsigned int value);
-
+      const unsigned int getIndexedUnsignedIntValue(const string& propertyName, const unsigned int index, const unsigned int defaultValue = 0, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER) const;
+      const bool setIndexedUnsignedIntValue(const string& propertyName, const unsigned int index, const unsigned int value, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER);
 
    private:
 
