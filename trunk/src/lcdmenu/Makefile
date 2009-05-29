@@ -26,9 +26,15 @@ LIB_QWERK_SRC_DIR=$(LIB_QWERK_DIR)
 LIB_QWERK_DIST_DIR=$(LIB_QWERK_DIR)/dist
 LIB_QWERK_LIB_SHORT_NAME=qwerk
 
-LIB_CONFIG_DIR=../libconfig/dist
-LIB_CONFIG_SRC_DIR=$(LIB_CONFIG_DIR)/include
-LIB_CONFIG_LIB_SHORT_NAME=config++
+LIB_JSONCPP_DIR=../jsoncpp
+LIB_JSONCPP_SRC_DIR=$(LIB_JSONCPP_DIR)/jsoncpp/include
+LIB_JSONCPP_DIST_DIR=$(LIB_JSONCPP_DIR)/dist/arm-oe-linux-uclibcgnueabi
+LIB_JSONCPP_LIB_SHORT_NAME=jsoncpp
+
+LIB_UTILITIES_DIR=../libUtilities
+LIB_UTILITIES_SRC_DIR=$(LIB_UTILITIES_DIR)/src
+LIB_UTILITIES_DIST_DIR=$(LIB_UTILITIES_DIR)/dist
+LIB_UTILITIES_LIB_SHORT_NAME=Utilities
 
 LIB_CONFIGURATION_MANAGEMENT_DIR=../libConfigurationManagement
 LIB_CONFIGURATION_MANAGEMENT_SRC_DIR=$(LIB_CONFIGURATION_MANAGEMENT_DIR)/src
@@ -44,7 +50,8 @@ CFLAGS=-fPIC -c -Wall \
        -I$(TINY_XML_SRC_DIR) \
        -D "TIXML_USE_TICPP" -D "UNICODE" -D "_UNICODE" -D "DEBUG" -D "_DEBUG" \
        -I$(LIB_QWERK_SRC_DIR) \
-       -I$(LIB_CONFIG_SRC_DIR) \
+       -I$(LIB_JSONCPP_SRC_DIR) \
+       -I$(LIB_UTILITIES_SRC_DIR) \
        -I$(LIB_CONFIGURATION_MANAGEMENT_SRC_DIR)
        
 LDFLAGS=-L$(LIB_DIR) \
@@ -54,10 +61,10 @@ LDFLAGS=-L$(LIB_DIR) \
         -l$(LIB_QWERK_LIB_SHORT_NAME) \
         -lpthread \
         -ldl \
-        -l$(LIB_CONFIG_LIB_SHORT_NAME) \
-        -l$(LIB_CONFIGURATION_MANAGEMENT_LIB_SHORT_NAME) \
-        -lStringUtilities
-        
+        -l$(LIB_JSONCPP_LIB_SHORT_NAME) \
+        -l$(LIB_UTILITIES_LIB_SHORT_NAME) \
+        -l$(LIB_CONFIGURATION_MANAGEMENT_LIB_SHORT_NAME)
+
 #-----------------------------------------------------------------------------------------------------------------------
 
 default: all
@@ -76,20 +83,6 @@ init:
 	mkdir -p $(LIB_DIR)
 	mkdir -p $(EXE_DIR)
 
-#-----------------------------------------------------------------------------------------------------------------------
-
-StringUtilities.o: init $(SRC_DIR)/StringUtilities.cpp
-	@echo 'Building target: $@'
-	$(CXX) $(CFLAGS) $(SRC_DIR)/StringUtilities.cpp -o $(OBJ_DIR)/StringUtilities.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-	
-libStringUtilities.so: StringUtilities.o
-	@echo 'Building target: $@'
-	$(CXX) -shared -Wl,-soname,libStringUtilities.so -o $(LIB_DIR)/libStringUtilities.so $(OBJ_DIR)/StringUtilities.o
-	@echo 'Finished building target: $@'
-	@echo ' '
-	
 #-----------------------------------------------------------------------------------------------------------------------
 
 FirmwareVersionMenuItemAction.o: init $(SRC_DIR)/FirmwareVersionMenuItemAction.cpp
@@ -190,8 +183,7 @@ LCDMenu.o: init $(SRC_DIR)/LCDMenu.cpp
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-LCDMenu: libStringUtilities.so \
-         libConfigurationManagement.so \
+LCDMenu: libConfigurationManagement.so \
          libCharacterDisplayMenu.so \
          libqwerk.so \
          libFirmwareVersionMenuItemAction.so \
@@ -242,8 +234,6 @@ dist:
 	mkdir -p $(DIST_DIR)
 	@echo 'Copying shared libraries to $(DIST_DIR)...'
 	cp $(LIB_DIR)/*.so $(DIST_DIR)/.
-	ln -s lib$(LIB_CONFIG_LIB_SHORT_NAME).so $(DIST_DIR)/lib$(LIB_CONFIG_LIB_SHORT_NAME).so.8
-	ln -s lib$(LIB_CONFIG_LIB_SHORT_NAME).so $(DIST_DIR)/lib$(LIB_CONFIG_LIB_SHORT_NAME).so.8.0.0
 	@echo 'Finished copying shared libraries'
 	@echo ' '
 	@echo 'Copying executables to $(DIST_DIR)...'
@@ -252,7 +242,7 @@ dist:
 	@echo ' '
 	@echo 'Copying resources to $(DIST_DIR)...'
 	cp $(RESOURCES_DIR)/menu.xml $(DIST_DIR)/.
-	cp $(LIB_CONFIGURATION_MANAGEMENT_DIST_DIR)/*.cfg $(DIST_DIR)/.
+	cp $(LIB_CONFIGURATION_MANAGEMENT_DIST_DIR)/*.json $(DIST_DIR)/.
 	@echo 'Finished copying resources'
 	@echo ' '
 

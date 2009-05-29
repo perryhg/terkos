@@ -3,7 +3,7 @@
 	<name>LibConfigurationManagementTest</name>
 	<comment></comment>
 	<projects>
-		<project>LibConfig</project>
+		<project>JsonCpp</project>
 		<project>LibConfigurationManagement</project>
 	</projects>
 	<buildSpec>

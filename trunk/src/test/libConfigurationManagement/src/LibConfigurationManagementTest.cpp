@@ -1,11 +1,9 @@
 #include <iostream>
 #include <string>
-#include <libconfig.h++>
-#include "AudioConfigManager.h"
-#include "ServoConfigManager.h"
+#include <AudioConfigManager.h>
+#include <ServoConfigManager.h>
 
 using namespace std;
-using namespace libconfig;
 
 int main(int argc, char** argv)
    {

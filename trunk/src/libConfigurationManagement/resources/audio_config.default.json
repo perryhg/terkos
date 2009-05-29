@@ -1,0 +1,8 @@
+{
+   "alerts" : {
+      "enabled" : true
+   },
+   "volume" : {
+      "level" : 5
+   }
+}
