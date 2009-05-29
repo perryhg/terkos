@@ -1,0 +1,37 @@
+/* A comment at the beginning of the file. */
+{
+   "foo" : "bar",
+
+   "baz" : "monkey",
+   
+   "boz" : 
+   {
+      "biz" : -1
+   },
+
+   "foobar" : 
+   {
+      "bazbat" : "squid"
+   },
+
+   // this is a comment
+   "bounds" :
+   {
+      "minimums" : [ 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25 ],
+      "maximums" : [ 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225 ]
+   },
+
+   "initial-positions" :[ 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125 ],
+   
+   "volume" :
+   {
+      "level" : 5
+   },
+
+   "alerts" :
+   {
+      // this is another comment
+      "enabled" : true
+   }
+}
+// A comment at the end of the file
