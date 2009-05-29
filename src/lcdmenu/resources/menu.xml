@@ -5,12 +5,12 @@
    <item text="Audio">
       <item text="Set Volume">
          <item text="">
-            <implementation-class name="SetVolumeMenuItemAction"/>
+            <implementation-class name="SetVolumeMenuItemAction" library="libAudioMenuItemActions.so"/>
          </item>
       </item>
       <item text="Toggle Audio  Alerts">
          <item text="">
-            <implementation-class name="ToggleAudioAlertsMenuItemAction">
+            <implementation-class name="ToggleAudioAlertsMenuItemAction" library="libAudioMenuItemActions.so">
                <property key="action.prompt">Enable Alerts?</property>
                <property key="choice.option1">Yes     </property>
                <property key="choice.option2">No</property>
@@ -21,7 +21,7 @@
       </item>
       <item text="Reset Audio">
          <item text="">
-            <implementation-class name="ResetAudioMenuItemAction">
+            <implementation-class name="ResetAudioMenuItemAction" library="libAudioMenuItemActions.so">
                <property key="action.prompt">Reset Audio?</property>
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
@@ -34,12 +34,12 @@
    <item text="Servos">
       <item text="View/Edit     Servo Configs">
          <item text="">
-            <implementation-class name="ViewAndEditServoConfigsMenuItemAction"/>
+            <implementation-class name="ViewAndEditServoConfigsMenuItemAction" library="libServoMenuItemActions.so"/>
          </item>
       </item>
       <item text="Reset Servos">
          <item text="">
-            <implementation-class name="ResetServosMenuItemAction">
+            <implementation-class name="ResetServosMenuItemAction" library="libServoMenuItemActions.so">
                <property key="action.prompt">Reset Servos?</property>
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
@@ -52,7 +52,7 @@
    <item text="Factory Reset">
       <item text="Reset Audio">
          <item text="">
-            <implementation-class name="ResetAudioMenuItemAction">
+            <implementation-class name="ResetAudioMenuItemAction" library="libAudioMenuItemActions.so">
                <property key="action.prompt">Reset Audio?</property>
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
@@ -85,7 +85,7 @@
       </item>
       <item text="Reset Servos">
          <item text="">
-            <implementation-class name="ResetServosMenuItemAction">
+            <implementation-class name="ResetServosMenuItemAction" library="libServoMenuItemActions.so">
                <property key="action.prompt">Reset Servos?</property>
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
@@ -109,14 +109,14 @@
    <item text="System Info">
       <item text="Firmware             Version">
          <item text="">
-            <implementation-class name="FirmwareVersionMenuItemAction">
+            <implementation-class name="FirmwareVersionMenuItemAction" library="libSystemInfoMenuItemActions.so">
                <property key="label">Firmware version</property>
             </implementation-class>
          </item>
       </item>
       <item text="Hardware             Version">
          <item text="">
-            <implementation-class name="HardwareVersionMenuItemAction">
+            <implementation-class name="HardwareVersionMenuItemAction" library="libSystemInfoMenuItemActions.so">
                <property key="label">Hardware version</property>
             </implementation-class>
          </item>

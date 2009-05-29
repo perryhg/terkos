@@ -121,18 +121,18 @@ void ViewAndEditServoConfigsMenuItemAction::displayServoConfigDetails()
 // required definitions for dynamic loading
 extern "C"
    {
-   void deleteObject(void* obj)
+   void deleteViewAndEditServoConfigsMenuItemActionObject(void* obj)
       {
       delete reinterpret_cast<DynamicObject*> (obj);
       }
 
-   void* loadObject(const char* name, int argc, void** argv)
+   void* loadViewAndEditServoConfigsMenuItemActionObject(const char* name, int argc, void** argv)
       {
       int numCharsToCompare = std::min(strlen(name), strlen(ViewAndEditServoConfigsMenuItemAction::CLASS_NAME.c_str()));
       if (strncmp(name, ViewAndEditServoConfigsMenuItemAction::CLASS_NAME.c_str(), numCharsToCompare) == 0)
          {
          map<string, string> properties;
-         return new ViewAndEditServoConfigsMenuItemAction(deleteObject, (MenuItem*) argv[0], (MenuStatusManager*) argv[1], (CharacterDisplay*) argv[2], *((map<
+         return new ViewAndEditServoConfigsMenuItemAction(deleteViewAndEditServoConfigsMenuItemActionObject, (MenuItem*) argv[0], (MenuStatusManager*) argv[1], (CharacterDisplay*) argv[2], *((map<
                   string, string>*) argv[3]));
          }
 

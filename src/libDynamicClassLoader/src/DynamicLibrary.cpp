@@ -25,11 +25,19 @@ DynamicObject* DynamicLibrary::newObject(const char* name, int argc, void** argv
       return NULL;
       }
 
-   // Get the loadObject() function.  If it doesn't exist, return NULL.
-   void* loadSym = dlsym(_objFile, "loadObject");
+   // Try to find the loadObject() function using the convention "load"+<classname>+"Object".
+   // If it doesn't exist, try using simply "loadObject".  If that doesn't exist either, then
+   // just return NULL.
+   std::string className(name);
+   std::string functionName = "load" + className + "Object";
+   void* loadSym = dlsym(_objFile, functionName.c_str());
    if (loadSym == NULL)
       {
-      return NULL;
+      loadSym = dlsym(_objFile, "loadObject");
+      if (loadSym == NULL)
+         {
+         return NULL;
+         }
       }
 
    // Load a new instance of the requested class, and return it

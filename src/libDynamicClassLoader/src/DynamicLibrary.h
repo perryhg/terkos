@@ -10,7 +10,10 @@
 
 #include <stdio.h>
 #include <dlfcn.h>
+#include <string>
 #include "DynamicObject.h"
+
+using namespace std;
 
 class DynamicLibrary
    {

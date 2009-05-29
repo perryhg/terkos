@@ -20,17 +20,17 @@ void HighPassFilter::processAudio(int size, unsigned char* buffer)
 // The Dynamic library should also contain the following external C function definitions
 extern "C"
    {
-   void deleteObject(void* obj)
+   void deleteHighPassFilterObject(void* obj)
       {
       delete reinterpret_cast<DynamicObject*> (obj);
       }
 
-   void* loadObject(const char* name, int argc, void** argv)
+   void* loadHighPassFilterObject(const char* name, int argc, void** argv)
       {
       int numCharsToCompare = std::min(strlen(name), strlen(HighPassFilter::CLASS_NAME.c_str()));
       if (strncmp(name, HighPassFilter::CLASS_NAME.c_str(), numCharsToCompare) == 0)
          {
-         return new HighPassFilter(deleteObject);
+         return new HighPassFilter(deleteHighPassFilterObject);
          }
 
       return NULL;
