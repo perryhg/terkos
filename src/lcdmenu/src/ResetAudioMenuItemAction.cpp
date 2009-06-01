@@ -21,11 +21,6 @@ void ResetAudioMenuItemAction::executeOption2Action()
    // do nothing
    }
 
-void ResetAudioMenuItemAction::setAlertsEnabled(const bool isEnabled)
-   {
-   configManager.setAlertsEnabled(isEnabled);
-   }
-
 // required definitions for dynamic loading
 extern "C"
    {

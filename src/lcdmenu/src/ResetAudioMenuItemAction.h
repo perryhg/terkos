@@ -37,9 +37,7 @@ class ResetAudioMenuItemAction : public TwoOptionMenuItemAction
    private:
 
       AudioConfigManager configManager;
-      bool areAlertsEnabled;
 
-      void setAlertsEnabled(const bool isAlertsEnabled);
    };
 
 #endif /* RESETAUDIOMENUITEMACTION_H_ */
