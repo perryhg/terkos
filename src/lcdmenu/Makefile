@@ -76,6 +76,11 @@ AUDIO_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/ToggleAudioAlertsMenuItemAction.cpp \
 AUDIO_MENU_ITEM_ACTIONS_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(AUDIO_MENU_ITEM_ACTIONS_SRCS)))
 AUDIO_MENU_ITEM_ACTIONS_OBJECTS := $(addprefix $(OBJ_DIR)/,$(AUDIO_MENU_ITEM_ACTIONS_OBJECTS))
 
+NETWORK_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/ToggleWirelessStartupUponBootMenuItemAction.cpp \
+                               $(SRC_DIR)/ResetWirelessNetworkingMenuItemAction.cpp
+NETWORK_MENU_ITEM_ACTIONS_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(NETWORK_MENU_ITEM_ACTIONS_SRCS)))
+NETWORK_MENU_ITEM_ACTIONS_OBJECTS := $(addprefix $(OBJ_DIR)/,$(NETWORK_MENU_ITEM_ACTIONS_OBJECTS))
+
 SERVO_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/ViewAndEditServoConfigsMenuItemAction.cpp
 SERVO_MENU_ITEM_ACTIONS_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(SERVO_MENU_ITEM_ACTIONS_SRCS)))
 SERVO_MENU_ITEM_ACTIONS_OBJECTS := $(addprefix $(OBJ_DIR)/,$(SERVO_MENU_ITEM_ACTIONS_OBJECTS))
@@ -138,12 +143,22 @@ libServoMenuItemActions.so: $(OBJ_DIR) $(LIB_DIR) $(SERVO_MENU_ITEM_ACTIONS_OBJE
 
 #-----------------------------------------------------------------------------------------------------------------------
 
+libNetworkMenuItemActions.so: $(OBJ_DIR) $(LIB_DIR) $(NETWORK_MENU_ITEM_ACTIONS_OBJECTS)
+	@echo 'Building target: $@'
+	$(CXX) -shared -Wl,-soname,libNetworkMenuItemActions.so -o $(LIB_DIR)/libNetworkMenuItemActions.so \
+	                                                         $(NETWORK_MENU_ITEM_ACTIONS_OBJECTS)
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+#-----------------------------------------------------------------------------------------------------------------------
+
 LCDMenu: $(EXE_DIR) \
          libConfigurationManagement.so \
          libCharacterDisplayMenu.so \
          libqwerk.so \
          libSystemInfoMenuItemActions.so \
          libAudioMenuItemActions.so \
+         libNetworkMenuItemActions.so \
          libServoMenuItemActions.so \
          $(LCD_MENU_OBJECTS)
 	@echo 'Building target: $@'

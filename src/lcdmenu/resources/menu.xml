@@ -31,6 +31,35 @@
          </item>
       </item>
    </item>
+   <item text="Network">
+      <item text="View Wireless Networks">
+         <item text="">
+            <implementation-class name="ViewWirelessNetworksMenuItemAction" library="libNetworkMenuItemActions.so"/>
+         </item>
+      </item>
+      <item text="Toggle StartupUpon Boot">
+         <item text="">
+            <implementation-class name="ToggleWirelessStartupUponBootMenuItemAction" library="libNetworkMenuItemActions.so">
+               <property key="action.prompt">Start on boot?</property>
+               <property key="choice.option1">Yes     </property>
+               <property key="choice.option2">No</property>
+               <property key="action.option1">Wireless will bestarted on boot.</property>
+               <property key="action.option2">Wireless won't  start on boot.</property>
+            </implementation-class>
+         </item>
+      </item>
+      <item text="Reset WirelessSettings">
+         <item text="">
+            <implementation-class name="ResetWirelessNetworkingMenuItemAction" library="libNetworkMenuItemActions.so">
+               <property key="action.prompt">Reset Wireless?</property>
+               <property key="choice.option1">OK  </property>
+               <property key="choice.option2">Cancel</property>
+               <property key="action.option1">Network reset tofactory defaults</property>
+               <property key="action.option2">Cancelled!</property>
+            </implementation-class>
+         </item>
+      </item>
+   </item>
    <item text="Servos">
       <item text="View/Edit     Servo Configs">
          <item text="">
