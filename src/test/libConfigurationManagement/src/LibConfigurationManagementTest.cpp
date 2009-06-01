@@ -2,6 +2,7 @@
 #include <string>
 #include <AudioConfigManager.h>
 #include <ServoConfigManager.h>
+#include <WirelessNetworkingConfigManager.h>
 
 using namespace std;
 
@@ -64,6 +65,23 @@ int main(int argc, char** argv)
    servoConfigManager.setMinBound(bogusServoId, 127);
    servoConfigManager.setMaxBound(bogusServoId, 127);
    servoConfigManager.setInitialPosition(bogusServoId, 127);
+
+   cout << "-----------------------------------------------------------------" << endl;
+
+   WirelessNetworkingConfigManager wirelessNetworkingConfigManager;
+
+   const bool wirelessIsEnabled = wirelessNetworkingConfigManager.isEnabled();
+   const bool wirelessWillConnectUsingSpecificProfile = wirelessNetworkingConfigManager.willConnectUsingSpecificProfile();
+   cout << "Wireless: Is Enabled                          = [" << wirelessIsEnabled << "]" << endl;
+   cout << "Wireless: Will Connect Using Specific Profile = [" << wirelessWillConnectUsingSpecificProfile << "]" << endl;
+
+   wirelessNetworkingConfigManager.setEnabled(!wirelessIsEnabled);
+   wirelessNetworkingConfigManager.setWillConnectUsingSpecificProfile(!wirelessWillConnectUsingSpecificProfile);
+
+   cout << "Wireless: Is Enabled                          = [" << wirelessNetworkingConfigManager.isEnabled() << "]" << endl;
+   cout << "Wireless: Will Connect Using Specific Profile = [" << wirelessNetworkingConfigManager.willConnectUsingSpecificProfile() << "]" << endl;
+
+   cout << "-----------------------------------------------------------------" << endl;
 
    return 0;
    }
