@@ -54,7 +54,7 @@
                <property key="action.prompt">Reset Wireless?</property>
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
-               <property key="action.option1">Network reset tofactory defaults</property>
+               <property key="action.option1">Wireless set to factory defaults</property>
                <property key="action.option2">Cancelled!</property>
             </implementation-class>
          </item>
