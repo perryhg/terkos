@@ -7,7 +7,7 @@ SECTION = "base"
 LICENSE = "GPL"
 PR = "r6"
 
-SRC_URI = "http://tinylogin.busybox.net/downloads/tinylogin-${PV}.tar.bz2 \
+SRC_URI = "file://tinylogin-${PV}.tar.bz2 \
 	file://cvs-20040608.patch;patch=1;pnum=1 \
 	file://add-system.patch;patch=1;pnum=1 \
 	file://adduser-empty_pwd.patch;patch=1 \
