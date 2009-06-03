@@ -41,6 +41,11 @@ LIB_CONFIGURATION_MANAGEMENT_SRC_DIR=$(LIB_CONFIGURATION_MANAGEMENT_DIR)/src
 LIB_CONFIGURATION_MANAGEMENT_DIST_DIR=$(LIB_CONFIGURATION_MANAGEMENT_DIR)/dist
 LIB_CONFIGURATION_MANAGEMENT_LIB_SHORT_NAME=ConfigurationManagement
 
+LIB_PSTREAMS_DIR=../pstreams
+LIB_PSTREAMS_SRC_DIR=$(LIB_PSTREAMS_DIR)/src
+
+SCRIPTS_DIR=../scripts
+
 CXX=arm-oe-linux-uclibcgnueabi-g++
 AR=arm-oe-linux-uclibcgnueabi-ar
 
@@ -52,7 +57,8 @@ CFLAGS=-fPIC -c -Wall \
        -I$(LIB_QWERK_SRC_DIR) \
        -I$(LIB_JSONCPP_SRC_DIR) \
        -I$(LIB_UTILITIES_SRC_DIR) \
-       -I$(LIB_CONFIGURATION_MANAGEMENT_SRC_DIR)
+       -I$(LIB_CONFIGURATION_MANAGEMENT_SRC_DIR) \
+       -I$(LIB_PSTREAMS_SRC_DIR)
        
 LDFLAGS=-L$(LIB_DIR) \
         -l$(LIB_CHARACTER_DISPLAY_MENU_LIB_SHORT_NAME) \
@@ -77,7 +83,8 @@ AUDIO_MENU_ITEM_ACTIONS_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(AUDIO_MENU_ITEM_
 AUDIO_MENU_ITEM_ACTIONS_OBJECTS := $(addprefix $(OBJ_DIR)/,$(AUDIO_MENU_ITEM_ACTIONS_OBJECTS))
 
 NETWORK_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/ToggleWirelessStartupUponBootMenuItemAction.cpp \
-                               $(SRC_DIR)/ResetWirelessNetworkingMenuItemAction.cpp
+                               $(SRC_DIR)/ResetWirelessNetworkingMenuItemAction.cpp \
+                               $(SRC_DIR)/ViewWirelessNetworksMenuItemAction.cpp
 NETWORK_MENU_ITEM_ACTIONS_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(NETWORK_MENU_ITEM_ACTIONS_SRCS)))
 NETWORK_MENU_ITEM_ACTIONS_OBJECTS := $(addprefix $(OBJ_DIR)/,$(NETWORK_MENU_ITEM_ACTIONS_OBJECTS))
 
@@ -208,6 +215,8 @@ dist:
 	@echo 'Copying resources to $(DIST_DIR)...'
 	cp $(RESOURCES_DIR)/menu.xml $(DIST_DIR)/.
 	cp $(LIB_CONFIGURATION_MANAGEMENT_DIST_DIR)/*.json $(DIST_DIR)/.
+	mkdir -p $(DIST_DIR)/scripts
+	cp $(SCRIPTS_DIR)/getWirelessAccessPointsAsJSON.pl $(DIST_DIR)/scripts/.
 	@echo 'Finished copying resources'
 	@echo ' '
 

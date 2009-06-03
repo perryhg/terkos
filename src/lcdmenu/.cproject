@@ -43,6 +43,8 @@
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/TinyXML/ticpp}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfigurationManagement/src}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibUtilities/src}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/PStreams/src}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/JsonCpp/jsoncpp/include}&quot;"/>
 </option>
 <option id="org.eclipse.cdt.build.core.settings.holder.undef.incpaths.1483332923" name="Undefined Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.undef.incpaths"/>
 <inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1565130371" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
