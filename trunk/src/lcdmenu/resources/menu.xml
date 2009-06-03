@@ -31,7 +31,7 @@
          </item>
       </item>
    </item>
-   <item text="Network">
+   <item text="Wireless      Networking">
       <item text="View Wireless Networks">
          <item text="">
             <implementation-class name="ViewWirelessNetworksMenuItemAction" library="libNetworkMenuItemActions.so"/>
