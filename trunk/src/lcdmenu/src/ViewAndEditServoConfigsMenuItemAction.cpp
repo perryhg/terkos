@@ -113,6 +113,7 @@ void ViewAndEditServoConfigsMenuItemAction::displayServoConfigDetails()
    string minBoundStr = StringUtilities::convertIntToString(configManager.getMinBound(currentServoId), 3, '0');
    string maxBoundStr = StringUtilities::convertIntToString(configManager.getMaxBound(currentServoId), 3, '0');
 
+   // TODO: these labels should be settable via properties
    string text = "Servo" + servoStr + " Min" + minBoundStr + "Init" + initialPositionStr + " Max" + maxBoundStr;
 
    getCharacterDisplay()->setTextWithScrollArrows(text);
