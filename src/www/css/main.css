@@ -1,0 +1,24 @@
+BODY, P, TABLE, TR, TD, UL, LI {
+   font-family: Verdana, Arial, Helvetica, sans-serif;
+   font-size: 8pt
+}
+
+.title {
+   font-size: 20pt;
+   font-weight: bold;
+}
+
+.page-title {
+   font-size: 12pt;
+   font-weight: bold;
+   margin-bottom:10px;
+}
+
+.navigation {
+   font-weight: bold;
+   margin-bottom:5px;
+}
+
+.table-heading {
+   font-weight: bold;
+}

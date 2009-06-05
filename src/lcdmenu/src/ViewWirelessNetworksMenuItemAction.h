@@ -27,7 +27,7 @@ class ViewWirelessNetworksMenuItemAction : public CharacterDisplayMenuItemAction
                                             CharacterDisplay* characterDisplay, map<string, string>& properties) :
          CharacterDisplayMenuItemAction(delObj, menuItem, menuStatusManager, characterDisplay, properties)
          {
-         currentAccessPointIndex = 0;
+         currentWirelessNetworkIndex = 0;
          isDetailViewMode = false;
          }
 
@@ -48,9 +48,9 @@ class ViewWirelessNetworksMenuItemAction : public CharacterDisplayMenuItemAction
 
    private:
 
-      Json::Value accessPoints;
+      Json::Value wirelessNetworks;
 
-      unsigned int currentAccessPointIndex;
+      unsigned int currentWirelessNetworkIndex;
 
       bool isDetailViewMode;
 
@@ -58,9 +58,9 @@ class ViewWirelessNetworksMenuItemAction : public CharacterDisplayMenuItemAction
       MenuItemAction* listModeMenuItemAction;
       MenuItemAction* detailModeMenuItemAction;
 
-      void displayAccessPointDetails();
+      void displayWirelessNetworkDetails();
 
-      const unsigned int getNumberOfAccessPoints() const;
+      const unsigned int getNumberOfWirelessNetworks() const;
 
    };
 
