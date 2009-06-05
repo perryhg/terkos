@@ -11,34 +11,37 @@ void ViewWirelessNetworksMenuItemAction::activate()
    getCharacterDisplay()->setText("Scanning...");
 
    // reset the current servo id
-   currentAccessPointIndex = 0;
+   currentWirelessNetworkIndex = 0;
 
    // call the Perl script which returns iwlist results as JSON and the parse the JSON
    try
       {
-      // try to load the file
-      redi::ipstream is("scripts/getWirelessAccessPointsAsJSON.pl");
+      // execute the script and return the results as a stream
+      redi::ipstream is("scripts/getWirelessNetworksAsJSON.pl");
+
+      // parse the stream
       Json::Reader reader;
-      bool parsingSuccessful = reader.parse(is, accessPoints, true);
+      bool parsingSuccessful = reader.parse(is, wirelessNetworks, true);
       is.close();
+
       if (!parsingSuccessful)
          {
          // report to the user the failure and their locations in the document.
          cerr << "ViewWirelessNetworksMenuItemAction(): failed to parse iwlist JSON:" << endl << reader.getFormatedErrorMessages();
-         accessPoints = Json::Value::null;
+         wirelessNetworks = Json::Value::null;
          }
       }
    catch (...)
       {
       cerr << "ViewWirelessNetworksMenuItemAction(): failed to parse iwlist JSON" << endl;
-      accessPoints = Json::Value::null;
+      wirelessNetworks = Json::Value::null;
       }
 
-   // TODO: sort list of access points by signal strength, filter out encrypted networks
-   
+   // TODO: add error handling here if no networks were found (display something to the user.)
+
    getCharacterDisplay()->clear();
 
-   displayAccessPointDetails();
+   displayWirelessNetworkDetails();
    }
 
 void ViewWirelessNetworksMenuItemAction::start()
@@ -74,16 +77,16 @@ void ViewWirelessNetworksMenuItemAction::upEvent()
    else
       {
       // decrement the current servo ID, wrapping around if necessary
-      if (currentAccessPointIndex == 0)
+      if (currentWirelessNetworkIndex == 0)
          {
-         currentAccessPointIndex = getNumberOfAccessPoints() - 1;
+         currentWirelessNetworkIndex = getNumberOfWirelessNetworks() - 1;
          }
       else
          {
-         currentAccessPointIndex--;
+         currentWirelessNetworkIndex--;
          }
 
-      displayAccessPointDetails();
+      displayWirelessNetworkDetails();
       }
    }
 
@@ -96,16 +99,16 @@ void ViewWirelessNetworksMenuItemAction::downEvent()
    else
       {
       // increment the current servo ID, wrapping around if necessary
-      if (currentAccessPointIndex >= getNumberOfAccessPoints() - 1)
+      if (currentWirelessNetworkIndex >= getNumberOfWirelessNetworks() - 1)
          {
-         currentAccessPointIndex = 0;
+         currentWirelessNetworkIndex = 0;
          }
       else
          {
-         currentAccessPointIndex++;
+         currentWirelessNetworkIndex++;
          }
 
-      displayAccessPointDetails();
+      displayWirelessNetworkDetails();
       }
    }
 
@@ -133,22 +136,22 @@ void ViewWirelessNetworksMenuItemAction::leftEvent()
       }
    }
 
-void ViewWirelessNetworksMenuItemAction::displayAccessPointDetails()
+void ViewWirelessNetworksMenuItemAction::displayWirelessNetworkDetails()
    {
-   Json::Value ssid = accessPoints["access-points"][currentAccessPointIndex]["ssid"];
+   Json::Value ssid = wirelessNetworks["wireless-networks"][currentWirelessNetworkIndex]["ssid"];
 
    string networkLine = "Network: ";
-   networkLine += StringUtilities::convertIntToString(currentAccessPointIndex + 1, 2, '0');
+   networkLine += StringUtilities::convertIntToString(currentWirelessNetworkIndex + 1, 2, '0');
    networkLine += "/";
-   networkLine += StringUtilities::convertIntToString(getNumberOfAccessPoints(), 2, '0');
+   networkLine += StringUtilities::convertIntToString(getNumberOfWirelessNetworks(), 2, '0');
    getCharacterDisplay()->setTextWithScrollArrows(networkLine + ssid.asString());
    }
 
-const unsigned int ViewWirelessNetworksMenuItemAction::getNumberOfAccessPoints() const
+const unsigned int ViewWirelessNetworksMenuItemAction::getNumberOfWirelessNetworks() const
    {
-   if (accessPoints != Json::Value::null)
+   if (wirelessNetworks != Json::Value::null)
       {
-      return accessPoints["access-points"].size();
+      return wirelessNetworks["wireless-networks"].size();
       }
    return 0;
    }
