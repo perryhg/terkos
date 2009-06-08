@@ -14,13 +14,13 @@ my @accessPoints = ();
 my $lineNumber = 0;
 my $i = -1;
 while ($lineNumber < $#lines)
-	{
-	my $line = $lines[$lineNumber];
-   chomp $line;						# chop off the newline
-   $line =~ s/^\s+//;				# chop off leading whitespace
-   $line =~ s/\s+$//;				# chop off trailing whitespace
+   {
+   my $line = $lines[$lineNumber];
+   chomp $line;                  # chop off the newline
+   $line =~ s/^\s+//;            # chop off leading whitespace
+   $line =~ s/\s+$//;            # chop off trailing whitespace
 
-   next unless length($line); 	# anything left?
+   next unless length($line);    # anything left?
 
    # test the line with regex to see if it's something we care about
    if ($line =~ /^Cell\s+\d+\s+-\s+Address:\s([A-F0-9:]+)$/)
@@ -32,30 +32,30 @@ while ($lineNumber < $#lines)
       $accessPoints[$i]->{mac} = $1;
       }
    elsif ($line =~ /^ESSID:"(.+)"/)
-   	{
-   	$accessPoints[$i]->{ssid} = $1;
-   	}
+      {
+      $accessPoints[$i]->{ssid} = $1;
+      }
    elsif ($line =~ /^Mode:(.+)/)
-   	{
-   	$accessPoints[$i]->{mode} = $1;
-   	}
+      {
+      $accessPoints[$i]->{mode} = $1;
+      }
    elsif ($line =~ /^Channel:(.+)/)
-   	{
-   	$accessPoints[$i]->{channel} = $1;
-   	}
+      {
+      $accessPoints[$i]->{channel} = $1;
+      }
    elsif ($line =~ /^Frequency:(.+)\s+\(Channel \d+\)/)
-   	{
-   	$accessPoints[$i]->{frequency} = $1;
-   	}
+      {
+      $accessPoints[$i]->{frequency} = $1;
+      }
    elsif ($line =~ /^Quality=(\d+)\/100\s+Signal level:(.+)\s+dBm$/)
-   	{
-   	$accessPoints[$i]->{quality} = $1;
-		$accessPoints[$i]->{signalLevel} = $2;
-   	}
+      {
+      $accessPoints[$i]->{quality} = $1;
+      $accessPoints[$i]->{signalLevel} = $2;
+      }
    elsif ($line =~ /^Encryption key:(.+)/)
-   	{
-   	$accessPoints[$i]->{isEncrypted} = ("on" eq $1 ? "true" : "false");
-   	}
+      {
+      $accessPoints[$i]->{isEncrypted} = ("on" eq $1 ? "true" : "false");
+      }
 
    $lineNumber++;
    }
@@ -105,34 +105,34 @@ my @ssids = sort keys %wirelessNetworks;
 for $networkCount (0 .. $#ssids)
    {
    my $ssid = $ssids[$networkCount];
-	print "   {\n";
-	print '      "ssid" : "'        . $ssid        . '"' . ",\n";
-	print '      "is-encrypted" : '  . $wirelessNetworks{$ssid}{isEncrypted} . ",\n";
-	print '      "access-points" : ['  .  "\n";
-	my @macs = sort keys %{$wirelessNetworks{$ssid}{access-points}};
-	for $macCount (0 .. $#macs)
-	   {
-	   print "         {\n";
-	   $mac = $macs[$macCount];
-	   print '            "mac" : "'         . $mac                                                       . '"' . ",\n";
-	   print '            "channel" : '     . $wirelessNetworks{$ssid}{access-points}{$mac}{channel}     . '' . ",\n";
-	   print '            "frequency" : "'   . $wirelessNetworks{$ssid}{access-points}{$mac}{frequency}   . '"' . ",\n";
-	   print '            "quality" : '     . $wirelessNetworks{$ssid}{access-points}{$mac}{quality}     . '' . ",\n";
-	   print '            "signalLevel" : ' . $wirelessNetworks{$ssid}{access-points}{$mac}{signalLevel} . '' . "\n";
+   print "   {\n";
+   print '      "ssid" : "'        . $ssid        . '"' . ",\n";
+   print '      "is-encrypted" : '  . $wirelessNetworks{$ssid}{isEncrypted} . ",\n";
+   print '      "access-points" : ['  .  "\n";
+   my @macs = sort keys %{$wirelessNetworks{$ssid}{access-points}};
+   for $macCount (0 .. $#macs)
+      {
+      print "         {\n";
+      $mac = $macs[$macCount];
+      print '            "mac" : "'         . $mac                                                       . '"' . ",\n";
+      print '            "channel" : '     . $wirelessNetworks{$ssid}{access-points}{$mac}{channel}     . '' . ",\n";
+      print '            "frequency" : "'   . $wirelessNetworks{$ssid}{access-points}{$mac}{frequency}   . '"' . ",\n";
+      print '            "quality" : '     . $wirelessNetworks{$ssid}{access-points}{$mac}{quality}     . '' . ",\n";
+      print '            "signalLevel" : ' . $wirelessNetworks{$ssid}{access-points}{$mac}{signalLevel} . '' . "\n";
       print "         }";
-	   if ($macCount < $#macs)
-		   {
-		   print ",";
-		   }
-	   print "\n";
-	   }
-	print "      ]\n";
-	print "   }";
-	if ($networkCount < $#ssids)
-		{
-		print ",";
-		}
-	print "\n";
+      if ($macCount < $#macs)
+         {
+         print ",";
+         }
+      print "\n";
+      }
+   print "      ]\n";
+   print "   }";
+   if ($networkCount < $#ssids)
+      {
+      print ",";
+      }
+   print "\n";
    }
 print "]}";
 if ($callbackFunctionName)
