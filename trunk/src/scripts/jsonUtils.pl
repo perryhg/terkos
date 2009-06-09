@@ -3,8 +3,9 @@
 require "httpUtils.pl";
 
 #===================================================================================================
-sub outputJson($json)
+sub outputJson()
    {
+   my ($json) = @_;
    # See whether this script is being called as a CGI.  If so, look for the JSON "callback" query
    # string parameter and then output appropriate headers before printing out the JSON.
    my $callbackFunctionName = '';

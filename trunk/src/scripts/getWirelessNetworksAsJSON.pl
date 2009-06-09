@@ -1,7 +1,11 @@
 #!/usr/bin/perl
 
+require "jsonUtils.pl";
+
+my $interfaceName = "wlan0";
+
 # call iwlist
-open(ACCESS_POINTS, "/sbin/iwlist wlan0 scan |") or die "Failed to call iwlist $!\n";
+open(ACCESS_POINTS, "/sbin/iwlist $interfaceName scan |") or die "Failed to call iwlist $!\n";
 
 # read the output into an array
 my @lines = <ACCESS_POINTS>;
