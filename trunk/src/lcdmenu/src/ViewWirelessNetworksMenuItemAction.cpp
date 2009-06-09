@@ -17,7 +17,7 @@ void ViewWirelessNetworksMenuItemAction::activate()
    try
       {
       // execute the script and return the results as a stream
-      redi::ipstream is("scripts/getWirelessNetworksAsJSON.pl");
+      redi::ipstream is("perl -Iscripts scripts/getWirelessNetworksAsJSON.pl");
 
       // parse the stream
       Json::Reader reader;
