@@ -216,7 +216,7 @@ dist:
 	cp $(RESOURCES_DIR)/menu.xml $(DIST_DIR)/.
 	cp $(LIB_CONFIGURATION_MANAGEMENT_DIST_DIR)/*.json $(DIST_DIR)/.
 	mkdir -p $(DIST_DIR)/scripts
-	cp $(SCRIPTS_DIR)/getWirelessNetworksAsJSON.pl $(DIST_DIR)/scripts/.
+	cp $(SCRIPTS_DIR)/*.pl $(DIST_DIR)/scripts/.
 	@echo 'Finished copying resources'
 	@echo ' '
 
