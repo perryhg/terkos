@@ -27,7 +27,7 @@
          // load the network list
          $.ajax(
          {
-            url: 'http://192.168.0.4/cgi-bin/getWirelessNetworksAsJSON.pl',
+            url: '/cgi-bin/getWirelessNetworksAsJSON.pl',
             success: function(wirelessNetworksJSON)
                {
                if (wirelessNetworksJSON && wirelessNetworksJSON['wireless-networks'])
