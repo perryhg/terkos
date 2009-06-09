@@ -15,8 +15,77 @@
 
       $(document).ready(function()
          {
-         scanForWirelessNetworks();
+         getStatus(true);
          });
+
+      function getStatus(willCallScanUponSuccess)
+         {
+         var wirelessNetworkingStatus = null;
+
+         // load the network list
+         $.ajax(
+         {
+            url: '/cgi-bin/getWirelessNetworkingStatusAsJSON.pl',
+            success: function(wirelessNetworkingStatusJSON)
+               {
+               if (wirelessNetworkingStatusJSON && wirelessNetworkingStatusJSON['wireless-networking-status'])
+                  {
+                  wirelessNetworkingStatus = wirelessNetworkingStatusJSON['wireless-networking-status'];
+                  }
+               displayWirelessNetworkingStatus(wirelessNetworkingStatus);
+
+               if (willCallScanUponSuccess)
+                  {
+                  scanForWirelessNetworks();
+                  }
+               },
+            error: function()
+               {
+               displayWirelessNetworkingStatus(wirelessNetworkingStatus);
+               }
+         });
+         }
+
+      function displayWirelessNetworkingStatus(wirelessNetworkingStatus)
+         {
+         if (wirelessNetworkingStatus)
+            {
+            $("#wirelessNetworkingStatus").empty();
+            if (wirelessNetworkingStatus["is-installed"])
+               {
+               var wirelessInterface = wirelessNetworkingStatus['wireless-interface'];
+               if (wirelessInterface)
+                  {
+                  if (wirelessInterface['is-enabled'])
+                     {
+                     displayStatus("Connected", "The wireless adapter is connected to " + wirelessInterface['access-point']['ssid'] + " and has the IP address " + wirelessInterface['access-point']['ip-address']);
+                     }
+                  else
+                     {
+                     displayStatus("Off", "The wireless interface is disabled.");
+                     }
+                  }
+               else
+                  {
+                  displayStatus("Unknown", "Failed to retrieve status.");
+                  }
+               }
+            else
+               {
+               displayStatus("Off", "The wireless adapter is unplugged.");
+               }
+            }
+         else
+            {
+            displayStatus("Unknown", "Failed to retrieve status.");
+            }
+         }
+
+      function displayStatus(title, description)
+         {
+         $("#wirelessNetworkingStatusTitle").text(title);
+         $("#wirelessNetworkingStatusDescription").text(description);
+         }
 
       function scanForWirelessNetworks()
          {
@@ -36,7 +105,7 @@
                   }
                displayNetworkList(wirelessNetworks);
                },
-            error: function(XMLHttpRequest, textStatus, errorThrown)
+            error: function()
                {
                displayNetworkList(wirelessNetworks);
                }
@@ -49,15 +118,15 @@
             {
             $("#networkList").empty();
             $("#networkList").append('<table id="networkListTable" border="0" cellpadding="0" cellspacing="0"></table>');
-            $("#networkListTable").append('<tr><td class="table-heading">Network Name</td><td><img src="images/clear.gif" alt="" width="20" height="5"/></td><td class="table-heading">Encrypted</th></tr>');
+            $("#networkListTable").append('<tr><td class="label">Network Name</td><td><img src="images/clear.gif" alt="" width="20" height="5"/></td><td class="label">Encrypted</th></tr>');
             for (var i = 0; i < wirelessNetworks.length; i++)
                {
                if (i > 0)
                   {
                   $("#networkListTable").append('<tr><td colspan="3"><img src="images/clear.gif" alt="" width="3" height="3"/></td></tr>');
                   }
-               var lock = (wirelessNetworks[i]['is-encrypted']) ? '<img src="images/lock.png" width="9" height="11" border="0" alt=""/>' : '&nbsp;';   
-               $("#networkListTable").append('<tr><td>' + wirelessNetworks[i]['ssid'] + '</td><td><img src="images/clear.gif" alt="" width="5" height="5"/></td><td align="center">'+lock+'</td></tr>');
+               var lock = (wirelessNetworks[i]['is-encrypted']) ? '<img src="images/lock.png" width="9" height="11" border="0" alt=""/>' : '&nbsp;';
+               $("#networkListTable").append('<tr><td>' + wirelessNetworks[i]['ssid'] + '</td><td><img src="images/clear.gif" alt="" width="5" height="5"/></td><td align="center">' + lock + '</td></tr>');
                }
             }
          else
@@ -69,18 +138,19 @@
 </head>
 <body>
 <div class="page-title">Wireless Networking</div>
-<div id="statusArea" style="display:none">
-   <table border="1" cellpadding="0" cellspacing="0">
+<div id="statusArea">
+   <table border="0" cellpadding="0" cellspacing="0">
       <tr>
-         <td valign="top">Status</td>
+         <td valign="top" class="label">Status</td>
          <td>&nbsp;</td>
          <td>
-            STATUS_GOES_HERE<br>
-            Description of status goes here.
+            <span id="wirelessNetworkingStatusTitle"></span><br/>
+            <span id="wirelessNetworkingStatusDescription" class="explanatory-text"></span>
          </td>
       </tr>
    </table>
 </div>
+<p>&nbsp;</p>
 <div id="networkListArea">
    <div id="networkList">
       Scanning...
