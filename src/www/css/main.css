@@ -19,6 +19,9 @@ BODY, P, TABLE, TR, TD, UL, LI {
    margin-bottom:5px;
 }
 
-.table-heading {
+.label {
    font-weight: bold;
+}
+.explanatory-text {
+   font-size: 7pt
 }
