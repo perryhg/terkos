@@ -27,13 +27,13 @@ void ViewWirelessNetworksMenuItemAction::activate()
       if (!parsingSuccessful)
          {
          // report to the user the failure and their locations in the document.
-         cerr << "ViewWirelessNetworksMenuItemAction(): failed to parse iwlist JSON:" << endl << reader.getFormatedErrorMessages();
+         cerr << "ViewWirelessNetworksMenuItemAction(): failed to parse wireless networks JSON:" << endl << reader.getFormatedErrorMessages();
          wirelessNetworks = Json::Value::null;
          }
       }
    catch (...)
       {
-      cerr << "ViewWirelessNetworksMenuItemAction(): failed to parse iwlist JSON" << endl;
+      cerr << "ViewWirelessNetworksMenuItemAction(): failed to parse wireless networks JSON" << endl;
       wirelessNetworks = Json::Value::null;
       }
 
