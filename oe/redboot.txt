@@ -1,0 +1,14 @@
+Reflashing the qwerk/vexpro:
+
+fis init -f
+load -r -v -b 0x80000 -m http -h lima-2.speech.cs.cmu.edu /~dhuggins/qwerk/zImage-qwerk.bin
+fis create -l 0x180000 zImage
+load -r -v -b 0x800000 -m http -h lima-2.speech.cs.cmu.edu /~dhuggins/qwerk/vexpro-image-qwerk.jffs2
+fis create -l 0xe00000 rootfs
+
+On future reflashes you don't need the fis init -f, it will just overwrite the existing partitions.
+
+The proper command to boot is now:
+
+fis load zImage
+exec -c "root=/dev/mtdblock2 rootfstype=jffs2"
