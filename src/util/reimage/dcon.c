@@ -79,7 +79,7 @@ int parity=0, bits=CS8, stopbits=0;
 unsigned long hstart,hset;
 char NullString[]={ "" };
 BOOL lastcharnl=1; /* Indicate that last char printed from getonebyte
-                               was a nl, so no new one is needed */
+		      was a nl, so no new one is needed */
 unsigned char *datafile;
 int datafilesize = 0;
 BOOL ymodem = 0;
@@ -253,7 +253,7 @@ void vmsg(char *text) {
     ct=ctime(&t);
     fprintf(fileout,"dcon %c%c:%c%c:%c%c -> %s\n",
             ct[11],ct[12],ct[14],ct[15],ct[17],ct[18],
-           text);
+	    text);
   }
 }
 
@@ -299,6 +299,7 @@ inline void putonebyte(char c) {
 
 /* Gets a single byte from comm. device.  Return -1 if none avail. */
 int getonebyte(void) {
+#if 1
   fd_set rfds;
   int res;
   char ch;
@@ -325,6 +326,32 @@ int getonebyte(void) {
     return(-1); /* Nada. */
   }
   return(0);
+#else
+  char ch;
+  int res;
+  struct timeval timeout;
+  unsigned long usec;
+
+  gettimeofday(&timeout, NULL);
+  usec = timeout.tv_usec;
+  while(1) {
+    res = read(comfd, &ch, 1);
+    if(res==1) { 
+      if(comecho&&!ymodem) {
+	if(ch=='\n') lastcharnl=1;
+	else 
+	  if(ch!='\r') lastcharnl=0;
+	fputc(ch,fileout);
+      }
+      return(ch);
+    }
+    else {
+      gettimeofday(&timeout, NULL);
+      if (timeout.tv_usec-usec > 10000)
+	return -1;
+    }
+  }
+#endif
 }
 
 void flushcom(void)
@@ -531,15 +558,15 @@ long getvalue(void) {
       amode=0;
       for(a=0;(unsigned int)a<strlen(string);a++) {
         switch(string[a]) {
-          case 'R' :
-          case 'r' : amode|=R_OK; break;
-          case 'W' :
-          case 'w' : amode|=W_OK; break;
-          case 'X' :
-          case 'x' : amode|=X_OK; break;
-          case 'F' :
-          case 'f' : amode|=F_OK; break;
-          default : serror("Access modes are r,w,x, and f",5);
+	case 'R' :
+	case 'r' : amode|=R_OK; break;
+	case 'W' :
+	case 'w' : amode|=W_OK; break;
+	case 'X' :
+	case 'x' : amode|=X_OK; break;
+	case 'F' :
+	case 'f' : amode|=F_OK; break;
+	default : serror("Access modes are r,w,x, and f",5);
         }
       }
       p=access(afile,amode);
@@ -832,7 +859,7 @@ void getstring(void) {
         if(ch==0) serror("Umatched quote.",5);
         if(ch=='\\') {
           if(script[pc]<='7' && script[pc]>='0' &&
-            script[pc+1]<='7' && script[pc+1]>='0' ) {
+	     script[pc+1]<='7' && script[pc+1]>='0' ) {
             ch=0;
             while(script[pc]>='0' && script[pc]<='7') {
               ch=8*ch+script[pc++]-'0';
@@ -840,21 +867,21 @@ void getstring(void) {
           }
           else {
             switch(script[pc]) {
-              case 'T' :
-              case 't' : ch=9;  break;
-              case 'R' :
-              case 'r' : ch=13; break;
-              case 'N' :
-              case 'n' : ch=10; break;
-              case 'B' :
-              case 'b' : ch=8;  break;
-              case 'F' :
-              case 'f' : ch=12; break;
-              case '"' :
-              case '^' :
-              case '\'' :
-              case '\\' : ch=script[pc]; break;
-              default :  serror("Malformed escaped character",5);
+	    case 'T' :
+	    case 't' : ch=9;  break;
+	    case 'R' :
+	    case 'r' : ch=13; break;
+	    case 'N' :
+	    case 'n' : ch=10; break;
+	    case 'B' :
+	    case 'b' : ch=8;  break;
+	    case 'F' :
+	    case 'f' : ch=12; break;
+	    case '"' :
+	    case '^' :
+	    case '\'' :
+	    case '\\' : ch=script[pc]; break;
+	    default :  serror("Malformed escaped character",5);
             }
             pc++;
           }
@@ -1045,50 +1072,50 @@ void doset(void) {
     }
     if(token[b]) {
       switch(token[b]) {
-        case 'n': parity=0; break;
-        case 'e': parity=PARENB; break;
-        case 'o': parity=PARENB|PARODD; break;
-        default : serror("Parity can only ben E, N, or O",5);
+      case 'n': parity=0; break;
+      case 'e': parity=PARENB; break;
+      case 'o': parity=PARENB|PARODD; break;
+      default : serror("Parity can only ben E, N, or O",5);
       }
       b++;
       if(token[b]) {
         switch(token[b]) {
-          case '5' : bits=CS5; break;
-          case '6' : bits=CS6; break;
-          case '7' : bits=CS7; break;
-          case '8' : bits=CS8; break;
-          default : serror("Bits can only be 5, 6, 7, or 8",5);
+	case '5' : bits=CS5; break;
+	case '6' : bits=CS6; break;
+	case '7' : bits=CS7; break;
+	case '8' : bits=CS8; break;
+	default : serror("Bits can only be 5, 6, 7, or 8",5);
         }
         b++;
         if(token[b]) {
           switch(token[b]) {
-            case '1': stopbits=0; break;
-            case '2': stopbits=CSTOPB; break;
-            default : serror("Stop bits can only be 1 or 2",5);
+	  case '1': stopbits=0; break;
+	  case '2': stopbits=CSTOPB; break;
+	  default : serror("Stop bits can only be 1 or 2",5);
           }
         }
       }
     }
     sprintf(cspeed,"%d",a);
     switch(a) {
-      case 0: speed = B0;break;
-      case 50: speed = B50;break;
-      case 75: speed = B75;break;
-      case 110: speed = B110;break;
-      case 150: speed = B150;break;
-      case 300: speed = B300;break;
-      case 600: speed = B600;break;
-      case 1200: speed = B1200;break;
-      case 2400: speed = B2400;break;
-      case 4800: speed = B4800;break;
-      case 9600: speed = B9600;break;
-      case 19200: speed = B19200;break;
-      case 38400: speed = B38400;break;
-      case 57600: speed = B57600;break;
-      case 115200: speed = B115200;break;
-      case 230400: speed = B230400;break;
-      case 460800: speed = B460800;break;
-      default: serror("Invalid baudrate",1);
+    case 0: speed = B0;break;
+    case 50: speed = B50;break;
+    case 75: speed = B75;break;
+    case 110: speed = B110;break;
+    case 150: speed = B150;break;
+    case 300: speed = B300;break;
+    case 600: speed = B600;break;
+    case 1200: speed = B1200;break;
+    case 2400: speed = B2400;break;
+    case 4800: speed = B4800;break;
+    case 9600: speed = B9600;break;
+    case 19200: speed = B19200;break;
+    case 38400: speed = B38400;break;
+    case 57600: speed = B57600;break;
+    case 115200: speed = B115200;break;
+    case 230400: speed = B230400;break;
+    case 460800: speed = B460800;break;
+    default: serror("Invalid baudrate",1);
     }
     setcom();
   }
@@ -1274,16 +1301,16 @@ void doprint(int channel) {
     }
   }
   switch(channel) {
-    case 1: printf("%s",msg); fflush(stdout); break;
-    case 2: fputs(msg,fileout); break;
-    case 3: 
-      if(msg[strlen(msg)-1]=='\n') msg[strlen(msg)-1]=0;
-      vmsg(msg);
-      break;
-    case 4: 
-      if(filep==NULL) serror("File not opened",4);
-      fputs(msg,filep);
-      break;
+  case 1: printf("%s",msg); fflush(stdout); break;
+  case 2: fputs(msg,fileout); break;
+  case 3: 
+    if(msg[strlen(msg)-1]=='\n') msg[strlen(msg)-1]=0;
+    vmsg(msg);
+    break;
+  case 4: 
+    if(filep==NULL) serror("File not opened",4);
+    fputs(msg,filep);
+    break;
   }
 }
 
@@ -1327,18 +1354,18 @@ void opendevice(void) {
   ioctl(comfd, TCGETA, &stbuf);
   speed=stbuf.c_cflag & CBAUD;
   switch(speed) {
-    case B0: strcpy(cspeed,"0");break;
-    case B50: strcpy(cspeed,"50");break;
-    case B75: strcpy(cspeed,"75");break;
-    case B110: strcpy(cspeed,"110");break;
-    case B300: strcpy(cspeed,"300");break;
-    case B600: strcpy(cspeed,"600");break;
-    case B1200: strcpy(cspeed,"1200");break;
-    case B2400: strcpy(cspeed,"2400");break;
-    case B4800: strcpy(cspeed,"4800");break;
-    case B9600: strcpy(cspeed,"9600");break;
-    case B19200: strcpy(cspeed,"19200");break;
-    case B38400: strcpy(cspeed,"38400");break;
+  case B0: strcpy(cspeed,"0");break;
+  case B50: strcpy(cspeed,"50");break;
+  case B75: strcpy(cspeed,"75");break;
+  case B110: strcpy(cspeed,"110");break;
+  case B300: strcpy(cspeed,"300");break;
+  case B600: strcpy(cspeed,"600");break;
+  case B1200: strcpy(cspeed,"1200");break;
+  case B2400: strcpy(cspeed,"2400");break;
+  case B4800: strcpy(cspeed,"4800");break;
+  case B9600: strcpy(cspeed,"9600");break;
+  case B19200: strcpy(cspeed,"19200");break;
+  case B38400: strcpy(cspeed,"38400");break;
   }
   bits=stbuf.c_cflag & CSIZE;
   clocal=stbuf.c_cflag & CLOCAL;
@@ -1542,14 +1569,14 @@ int doscript(void) {
     else {
       /* Humour is the spice of life. */
       switch(time(0)&7) {
-        case 0 : serror("That's human mumbo-jumbo to me",5); break;
-        case 1 : serror("Lovely but incomprehensible",5); break;
-        case 2 : serror("What's that, governor?",5); break;
-        case 3 : serror("Very funny.  I don't get it",5); break;
-        case 4 : serror("Huh?",5); break;
-        case 5 : serror("dcon doesn't speak spanish",5); break;
-        case 6 : serror("Mais, qu'est-ce que vous dites?",5); break;
-        default: serror("%E-6837-% : Corrupted human data detected",5); break;
+      case 0 : serror("That's human mumbo-jumbo to me",5); break;
+      case 1 : serror("Lovely but incomprehensible",5); break;
+      case 2 : serror("What's that, governor?",5); break;
+      case 3 : serror("Very funny.  I don't get it",5); break;
+      case 4 : serror("Huh?",5); break;
+      case 5 : serror("dcon doesn't speak spanish",5); break;
+      case 6 : serror("Mais, qu'est-ce que vous dites?",5); break;
+      default: serror("%E-6837-% : Corrupted human data detected",5); break;
       }
     }
     skipspaces();
@@ -1586,39 +1613,39 @@ int main(int argc,char **argv) {
   }
   while((a=getopt(argc,argv,"evd:t:s:b:"))!= -1) {
     switch(a) {
-      case 't' :
-        terminator=optarg[0];
-        sprintf(msg,"Alternate line terminator set to \"%c\"",terminator);
-        vmsg(msg);
-        break;
-      case 'd' :
-        strcpy(device,optarg);
-        opendevice();
-        break;
-      case 'e' :
-        comecho=1;
-        vmsg("Communication echo turned on");
-        break;
-      case 'v' :
-        verbose=1;
-        vmsg("Verbose output enabled");
-        break;
-      case 's' :
-        scriptspace=strlen(optarg)+2;
-        if((script=(unsigned char *)realloc(script,scriptspace))==0) {
-          serror("Could not malloc()",3);
-        }
-        strcpy((char *)script,optarg);
-        for(a=0;a<scriptspace;a++) {
-          if(script[a]==terminator) script[a]='\n';
-        }
-        sprintf(msg,"Read %d bytes mini-script from command line",scriptspace-1);
-        vmsg(msg);
-        break;
-      default :
-        fprintf(fileout,"I don't get '%s'.\n",optarg);
-        exit(1);
-        break;
+    case 't' :
+      terminator=optarg[0];
+      sprintf(msg,"Alternate line terminator set to \"%c\"",terminator);
+      vmsg(msg);
+      break;
+    case 'd' :
+      strcpy(device,optarg);
+      opendevice();
+      break;
+    case 'e' :
+      comecho=1;
+      vmsg("Communication echo turned on");
+      break;
+    case 'v' :
+      verbose=1;
+      vmsg("Verbose output enabled");
+      break;
+    case 's' :
+      scriptspace=strlen(optarg)+2;
+      if((script=(unsigned char *)realloc(script,scriptspace))==0) {
+	serror("Could not malloc()",3);
+      }
+      strcpy((char *)script,optarg);
+      for(a=0;a<scriptspace;a++) {
+	if(script[a]==terminator) script[a]='\n';
+      }
+      sprintf(msg,"Read %d bytes mini-script from command line",scriptspace-1);
+      vmsg(msg);
+      break;
+    default :
+      fprintf(fileout,"I don't get '%s'.\n",optarg);
+      exit(1);
+      break;
     }
   }
   if(optind<argc) {
