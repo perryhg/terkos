@@ -5,7 +5,7 @@
    welcome-text CDATA        #IMPLIED
 >
 
-<!ELEMENT item (item+|implementation-class)>
+<!ELEMENT item ((implementation-class,item*)|(item+))>
 <!ATTLIST item
    text CDATA        #REQUIRED
 >

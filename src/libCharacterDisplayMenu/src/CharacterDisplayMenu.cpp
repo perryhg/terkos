@@ -78,8 +78,11 @@ MenuItemImpl* CharacterDisplayMenu::buildMenuItemTree(ticpp::Element* parentElem
          // create the MenuItem
          MenuItemImpl* menuItem = new MenuItemImpl(text, children);
 
-         // set the MenuItemAction
-         menuItem->setMenuItemAction(new CharacterDisplayMenuItemAction(NULL, menuItem, menuStatusManager, characterDisplay));
+         // create an instance of the MenuItemAction implementation class, or default
+         // to the CharacterDisplayMenuItemAction upon failure
+         MenuItemAction* menuItemAction = createMenuItemAction(parentElement, menuItem, menuStatusManager, characterDisplay);
+
+         menuItem->setMenuItemAction(menuItemAction);
 
          // set up the parent and sibling references for each of the children
          unsigned int lastIndex = children.size() - 1;
@@ -104,56 +107,8 @@ MenuItemImpl* CharacterDisplayMenu::buildMenuItemTree(ticpp::Element* parentElem
 
          // create an instance of the MenuItemAction implementation class, or default
          // to the CharacterDisplayMenuItemAction upon failure
-         MenuItemAction* menuItemAction = NULL;
-         ticpp::Element* implementationClassElement = parentElement->FirstChildElement("implementation-class", false);
-         if (implementationClassElement != NULL)
-            {
-            // See if the <implementation-class> element has any <property> child
-            // elements.  If so, store them in a map of strings.
-            map<string, string> properties;
-            ticpp::Element* propertyElement = NULL;
-            for (propertyElement = implementationClassElement->FirstChildElement("property", false); propertyElement; propertyElement
-                     = propertyElement->NextSiblingElement("property", false))
-               {
-               string key = propertyElement->GetAttribute("key");
+         MenuItemAction* menuItemAction = createMenuItemAction(parentElement, menuItem, menuStatusManager, characterDisplay);
 
-               // Use the element's text contents if the attribute isn't specified.
-               string value;
-               if (propertyElement->HasAttribute("value"))
-                  {
-                  value = propertyElement->GetAttribute("value");
-                  }
-               else
-                  {
-                  value = propertyElement->GetText(false);
-                  }
-
-               properties[key] = value;
-               }
-
-            // fetch the implementation class name
-            string menuItemActionImplementationClassName = implementationClassElement->GetAttribute("name");
-
-            // fetch the implementation class's library name (if not specified, default to the class name)
-            string menuItemActionLibraryName = implementationClassElement->GetAttributeOrDefault("library", "lib"
-                     + menuItemActionImplementationClassName + ".so");
-
-            // instantiate the class
-            if (menuItemActionImplementationClassName != CharacterDisplayMenu::EMPTY_STRING)
-               {
-               cout << "impl class='" << menuItemActionImplementationClassName << "' and library='" << menuItemActionLibraryName << "'" << endl;
-
-               menuItemAction
-                        = this->instantiateMenuItemAction(menuItemActionLibraryName, menuItemActionImplementationClassName, menuItem, menuStatusManager, characterDisplay, properties);
-               }
-            }
-
-         if (menuItemAction == NULL)
-            {
-            cout << "CharacterDisplayMenu::buildMenuItemTree(): MenuItemAction implementation "
-                     << "unspecified or invalid, defaulting to using CharacterDisplayMenuItemAction" << endl;
-            menuItemAction = new CharacterDisplayMenuItemAction(NULL, menuItem, menuStatusManager, characterDisplay);
-            }
          menuItem->setMenuItemAction(menuItemAction);
 
          return menuItem;
@@ -161,6 +116,65 @@ MenuItemImpl* CharacterDisplayMenu::buildMenuItemTree(ticpp::Element* parentElem
       }
 
    return NULL;
+   }
+
+MenuItemAction* CharacterDisplayMenu::createMenuItemAction(ticpp::Element* parentElement, MenuItemImpl* menuItem,
+                                                           MenuStatusManager* menuStatusManager, CharacterDisplay* characterDisplay)
+   {
+   // create an instance of the MenuItemAction implementation class, or default
+   // to the CharacterDisplayMenuItemAction upon failure
+   MenuItemAction* menuItemAction = NULL;
+   ticpp::Element* implementationClassElement = parentElement->FirstChildElement("implementation-class", false);
+   if (implementationClassElement != NULL)
+      {
+      // See if the <implementation-class> element has any <property> child
+      // elements.  If so, store them in a map of strings.
+      map<string, string> properties;
+      ticpp::Element* propertyElement = NULL;
+      for (propertyElement = implementationClassElement->FirstChildElement("property", false); propertyElement; propertyElement
+               = propertyElement->NextSiblingElement("property", false))
+         {
+         string key = propertyElement->GetAttribute("key");
+
+         // Use the element's text contents if the attribute isn't specified.
+         string value;
+         if (propertyElement->HasAttribute("value"))
+            {
+            value = propertyElement->GetAttribute("value");
+            }
+         else
+            {
+            value = propertyElement->GetText(false);
+            }
+
+         properties[key] = value;
+         }
+
+      // fetch the implementation class name
+      string menuItemActionImplementationClassName = implementationClassElement->GetAttribute("name");
+
+      // fetch the implementation class's library name (if not specified, default to the class name)
+      string menuItemActionLibraryName = implementationClassElement->GetAttributeOrDefault("library", "lib" + menuItemActionImplementationClassName
+               + ".so");
+
+      // instantiate the class
+      if (menuItemActionImplementationClassName != CharacterDisplayMenu::EMPTY_STRING)
+         {
+         cout << "impl class='" << menuItemActionImplementationClassName << "' and library='" << menuItemActionLibraryName << "'" << endl;
+
+         menuItemAction
+                  = this->instantiateMenuItemAction(menuItemActionLibraryName, menuItemActionImplementationClassName, menuItem, menuStatusManager, characterDisplay, properties);
+         }
+      }
+
+   if (menuItemAction == NULL)
+      {
+      cout << "CharacterDisplayMenu::createMenuItemAction(): MenuItemAction implementation "
+               << "unspecified or invalid, defaulting to using CharacterDisplayMenuItemAction" << endl;
+      menuItemAction = new CharacterDisplayMenuItemAction(NULL, menuItem, menuStatusManager, characterDisplay);
+      }
+
+   return menuItemAction;
    }
 
 MenuItemAction* CharacterDisplayMenu::instantiateMenuItemAction(const string& sharedLibraryName, const string& className, MenuItem* menuItem,
