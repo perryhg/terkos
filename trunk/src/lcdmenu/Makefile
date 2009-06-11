@@ -82,9 +82,11 @@ AUDIO_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/ToggleAudioAlertsMenuItemAction.cpp \
 AUDIO_MENU_ITEM_ACTIONS_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(AUDIO_MENU_ITEM_ACTIONS_SRCS)))
 AUDIO_MENU_ITEM_ACTIONS_OBJECTS := $(addprefix $(OBJ_DIR)/,$(AUDIO_MENU_ITEM_ACTIONS_OBJECTS))
 
-NETWORK_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/ToggleWirelessStartupUponBootMenuItemAction.cpp \
-                               $(SRC_DIR)/ResetWirelessNetworkingMenuItemAction.cpp \
-                               $(SRC_DIR)/ViewWirelessNetworksMenuItemAction.cpp
+NETWORK_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/WirelessStatusCheckingMenuItemAction.cpp \
+                               $(SRC_DIR)/WirelessStatusMenuItemAction.cpp \
+                               $(SRC_DIR)/ViewWirelessNetworksMenuItemAction.cpp \
+                               $(SRC_DIR)/ToggleWirelessStartupUponBootMenuItemAction.cpp \
+                               $(SRC_DIR)/ResetWirelessNetworkingMenuItemAction.cpp
 NETWORK_MENU_ITEM_ACTIONS_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(NETWORK_MENU_ITEM_ACTIONS_SRCS)))
 NETWORK_MENU_ITEM_ACTIONS_OBJECTS := $(addprefix $(OBJ_DIR)/,$(NETWORK_MENU_ITEM_ACTIONS_OBJECTS))
 

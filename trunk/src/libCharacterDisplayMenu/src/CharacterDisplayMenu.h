@@ -67,6 +67,9 @@ class CharacterDisplayMenu : public Menu
 
       MenuItemImpl* buildMenuItemTree(ticpp::Element* parentElement, MenuStatusManager* menuStatusManager, CharacterDisplay* characterDisplay);
 
+      MenuItemAction* createMenuItemAction(ticpp::Element* parentElement, MenuItemImpl* menuItem, MenuStatusManager* menuStatusManager,
+                                           CharacterDisplay* characterDisplay);
+
       MenuItemAction* instantiateMenuItemAction(const string& sharedLibraryName, const string& className, MenuItem* menuItem,
                                                 MenuStatusManager* menuStatusManager, CharacterDisplay* characterDisplay,
                                                 map<string, string>& properties);

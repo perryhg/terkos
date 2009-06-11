@@ -32,12 +32,17 @@
       </item>
    </item>
    <item text="Wireless      Networking">
-      <item text="View Wireless Networks">
+      <item text="Wireless      Status">
+         <item text="">
+            <implementation-class name="WirelessStatusMenuItemAction" library="libNetworkMenuItemActions.so"/>
+         </item>
+      </item>
+      <item text="List Wireless Networks">
          <item text="">
             <implementation-class name="ViewWirelessNetworksMenuItemAction" library="libNetworkMenuItemActions.so"/>
          </item>
       </item>
-      <item text="Toggle StartupUpon Boot">
+      <item text="Start WirelessUpon Boot">
          <item text="">
             <implementation-class name="ToggleWirelessStartupUponBootMenuItemAction" library="libNetworkMenuItemActions.so">
                <property key="action.prompt">Start on boot?</property>
