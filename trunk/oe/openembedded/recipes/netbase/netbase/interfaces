@@ -10,6 +10,7 @@ iface lo inet loopback
 # Example of an unencrypted (no WEP or WPA) wireless connection
 # that connects to any available access point:
 #
+auto wlan0
 iface wlan0 inet dhcp
 	wireless_mode managed
 	wireless_essid any
