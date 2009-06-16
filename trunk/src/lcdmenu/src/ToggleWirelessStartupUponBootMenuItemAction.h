@@ -37,9 +37,8 @@ class ToggleWirelessStartupUponBootMenuItemAction : public TwoOptionMenuItemActi
    private:
 
       WirelessNetworkingConfigManager configManager;
-      bool isEnabled;
 
-      void setEnabled(const bool isEnabled);
+      void setWillStartOnBootup(const bool willStartOnBootup);
    };
 
 #endif /* TOGGLEWIRELESSSTARTUPUPONBOOTMENUITEMACTION_H_ */

@@ -70,16 +70,12 @@ int main(int argc, char** argv)
 
    WirelessNetworkingConfigManager wirelessNetworkingConfigManager;
 
-   const bool wirelessIsEnabled = wirelessNetworkingConfigManager.isEnabled();
-   const bool wirelessWillConnectUsingSpecificProfile = wirelessNetworkingConfigManager.willConnectUsingSpecificProfile();
-   cout << "Wireless: Is Enabled                          = [" << wirelessIsEnabled << "]" << endl;
-   cout << "Wireless: Will Connect Using Specific Profile = [" << wirelessWillConnectUsingSpecificProfile << "]" << endl;
+   const bool willStartOnBootup = wirelessNetworkingConfigManager.willStartOnBootup();
+   cout << "Wireless: Will Start on Boot = [" << willStartOnBootup << "]" << endl;
 
-   wirelessNetworkingConfigManager.setEnabled(!wirelessIsEnabled);
-   wirelessNetworkingConfigManager.setWillConnectUsingSpecificProfile(!wirelessWillConnectUsingSpecificProfile);
+   wirelessNetworkingConfigManager.setWillStartOnBootup(!willStartOnBootup);
 
-   cout << "Wireless: Is Enabled                          = [" << wirelessNetworkingConfigManager.isEnabled() << "]" << endl;
-   cout << "Wireless: Will Connect Using Specific Profile = [" << wirelessNetworkingConfigManager.willConnectUsingSpecificProfile() << "]" << endl;
+   cout << "Wireless: Will Start on Boot = [" << wirelessNetworkingConfigManager.willStartOnBootup() << "]" << endl;
 
    cout << "-----------------------------------------------------------------" << endl;
 

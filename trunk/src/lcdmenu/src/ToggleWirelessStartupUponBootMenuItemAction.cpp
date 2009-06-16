@@ -8,22 +8,22 @@ const string ToggleWirelessStartupUponBootMenuItemAction::CLASS_NAME = "ToggleWi
 
 bool ToggleWirelessStartupUponBootMenuItemAction::shouldOption1BeSelectedUponActivation() const
    {
-   return configManager.isEnabled();
+   return configManager.willStartOnBootup();
    }
 
 void ToggleWirelessStartupUponBootMenuItemAction::executeOption1Action()
    {
-   setEnabled(true);
+   setWillStartOnBootup(true);
    }
 
 void ToggleWirelessStartupUponBootMenuItemAction::executeOption2Action()
    {
-   setEnabled(false);
+   setWillStartOnBootup(false);
    }
 
-void ToggleWirelessStartupUponBootMenuItemAction::setEnabled(const bool isEnabled)
+void ToggleWirelessStartupUponBootMenuItemAction::setWillStartOnBootup(const bool willStartOnBootup)
    {
-   configManager.setEnabled(isEnabled);
+   configManager.setWillStartOnBootup(willStartOnBootup);
    }
 
 // required definitions for dynamic loading

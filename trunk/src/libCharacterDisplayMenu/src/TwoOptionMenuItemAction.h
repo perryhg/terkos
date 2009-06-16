@@ -37,6 +37,8 @@ class TwoOptionMenuItemAction : public CharacterDisplayMenuItemAction
       static const string PROPERTY_ACTION_CHOSE_OPTION2;
       static const string PROPERTY_ACTION_CHOSE_CANCEL;
 
+      static const int DEFAULT_MILLISECONDS_TO_SLEEP;
+
       TwoOptionMenuItemAction(void(*delObj)(void*), MenuItem* menuItem, MenuStatusManager* menuStatusManager, CharacterDisplay* characterDisplay,
                               map<string, string>& properties) :
          CharacterDisplayMenuItemAction(delObj, menuItem, menuStatusManager, characterDisplay, properties)
@@ -71,6 +73,31 @@ class TwoOptionMenuItemAction : public CharacterDisplayMenuItemAction
 
       virtual void executeOption2Action() = 0;
 
+      virtual bool shouldDisplayTextThenExitToParentWhenAction1IsComplete()
+         {
+         return true;
+         }
+
+      virtual bool shouldDisplayTextThenExitToParentWhenAction2IsComplete()
+         {
+         return true;
+         }
+
+      virtual int getMillisecondsToSleepBeforeExitingToParentAfterAction1IsComplete()
+         {
+         return DEFAULT_MILLISECONDS_TO_SLEEP;
+         }
+
+      virtual int getMillisecondsToSleepBeforeExitingToParentAfterAction2IsComplete()
+         {
+         return DEFAULT_MILLISECONDS_TO_SLEEP;
+         }
+
+      virtual int getMillisecondsToSleepBeforeExitingToParentAfterCancel()
+         {
+         return DEFAULT_MILLISECONDS_TO_SLEEP;
+         }
+
    private:
 
       bool userChoseOption1;
@@ -104,7 +131,7 @@ class TwoOptionMenuItemAction : public CharacterDisplayMenuItemAction
                   + getProperty(PROPERTY_CHOICE_OPTION2, DEFAULT_LABEL_OPTION2);
          }
 
-      void sleepThenPopUpToParentMenuItem();
+      void sleepThenPopUpToParentMenuItem(const int millisecondsToSleep);
    };
 
 #endif /* TWOOPTIONMENUITEMACTION_H_ */

@@ -25,22 +25,15 @@ class WirelessNetworkingConfigManager : public ConfigFile
          // nothing to do
          }
 
-      const bool isEnabled() const;
+      const bool willStartOnBootup() const;
 
-      bool setEnabled(const bool isEnabled);
-
-      const bool willConnectUsingSpecificProfile() const;
-
-      bool setWillConnectUsingSpecificProfile(const bool willConnectUsingSpecificProfile);
+      bool setWillStartOnBootup(const bool willStart);
 
    private:
 
       static const string CONFIG_FILENAME;
       static const string DEFAULT_CONFIG_FILENAME;
-      static const string IS_ENABLED_PROPERTY;
-      static const string WILL_CONNECT_USING_SPECIFIC_PROFILE_PROPERTY;
-      static const string CONNECTION_ATTEMPTS_BEFORE_SWITCHING_TO_BEST_AVAILABLE_PROPERTY;
-      static const string PREFERRED_PROFILE_ID_PROPERTY;
+      static const string WILL_START_ON_BOOTUP_PROPERTY;
       static const string PROFILES_PROPERTY;
    };
 
