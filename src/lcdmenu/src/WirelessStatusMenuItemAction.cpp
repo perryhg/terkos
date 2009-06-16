@@ -6,155 +6,138 @@
 
 const string WirelessStatusMenuItemAction::CLASS_NAME = "WirelessStatusMenuItemAction";
 
+const string WirelessStatusMenuItemAction::STATUS_FAILURE_PROPERTY_ACTION_PROMPT = "status.failure";
+const string WirelessStatusMenuItemAction::STATUS_FAILURE_DEFAULT_ACTION_PROMPT = "Failed to get   wireless status.";
+
+const string WirelessStatusMenuItemAction::STATUS_UNPLUGGED_PROPERTY_ACTION_PROMPT = "status.unplugged";
+const string WirelessStatusMenuItemAction::STATUS_UNPLUGGED_DEFAULT_ACTION_PROMPT = "Wireless adapteris unplugged.";
+
+const string WirelessStatusMenuItemAction::WIRELESS_DISABLED_PROPERTY_ACTION_PROMPT = "wireless-disabled.action.prompt";
+const string WirelessStatusMenuItemAction::WIRELESS_DISABLED_PROPERTY_ACTION_CHOSE_CANCEL = "wireless-disabled.action.cancel";
+const string WirelessStatusMenuItemAction::WIRELESS_DISABLED_PROPERTY_CHOICE_OPTION1 = "wireless-disabled.choice.option1";
+const string WirelessStatusMenuItemAction::WIRELESS_DISABLED_PROPERTY_CHOICE_OPTION2 = "wireless-disabled.choice.option2";
+const string WirelessStatusMenuItemAction::WIRELESS_DISABLED_PROPERTY_ACTION_CHOSE_OPTION1 = "wireless-disabled.action.option1";
+const string WirelessStatusMenuItemAction::WIRELESS_DISABLED_PROPERTY_ACTION_CHOSE_OPTION2 = "wireless-disabled.action.option2";
+const string WirelessStatusMenuItemAction::WIRELESS_DISABLED_DEFAULT_ACTION_PROMPT = "Wireless is off.";
+const string WirelessStatusMenuItemAction::WIRELESS_DISABLED_DEFAULT_ACTION_CHOSE_CANCEL = "Cancelled -- No settings changed";
+const string WirelessStatusMenuItemAction::WIRELESS_DISABLED_DEFAULT_LABEL_OPTION1 = "Start   ";
+const string WirelessStatusMenuItemAction::WIRELESS_DISABLED_DEFAULT_LABEL_OPTION2 = "OK";
+const string WirelessStatusMenuItemAction::WIRELESS_DISABLED_DEFAULT_ACTION_CHOSE_OPTION1 = "You chose Start."; // TODO
+const string WirelessStatusMenuItemAction::WIRELESS_DISABLED_DEFAULT_ACTION_CHOSE_OPTION2 = "Nothing to say here."; // TODO
+
+const string WirelessStatusMenuItemAction::WIRELESS_ENABLED_PROPERTY_ACTION_PROMPT = "wireless-enabled.action.prompt";
+const string WirelessStatusMenuItemAction::WIRELESS_ENABLED_PROPERTY_ACTION_CHOSE_CANCEL = "wireless-enabled.action.cancel";
+const string WirelessStatusMenuItemAction::WIRELESS_ENABLED_PROPERTY_CHOICE_OPTION1 = "wireless-enabled.choice.option1";
+const string WirelessStatusMenuItemAction::WIRELESS_ENABLED_PROPERTY_CHOICE_OPTION2 = "wireless-enabled.choice.option2";
+const string WirelessStatusMenuItemAction::WIRELESS_ENABLED_PROPERTY_ACTION_CHOSE_OPTION2 = "wireless-enabled.action.option2";
+const string WirelessStatusMenuItemAction::WIRELESS_ENABLED_PROPERTY_OPTION1_FAILURE = "wireless-enabled.option1.failure";
+const string WirelessStatusMenuItemAction::WIRELESS_ENABLED_DEFAULT_ACTION_PROMPT = "Wireless is on.";
+const string WirelessStatusMenuItemAction::WIRELESS_ENABLED_DEFAULT_ACTION_CHOSE_CANCEL = "Cancelled -- No settings changed";
+const string WirelessStatusMenuItemAction::WIRELESS_ENABLED_DEFAULT_LABEL_OPTION1 = "Info  ";
+const string WirelessStatusMenuItemAction::WIRELESS_ENABLED_DEFAULT_LABEL_OPTION2 = "Stop";
+const string WirelessStatusMenuItemAction::WIRELESS_ENABLED_DEFAULT_ACTION_CHOSE_OPTION2 = "Wireless is now turned off.";
+const string WirelessStatusMenuItemAction::WIRELESS_ENABLED_DEFAULT_OPTION1_FAILURE = "Could not obtainwireless details";
+
 void WirelessStatusMenuItemAction::activate()
    {
-   cout << "WirelessStatusMenuItemAction::activate()" << endl;
    WirelessStatusCheckingMenuItemAction::activate();
    currentMenuItemAction->activate();
    }
 
 void WirelessStatusMenuItemAction::start()
    {
-   cout << "WirelessStatusMenuItemAction::start()" << endl;
    currentMenuItemAction->start();
    }
 
 void WirelessStatusMenuItemAction::stop()
    {
-   cout << "WirelessStatusMenuItemAction::stop()" << endl;
    currentMenuItemAction->stop();
    }
 
 void WirelessStatusMenuItemAction::upEvent()
    {
-   cout << "WirelessStatusMenuItemAction::upEvent()" << endl;
    currentMenuItemAction->upEvent();
    }
 
 void WirelessStatusMenuItemAction::downEvent()
    {
-   cout << "WirelessStatusMenuItemAction::downEvent()" << endl;
    currentMenuItemAction->downEvent();
    }
 
 void WirelessStatusMenuItemAction::rightEvent()
    {
-   cout << "WirelessStatusMenuItemAction::rightEvent()" << endl;
    currentMenuItemAction->rightEvent();
    }
 
 void WirelessStatusMenuItemAction::leftEvent()
    {
-   cout << "WirelessStatusMenuItemAction::leftEvent()" << endl;
    currentMenuItemAction->leftEvent();
    }
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-void WirelessStatusMenuItemAction::WirelessDisabledMenuItemAction::activate()
+bool WirelessStatusMenuItemAction::WirelessDisabledMenuItemAction::shouldOption1BeSelectedUponActivation() const
    {
-   cout << "WirelessDisabledMenuItemAction::activate()" << endl;
-
-   getCharacterDisplay()->setText("Wireless adapteris disabled.");
+   return true;
    }
 
-void WirelessStatusMenuItemAction::WirelessDisabledMenuItemAction::start()
+void WirelessStatusMenuItemAction::WirelessDisabledMenuItemAction::executeOption1Action()
    {
-   cout << "WirelessDisabledMenuItemAction::start()" << endl;
-
-   // start and stop should do the same thing, so just call stop()
-   stop();
+   // TODO
+   cout << "WirelessDisabledMenuItemAction::executeOption1Action()" << endl;
    }
 
-void WirelessStatusMenuItemAction::WirelessDisabledMenuItemAction::stop()
+void WirelessStatusMenuItemAction::WirelessDisabledMenuItemAction::executeOption2Action()
    {
-   cout << "WirelessDisabledMenuItemAction::stop()" << endl;
-
-   // call stop on CharacterDisplayMenuItemAction so that we pop back up to the parent menu item
-   CharacterDisplayMenuItemAction::stop();
-   }
-
-void WirelessStatusMenuItemAction::WirelessDisabledMenuItemAction::upEvent()
-   {
-   cout << "WirelessDisabledMenuItemAction::upEvent()" << endl;
-
-   // do nothing, just swallow the event
-   }
-
-void WirelessStatusMenuItemAction::WirelessDisabledMenuItemAction::downEvent()
-   {
-   cout << "WirelessDisabledMenuItemAction::downEvent()" << endl;
-
-   // do nothing, just swallow the event
-   }
-
-void WirelessStatusMenuItemAction::WirelessDisabledMenuItemAction::rightEvent()
-   {
-   cout << "WirelessDisabledMenuItemAction::rightEvent()" << endl;
-
-   // do nothing, just swallow the event
-   }
-
-void WirelessStatusMenuItemAction::WirelessDisabledMenuItemAction::leftEvent()
-   {
-   cout << "WirelessDisabledMenuItemAction::leftEvent()" << endl;
-
-   // do nothing, just swallow the event
+   // TODO
+   cout << "WirelessDisabledMenuItemAction::executeOption2Action()" << endl;
    }
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-void WirelessStatusMenuItemAction::WirelessEnabledMenuItemAction::activate()
+bool WirelessStatusMenuItemAction::WirelessEnabledMenuItemAction::shouldOption1BeSelectedUponActivation() const
    {
-   cout << "WirelessEnabledMenuItemAction::activate()" << endl;
-
-   getCharacterDisplay()->setText("Wireless adapteris enabled.");
+   return true;
    }
 
-void WirelessStatusMenuItemAction::WirelessEnabledMenuItemAction::start()
+void WirelessStatusMenuItemAction::WirelessEnabledMenuItemAction::executeOption1Action()
    {
-   cout << "WirelessEnabledMenuItemAction::start()" << endl;
-
-   // start and stop should do the same thing, so just call stop()
-   stop();
+   isOnChoiceScreen = false;
+   Json::Value status = parentMenuItemAction->getWirelessNetworkingStatus();
+   Json::Value accessPointJson = status["wireless-networking-status"]["wireless-interface"]["access-point"];
+   if (accessPointJson != Json::Value::null)
+      {
+      getCharacterDisplay()->setLine(0, accessPointJson["ssid"].asString());
+      getCharacterDisplay()->setLine(1, accessPointJson["ip-address"].asString());
+      }
+   else
+      {
+      getCharacterDisplay()->setText(getProperty(WIRELESS_ENABLED_PROPERTY_OPTION1_FAILURE, WIRELESS_ENABLED_DEFAULT_OPTION1_FAILURE));
+      }
    }
 
-void WirelessStatusMenuItemAction::WirelessEnabledMenuItemAction::stop()
+void WirelessStatusMenuItemAction::WirelessEnabledMenuItemAction::executeOption2Action()
    {
-   cout << "WirelessEnabledMenuItemAction::stop()" << endl;
+   // TODO
+   isOnChoiceScreen = false;
 
-   // call stop on CharacterDisplayMenuItemAction so that we pop back up to the parent menu item
-   CharacterDisplayMenuItemAction::stop();
+   // call the Perl script which disables wireless
+   try
+      {
+      // execute the script and return the results as a stream
+      redi::ipstream is("perl -Iscripts scripts/disableWirelessNetworking.pl");
+
+      // In this case, we don't really care about the returned JSON status.  Just display
+      // a message to the user and then pop up to the parent
+      is.close();
+      }
+   catch (...)
+      {
+      cerr << "WirelessEnabledMenuItemAction::executeOption2Action(): failed to call script to disable wireless networking." << endl;
+      }
+
+   getCharacterDisplay()->setText(getProperty(WIRELESS_ENABLED_PROPERTY_ACTION_CHOSE_OPTION2, WIRELESS_ENABLED_DEFAULT_ACTION_CHOSE_OPTION2));
    }
-
-void WirelessStatusMenuItemAction::WirelessEnabledMenuItemAction::upEvent()
-   {
-   cout << "WirelessEnabledMenuItemAction::upEvent()" << endl;
-
-   // do nothing, just swallow the event
-   }
-
-void WirelessStatusMenuItemAction::WirelessEnabledMenuItemAction::downEvent()
-   {
-   cout << "WirelessEnabledMenuItemAction::downEvent()" << endl;
-
-   // do nothing, just swallow the event
-   }
-
-void WirelessStatusMenuItemAction::WirelessEnabledMenuItemAction::rightEvent()
-   {
-   cout << "WirelessEnabledMenuItemAction::rightEvent()" << endl;
-
-   // do nothing, just swallow the event
-   }
-
-void WirelessStatusMenuItemAction::WirelessEnabledMenuItemAction::leftEvent()
-   {
-   cout << "WirelessEnabledMenuItemAction::leftEvent()" << endl;
-
-   // do nothing, just swallow the event
-   }
-
 // ---------------------------------------------------------------------------------------------------------------------
 
 // required definitions for dynamic loading

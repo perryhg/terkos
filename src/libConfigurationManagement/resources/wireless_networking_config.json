@@ -1,7 +1,4 @@
 {
-   "connection-attempts-before-switching-to-best-available" : 0,
-   "is-enabled" : true,
-   "preferred-profile-id" : -1,
-   "profiles" : [],
-   "will-connect-using-specific-profile" : false
+   "will-start-on-bootup" : true,
+   "profiles" : []
 }

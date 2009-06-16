@@ -13,7 +13,7 @@ const string SetVolumeMenuItemAction::DEFAULT_LABEL_HIGH = "Hi";
 const string SetVolumeMenuItemAction::DEFAULT_LABEL_OFF = "Off";
 const string SetVolumeMenuItemAction::DEFAULT_VOLUME_GRAPH_CHARACTER = "*";
 const string SetVolumeMenuItemAction::DEFAULT_LABEL_ACTION_PERFORMED = "Volume set to ";
-const string SetVolumeMenuItemAction::DEFAULT_LABEL_ACTION_CANCELLED = "Cancelled!";
+const string SetVolumeMenuItemAction::DEFAULT_LABEL_ACTION_CANCELLED = "Cancelled -- No settings changed";
 const string SetVolumeMenuItemAction::PROPERTY_GRAPH_CHARACTER = "graph.character";
 const string SetVolumeMenuItemAction::PROPERTY_LABEL_VOLUME = "label.volume";
 const string SetVolumeMenuItemAction::PROPERTY_LABEL_HIGH = "label.high";
@@ -120,7 +120,7 @@ const string SetVolumeMenuItemAction::generateVolumeGraphLine()
 
 void SetVolumeMenuItemAction::sleepThenPopUpToParentMenuItem()
    {
-   sleep(2);
+   usleep(1500000);
    CharacterDisplayMenuItemAction::stop();
    }
 

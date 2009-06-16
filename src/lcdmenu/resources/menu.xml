@@ -26,7 +26,7 @@
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
                <property key="action.option1">Audio reset to  factory defaults</property>
-               <property key="action.option2">Cancelled!</property>
+               <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
       </item>
@@ -34,7 +34,24 @@
    <item text="Wireless      Networking">
       <item text="Wireless      Status">
          <item text="">
-            <implementation-class name="WirelessStatusMenuItemAction" library="libNetworkMenuItemActions.so"/>
+            <implementation-class name="WirelessStatusMenuItemAction" library="libNetworkMenuItemActions.so">
+               <property key="status.failure">Failed to get   wireless status.</property>
+               <property key="status.unplugged">Wireless adapteris unplugged.</property>
+
+               <property key="wireless-disabled.action.prompt">Wireless is off.</property>
+               <property key="wireless-disabled.action.cancel"></property>
+               <property key="wireless-disabled.choice.option1">Start   </property>
+               <property key="wireless-disabled.choice.option2">OK</property>
+               <property key="wireless-disabled.action.option1">You chose Start.</property>
+               <property key="wireless-disabled.action.option2">Nothing to say here.</property><!--TODO-->
+               
+               <property key="wireless-enabled.action.prompt">Wireless is on.</property>
+               <property key="wireless-enabled.action.cancel"></property>
+               <property key="wireless-enabled.choice.option1">Info  </property>
+               <property key="wireless-enabled.choice.option2">Stop</property>
+               <property key="wireless-enabled.action.option2">Wireless is now turned off.</property>
+               <property key="wireless-enabled.option1.failure">Could not obtainwireless details</property>
+            </implementation-class>
          </item>
       </item>
       <item text="List Wireless Networks">
@@ -60,7 +77,7 @@
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
                <property key="action.option1">Wireless set to factory defaults</property>
-               <property key="action.option2">Cancelled!</property>
+               <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
       </item>
@@ -78,7 +95,7 @@
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
                <property key="action.option1">Servos reset to factory defaults</property>
-               <property key="action.option2">Cancelled!</property>
+               <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
       </item>
@@ -91,7 +108,7 @@
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
                <property key="action.option1">Audio reset to  factory defaults</property>
-               <property key="action.option2">Cancelled!</property>
+               <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
       </item>
@@ -102,7 +119,7 @@
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
                <property key="action.option1">Motors reset to factory defaults</property>
-               <property key="action.option2">Cancelled!</property>
+               <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
       </item>
@@ -113,7 +130,7 @@
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
                <property key="action.option1">Network reset tofactory defaults</property>
-               <property key="action.option2">Cancelled!</property>
+               <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
       </item>
@@ -124,7 +141,7 @@
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
                <property key="action.option1">Servos reset to factory defaults</property>
-               <property key="action.option2">Cancelled!</property>
+               <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
       </item>
@@ -135,7 +152,7 @@
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
                <property key="action.option1">Reset to factorydefaults</property>
-               <property key="action.option2">Cancelled!</property>
+               <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
       </item>

@@ -41,10 +41,11 @@ class WirelessStatusCheckingMenuItemAction : public CharacterDisplayMenuItemActi
       virtual void handleWirelessDisabled() = 0;
       virtual void handleWirelessUnplugged() = 0;
       virtual void handleWirelessStatusFailure() = 0;
+      Json::Value getWirelessNetworkingStatus();
 
    private:
 
-      Json::Value wirelessNetworkingStatus;
+      Json::Value wirelessNetworkingStatusJson;
 
    };
 
