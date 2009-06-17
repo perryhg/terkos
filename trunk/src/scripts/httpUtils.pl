@@ -1,6 +1,11 @@
 #!/usr/bin/perl
 
 #===================================================================================================
+sub isHttpRequest()
+   {
+   return (exists($ENV{SERVER_SOFTWARE}) && exists($ENV{REQUEST_METHOD}));
+   }
+#===================================================================================================
 # Code taken from Matt's Scripts: http://www.scriptarchive.com/
 sub parseHttpRequestParameters()
    {

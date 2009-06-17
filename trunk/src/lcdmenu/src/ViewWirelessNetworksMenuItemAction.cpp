@@ -16,8 +16,8 @@ void ViewWirelessNetworksMenuItemAction::activate()
    // call the Perl script which returns iwlist results as JSON and the parse the JSON
    try
       {
-      // execute the script and return the results as a stream
-      redi::ipstream is("perl -Iscripts scripts/getWirelessNetworksAsJSON.pl");
+      // execute the script and return the results as a stream (for now, only return unencrypted networks)
+      redi::ipstream is("perl -Iscripts scripts/getWirelessNetworksAsJSON.pl --include-encrypted=false");
 
       // parse the stream
       Json::Reader reader;

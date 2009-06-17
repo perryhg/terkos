@@ -1,6 +1,36 @@
 #!/usr/bin/perl
 
+require "commandLineUtils.pl";
+require "httpUtils.pl";
 require "jsonUtils.pl";
+
+# parse command line switches or HTTP request params
+my %arguments = ();
+if (isHttpRequest())
+   {
+   %arguments = parseHttpRequestParameters();
+   }
+else
+   {
+   %arguments = parseCommandLineSwitches();
+   }
+
+# convert "true" and "false" values to booleans
+while (($key, $val) = each(%arguments))
+   {
+   if (lc($val) eq 'true')
+      {
+      $arguments{$key} = 1;
+      }
+   elsif (lc($val) eq 'false')
+      {
+      $arguments{$key} = 0;
+      }
+   }
+
+# set flags, defaulting to true if the arguments weren't specified
+my $includeEncryptedNetworks = (exists($arguments{'include-encrypted'})) ? $arguments{'include-encrypted'} : 1;
+my $includeUnencryptedNetworks = (exists($arguments{'include-unencrypted'})) ? $arguments{'include-unencrypted'} : 1;
 
 my $interfaceName = "wlan0";
 
@@ -58,7 +88,9 @@ while ($lineNumber < $#lines)
       }
    elsif ($line =~ /^Encryption key:(.+)/)
       {
-      $accessPoints[$i]->{isEncrypted} = ("on" eq $1 ? "true" : "false");
+      my $isEncrypted = ("on" eq $1);
+      $accessPoints[$i]->{isEncrypted} = ($isEncrypted) ? 1 : 0;
+      $accessPoints[$i]->{isEncryptedStr} = ($isEncrypted) ? "true" : "false";
       }
 
    $lineNumber++;
@@ -68,13 +100,17 @@ while ($lineNumber < $#lines)
 my %wirelessNetworks = ();
 for $j (0 .. $#accessPoints)
    {
-   my $ssid = $accessPoints[$j]{ssid};
-   my $mac = $accessPoints[$j]{mac};
-   $wirelessNetworks{$ssid}{isEncrypted} = $accessPoints[$j]{isEncrypted};
-   $wirelessNetworks{$ssid}{access-points}{$mac}{channel} = $accessPoints[$j]{channel};
-   $wirelessNetworks{$ssid}{access-points}{$mac}{frequency} = $accessPoints[$j]{frequency};
-   $wirelessNetworks{$ssid}{access-points}{$mac}{quality} = $accessPoints[$j]{quality};
-   $wirelessNetworks{$ssid}{access-points}{$mac}{signalLevel} = $accessPoints[$j]{signalLevel};
+   my $isEncrypted = $accessPoints[$j]{isEncrypted};
+   if (($isEncrypted && $includeEncryptedNetworks) || (($isEncrypted == 0) && $includeUnencryptedNetworks))
+      {
+      my $ssid = $accessPoints[$j]{ssid};
+      my $mac = $accessPoints[$j]{mac};
+      $wirelessNetworks{$ssid}{isEncrypted} = $accessPoints[$j]{isEncryptedStr};
+      $wirelessNetworks{$ssid}{access-points}{$mac}{channel} = $accessPoints[$j]{channel};
+      $wirelessNetworks{$ssid}{access-points}{$mac}{frequency} = $accessPoints[$j]{frequency};
+      $wirelessNetworks{$ssid}{access-points}{$mac}{quality} = $accessPoints[$j]{quality};
+      $wirelessNetworks{$ssid}{access-points}{$mac}{signalLevel} = $accessPoints[$j]{signalLevel};
+      }
    }
 
 # iterate over the wireless networks and create the JSON representation
