@@ -19,6 +19,11 @@ if [ "$PS1" ]; then
    PS1='\u@\h:\w\$ '
 fi
 
+alias ll="ls -l";
+alias la="ls -Al";
+alias cdu="cd ..";
+alias cduu="cd ../..";
+
 if [ -d /etc/profile.d ]; then
   for i in /etc/profile.d/*.sh; do
     if [ -r $i ]; then
