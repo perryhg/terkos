@@ -12,7 +12,7 @@ void WirelessStatusCheckingMenuItemAction::activate()
    try
       {
       // execute the script and return the results as a stream
-      redi::ipstream is("perl -Iscripts scripts/getWirelessNetworkingStatusAsJSON.pl");
+      redi::ipstream is("perl -I/opt/scripts /opt/scripts/getWirelessNetworkingStatusAsJSON.pl");
 
       // parse the stream
       Json::Reader reader;

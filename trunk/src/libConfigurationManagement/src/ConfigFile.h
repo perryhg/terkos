@@ -21,7 +21,7 @@ class ConfigFile
       static const char CHAINED_PROPERTY_NAME_DELIMITER;
 
       ConfigFile(const string& configFilename, const string& defaultConfigFilename, const string& configFileDirectory = DEFAULT_CONFIG_FILE_DIRECTORY) :
-         configFilename(configFilename), defaultConfigFilename(defaultConfigFilename)
+         configFilename(configFilename), defaultConfigFilename(defaultConfigFilename), configFileDirectory(configFileDirectory)
          {
          Json::Value config;
          if (!load(config))

@@ -17,7 +17,7 @@ void ViewWirelessNetworksMenuItemAction::activate()
    try
       {
       // execute the script and return the results as a stream (for now, only return unencrypted networks)
-      redi::ipstream is("perl -Iscripts scripts/getWirelessNetworksAsJSON.pl --include-encrypted=false");
+      redi::ipstream is("perl -I/opt/scripts /opt/scripts/getWirelessNetworksAsJSON.pl --include-encrypted=false");
 
       // parse the stream
       Json::Reader reader;
