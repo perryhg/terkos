@@ -22,8 +22,8 @@ class ServoConfigManager : public ConfigFile
       static const unsigned int DEFAULT_MAX_BOUND;
       static const unsigned int DEFAULT_INITIAL_POSITION;
 
-      ServoConfigManager() :
-         ConfigFile(CONFIG_FILENAME, DEFAULT_CONFIG_FILENAME)
+      ServoConfigManager(const string& configFileDirectory = ConfigFile::DEFAULT_CONFIG_FILE_DIRECTORY) :
+         ConfigFile(CONFIG_FILENAME, DEFAULT_CONFIG_FILENAME, configFileDirectory)
          {
          // nothing to do
          }
