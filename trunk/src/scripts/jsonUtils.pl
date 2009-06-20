@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 require "httpUtils.pl";
+require "fileUtils.pl";
 
 #===================================================================================================
 sub outputJson()
@@ -21,9 +22,7 @@ sub outputJson()
          }
 
       # print HTTP response headers
-      print "Content-Type: application/json\n";
-      print "Expires: Wed, 25 Apr 2007 14:00:00 GMT\n";
-      print "Cache-Control: no-cache\n\n";
+      printJsonHttpResponseHeaders();
       }
 
    # iterate over the wireless networks and print them out as JSON
@@ -37,6 +36,25 @@ sub outputJson()
       print ')';
       }
    print "\n";
+   }
+#===================================================================================================
+sub outputJsonFile()
+   {
+   my ($jsonFilename) = @_;
+
+   if (isHttpRequest())
+      {
+      printJsonHttpResponseHeaders();
+      }
+   readFileAndPrintToStdOut($jsonFilename);
+   }
+#===================================================================================================
+sub printJsonHttpResponseHeaders()
+   {
+   # print HTTP response headers
+   print "Content-Type: application/json\n";
+   print "Expires: Wed, 25 Apr 2007 14:00:00 GMT\n";
+   print "Cache-Control: no-cache\n\n";
    }
 #===================================================================================================
 return 1;
