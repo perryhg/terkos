@@ -17,8 +17,8 @@ class AudioConfigManager : public ConfigFile
       static const unsigned int MIN_VOLUME;
       static const unsigned int MAX_VOLUME;
 
-      AudioConfigManager() :
-         ConfigFile(CONFIG_FILENAME, DEFAULT_CONFIG_FILENAME)
+      AudioConfigManager(const string& configFileDirectory = ConfigFile::DEFAULT_CONFIG_FILE_DIRECTORY) :
+         ConfigFile(CONFIG_FILENAME, DEFAULT_CONFIG_FILENAME, configFileDirectory)
          {
          // nothing to do
          }

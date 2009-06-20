@@ -14,8 +14,8 @@ class WirelessNetworkingConfigManager : public ConfigFile
    {
    public:
 
-      WirelessNetworkingConfigManager() :
-         ConfigFile(CONFIG_FILENAME, DEFAULT_CONFIG_FILENAME)
+      WirelessNetworkingConfigManager(const string& configFileDirectory = ConfigFile::DEFAULT_CONFIG_FILE_DIRECTORY) :
+         ConfigFile(CONFIG_FILENAME, DEFAULT_CONFIG_FILENAME, configFileDirectory)
          {
          // nothing to do
          }

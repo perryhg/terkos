@@ -4,6 +4,7 @@
 
 #include "ConfigFile.h"
 
+const string ConfigFile::DEFAULT_CONFIG_FILE_DIRECTORY = "/opt/config/";
 const char ConfigFile::CHAINED_PROPERTY_NAME_DELIMITER = '.';
 
 void ConfigFile::revertToDefault()
