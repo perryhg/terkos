@@ -9,7 +9,7 @@ using namespace std;
 int main(int argc, char** argv)
    {
 
-   AudioConfigManager audioConfigManager(".");
+   AudioConfigManager audioConfigManager("./");
 
    cout << "Volume Level   = [" << audioConfigManager.getVolumeLevel() << "]" << endl;
    cout << "Alerts Enabled = [" << audioConfigManager.areAlertsEnabled() << "]" << endl;
@@ -28,7 +28,7 @@ int main(int argc, char** argv)
 
    cout << "-----------------------------------------------------------------" << endl;
 
-   ServoConfigManager servoConfigManager(".");
+   ServoConfigManager servoConfigManager("./");
 
    cout << "Number of servos: " << ServoConfigManager::NUM_SERVOS << endl;
 
@@ -68,7 +68,7 @@ int main(int argc, char** argv)
 
    cout << "-----------------------------------------------------------------" << endl;
 
-   WirelessNetworkingConfigManager wirelessNetworkingConfigManager(".");
+   WirelessNetworkingConfigManager wirelessNetworkingConfigManager("./");
 
    const bool willStartOnBootup = wirelessNetworkingConfigManager.willStartOnBootup();
    cout << "Wireless: Will Start on Boot = [" << willStartOnBootup << "]" << endl;

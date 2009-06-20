@@ -125,7 +125,7 @@ void WirelessStatusMenuItemAction::WirelessEnabledMenuItemAction::executeOption2
    try
       {
       // execute the script and return the results as a stream
-      redi::ipstream is("perl -Iscripts scripts/disableWirelessNetworking.pl");
+      redi::ipstream is("perl -I/opt/scripts /opt/scripts/disableWirelessNetworking.pl");
 
       // In this case, we don't really care about the returned JSON status.  Just display
       // a message to the user and then pop up to the parent

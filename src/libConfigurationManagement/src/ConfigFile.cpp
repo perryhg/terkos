@@ -206,17 +206,18 @@ const bool ConfigFile::load(Json::Value& config) const
 
 const bool ConfigFile::load(Json::Value& config, const string& filename) const
    {
+   string directoryAndFilename = configFileDirectory + filename;
    try
       {
       // try to load the file
-      ifstream is(filename.c_str(), ios::in);
+      ifstream is(directoryAndFilename.c_str(), ios::in);
       Json::Reader reader;
       bool parsingSuccessful = reader.parse(is, config, true);
       is.close();
       if (!parsingSuccessful)
          {
          // report to the user the failure and their locations in the document.
-         cerr << "ConfigFile::loadFile(): failed to load or parse configuration file [" << filename << "]:" << endl
+         cerr << "ConfigFile::loadFile(): failed to load or parse configuration file [" << directoryAndFilename << "]:" << endl
                   << reader.getFormatedErrorMessages();
          }
 
@@ -224,17 +225,18 @@ const bool ConfigFile::load(Json::Value& config, const string& filename) const
       }
    catch (...)
       {
-      cerr << "ConfigFile::loadFile(): failed to load file [" << filename << "]" << endl;
+      cerr << "ConfigFile::loadFile(): failed to load file [" << directoryAndFilename << "]" << endl;
       }
    return false;
    }
 
 const bool ConfigFile::save(Json::Value& config) const
    {
+   string directoryAndFilename = configFileDirectory + configFilename;
    try
       {
       // open the file
-      ofstream outfile(configFilename.c_str());
+      ofstream outfile(directoryAndFilename.c_str());
 
       // write to the file
       Json::StyledWriter writer;
@@ -246,7 +248,7 @@ const bool ConfigFile::save(Json::Value& config) const
       }
    catch (...)
       {
-      cerr << "ConfigFile::save(): failed to save file [" << configFilename << "]" << endl;
+      cerr << "ConfigFile::save(): failed to save file [" << directoryAndFilename << "]" << endl;
       }
    return false;
    }
