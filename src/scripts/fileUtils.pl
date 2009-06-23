@@ -1,16 +1,15 @@
 #!/usr/bin/perl
 
 #===================================================================================================
-sub readFileAndPrintToStdOut()
+sub readFileIntoString()
    {
    my ($filename) = @_;
 
-   open FILE, $filename or die $!;
+   open FILE, $filename or die "Couldn't open file: $!";
+   my $str = join("", <FILE>);
+   close FILE;
 
-   while (<FILE>)
-      {
-      print $_;
-      }
+   return $str;
    }
 #===================================================================================================
 return 1;
