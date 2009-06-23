@@ -25,7 +25,7 @@ sub outputJson()
       printJsonHttpResponseHeaders();
       }
 
-   # iterate over the wireless networks and print them out as JSON
+   # print them out as JSON
    if ($callbackFunctionName)
       {
       print $callbackFunctionName . '(';
@@ -42,11 +42,9 @@ sub outputJsonFile()
    {
    my ($jsonFilename) = @_;
 
-   if (isHttpRequest())
-      {
-      printJsonHttpResponseHeaders();
-      }
-   readFileAndPrintToStdOut($jsonFilename);
+   my $fileContents = readFileIntoString($jsonFilename);
+
+   &outputJson($fileContents);
    }
 #===================================================================================================
 sub printJsonHttpResponseHeaders()

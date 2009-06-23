@@ -149,12 +149,7 @@ for $networkCount (0 .. $#ssids)
       }
    $json .= "\n";
    }
-$json .= "]}";
-if ($callbackFunctionName)
-   {
-   $json .= ')';
-   }
-$json .= "\n";
+$json .= "]}\n";
 
 # write out the JSON
 outputJson($json);
