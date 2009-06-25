@@ -1,27 +1,71 @@
-BODY, P, TABLE, TR, TD, UL, LI {
+body, p, table, tr, td, ul, li, div {
    font-family: Verdana, Arial, Helvetica, sans-serif;
    font-size: 8pt
 }
 
-.title {
-   font-size: 20pt;
-   font-weight: bold;
+.blank-line {
+   height: 10px;
 }
 
-.page-title {
-   font-size: 12pt;
-   font-weight: bold;
-   margin-bottom:10px;
+.button-container div {
+   margin: 2px 2px 2px 0;
+   padding: 2px 0;
+   cursor: pointer;
+   float: left;
 }
 
-.navigation {
+span.ui-icon {
+   float: left;
+   margin: 0 2px;
+}
+
+.explanatory-text {
+   font-size: 8pt
+}
+
+.handle {
+   padding: 1px;
+   cursor: pointer;
+}
+
+.hidden {
+   display: none;
+}
+
+.indented {
+   margin-left: 20px;
+}
+
+.emphasized {
    font-weight: bold;
-   margin-bottom:5px;
 }
 
 .label {
    font-weight: bold;
 }
-.explanatory-text {
-   font-size: 7pt
+
+.main-title {
+   font-size: 20pt;
+   font-weight: bold;
 }
+
+.section {
+   margin-bottom: 20px;
+}
+
+.section-title {
+   font-size: 10pt;
+   font-weight: bold;
+   margin-bottom: 10px;
+}
+
+.selected {
+   background-color: #dddddd;
+}
+
+.sortableListItem {
+   display: block;
+   padding: 0;
+   margin: 0;
+}
+

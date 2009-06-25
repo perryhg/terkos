@@ -1,13 +1,194 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-   <title>VexPro</title>
+   <title>VexPro Control Panel</title>
+   <link type="text/css" href="css/smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet"/>
+   <link type="text/css" href="css/main.css" rel="stylesheet"/>
+   <style type="text/css">
+      #preferredWirelessNetworksListContainer {
+         display: block;
+         padding: 0;
+         margin: 0;
+      }
+   </style>
+   <script type="text/javascript" src="javascript/jquery.js"></script>
+   <script type="text/javascript" src="javascript/jquery-ui-1.7.2.custom.min.js"></script>
+   <script type="text/javascript" src="javascript/jquery.mousecapture.js"></script>
+   <script type="text/javascript" src="javascript/WirelessNetworkingConfigManager.js"></script>
+   <script type="text/javascript">
+      var tabSelectionHandlers = new Array();
+      var wirelessNetworkingConfigManager = null;
+
+      $(function()
+         {
+         wirelessNetworkingConfigManager = new edu.cmu.ri.terk.WirelessNetworkingConfigManager(
+               "wirelessNetworkingStatusMessageArea",
+               "wirelessNetworkingStatusMessageAreaDetail",
+               "wirelessNetworkingConfigurationMessageArea",
+               "wirelessNetworkingConfigurationArea",
+               "willStartWirelessNetworkingOnBootupCheckbox",
+               "preferredWirelessNetworksListContainer",
+               "preferredWirelessNetworksList"
+               );
+
+         wirelessNetworkingConfigManager.addSelectionListener(function(isSelected)
+            {
+            if (isSelected)
+               {
+               $(".state-depends-on-preferred-network-selection").addClass("ui-state-default");
+               $(".state-depends-on-preferred-network-selection").removeClass("ui-state-active");
+               $(".state-depends-on-preferred-network-selection").removeClass("ui-state-disabled");
+               }
+            else
+               {
+               $(".state-depends-on-preferred-network-selection").removeClass("ui-state-default");
+               $(".state-depends-on-preferred-network-selection").addClass("ui-state-active");
+               $(".state-depends-on-preferred-network-selection").addClass("ui-state-disabled");
+               }
+            });
+
+         tabSelectionHandlers[tabSelectionHandlers.length] = function()
+            {
+            };
+         tabSelectionHandlers[tabSelectionHandlers.length] = function()
+            {
+            };
+         tabSelectionHandlers[tabSelectionHandlers.length] = function()
+            {
+            wirelessNetworkingConfigManager.getWirelessNetworkingStatus();
+            wirelessNetworkingConfigManager.getWirelessNetworkingConfig();
+            };
+         tabSelectionHandlers[tabSelectionHandlers.length] = function()
+            {
+            };
+         tabSelectionHandlers[tabSelectionHandlers.length] = function()
+            {
+            };
+         tabSelectionHandlers[tabSelectionHandlers.length] = function()
+            {
+            };
+
+         // create the tabbed interface
+         $("#tabs").tabs(
+         {
+            select: function(event, ui)
+               {
+               if (tabSelectionHandlers[ui.index])
+                  {
+                  return tabSelectionHandlers[ui.index]();
+                  }
+               return false;
+               }
+         });
+
+         // add mouseover actions to the buttons
+         $('.button').hover(
+               function()
+                  {
+                  $(this).addClass('ui-state-hover');
+                  },
+               function()
+                  {
+                  $(this).removeClass('ui-state-hover');
+                  }
+               );
+
+         // add mousedown/mouseup actions to the Add button
+         $('#addPreferredWirelessNetworkButton').mousecapture({
+            "down": function()
+               {
+               $(this).addClass('ui-state-active');
+               },
+            "up": function()
+               {
+               $(this).removeClass('ui-state-active');
+               }
+         });
+
+         // add mousedown/mouseup actions to the Delete and Edit buttons
+         $('.state-depends-on-preferred-network-selection').mousecapture({
+            "down": function()
+               {
+               if (wirelessNetworkingConfigManager.isItemSelected())
+                  {
+                  $(this).addClass('ui-state-active');
+                  }
+               },
+            "up": function()
+               {
+               if (wirelessNetworkingConfigManager.isItemSelected())
+                  {
+                  $(this).removeClass('ui-state-active');
+                  }
+               }});
+
+         });
+   </script>
 </head>
-<frameset rows="50,*" border="1">
-   <frame src="title.html" noresize="noresize" scrolling="no">
-   <frameset cols="200,*">
-      <frame src="navigation.html" noresize="noresize" scrolling="auto">
-      <frame src="status.html" name="contentFrame" noresize="noresize" scrolling="auto">
-   </frameset>
-</frameset>
+<body>
+<div class="main-title">VexPro</div>
+<div id="tabs">
+   <ul>
+      <li><a href="#System_Info" title="System Info">System Info</a></li>
+      <li><a href="#Audio" title="Audio">Audio</a></li>
+      <li><a href="#Wireless_Networking" title="Wireless Networking">Wireless Networking</a></li>
+      <li><a href="#Programs" title="Programs">Programs</a></li>
+      <li><a href="#Logging" title="Logging">Logging</a></li>
+      <li><a href="#Factory_Reset" title="Factory Reset">Factory Reset</a></li>
+   </ul>
+   <div id="System_Info">
+      <p>System Info</p>
+      Things like firmware/hardware version, battery status, free disk space, free memory, etc. will go here.
+   </div>
+   <div id="Audio">
+      <p>Audio</p>
+   </div>
+   <div id="Wireless_Networking">
+      <form action="javascript:void()" method="post">
+         <div class="section">
+            <div class="section-title">Status</div>
+            <div class="indented">
+               <div id="wirelessNetworkingStatusMessageArea" class="emphasized">&nbsp;</div>
+               <div id="wirelessNetworkingStatusMessageAreaDetail" class="explanatory-text">&nbsp;</div>
+            </div>
+         </div>
+         <div class="section">
+            <div class="section-title">Preferences</div>
+            <div class="indented">
+               <div id="wirelessNetworkingConfigurationMessageArea">&nbsp;</div>
+               <div id="wirelessNetworkingConfigurationArea" class="hidden">
+                  <input id="willStartWirelessNetworkingOnBootupCheckbox" name="willStartWirelessNetworkingOnBootup" type="checkbox"/>Start wireless networking on boot up
+                  <div class="blank-line"></div>
+                  <div class="label">Preferred Networks:</div>
+                  <div id="preferredWirelessNetworksListContainer">
+                     <div id="preferredWirelessNetworksList" style="border: 1px solid black; overflow: auto; height:150px; width: 260px;"></div>
+                  </div>
+                  <div class="button-container">
+                     <div id="addPreferredWirelessNetworkButton" class="ui-state-default ui-corner-all button" title="Add">
+                        <span class="ui-icon ui-icon-plus"></span>
+                     </div>
+                     <div id="deletePreferredWirelessNetworkButton" class="ui-state-active ui-state-disabled ui-corner-all button state-depends-on-preferred-network-selection" title="Delete">
+                        <span class="ui-icon ui-icon-minus"></span>
+                     </div>
+                     <div id="editPreferredWirelessNetworkButton" class="ui-state-active ui-state-disabled ui-corner-all button state-depends-on-preferred-network-selection" title="Edit">
+                        <span class="ui-icon ui-icon-pencil"></span>
+                     </div>
+                  </div>
+                  <div style="clear:both"></div>
+               </div>
+            </div>
+         </div>
+      </form>
+   </div>
+   <div id="Programs">
+      <p>Programs</p>
+   </div>
+   <div id="Logging">
+      <p>Logging</p>
+   </div>
+   <div id="Factory_Reset">
+      <p>Factory Reset</p>
+   </div>
+</div>
+</body>
 </html>

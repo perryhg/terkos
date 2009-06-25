@@ -1,0 +1,291 @@
+//======================================================================================================================
+// Class for managing the wireless networking configuration.
+//
+// Dependencies:
+// * jQuery (http://jquery.com/)
+// * jQuery UI (http://jqueryui.com/)
+// * main.css
+//
+// Author: Chris Bartley (bartley@cmu.edu)
+//======================================================================================================================
+
+//======================================================================================================================
+// VERIFY NAMESPACE (terk.ri.cmu.edu  edu.cmu.ri.terk)
+//======================================================================================================================
+// Create the global symbol "edu" if it doesn't exist.  Throw an error if it does exist but is not an object.
+var edu;
+if (!edu)
+   {
+   edu = {};
+   }
+else if (typeof edu != "object")
+   {
+   var eduExistsMessage = "Error: failed to create edu namespace: edu already exists and is not an object";
+   alert(eduExistsMessage);
+   throw new Error(eduExistsMessage);
+   }
+
+// Repeat the creation and type-checking for the next level
+if (!edu.cmu)
+   {
+   edu.cmu = {};
+   }
+else if (typeof edu.cmu != "object")
+   {
+   var eduCmuExistsMessage = "Error: failed to create edu.cmu namespace: edu.cmu already exists and is not an object";
+   alert(eduCmuExistsMessage);
+   throw new Error(eduCmuExistsMessage);
+   }
+
+// Repeat the creation and type-checking for the next level
+if (!edu.cmu.ri)
+   {
+   edu.cmu.ri = {};
+   }
+else if (typeof edu.cmu.ri != "object")
+   {
+   var eduCmuRiExistsMessage = "Error: failed to create edu.cmu.ri namespace: edu.cmu.ri already exists and is not an object";
+   alert(eduCmuRiExistsMessage);
+   throw new Error(eduCmuRiExistsMessage);
+   }
+
+// Repeat the creation and type-checking for the next level
+if (!edu.cmu.ri.terk)
+   {
+   edu.cmu.ri.terk = {};
+   }
+else if (typeof edu.cmu.ri.terk != "object")
+   {
+   var eduCmuRiTerkExistsMessage = "Error: failed to create edu.cmu.ri.terk namespace: edu.cmu.ri.terk already exists and is not an object";
+   alert(eduCmuRiTerkExistsMessage);
+   throw new Error(eduCmuRiTerkExistsMessage);
+   }
+//======================================================================================================================
+
+//======================================================================================================================
+// DEPENDECIES
+//======================================================================================================================
+if (!window['$'])
+   {
+   var nojQueryMsg = "The jQuery library is required by edu.cmu.ri.terk.WirelessNetworkingConfigManager.js";
+   alert(nojQueryMsg);
+   throw new Error(nojQueryMsg);
+   }
+//======================================================================================================================
+
+//======================================================================================================================
+// CODE
+//======================================================================================================================
+(function()
+   {
+   var jQuery = window['$'];
+   jQuery.ajaxSetup({
+      type: 'GET',
+      dataType: 'jsonp',
+      timeout: 3000,
+      cache: false,
+      global: false
+   });
+
+   edu.cmu.ri.terk.WirelessNetworkingConfigManager = function(wirelessNetworkingStatusMessageAreaId,
+                                                              wirelessNetworkingStatusMessageAreaDetailId,
+                                                              wirelessNetworkingConfigurationMessageAreaId,
+                                                              wirelessNetworkingConfigurationAreaId,
+                                                              willStartWirelessNetworkingOnBootupCheckboxId,
+                                                              preferredWirelessNetworksListContainerId,
+                                                              preferredWirelessNetworksListId)
+      {
+      var host = ''; // http://192.168.0.4';
+
+      var selectedPreferredWirelessNetwork = null;
+      var selectionListeners = new Array();
+
+      jQuery("#" + preferredWirelessNetworksListId).sortable({
+         handle : '.handle',
+         axis: 'y',
+         tolerance: 'pointer' ,
+         containment: '#' + preferredWirelessNetworksListContainerId
+      }).disableSelection();
+
+      this.getWirelessNetworkingStatus = function()
+         {
+         displayStatus("Checking status...", "&nbsp;");
+
+         var wirelessNetworkingStatus = null;
+         // load the wireless status
+         jQuery.ajax(
+         {
+            url: host + '/cgi-bin/getWirelessNetworkingStatusAsJSON.pl',
+            success: function(jsonResponse)
+               {
+               if (jsonResponse && jsonResponse['wireless-networking-status'])
+                  {
+                  wirelessNetworkingStatus = jsonResponse['wireless-networking-status'];
+                  }
+               displayWirelessNetworkingStatus(wirelessNetworkingStatus);
+               },
+            error: function()
+               {
+               displayWirelessNetworkingStatus(wirelessNetworkingStatus);
+               }
+         });
+         };
+
+      var displayWirelessNetworkingStatus = function(wirelessNetworkingStatusJSON)
+         {
+         if (wirelessNetworkingStatusJSON)
+            {
+            if (wirelessNetworkingStatusJSON["is-installed"])
+               {
+               var wirelessInterface = wirelessNetworkingStatusJSON['wireless-interface'];
+               if (wirelessInterface)
+                  {
+                  if (wirelessInterface['is-enabled'])
+                     {
+                     displayStatus("Connected", "The wireless adapter is connected to " + wirelessInterface['access-point']['ssid'] + " and has the IP address " + wirelessInterface['access-point']['ip-address']);
+                     }
+                  else
+                     {
+                     displayStatus("Off", "The wireless interface is disabled.");
+                     }
+                  }
+               else
+                  {
+                  displayStatus("Unknown", "Failed to retrieve status.");
+                  }
+               }
+            else
+               {
+               displayStatus("Off", "The wireless adapter is unplugged.");
+               }
+            }
+         else
+            {
+            displayStatus("Unknown", "Failed to retrieve status.");
+            }
+         };
+
+      var displayStatus = function(message, detail)
+         {
+         jQuery("#" + wirelessNetworkingStatusMessageAreaId).html(message);
+         jQuery("#" + wirelessNetworkingStatusMessageAreaDetailId).html(detail);
+         };
+
+      this.getWirelessNetworkingConfig = function()
+         {
+         jQuery("#" + wirelessNetworkingConfigurationMessageAreaId).html("Loading preferences...");
+         jQuery("#" + wirelessNetworkingConfigurationAreaId).addClass("hidden");
+
+         // load the wireless status
+         jQuery.ajax(
+         {
+            url: host + '/cgi-bin/getWirelessNetworkingConfigAsJSON.pl',
+            success: function(jsonResponse)
+               {
+               jQuery("#" + wirelessNetworkingConfigurationAreaId).removeClass("hidden");
+               displayWirelessNetworkingConfig(jsonResponse);
+               },
+            error: function()
+               {
+               displayWirelessNetworkingConfig(null);
+               }
+         });
+         };
+
+      var displayWirelessNetworkingConfig = function(wirelessNetworkingConfig)
+         {
+         jQuery("#" + preferredWirelessNetworksListId).empty();
+
+         if (wirelessNetworkingConfig)
+            {
+            jQuery("#" + wirelessNetworkingConfigurationMessageAreaId).empty();
+            jQuery("#" + willStartWirelessNetworkingOnBootupCheckboxId).attr('checked', wirelessNetworkingConfig["will-start-on-bootup"]);
+            if (wirelessNetworkingConfig['profiles'])
+               {
+               jQuery.each(wirelessNetworkingConfig['profiles'], function(i, networkProfile)
+                  {
+                  if (networkProfile)
+                     {
+                     // build the list item
+                     var listItem = document.createElement("div");
+                     listItem.id = "preferredWirelessNetworksListItem_" + i;
+                     listItem.className = "sortableListItem";
+
+                     var listItemInfo = document.createElement("div");
+                     listItemInfo.id = "preferredWirelessNetworksListItemInfo_" + i;
+                     listItemInfo.className = "handle";
+
+                     // add the item to the list
+                     jQuery("#" + preferredWirelessNetworksListId).append(listItem);
+                     jQuery("#" + listItem.id).append(listItemInfo);
+                     jQuery("#" + listItemInfo.id).text(networkProfile['ssid']);
+
+                     // add a mousedown event handler to the list item so we can keep
+                     // track of which one is selected (and also do some selection highlighting)
+                     jQuery("#" + listItem.id).mousedown(
+                           function()
+                              {
+                              if (this != selectedPreferredWirelessNetwork)
+                                 {
+                                 if (selectedPreferredWirelessNetwork != null)
+                                    {
+                                    jQuery(selectedPreferredWirelessNetwork).removeClass("selected");
+                                    }
+                                 jQuery(this).addClass("selected");
+                                 selectedPreferredWirelessNetwork = this;
+
+                                 // notify listeners that something is now selected
+                                 jQuery.each(selectionListeners, function(i, listener)
+                                    {
+                                    if (listener)
+                                       {
+                                       listener(true);
+                                       }
+                                    });
+                                 }
+                              }
+                           );
+                     }
+                  });
+
+               // reset the selected network
+               selectedPreferredWirelessNetwork = null;
+                  
+               // refresh the Preferred Networks list 
+               jQuery("#" + preferredWirelessNetworksListId).sortable('refresh');
+
+               // notify listeners that nothing is selected
+               jQuery.each(selectionListeners, function(i, listener)
+                  {
+                  if (listener)
+                     {
+                     listener(false);
+                     }
+                  });
+               }
+            }
+         else
+            {
+            jQuery("#" + wirelessNetworkingConfigurationMessageAreaId).html("Sorry, the wireless configuration is currently unavailable.");
+            }
+         };
+
+      this.addSelectionListener = function(listener)
+         {
+         if (listener)
+            {
+            selectionListeners[selectionListeners.length] = listener;
+            }
+         };
+
+      this.isItemSelected = function()
+         {
+         return selectedPreferredWirelessNetwork != null;
+         };
+      };
+   // ==================================================================================================================
+
+
+   // ==================================================================================================================
+   })();
+
