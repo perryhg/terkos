@@ -10,7 +10,7 @@
 //======================================================================================================================
 
 //======================================================================================================================
-// VERIFY NAMESPACE (terk.ri.cmu.edu  edu.cmu.ri.terk)
+// VERIFY NAMESPACE
 //======================================================================================================================
 // Create the global symbol "edu" if it doesn't exist.  Throw an error if it does exist but is not an object.
 var edu;
@@ -87,96 +87,48 @@ if (!window['$'])
       global: false
    });
 
-   edu.cmu.ri.terk.WirelessNetworkingConfigManager = function(wirelessNetworkingStatusMessageAreaId,
-                                                              wirelessNetworkingStatusMessageAreaDetailId,
-                                                              wirelessNetworkingConfigurationMessageAreaId,
+   edu.cmu.ri.terk.WirelessNetworkingConfigManager = function(wirelessNetworkingConfigurationMessageAreaId,
                                                               wirelessNetworkingConfigurationAreaId,
                                                               willStartWirelessNetworkingOnBootupCheckboxId,
-                                                              preferredWirelessNetworksListContainerId,
-                                                              preferredWirelessNetworksListId)
+                                                              wirelessNetworksListContainerId,
+                                                              wirelessNetworksListId)
       {
-      var host = ''; // http://192.168.0.4';
+      var host = '';//http://192.168.1.104'; // TODO: remove me!
 
-      var selectedPreferredWirelessNetwork = null;
+      var selectedWirelessNetwork = null;
       var selectionListeners = new Array();
 
-      jQuery("#" + preferredWirelessNetworksListId).sortable({
+      jQuery("#" + wirelessNetworksListId).sortable({
          handle : '.handle',
          axis: 'y',
          tolerance: 'pointer' ,
-         containment: '#' + preferredWirelessNetworksListContainerId
+         containment: '#' + wirelessNetworksListContainerId
       }).disableSelection();
-
-      this.getWirelessNetworkingStatus = function()
-         {
-         displayStatus("Checking status...", "&nbsp;");
-
-         var wirelessNetworkingStatus = null;
-         // load the wireless status
-         jQuery.ajax(
-         {
-            url: host + '/cgi-bin/getWirelessNetworkingStatusAsJSON.pl',
-            success: function(jsonResponse)
-               {
-               if (jsonResponse && jsonResponse['wireless-networking-status'])
-                  {
-                  wirelessNetworkingStatus = jsonResponse['wireless-networking-status'];
-                  }
-               displayWirelessNetworkingStatus(wirelessNetworkingStatus);
-               },
-            error: function()
-               {
-               displayWirelessNetworkingStatus(wirelessNetworkingStatus);
-               }
-         });
-         };
-
-      var displayWirelessNetworkingStatus = function(wirelessNetworkingStatusJSON)
-         {
-         if (wirelessNetworkingStatusJSON)
-            {
-            if (wirelessNetworkingStatusJSON["is-installed"])
-               {
-               var wirelessInterface = wirelessNetworkingStatusJSON['wireless-interface'];
-               if (wirelessInterface)
-                  {
-                  if (wirelessInterface['is-enabled'])
-                     {
-                     displayStatus("Connected", "The wireless adapter is connected to " + wirelessInterface['access-point']['ssid'] + " and has the IP address " + wirelessInterface['access-point']['ip-address']);
-                     }
-                  else
-                     {
-                     displayStatus("Off", "The wireless interface is disabled.");
-                     }
-                  }
-               else
-                  {
-                  displayStatus("Unknown", "Failed to retrieve status.");
-                  }
-               }
-            else
-               {
-               displayStatus("Off", "The wireless adapter is unplugged.");
-               }
-            }
-         else
-            {
-            displayStatus("Unknown", "Failed to retrieve status.");
-            }
-         };
-
-      var displayStatus = function(message, detail)
-         {
-         jQuery("#" + wirelessNetworkingStatusMessageAreaId).html(message);
-         jQuery("#" + wirelessNetworkingStatusMessageAreaDetailId).html(detail);
-         };
 
       this.getWirelessNetworkingConfig = function()
          {
          jQuery("#" + wirelessNetworkingConfigurationMessageAreaId).html("Loading preferences...");
          jQuery("#" + wirelessNetworkingConfigurationAreaId).addClass("hidden");
 
-         // load the wireless status
+         // clear the list
+         jQuery("#" + wirelessNetworksListId).empty();
+
+         // reset the selected network
+         selectedWirelessNetwork = null;
+
+         // refresh the Preferred Networks list
+         jQuery("#" + wirelessNetworksListId).sortable('refresh');
+
+         // notify listeners that nothing is selected
+         jQuery.each(selectionListeners, function(i, listener)
+            {
+            if (listener)
+               {
+               listener(false);
+               }
+            });
+
+         // load the wireless config
          jQuery.ajax(
          {
             url: host + '/cgi-bin/getWirelessNetworkingConfigAsJSON.pl',
@@ -194,8 +146,6 @@ if (!window['$'])
 
       var displayWirelessNetworkingConfig = function(wirelessNetworkingConfig)
          {
-         jQuery("#" + preferredWirelessNetworksListId).empty();
-
          if (wirelessNetworkingConfig)
             {
             jQuery("#" + wirelessNetworkingConfigurationMessageAreaId).empty();
@@ -209,14 +159,14 @@ if (!window['$'])
                      // build the list item
                      var listItem = document.createElement("div");
                      listItem.id = "preferredWirelessNetworksListItem_" + i;
-                     listItem.className = "sortableListItem";
+                     listItem.className = "sortable-list-item";
 
                      var listItemInfo = document.createElement("div");
                      listItemInfo.id = "preferredWirelessNetworksListItemInfo_" + i;
                      listItemInfo.className = "handle";
 
                      // add the item to the list
-                     jQuery("#" + preferredWirelessNetworksListId).append(listItem);
+                     jQuery("#" + wirelessNetworksListId).append(listItem);
                      jQuery("#" + listItem.id).append(listItemInfo);
                      jQuery("#" + listItemInfo.id).text(networkProfile['ssid']);
 
@@ -225,14 +175,14 @@ if (!window['$'])
                      jQuery("#" + listItem.id).mousedown(
                            function()
                               {
-                              if (this != selectedPreferredWirelessNetwork)
+                              if (this != selectedWirelessNetwork)
                                  {
-                                 if (selectedPreferredWirelessNetwork != null)
+                                 if (selectedWirelessNetwork != null)
                                     {
-                                    jQuery(selectedPreferredWirelessNetwork).removeClass("selected");
+                                    jQuery(selectedWirelessNetwork).removeClass("selected");
                                     }
                                  jQuery(this).addClass("selected");
-                                 selectedPreferredWirelessNetwork = this;
+                                 selectedWirelessNetwork = this;
 
                                  // notify listeners that something is now selected
                                  jQuery.each(selectionListeners, function(i, listener)
@@ -245,21 +195,6 @@ if (!window['$'])
                                  }
                               }
                            );
-                     }
-                  });
-
-               // reset the selected network
-               selectedPreferredWirelessNetwork = null;
-                  
-               // refresh the Preferred Networks list 
-               jQuery("#" + preferredWirelessNetworksListId).sortable('refresh');
-
-               // notify listeners that nothing is selected
-               jQuery.each(selectionListeners, function(i, listener)
-                  {
-                  if (listener)
-                     {
-                     listener(false);
                      }
                   });
                }
@@ -280,7 +215,7 @@ if (!window['$'])
 
       this.isItemSelected = function()
          {
-         return selectedPreferredWirelessNetwork != null;
+         return selectedWirelessNetwork != null;
          };
       };
    // ==================================================================================================================
