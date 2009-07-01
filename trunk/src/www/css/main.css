@@ -3,6 +3,11 @@ body, p, table, tr, td, ul, li, div {
    font-size: 8pt
 }
 
+span.ui-icon {
+   float: left;
+   margin: 0 2px;
+}
+
 .blank-line {
    height: 10px;
 }
@@ -14,9 +19,9 @@ body, p, table, tr, td, ul, li, div {
    float: left;
 }
 
-span.ui-icon {
-   float: left;
-   margin: 0 2px;
+.divider {
+   border-width: 1px 0 0 0;
+   margin: 5px 0 5px 0
 }
 
 .explanatory-text {
@@ -44,6 +49,13 @@ span.ui-icon {
    font-weight: bold;
 }
 
+.list-item {
+   display: block;
+   padding: 1px;
+   margin: 0;
+   cursor: pointer;
+}
+
 .main-title {
    font-size: 20pt;
    font-weight: bold;
@@ -63,9 +75,10 @@ span.ui-icon {
    background-color: #dddddd;
 }
 
-.sortableListItem {
+.sortable-list-item {
    display: block;
    padding: 0;
    margin: 0;
+   cursor: pointer;
 }
 
