@@ -186,17 +186,6 @@
                   }
             });
 
-            $('#addPreferredWirelessNetworkDialogButtonsContainer button').mousecapture({
-               "down": function()
-                  {
-                  $(this).addClass('ui-state-active');
-                  },
-               "up": function()
-                  {
-                  $(this).removeClass('ui-state-active');
-                  }
-            });
-
             $('#showAvailableWirelessNetworksButton').click(
                   function()
                      {
@@ -207,7 +196,7 @@
                      }
                   );
 
-            $('#showAvailableWirelessNetworksButton').mousecapture({
+            $('.state-has-no-dependency').mousecapture({
                "down": function()
                   {
                   $(this).addClass('ui-state-active');
@@ -226,17 +215,6 @@
                      }
                   );
 
-            $('#manuallyEnterAWirelessNetworkButton').mousecapture({
-               "down": function()
-                  {
-                  $(this).addClass('ui-state-active');
-                  },
-               "up": function()
-                  {
-                  $(this).removeClass('ui-state-active');
-                  }
-            });
-
             $('.cancel-preferred-wireless-network-dialog-button').click(
                   function()
                      {
@@ -244,32 +222,13 @@
                      }
                   );
 
-            $('.cancel-preferred-wireless-network-dialog-button').mousecapture({
-               "down": function()
-                  {
-                  $(this).addClass('ui-state-active');
-                  },
-               "up": function()
-                  {
-                  $(this).removeClass('ui-state-active');
-                  }
-            });
-
             // add mouse event handlers to the Add Preferred Wireless Network button
             $('#addPreferredWirelessNetworkButton').click(
                   function()
                      {
                      $('#preferred-wireless-network-dialog').dialog('open');
-                     }).mousecapture({
-               "down": function()
-                  {
-                  $(this).addClass('ui-state-active');
-                  },
-               "up": function()
-                  {
-                  $(this).removeClass('ui-state-active');
-                  }
-            });
+                     }
+                  );
 
             // add mousedown/mouseup actions to the Delete and Edit preferred wireless network buttons
             $('.state-depends-on-preferred-wireless-network-list-selection').mousecapture({
@@ -328,7 +287,7 @@
                      <div id="preferredWirelessNetworksList" class="ui-widget-content" style="overflow: auto; height:150px; width: 260px;"></div>
                   </div>
                   <div class="button-container">
-                     <div id="addPreferredWirelessNetworkButton" class="ui-state-default ui-corner-all button" title="Add">
+                     <div id="addPreferredWirelessNetworkButton" class="ui-state-default ui-corner-all button state-has-no-dependency" title="Add">
                         <span class="ui-icon ui-icon-plus"></span>
                      </div>
                      <div id="deletePreferredWirelessNetworkButton" class="ui-state-active ui-state-disabled ui-corner-all button state-depends-on-preferred-wireless-network-list-selection" title="Delete">
@@ -354,8 +313,8 @@
             <div class="ui-widget-content divider" style="margin-top: 50px"></div>
             <div id="addManuallyEnteredPreferredWirelessNetworkDialogButtonsContainer">
                <button type="button" style="float:right" id="addManuallyEnteredWirelessNetworkDialogButton" class="ui-state-disabled ui-state-active ui-corner-all button">Add</button>
-               <button type="button" style="float:right" class="ui-state-default ui-corner-all button cancel-preferred-wireless-network-dialog-button">Cancel</button>
-               <button type="button" id="showAvailableWirelessNetworksButton" class="ui-state-default ui-corner-all button">Show Networks</button>
+               <button type="button" style="float:right" class="ui-state-default ui-corner-all button cancel-preferred-wireless-network-dialog-button state-has-no-dependency">Cancel</button>
+               <button type="button" id="showAvailableWirelessNetworksButton" class="ui-state-default ui-corner-all button state-has-no-dependency">Show Networks</button>
             </div>
          </form>
          <div id="formToChooseFromAvailableWirelessNetworks" class="hidden">
@@ -374,8 +333,8 @@
             <div class="ui-widget-content divider" style="margin-top: 50px"></div>
             <div id="addChosenPreferredWirelessNetworkDialogButtonsContainer">
                <button type="button" style="float:right" id="addAvailableWirelessNetworkDialogButton" class="ui-state-active ui-state-disabled ui-corner-all button state-depends-on-available-wireless-network-list-selection">Add</button>
-               <button type="button" style="float:right" class="ui-state-default ui-corner-all button cancel-preferred-wireless-network-dialog-button">Cancel</button>
-               <button type="button" id="manuallyEnterAWirelessNetworkButton" class="ui-state-default ui-corner-all button">Other...</button>
+               <button type="button" style="float:right" class="ui-state-default ui-corner-all button cancel-preferred-wireless-network-dialog-button state-has-no-dependency">Cancel</button>
+               <button type="button" id="manuallyEnterAWirelessNetworkButton" class="ui-state-default ui-corner-all button state-has-no-dependency">Other...</button>
             </div>
          </div>
       </div>
