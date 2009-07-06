@@ -8,7 +8,7 @@ int main(int argc, char **argv)
   int i = 0;
   
   
-#if 1
+#if 0
   C9302Hardware hw;
   printf("%x\n", *hw.m_fpga.Ushort(0xfd0));
 
@@ -16,7 +16,7 @@ int main(int argc, char **argv)
   *hw.m_fpga.Ushort(0x008) = 0x0700 | 0x0030; 
   *hw.m_fpga.Ushort(0x00a) = 0x0009;
 #endif
-#if 1
+#if 0
   while(1)
     {
       i++;
@@ -45,7 +45,9 @@ int main(int argc, char **argv)
 #endif
 #if 1
   Axis_position pos;
+  printf("1\n");
   CQEMotorUser mu(NULL, 0);
+  printf("2\n");
   
   //mu.SetPWM(0, 128);
   mu.SetPIDVGains(0, 100, 0, 500, 0);

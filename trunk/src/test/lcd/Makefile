@@ -1,5 +1,5 @@
 TARGET=lcd
-CXX=arm-linux-gnueabi-g++
+CXX=arm-oe-linux-uclibcgnueabi-g++
 CFLAGS=-g -I../../libqwerk
 LDFLAGS=-L../../libqwerk -lqwerk
 SRCS=$(wildcard *.cxx)

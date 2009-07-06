@@ -1,5 +1,5 @@
 TARGET=libmmap
-CXX=arm-linux-gnueabi-g++
+CXX=arm-oe-linux-uclibcgnueabi-g++
 CFLAGS=
 SRCS=$(wildcard *.cxx)
 OBJECTS=$(SRCS:.cxx=.o)
@@ -11,7 +11,7 @@ install: $(TARGET).a
 	cp *.h ../../include
 
 $(TARGET).a: $(OBJECTS)
-	arm-linux-gnueabi-ar rvs $(TARGET).a $(OBJECTS)
+	arm-oe-linux-uclibcgnueabi-ar rvs $(TARGET).a $(OBJECTS)
 
 clean:
 	-rm *.o

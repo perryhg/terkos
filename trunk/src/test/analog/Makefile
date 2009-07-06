@@ -1,5 +1,5 @@
 TARGET=analog
-CXX=arm-linux-gnueabi-g++
+CXX=arm-oe-linux-uclibcgnueabi-g++
 CFLAGS=-g -I../../../include
 LDFLAGS=-L../../../lib -lqwerk
 SRCS=$(wildcard *.cxx)

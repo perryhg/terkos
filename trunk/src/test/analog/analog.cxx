@@ -11,6 +11,8 @@ int main(int argc, char **argv)
   *phw->PortHDataDR() |= 0x0020;  
   *phw->PortHData() |= 0x0020;
 
+  // *phw->PortCData() = 0; // turn off unit
+
 #if 0
 
   //set channel

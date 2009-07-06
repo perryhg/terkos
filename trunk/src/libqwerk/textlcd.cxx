@@ -128,6 +128,9 @@ void CTextLcd::SetBacklight(const bool isOn)
 
 void CTextLcd::Init()
 {
+  // backlight-- output
+  *m_p9302hw->PortADataDR() |= 0x08;
+
   // R/W and E low
   *m_p9302hw->PortBData() &= ~0xfc;
   *m_p9302hw->PortBDataDR() |= 0x0c;
@@ -135,15 +138,6 @@ void CTextLcd::Init()
   // RS low
   *m_p9302hw->PortGData() &= ~0x02;
   *m_p9302hw->PortGDataDR() |= 0x02;
-
-#if 0
-  PutNibble(0x02);
-  PutNibble(0x02);
-  PutNibble(0x08);
-  PutByte(0x0c);
-  PutByte(0x01);
-  PutByte(0x03);
-#endif
 
   Clear();
 }
@@ -187,7 +181,7 @@ int CTextLcd::GetProperty(int property, long *value)
   switch(property)
     {
     case TL_PROP_BACKLIGHT:
-      *value = *m_p9302hw->m_uart1.Uint(0x100) & 0x0001 ? 0 : 1;
+      *value = *m_p9302hw->PortAData() & 0x0008 ? 1 : 0;
       break;
 
     case TL_PROP_HEIGHT:
@@ -211,9 +205,9 @@ int CTextLcd::SetProperty(int property, long value)
     {
     case TL_PROP_BACKLIGHT:
       if (value)
-	*m_p9302hw->m_uart1.Uint(0x100) &= ~0x0001;
+	*m_p9302hw->PortAData() |= 0x08;
       else
-	*m_p9302hw->m_uart1.Uint(0x100) |= 0x0001;
+	*m_p9302hw->PortAData() &= ~0x08;
       break;
 
     case TL_PROP_HEIGHT:

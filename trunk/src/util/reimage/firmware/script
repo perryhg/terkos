@@ -24,7 +24,7 @@ waitfor 60 "Redboot>"
 print "done^m^j"
 #
 print "Copying flashdisk to flash..."
-send "fis create -b 0x800000 -l 0xe00000 root.jffs2^m"
+send "fis create -b 0x800000 -l 0x800000 root.jffs2^m"
 waitfor 200 "Redboot>"
 print "done^m^j"
 #

@@ -1,6 +1,6 @@
 TARGET=libqwerk
-CXX=arm-linux-gnueabi-g++
-AR=arm-linux-gnueabi-ar
+CXX=arm-oe-linux-uclibcgnueabi-g++
+AR=arm-oe-linux-uclibcgnueabi-ar
 CFLAGS=-g -Wall
 SRCS=$(wildcard *.cxx)
 OBJECTS=$(SRCS:.cxx=.o)

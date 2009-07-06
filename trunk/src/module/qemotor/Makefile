@@ -1,11 +1,11 @@
 ifeq ($(KERNELRELEASE),)
 
-KERNELDIR ?= /home/rich/oe/EMAC-OE/tmp/work/IPAC9302-linux-gnueabi/IPAC9302-kernel-2.6.22-r1.3/linux-2.6.22
+KERNELDIR ?= /home/rich/terk/terkos/trunk/oe/tmp/work/qwerk-oe-linux-uclibcgnueabi/linux-2.6.29.4-r2/linux-2.6.29.4
 
 PWD := $(shell pwd)
 
 modules:
-	$(MAKE) ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- modules2
+	$(MAKE) ARCH=arm CROSS_COMPILE=arm-oe-linux-uclibcgnueabi- modules2
 
 modules2:
 	$(MAKE) -C $(KERNELDIR) M=$(PWD) modules
