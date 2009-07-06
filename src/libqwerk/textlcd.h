@@ -30,7 +30,7 @@ class CTextLcd : public IProperty
       static const unsigned int NUM_COLUMNS;
 
       CTextLcd();
-      ~CTextLcd();
+      virtual ~CTextLcd();
 
       void Clear();
       void ClearLine(unsigned int lineNumber);

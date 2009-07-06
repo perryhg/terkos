@@ -4,6 +4,7 @@
 #include <asm/io.h>
 #include <linux/time.h>
 #include <linux/kfifo.h>
+#include <linux/sched.h>
 #include <asm/uaccess.h>
 
 #include "../../../src/libqwerk/qemotor.h"

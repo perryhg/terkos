@@ -10,7 +10,7 @@ int main(int argc, char **argv)
   int i, res;
   unsigned short s, read;
 
-  CQwerkHardware hw(NULL);
+  CQwerkHardware hw;
 
   hw.SetAudioEnable(true);
 
