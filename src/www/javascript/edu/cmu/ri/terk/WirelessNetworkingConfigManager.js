@@ -4,6 +4,7 @@
 // Dependencies:
 // * jQuery (http://jquery.com/)
 // * jQuery UI (http://jqueryui.com/)
+// * Math.uuid (http://www.broofa.com/blog/?p=151)
 // * main.css
 //
 // Author: Chris Bartley (bartley@cmu.edu)
@@ -67,9 +68,16 @@ else if (typeof edu.cmu.ri.terk != "object")
 //======================================================================================================================
 if (!window['$'])
    {
-   var nojQueryMsg = "The jQuery library is required by edu.cmu.ri.terk.WirelessNetworkingConfigManager.js";
-   alert(nojQueryMsg);
-   throw new Error(nojQueryMsg);
+   var msg = "The jQuery library is required by edu.cmu.ri.terk.WirelessNetworkingConfigManager.js";
+   alert(msg);
+   throw new Error(msg);
+   }
+//======================================================================================================================
+if (!Math.uuid)
+   {
+   var msg = "The Math.uuid library is required by edu.cmu.ri.terk.WirelessNetworkingConfigManager.js";
+   alert(msg);
+   throw new Error(msg);
    }
 //======================================================================================================================
 
@@ -93,17 +101,46 @@ if (!window['$'])
                                                               wirelessNetworksListContainerId,
                                                               wirelessNetworksListId)
       {
-      var host = '';//http://192.168.1.104'; // TODO: remove me!
+      var host = '';//http://192.168.0.4'; // TODO: remove me!
 
       var selectedWirelessNetwork = null;
       var selectionListeners = new Array();
+      var json = null;
+      var profilesMap = new Array();
 
       jQuery("#" + wirelessNetworksListId).sortable({
          handle : '.handle',
          axis: 'y',
          tolerance: 'pointer' ,
-         containment: '#' + wirelessNetworksListContainerId
+         containment: '#' + wirelessNetworksListContainerId,
+         update : function ()
+            {
+            rebuildProfiles();
+            }
       }).disableSelection();
+
+      var rebuildProfiles = function()
+         {
+         // wipe the current profile ordering from the JSON
+         json['profiles'] = new Array();
+
+         // fetch the new ordering
+         var desiredProfileOrdering = $('#' + wirelessNetworksListId).sortable("toArray");
+
+         // add the profiles to the JSON in the new order
+         for (var i = 0; i < desiredProfileOrdering.length; i++)
+            {
+            var uuid = desiredProfileOrdering[i];
+            json['profiles'][json['profiles'].length] = profilesMap[uuid];
+            }
+
+         displayJsonForDebugging();
+         };
+
+      var displayJsonForDebugging = function()
+         {
+         jQuery("#info").html("<pre>" + JSON.stringify(json, null, "\t") + "</pre>");
+         };
 
       this.getWirelessNetworkingConfig = function()
          {
@@ -113,6 +150,28 @@ if (!window['$'])
          // clear the list
          jQuery("#" + wirelessNetworksListId).empty();
 
+         clearListSelection();
+
+         // load the wireless config
+         jQuery.ajax(
+         {
+            url: host + '/cgi-bin/getWirelessNetworkingConfigAsJSON.pl',
+            success: function(jsonResponse)
+               {
+               jQuery("#" + wirelessNetworkingConfigurationAreaId).removeClass("hidden");
+               json = jsonResponse;
+               displayWirelessNetworkingConfig();
+               },
+            error: function()
+               {
+               json = null;
+               displayWirelessNetworkingConfig();
+               }
+         });
+         };
+
+      var clearListSelection = function()
+         {
          // reset the selected network
          selectedWirelessNetwork = null;
 
@@ -127,77 +186,85 @@ if (!window['$'])
                listener(false);
                }
             });
-
-         // load the wireless config
-         jQuery.ajax(
-         {
-            url: host + '/cgi-bin/getWirelessNetworkingConfigAsJSON.pl',
-            success: function(jsonResponse)
-               {
-               jQuery("#" + wirelessNetworkingConfigurationAreaId).removeClass("hidden");
-               displayWirelessNetworkingConfig(jsonResponse);
-               },
-            error: function()
-               {
-               displayWirelessNetworkingConfig(null);
-               }
-         });
          };
 
-      var displayWirelessNetworkingConfig = function(wirelessNetworkingConfig)
+      var createUUID = function()
          {
-         if (wirelessNetworkingConfig)
+         return "profile_" + Math.uuid(10);
+         };
+
+      var addNetworkProfile = function(networkProfile)
+         {
+         if (networkProfile)
+            {
+            // create a UUID for this network, so we can uniquely reference it when the user
+            // changes sort order and such
+            var uuid = createUUID();
+
+            // save the profile in the map for easy reference later
+            profilesMap[uuid] = networkProfile;
+
+            // build the list item
+            var listItem = document.createElement("div");
+            listItem.id = uuid;
+            listItem.className = "sortable-list-item";
+
+            var listItemInfo = document.createElement("div");
+            listItemInfo.id = uuid + "_info";
+            listItemInfo.className = "handle";
+
+            // add the item to the list
+            jQuery("#" + wirelessNetworksListId).append(listItem);
+            jQuery("#" + listItem.id).append(listItemInfo);
+            jQuery("#" + listItemInfo.id).text(networkProfile['ssid']);
+
+            // add a mousedown event handler to the list item so we can keep
+            // track of which one is selected (and also do some selection highlighting)
+            jQuery("#" + listItem.id).mousedown(
+                  function()
+                     {
+                     if (this != selectedWirelessNetwork)
+                        {
+                        // remove selection highlighting from the previously selected item, if any
+                        if (selectedWirelessNetwork != null)
+                           {
+                           jQuery(selectedWirelessNetwork).removeClass("selected");
+                           }
+                        // add selection highlighting to the newly selected item
+                        jQuery(this).addClass("selected");
+
+                        // record which item is selected
+                        selectedWirelessNetwork = this;
+
+                        // notify listeners that something is now selected
+                        jQuery.each(selectionListeners, function(i, listener)
+                           {
+                           if (listener)
+                              {
+                              listener(true);
+                              }
+                           });
+                        }
+                     }
+                  );
+            }
+         };
+
+      var displayWirelessNetworkingConfig = function()
+         {
+         if (json)
             {
             jQuery("#" + wirelessNetworkingConfigurationMessageAreaId).empty();
-            jQuery("#" + willStartWirelessNetworkingOnBootupCheckboxId).attr('checked', wirelessNetworkingConfig["will-start-on-bootup"]);
-            if (wirelessNetworkingConfig['profiles'])
+            jQuery("#" + willStartWirelessNetworkingOnBootupCheckboxId).attr('checked', json["will-start-on-bootup"]);
+            if (json['profiles'])
                {
-               jQuery.each(wirelessNetworkingConfig['profiles'], function(i, networkProfile)
+               jQuery.each(json['profiles'], function(i, networkProfile)
                   {
-                  if (networkProfile)
-                     {
-                     // build the list item
-                     var listItem = document.createElement("div");
-                     listItem.id = "preferredWirelessNetworksListItem_" + i;
-                     listItem.className = "sortable-list-item";
-
-                     var listItemInfo = document.createElement("div");
-                     listItemInfo.id = "preferredWirelessNetworksListItemInfo_" + i;
-                     listItemInfo.className = "handle";
-
-                     // add the item to the list
-                     jQuery("#" + wirelessNetworksListId).append(listItem);
-                     jQuery("#" + listItem.id).append(listItemInfo);
-                     jQuery("#" + listItemInfo.id).text(networkProfile['ssid']);
-
-                     // add a mousedown event handler to the list item so we can keep
-                     // track of which one is selected (and also do some selection highlighting)
-                     jQuery("#" + listItem.id).mousedown(
-                           function()
-                              {
-                              if (this != selectedWirelessNetwork)
-                                 {
-                                 if (selectedWirelessNetwork != null)
-                                    {
-                                    jQuery(selectedWirelessNetwork).removeClass("selected");
-                                    }
-                                 jQuery(this).addClass("selected");
-                                 selectedWirelessNetwork = this;
-
-                                 // notify listeners that something is now selected
-                                 jQuery.each(selectionListeners, function(i, listener)
-                                    {
-                                    if (listener)
-                                       {
-                                       listener(true);
-                                       }
-                                    });
-                                 }
-                              }
-                           );
-                     }
+                  addNetworkProfile(networkProfile);
                   });
                }
+
+            displayJsonForDebugging();
             }
          else
             {
@@ -216,6 +283,49 @@ if (!window['$'])
       this.isItemSelected = function()
          {
          return selectedWirelessNetwork != null;
+         };
+
+      this.deleteSelected = function()
+         {
+         if (this.isItemSelected())
+            {
+            // delete the item from the list and fetch its uuid
+            var uuid = jQuery(selectedWirelessNetwork).remove().attr("id");
+
+            // delete it from the profiles map
+            delete profilesMap[uuid];
+
+            clearListSelection();
+
+            // rebuild the JSON
+            rebuildProfiles();
+            }
+         }
+
+      this.editSelected = function()
+         {
+         if (this.isItemSelected())
+            {
+            // TODO
+            alert("Edit not yet implemented");
+            }
+         };
+
+      this.addNetwork = function(networkProfile)
+         {
+         if (networkProfile)
+            {
+            addNetworkProfile(networkProfile)
+
+            // rebuild the JSON
+            rebuildProfiles();
+            }
+         };
+
+      this.setWillStartOnBootup = function(willStartOnBootup)
+         {
+         json["will-start-on-bootup"] = willStartOnBootup;
+         displayJsonForDebugging();
          };
       };
    // ==================================================================================================================

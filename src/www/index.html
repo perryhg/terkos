@@ -4,16 +4,11 @@
    <title>VexPro Control Panel</title>
    <link type="text/css" href="css/smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet"/>
    <link type="text/css" href="css/main.css" rel="stylesheet"/>
-   <style type="text/css">
-      #preferredWirelessNetworksListContainer {
-         display: block;
-         padding: 0;
-         margin: 0;
-      }
-   </style>
    <script type="text/javascript" src="javascript/jquery.js"></script>
    <script type="text/javascript" src="javascript/jquery-ui-1.7.2.custom.min.js"></script>
    <script type="text/javascript" src="javascript/jquery.mousecapture.js"></script>
+   <script type="text/javascript" src="javascript/Math.uuid.js"></script>
+   <script type="text/javascript" src="javascript/json2.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkingStatus.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkingConfigManager.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkScanner.js"></script>
@@ -184,7 +179,21 @@
                      $(this).removeClass('ui-state-active');
                      }
                   }
-            });
+            }).click(
+                  function()
+                     {
+                     // build the network profile object
+                     var network = new Object();
+                     network['ssid'] = $("#wirelessNetworkName").val();
+                     network['encryption'] = false;
+
+                     // add the network
+                     wirelessNetworkingConfigManager.addNetwork(network);
+
+                     // close the dialog
+                     $("#preferred-wireless-network-dialog").dialog('close');
+                     }
+                  );
 
             $('#showAvailableWirelessNetworksButton').click(
                   function()
@@ -193,6 +202,13 @@
                      $("#formToChooseFromAvailableWirelessNetworks").removeClass("hidden");
 
                      wirelessNetworkScanner.scanForWirelessNetworks();
+                     }
+                  );
+
+            $('#willStartWirelessNetworkingOnBootupCheckbox').change(
+                  function()
+                     {
+                     wirelessNetworkingConfigManager.setWillStartOnBootup($(this).attr("checked"));
                      }
                   );
 
@@ -228,7 +244,23 @@
                      {
                      $('#preferred-wireless-network-dialog').dialog('open');
                      }
-                  );
+                  ).disableSelection();
+
+            // add mouse event handlers to the Delete Preferred Wireless Network button
+            $('#deletePreferredWirelessNetworkButton').click(
+                  function()
+                     {
+                     wirelessNetworkingConfigManager.deleteSelected();
+                     }
+                  ).disableSelection();
+
+            // add mouse event handlers to the Edit Preferred Wireless Network button
+            $('#editPreferredWirelessNetworkButton').click(
+                  function()
+                     {
+                     wirelessNetworkingConfigManager.editSelected();
+                     }
+                  ).disableSelection();
 
             // add mousedown/mouseup actions to the Delete and Edit preferred wireless network buttons
             $('.state-depends-on-preferred-wireless-network-list-selection').mousecapture({
@@ -284,7 +316,7 @@
                   <div class="blank-line"></div>
                   <div class="label">Preferred Networks:</div>
                   <div id="preferredWirelessNetworksListContainer">
-                     <div id="preferredWirelessNetworksList" class="ui-widget-content" style="overflow: auto; height:150px; width: 260px;"></div>
+                     <div id="preferredWirelessNetworksList" class="ui-widget-content" style="display:block; padding:0; margin:0; overflow: auto; height:150px; width: 260px;"></div>
                   </div>
                   <div class="button-container">
                      <div id="addPreferredWirelessNetworkButton" class="ui-state-default ui-corner-all button state-has-no-dependency" title="Add">
@@ -302,6 +334,7 @@
             </div>
          </div>
       </form>
+      <div id="info"></div>
       <div id="preferred-wireless-network-dialog" title="Add a Preferred Wireless Network">
          <form id="formToEnterPreferredWirelessNetworkInfo">
             <p>
