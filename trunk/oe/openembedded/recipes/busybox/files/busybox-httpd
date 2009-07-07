@@ -3,7 +3,9 @@ DAEMON=/usr/sbin/httpd
 NAME=httpd
 DESC="Busybox HTTP Daemon"
 HTTPROOT="/srv/www"
-ARGS="-h $HTTPROOT"
+HTTPCONF="/etc/httpd.conf"
+HTTPREALM="VexPro"
+ARGS="-h $HTTPROOT -c $HTTPCONF -r $HTTPREALM"
 
 test -f $DAEMON || exit 0
 
