@@ -54,6 +54,6 @@ IMAGE_INSTALL = " \
 export IMAGE_BASENAME = "vexpro-image"
 IMAGE_LINGUAS = ""
 
-ONLINE_PACKAGE_MANAGEMENT = "none"
+#ONLINE_PACKAGE_MANAGEMENT = "none"
 
 inherit image

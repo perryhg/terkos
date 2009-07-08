@@ -1,0 +1,8 @@
+This patch overrides the root-home.patch for all DISTROs
+derived from terkos (DISTROs which set terkos in OVERRIDES)
+
+The patch sets a root password on /etc/passwd, this password is
+
+qwerk
+
+This allows ssh login to a Qwerk or VexPro using that password.
