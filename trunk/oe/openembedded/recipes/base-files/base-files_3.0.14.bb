@@ -14,6 +14,8 @@ SRC_URI = " \
            file://filesystems \
            file://issue.net \
            file://issue \
+           file://httpd.conf \
+           file://httpd.conf.default \
            file://usbd \
            file://share/dot.bashrc \
            file://share/dot.profile \
@@ -143,6 +145,10 @@ do_install_append_slugos() {
 
 do_install_append_netbook-pro () {
 	mkdir -p ${D}/initrd
+}
+
+do_install_append_terkos () {
+        install -m 644 ${WORKDIR}/httpd.conf*  ${D}${sysconfdir}  
 }
 
 PACKAGES = "${PN}-dbg ${PN}-doc ${PN}"
