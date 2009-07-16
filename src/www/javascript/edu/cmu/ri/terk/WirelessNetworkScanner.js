@@ -4,6 +4,7 @@
 // Dependencies:
 // * jQuery (http://jquery.com/)
 // * jQuery UI (http://jqueryui.com/)
+// * Math.uuid (http://www.broofa.com/blog/?p=151)
 // * main.css
 //
 // Author: Chris Bartley (bartley@cmu.edu)
@@ -72,6 +73,13 @@ if (!window['$'])
    throw new Error(nojQueryMsg);
    }
 //======================================================================================================================
+if (!Math.uuid)
+   {
+   var msg2 = "The Math.uuid library is required by edu.cmu.ri.terk.WirelessNetworkingConfigManager.js";
+   alert(msg2);
+   throw new Error(msg2);
+   }
+//======================================================================================================================
 
 //======================================================================================================================
 // CODE
@@ -94,6 +102,7 @@ if (!window['$'])
 
       var selectedWirelessNetwork = null;
       var selectionListeners = new Array();
+      var profilesMap = new Array();
 
       this.scanForWirelessNetworks = function()
          {
@@ -129,6 +138,57 @@ if (!window['$'])
          });
          };
 
+      var createUUID = function()
+         {
+         return Math.uuid(10);
+         };
+
+      var addNetworkProfile = function(networkProfile)
+         {
+         if (networkProfile)
+            {
+            // create a UUID for this network, so we can uniquely reference it when the user
+            // changes sort order and such
+            var uuid = createUUID();
+
+            // save the profile in the map for easy reference later
+            profilesMap[uuid] = networkProfile;
+
+            // build the list item
+            var listItem = document.createElement("div");
+            listItem.id = uuid;
+
+            jQuery("#" + wirelessNetworksListId).append(listItem);
+            jQuery("#" + listItem.id).text(networkProfile['ssid']).disableSelection().addClass("list-item");
+
+            // add a mousedown event handler to the list item so we can keep
+            // track of which one is selected (and also do some selection highlighting)
+            jQuery("#" + listItem.id).mousedown(
+                  function()
+                     {
+                     if (this != selectedWirelessNetwork)
+                        {
+                        if (selectedWirelessNetwork != null)
+                           {
+                           jQuery(selectedWirelessNetwork).removeClass("selected");
+                           }
+                        jQuery(this).addClass("selected");
+                        selectedWirelessNetwork = this;
+
+                        // notify listeners that something is now selected
+                        jQuery.each(selectionListeners, function(i, listener)
+                           {
+                           if (listener)
+                              {
+                              listener(true);
+                              }
+                           });
+                        }
+                     }
+                  );
+            }
+         };
+
       var displayAvailableWirelessNetworks = function(wirelessNetworksJSON)
          {
          jQuery("#" + pleaseWaitIndicatorId).addClass("hidden");
@@ -138,41 +198,10 @@ if (!window['$'])
             var wirelessNetworks = wirelessNetworksJSON['wireless-networks'];
             if (wirelessNetworks && wirelessNetworks.length > 0)
                {
-               for (var i = 0; i < wirelessNetworks.length; i++)
+               jQuery.each(wirelessNetworks, function(i, networkProfile)
                   {
-                  // build the list item
-                  var listItem = document.createElement("div");
-                  listItem.id = "availableWirelessNetworksListItem_" + i;
-
-                  jQuery("#" + wirelessNetworksListId).append(listItem);
-                  jQuery("#" + listItem.id).text(wirelessNetworks[i]['ssid']).disableSelection().addClass("list-item");
-
-                  // add a mousedown event handler to the list item so we can keep
-                  // track of which one is selected (and also do some selection highlighting)
-                  jQuery("#" + listItem.id).mousedown(
-                        function()
-                           {
-                           if (this != selectedWirelessNetwork)
-                              {
-                              if (selectedWirelessNetwork != null)
-                                 {
-                                 jQuery(selectedWirelessNetwork).removeClass("selected");
-                                 }
-                              jQuery(this).addClass("selected");
-                              selectedWirelessNetwork = this;
-
-                              // notify listeners that something is now selected
-                              jQuery.each(selectionListeners, function(i, listener)
-                                 {
-                                 if (listener)
-                                    {
-                                    listener(true);
-                                    }
-                                 });
-                              }
-                           }
-                        );
-                  }
+                  addNetworkProfile(networkProfile);
+                  });
                }
             }
          else
@@ -193,6 +222,17 @@ if (!window['$'])
          {
          return selectedWirelessNetwork != null;
          };
+
+      this.getSelectedItemJSON = function()
+         {
+         if (this.isItemSelected())
+            {
+            // get the selected item and fetch its uuid
+            var uuid = jQuery(selectedWirelessNetwork).attr("id");
+            return profilesMap[uuid];
+            }
+         };
+
       };
    // ==================================================================================================================
    })();
