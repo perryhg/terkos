@@ -17,6 +17,28 @@
 
       $(function()
          {
+         // create the WirelessNetworkStatus
+         var wirelessNetworkingStatus = new edu.cmu.ri.terk.WirelessNetworkingStatus(
+               "wirelessNetworkingStatusMessageArea",
+               "wirelessNetworkingStatusMessageAreaDetail"
+               );
+
+         var wirelessNetworkingConfigManager = new edu.cmu.ri.terk.WirelessNetworkingConfigManager(
+            "wirelessNetworkingConfigurationMessageArea",
+            "wirelessNetworkingConfigurationArea",
+            "willStartWirelessNetworkingOnBootupCheckbox",
+            "preferredWirelessNetworksListContainer",
+            "preferredWirelessNetworksList"
+            );
+
+         // create the WirelessNetworkScanner
+         var wirelessNetworkScanner = new edu.cmu.ri.terk.WirelessNetworkScanner(
+               "availableWirelessNetworksList",
+               "availableWirelessNetworksPleaseWaitIndicator"
+               );
+
+         var wirelessNetworkingTab = new edu.cmu.ri.terk.WirelessNetworkingTab(wirelessNetworkingConfigManager, wirelessNetworkScanner);
+
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
             };
@@ -89,215 +111,7 @@
    </div>
    <!-- ============================================================================================================ -->
    <div id="Wireless_Networking">
-      <script type="text/javascript">
-         var wirelessNetworkingStatus = null;
-         var wirelessNetworkingConfigManager = null;
-         var wirelessNetworkScanner = null;
-
-         $(function()
-            {
-            // create the WirelessNetworkStatus
-            wirelessNetworkingStatus = new edu.cmu.ri.terk.WirelessNetworkingStatus(
-                  "wirelessNetworkingStatusMessageArea",
-                  "wirelessNetworkingStatusMessageAreaDetail"
-                  );
-
-            // create the WirelessNetworkScanner
-            wirelessNetworkScanner = new edu.cmu.ri.terk.WirelessNetworkScanner(
-                  "availableWirelessNetworksList",
-                  "availableWirelessNetworksPleaseWaitIndicator"
-                  );
-
-            // create and configure the WirelessNetworkingConfigManager
-            wirelessNetworkingConfigManager = new edu.cmu.ri.terk.WirelessNetworkingConfigManager(
-                  "wirelessNetworkingConfigurationMessageArea",
-                  "wirelessNetworkingConfigurationArea",
-                  "willStartWirelessNetworkingOnBootupCheckbox",
-                  "preferredWirelessNetworksListContainer",
-                  "preferredWirelessNetworksList"
-                  );
-
-            wirelessNetworkScanner.addSelectionListener(function(isSelected)
-               {
-               $(".state-depends-on-available-wireless-network-list-selection").toggleClass("ui-state-default", isSelected);
-               $(".state-depends-on-available-wireless-network-list-selection").toggleClass("ui-state-active", !isSelected);
-               $(".state-depends-on-available-wireless-network-list-selection").toggleClass("ui-state-disabled", !isSelected);
-               });
-
-            wirelessNetworkingConfigManager.addSelectionListener(function(isSelected)
-               {
-               $(".state-depends-on-preferred-wireless-network-list-selection").toggleClass("ui-state-default", isSelected);
-               $(".state-depends-on-preferred-wireless-network-list-selection").toggleClass("ui-state-active", !isSelected);
-               $(".state-depends-on-preferred-wireless-network-list-selection").toggleClass("ui-state-disabled", !isSelected);
-               });
-
-            var wirelessNetworkName = $("#wirelessNetworkName");
-            var allFields = $([]).add(wirelessNetworkName);
-
-            // create the dialog for entering/specifying a preferred wireless network
-            $("#preferred-wireless-network-dialog").dialog({
-               bgiframe: true,
-               autoOpen: false,
-               modal: true,
-               draggable: false,
-               resizable: false,
-               close: function()
-                  {
-                  allFields.val('');
-                  $('#manuallyEnterAWirelessNetworkButton').click();
-                  $("#wirelessNetworkName").keyup();
-                  }
-            });
-
-            var isNetworkNameValid = function()
-               {
-               return $("#wirelessNetworkName").val().length > 0;
-               };
-
-            $("#wirelessNetworkName").keyup(
-                  function()
-                     {
-                     var isValid = isNetworkNameValid();
-                     $("#addManuallyEnteredWirelessNetworkDialogButton").toggleClass("ui-state-default", isValid);
-                     $("#addManuallyEnteredWirelessNetworkDialogButton").toggleClass("ui-state-active", !isValid);
-                     $("#addManuallyEnteredWirelessNetworkDialogButton").toggleClass("ui-state-disabled", !isValid);
-                     }
-                  );
-
-            $('#addManuallyEnteredWirelessNetworkDialogButton').mousecapture({
-               "down": function()
-                  {
-                  if (isNetworkNameValid())
-                     {
-                     $(this).addClass('ui-state-active');
-                     }
-                  },
-               "up": function()
-                  {
-                  if (isNetworkNameValid())
-                     {
-                     $(this).removeClass('ui-state-active');
-                     }
-                  }
-            }).click(
-                  function()
-                     {
-                     // build the network profile object
-                     var network = new Object();
-                     network['ssid'] = $("#wirelessNetworkName").val();
-                     network['encryption'] = false;
-
-                     // add the network
-                     wirelessNetworkingConfigManager.addNetwork(network);
-
-                     // close the dialog
-                     $("#preferred-wireless-network-dialog").dialog('close');
-                     }
-                  );
-
-            $('#showAvailableWirelessNetworksButton').click(
-                  function()
-                     {
-                     $("#formToEnterPreferredWirelessNetworkInfo").addClass("hidden");
-                     $("#formToChooseFromAvailableWirelessNetworks").removeClass("hidden");
-
-                     wirelessNetworkScanner.scanForWirelessNetworks();
-                     }
-                  );
-
-            $('#willStartWirelessNetworkingOnBootupCheckbox').change(
-                  function()
-                     {
-                     wirelessNetworkingConfigManager.setWillStartOnBootup($(this).attr("checked"));
-                     }
-                  );
-
-            $('.state-has-no-dependency').mousecapture({
-               "down": function()
-                  {
-                  $(this).addClass('ui-state-active');
-                  },
-               "up": function()
-                  {
-                  $(this).removeClass('ui-state-active');
-                  }
-            });
-
-            $('#manuallyEnterAWirelessNetworkButton').click(
-                  function()
-                     {
-                     $("#formToEnterPreferredWirelessNetworkInfo").removeClass("hidden");
-                     $("#formToChooseFromAvailableWirelessNetworks").addClass("hidden");
-                     }
-                  );
-
-            $('.cancel-preferred-wireless-network-dialog-button').click(
-                  function()
-                     {
-                     $("#preferred-wireless-network-dialog").dialog('close');
-                     }
-                  );
-
-            // add mouse event handlers to the Add Preferred Wireless Network button
-            $('#addPreferredWirelessNetworkButton').click(
-                  function()
-                     {
-                     $('#preferred-wireless-network-dialog').dialog('open');
-                     }
-                  ).disableSelection();
-
-            // add mouse event handlers to the Delete Preferred Wireless Network button
-            $('#deletePreferredWirelessNetworkButton').click(
-                  function()
-                     {
-                     wirelessNetworkingConfigManager.deleteSelected();
-                     }
-                  ).disableSelection();
-
-            // add mouse event handlers to the Edit Preferred Wireless Network button
-            $('#editPreferredWirelessNetworkButton').click(
-                  function()
-                     {
-                     wirelessNetworkingConfigManager.editSelected();
-                     }
-                  ).disableSelection();
-
-            // add mousedown/mouseup actions to the Delete and Edit preferred wireless network buttons
-            $('.state-depends-on-preferred-wireless-network-list-selection').mousecapture({
-               "down": function()
-                  {
-                  if (wirelessNetworkingConfigManager.isItemSelected())
-                     {
-                     $(this).addClass('ui-state-active');
-                     }
-                  },
-               "up": function()
-                  {
-                  if (wirelessNetworkingConfigManager.isItemSelected())
-                     {
-                     $(this).removeClass('ui-state-active');
-                     }
-                  }});
-
-            // add mousedown/mouseup actions to the Add available wireless network button
-            $('.state-depends-on-available-wireless-network-list-selection').mousecapture({
-               "down": function()
-                  {
-                  if (wirelessNetworkScanner.isItemSelected())
-                     {
-                     $(this).addClass('ui-state-active');
-                     }
-                  },
-               "up": function()
-                  {
-                  if (wirelessNetworkScanner.isItemSelected())
-                     {
-                     $(this).removeClass('ui-state-active');
-                     }
-                  }});
-
-            });
-      </script>
+      <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkingTab.js"></script>
 
       <form action="javascript:void()" method="post">
          <div class="section">
@@ -336,13 +150,13 @@
       </form>
       <div id="info"></div>
       <div id="preferred-wireless-network-dialog" title="Add a Preferred Wireless Network">
-         <form id="formToEnterPreferredWirelessNetworkInfo">
+         <form id="formToEnterPreferredWirelessNetworkInfo" onsubmit="return false;">
             <p>
                Enter the name of the network you want to add. You can also click
                Show Networks to choose from a list of available networks.
             </p>
-            <label for="wirelessNetworkName">Network Name</label>
-            <input type="text" name="wirelessNetworkName" id="wirelessNetworkName" class="text ui-widget-content ui-corner-all"/>
+            <label for="wirelessNetworkName_add">Network Name</label>
+            <input type="text" name="wirelessNetworkName_add" id="wirelessNetworkName_add" class="text ui-widget-content ui-corner-all"/>
             <div class="ui-widget-content divider" style="margin-top: 50px"></div>
             <div id="addManuallyEnteredPreferredWirelessNetworkDialogButtonsContainer">
                <button type="button" style="float:right" id="addManuallyEnteredWirelessNetworkDialogButton" class="ui-state-disabled ui-state-active ui-corner-all button">Add</button>
@@ -370,6 +184,21 @@
                <button type="button" id="manuallyEnterAWirelessNetworkButton" class="ui-state-default ui-corner-all button state-has-no-dependency">Other...</button>
             </div>
          </div>
+      </div>
+      <div id="edit-preferred-wireless-network-dialog" title="Edit a Preferred Wireless Network">
+         <form id="formToEdiPreferredWirelessNetworkInfo" onsubmit="return false;">
+            <p>
+               Edit the wireless network's name.
+            </p>
+            <label for="wirelessNetworkName_edit">Network Name</label>
+            <input type="text" name="wirelessNetworkName_edit" id="wirelessNetworkName_edit" class="text ui-widget-content ui-corner-all"/>
+            <input type="hidden" id="wirelessNetworkUUID_edit"/>
+            <div class="ui-widget-content divider" style="margin-top: 50px"></div>
+            <div id="editPreferredWirelessNetworkDialogButtonsContainer">
+               <button type="button" style="float:right" id="saveManuallyEnteredWirelessNetworkDialogButton" class="ui-state-disabled ui-state-active ui-corner-all button">OK</button>
+               <button type="button" style="float:right" id="cancelEditWirelessNetworkDialogButton" class="ui-state-default ui-corner-all button state-has-no-dependency">Cancel</button>
+            </div>
+         </form>
       </div>
    </div>
    <!-- ============================================================================================================ -->

@@ -68,16 +68,16 @@ else if (typeof edu.cmu.ri.terk != "object")
 //======================================================================================================================
 if (!window['$'])
    {
-   var msg = "The jQuery library is required by edu.cmu.ri.terk.WirelessNetworkingConfigManager.js";
-   alert(msg);
-   throw new Error(msg);
+   var msg1 = "The jQuery library is required by edu.cmu.ri.terk.WirelessNetworkingConfigManager.js";
+   alert(msg1);
+   throw new Error(msg1);
    }
 //======================================================================================================================
 if (!Math.uuid)
    {
-   var msg = "The Math.uuid library is required by edu.cmu.ri.terk.WirelessNetworkingConfigManager.js";
-   alert(msg);
-   throw new Error(msg);
+   var msg2 = "The Math.uuid library is required by edu.cmu.ri.terk.WirelessNetworkingConfigManager.js";
+   alert(msg2);
+   throw new Error(msg2);
    }
 //======================================================================================================================
 
@@ -105,6 +105,7 @@ if (!Math.uuid)
 
       var selectedWirelessNetwork = null;
       var selectionListeners = new Array();
+      var doubleClickListeners = new Array();
       var json = null;
       var profilesMap = new Array();
 
@@ -125,7 +126,7 @@ if (!Math.uuid)
          json['profiles'] = new Array();
 
          // fetch the new ordering
-         var desiredProfileOrdering = $('#' + wirelessNetworksListId).sortable("toArray");
+         var desiredProfileOrdering = jQuery('#' + wirelessNetworksListId).sortable("toArray");
 
          // add the profiles to the JSON in the new order
          for (var i = 0; i < desiredProfileOrdering.length; i++)
@@ -246,6 +247,18 @@ if (!Math.uuid)
                            });
                         }
                      }
+                  ).dblclick(
+                  function()
+                     {
+                     // notify listeners that the selected item was double-clicked
+                     jQuery.each(doubleClickListeners, function(i, listener)
+                        {
+                        if (listener)
+                           {
+                           listener();
+                           }
+                        });
+                     }
                   );
             }
          };
@@ -280,14 +293,26 @@ if (!Math.uuid)
             }
          };
 
-      this.isItemSelected = function()
+      this.addDoubleClickListener = function(listener)
+         {
+         if (listener)
+            {
+            doubleClickListeners[doubleClickListeners.length] = listener;
+            }
+         };
+
+      var getIsItemSelected = function()
          {
          return selectedWirelessNetwork != null;
+         };
+      this.isItemSelected = function()
+         {
+         return getIsItemSelected();
          };
 
       this.deleteSelected = function()
          {
-         if (this.isItemSelected())
+         if (getIsItemSelected())
             {
             // delete the item from the list and fetch its uuid
             var uuid = jQuery(selectedWirelessNetwork).remove().attr("id");
@@ -300,25 +325,51 @@ if (!Math.uuid)
             // rebuild the JSON
             rebuildProfiles();
             }
-         }
-
-      this.editSelected = function()
-         {
-         if (this.isItemSelected())
-            {
-            // TODO
-            alert("Edit not yet implemented");
-            }
          };
 
       this.addNetwork = function(networkProfile)
          {
          if (networkProfile)
             {
-            addNetworkProfile(networkProfile)
+            addNetworkProfile(networkProfile);
 
             // rebuild the JSON
             rebuildProfiles();
+            }
+         };
+
+      this.editNetwork = function(uuid, networkProfile)
+         {
+         if (uuid && networkProfile)
+            {
+            // save the new details in the profiles map
+            profilesMap[uuid] = networkProfile;
+
+            // update the UI
+            jQuery("#" + uuid + "_info").text(networkProfile['ssid']);
+
+            // rebuild the JSON
+            rebuildProfiles();
+            }
+         };
+
+      this.getSelectedItemJSON = function()
+         {
+         if (getIsItemSelected())
+            {
+            // get the selected item and fetch its uuid
+            var uuid = jQuery(selectedWirelessNetwork).attr("id");
+
+            return profilesMap[uuid];
+            }
+         };
+
+      this.getSelectedItemUUID = function()
+         {
+         if (getIsItemSelected())
+            {
+            // get the selected item and return its uuid
+            return jQuery(selectedWirelessNetwork).attr("id");
             }
          };
 
@@ -328,8 +379,6 @@ if (!Math.uuid)
          displayJsonForDebugging();
          };
       };
-   // ==================================================================================================================
-
 
    // ==================================================================================================================
    })();
