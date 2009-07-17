@@ -18,7 +18,7 @@ span.ui-icon {
 
 .button-container div {
    margin: 2px 2px 2px 0;
-   padding: 2px 0;
+   padding: 1px 0 2px;
    cursor: pointer;
    float: left;
 }
@@ -84,5 +84,9 @@ span.ui-icon {
    padding: 0;
    margin: 0;
    cursor: pointer;
+}
+
+.text-button {
+   padding: 3px 7px;
 }
 

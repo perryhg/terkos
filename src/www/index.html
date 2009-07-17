@@ -47,8 +47,8 @@
             };
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
-            wirelessNetworkingStatus.getWirelessNetworkingStatus();
             wirelessNetworkingConfigManager.getWirelessNetworkingConfig();
+            wirelessNetworkingStatus.getWirelessNetworkingStatus();
             };
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
@@ -132,7 +132,7 @@
                   <div id="preferredWirelessNetworksListContainer">
                      <div id="preferredWirelessNetworksList" class="ui-widget-content" style="display:block; padding:0; margin:0; overflow: auto; height:150px; width: 260px;"></div>
                   </div>
-                  <div class="button-container">
+                  <div class="button-container" style="width:262px;background-color:#ccccff">
                      <div id="addPreferredWirelessNetworkButton" class="ui-state-default ui-corner-all button state-has-no-dependency" title="Add">
                         <span class="ui-icon ui-icon-plus"></span>
                      </div>
@@ -142,6 +142,7 @@
                      <div id="editPreferredWirelessNetworkButton" class="ui-state-active ui-state-disabled ui-corner-all button state-depends-on-preferred-wireless-network-list-selection" title="Edit">
                         <span class="ui-icon ui-icon-pencil"></span>
                      </div>
+                     <button type="button" style="float:right;margin-right:0;" id="saveWirelessNetworkingConfigButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Save</button>
                   </div>
                   <div style="clear:both"></div>
                </div>
@@ -159,9 +160,9 @@
             <input type="text" name="wirelessNetworkName_add" id="wirelessNetworkName_add" class="text ui-widget-content ui-corner-all"/>
             <div class="ui-widget-content divider" style="margin-top: 50px"></div>
             <div id="addManuallyEnteredPreferredWirelessNetworkDialogButtonsContainer">
-               <button type="button" style="float:right" id="addManuallyEnteredWirelessNetworkDialogButton" class="ui-state-disabled ui-state-active ui-corner-all button">Add</button>
-               <button type="button" style="float:right" class="ui-state-default ui-corner-all button cancel-preferred-wireless-network-dialog-button state-has-no-dependency">Cancel</button>
-               <button type="button" id="showAvailableWirelessNetworksButton" class="ui-state-default ui-corner-all button state-has-no-dependency">Show Networks</button>
+               <button type="button" style="float:right" id="addManuallyEnteredWirelessNetworkDialogButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Add</button>
+               <button type="button" style="float:right" class="ui-state-default ui-corner-all button text-button cancel-preferred-wireless-network-dialog-button state-has-no-dependency">Cancel</button>
+               <button type="button" id="showAvailableWirelessNetworksButton" class="ui-state-default ui-corner-all button text-button state-has-no-dependency">Show Networks</button>
             </div>
          </form>
          <div id="formToChooseFromAvailableWirelessNetworks" class="hidden">
@@ -179,9 +180,9 @@
             </table>
             <div class="ui-widget-content divider" style="margin-top: 50px"></div>
             <div id="addChosenPreferredWirelessNetworkDialogButtonsContainer">
-               <button type="button" style="float:right" id="addAvailableWirelessNetworkDialogButton" class="ui-state-active ui-state-disabled ui-corner-all button state-depends-on-available-wireless-network-list-selection">Add</button>
-               <button type="button" style="float:right" class="ui-state-default ui-corner-all button cancel-preferred-wireless-network-dialog-button state-has-no-dependency">Cancel</button>
-               <button type="button" id="manuallyEnterAWirelessNetworkButton" class="ui-state-default ui-corner-all button state-has-no-dependency">Other...</button>
+               <button type="button" style="float:right" id="addAvailableWirelessNetworkDialogButton" class="ui-state-active ui-state-disabled ui-corner-all button text-button state-depends-on-available-wireless-network-list-selection">Add</button>
+               <button type="button" style="float:right" class="ui-state-default ui-corner-all button text-button cancel-preferred-wireless-network-dialog-button state-has-no-dependency">Cancel</button>
+               <button type="button" id="manuallyEnterAWirelessNetworkButton" class="ui-state-default ui-corner-all button text-button state-has-no-dependency">Other...</button>
             </div>
          </div>
       </div>
@@ -195,8 +196,8 @@
             <input type="hidden" id="wirelessNetworkUUID_edit"/>
             <div class="ui-widget-content divider" style="margin-top: 50px"></div>
             <div id="editPreferredWirelessNetworkDialogButtonsContainer">
-               <button type="button" style="float:right" id="saveManuallyEnteredWirelessNetworkDialogButton" class="ui-state-disabled ui-state-active ui-corner-all button">OK</button>
-               <button type="button" style="float:right" id="cancelEditWirelessNetworkDialogButton" class="ui-state-default ui-corner-all button state-has-no-dependency">Cancel</button>
+               <button type="button" style="float:right" id="saveManuallyEnteredWirelessNetworkDialogButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">OK</button>
+               <button type="button" style="float:right" id="cancelEditWirelessNetworkDialogButton" class="ui-state-default ui-corner-all button text-button state-has-no-dependency">Cancel</button>
             </div>
          </form>
       </div>

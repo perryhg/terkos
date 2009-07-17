@@ -116,6 +116,14 @@ if (!window['$'])
          jQuery(".state-depends-on-preferred-wireless-network-list-selection").toggleClass("ui-state-disabled", !isSelected);
          });
       wirelessNetworkingConfigManager.addDoubleClickListener(showEditPreferredNetworkDialog);
+      wirelessNetworkingConfigManager.addChangeListener(
+            function(isModified)
+               {
+               jQuery("#saveWirelessNetworkingConfigButton").toggleClass("ui-state-default", isModified);
+               jQuery("#saveWirelessNetworkingConfigButton").toggleClass("ui-state-active", !isModified);
+               jQuery("#saveWirelessNetworkingConfigButton").toggleClass("ui-state-disabled", !isModified);
+               }
+            );
 
       // ---------------------------------------------------------------------------------------------------------------
       // Common configuration
@@ -174,7 +182,7 @@ if (!window['$'])
                }
             ).disableSelection();
 
-      // add mousedown/mouseup actions to the Delete and Edit preferred wireless network buttons
+      // add mousedown/mouseup event handlers to the Delete and Edit preferred wireless network buttons
       jQuery('.state-depends-on-preferred-wireless-network-list-selection').mousecapture({
          "down": function()
             {
@@ -190,6 +198,31 @@ if (!window['$'])
                jQuery(this).removeClass('ui-state-active');
                }
             }});
+
+      // add mouse event handlers to the Save button
+      jQuery('#saveWirelessNetworkingConfigButton').mousecapture({
+         "down": function()
+            {
+            if (wirelessNetworkingConfigManager.isModified())
+               {
+               jQuery(this).addClass('ui-state-active');
+               }
+            },
+         "up": function()
+            {
+            if (wirelessNetworkingConfigManager.isModified())
+               {
+               jQuery(this).removeClass('ui-state-active');
+               }
+            }}).click(
+            function()
+               {
+               if (wirelessNetworkingConfigManager.isModified())
+                  {
+                  alert("Save not implemented!");
+                  }
+               }
+            ).disableSelection();
 
       // ---------------------------------------------------------------------------------------------------------------
       // Dialog for manually adding a preferred wireless network
@@ -277,7 +310,7 @@ if (!window['$'])
                }
             );
 
-      // add mousedown/mouseup actions to the Add available wireless network button
+      // add mouse event handlers to the Add available wireless network button
       jQuery('#addAvailableWirelessNetworkDialogButton').mousecapture({
          "down": function()
             {

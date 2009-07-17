@@ -94,7 +94,7 @@ if (!window['$'])
 
       this.getWirelessNetworkingStatus = function()
          {
-         displayStatus("Checking status...", "&nbsp;");
+         displayStatus("&nbsp;","Checking status...");
 
          var wirelessNetworkingStatus = null;
 
