@@ -5,6 +5,7 @@
 // * jQuery (http://jquery.com/)
 // * jQuery UI (http://jqueryui.com/)
 // * Math.uuid (http://www.broofa.com/blog/?p=151)
+// * json2.js (http://www.JSON.org/json2.js)
 // * main.css
 //
 // Author: Chris Bartley (bartley@cmu.edu)
@@ -80,6 +81,13 @@ if (!Math.uuid)
    throw new Error(msg2);
    }
 //======================================================================================================================
+if (!JSON)
+   {
+   var msg3 = "The json2.js library is required by edu.cmu.ri.terk.WirelessNetworkingConfigManager.js";
+   alert(msg3);
+   throw new Error(msg3);
+   }
+//======================================================================================================================
 
 //======================================================================================================================
 // CODE
@@ -106,6 +114,8 @@ if (!Math.uuid)
       var selectedWirelessNetwork = null;
       var selectionListeners = new Array();
       var doubleClickListeners = new Array();
+      var changeListeners = new Array();
+      var stringifiedOriginalJSON = null;
       var json = null;
       var profilesMap = new Array();
 
@@ -138,9 +148,30 @@ if (!Math.uuid)
          displayJsonForDebugging();
          };
 
+      var getIsModified = function()
+         {
+         return (JSON.stringify(json) != stringifiedOriginalJSON);
+         };
+      this.isModified = function()
+         {
+         return getIsModified();
+         };
+
       var displayJsonForDebugging = function()
          {
          jQuery("#info").html("<pre>" + JSON.stringify(json, null, "\t") + "</pre>");
+
+         // compare stringified versions of the original JSON with the updated one to see if
+         // anything has changed and then update the listeners accordingly
+         var isModified = getIsModified();
+         // notify listeners that nothing is selected
+         jQuery.each(changeListeners, function(i, listener)
+            {
+            if (listener)
+               {
+               listener(isModified);
+               }
+            });
          };
 
       this.getWirelessNetworkingConfig = function()
@@ -161,11 +192,13 @@ if (!Math.uuid)
                {
                jQuery("#" + wirelessNetworkingConfigurationAreaId).removeClass("hidden");
                json = jsonResponse;
+               stringifiedOriginalJSON = JSON.stringify(json);
                displayWirelessNetworkingConfig();
                },
             error: function()
                {
                json = null;
+               stringifiedOriginalJSON = null;
                displayWirelessNetworkingConfig();
                }
          });
@@ -298,6 +331,14 @@ if (!Math.uuid)
          if (listener)
             {
             doubleClickListeners[doubleClickListeners.length] = listener;
+            }
+         };
+
+      this.addChangeListener = function(listener)
+         {
+         if (listener)
+            {
+            changeListeners[changeListeners.length] = listener;
             }
          };
 
