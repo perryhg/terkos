@@ -244,6 +244,17 @@ if (!window['$'])
             }
       });
 
+      jQuery("#formToEnterPreferredWirelessNetworkInfo").submit(
+            function()
+               {
+               if (isNetworkNameValid("#wirelessNetworkName_add"))
+                  {
+                  jQuery('#addManuallyEnteredWirelessNetworkDialogButton').click();
+                  }
+               return false;
+               }
+            );
+
       jQuery("#wirelessNetworkName_add").keyup(
             function()
                {
@@ -365,6 +376,17 @@ if (!window['$'])
             jQuery("#wirelessNetworkName_edit").keyup();
             }
       });
+
+      jQuery("#formToEdiPreferredWirelessNetworkInfo").submit(
+            function()
+               {
+               if (isNetworkNameValid("#wirelessNetworkName_edit"))
+                  {
+                  jQuery('#saveManuallyEnteredWirelessNetworkDialogButton').click();
+                  }
+               return false;
+               }
+            );
 
       jQuery("#wirelessNetworkName_edit").keyup(
             function()
