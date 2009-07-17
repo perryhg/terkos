@@ -113,7 +113,7 @@
    <div id="Wireless_Networking">
       <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkingTab.js"></script>
 
-      <form action="javascript:void()" method="post">
+      <form method="post" onsubmit="return false;">
          <div class="section">
             <div class="section-title">Status</div>
             <div class="indented">
@@ -151,7 +151,7 @@
       </form>
       <div id="info"></div>
       <div id="preferred-wireless-network-dialog" title="Add a Preferred Wireless Network">
-         <form id="formToEnterPreferredWirelessNetworkInfo" onsubmit="return false;">
+         <form id="formToEnterPreferredWirelessNetworkInfo" method="post">
             <p>
                Enter the name of the network you want to add. You can also click
                Show Networks to choose from a list of available networks.
@@ -187,7 +187,7 @@
          </div>
       </div>
       <div id="edit-preferred-wireless-network-dialog" title="Edit a Preferred Wireless Network">
-         <form id="formToEdiPreferredWirelessNetworkInfo" onsubmit="return false;">
+         <form id="formToEdiPreferredWirelessNetworkInfo" method="post">
             <p>
                Edit the wireless network's name.
             </p>
