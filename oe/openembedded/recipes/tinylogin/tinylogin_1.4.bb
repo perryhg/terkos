@@ -5,13 +5,14 @@ and groups on an embedded system."
 HOMEPAGE = "http://tinylogin.busybox.net/"
 SECTION = "base"
 LICENSE = "GPL"
-PR = "r6"
+PR = "r7"
 
 SRC_URI = "file://tinylogin-${PV}.tar.bz2 \
 	file://cvs-20040608.patch;patch=1;pnum=1 \
 	file://add-system.patch;patch=1;pnum=1 \
 	file://adduser-empty_pwd.patch;patch=1 \
-	file://remove-index.patch;patch=1"
+	file://remove-index.patch;patch=1 \
+	file://more-bitrates.patch;patch=1"
 
 EXTRA_OEMAKE = ""
 
