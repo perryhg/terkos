@@ -1,0 +1,44 @@
+diff -ur tinylogin-1.4.bak/getty.c tinylogin-1.4/getty.c
+--- tinylogin-1.4.bak/getty.c	2002-06-23 03:09:07.000000000 +0000
++++ tinylogin-1.4/getty.c	2009-07-20 20:49:43.000000000 +0000
+@@ -213,6 +213,39 @@
+ #ifdef B230400
+ 	{230400, B230400},
+ #endif
++#ifdef B460800
++	{460800, B460800},
++#endif
++#ifdef B500000
++	{500000, B500000},
++#endif
++#ifdef B576000
++	{576000, B576000},
++#endif
++#ifdef B921600
++	{921600, B921600},
++#endif
++#ifdef B1000000
++	{1000000, B1000000},
++#endif
++#ifdef B1152000
++	{1152000, B1152000},
++#endif
++#ifdef B1500000
++	{1500000, B1500000},
++#endif
++#ifdef B2000000
++	{2000000, B2000000},
++#endif
++#ifdef B2500000
++	{2500000, B2500000},
++#endif
++#ifdef B3000000
++	{3000000, B3000000},
++#endif
++#ifdef B4000000
++	{4000000, B4000000},
++#endif
+ 	{0, 0},
+ };
+ 
+Only in tinylogin-1.4: getty.c~
