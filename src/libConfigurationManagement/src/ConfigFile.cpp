@@ -7,6 +7,43 @@
 const string ConfigFile::DEFAULT_CONFIG_FILE_DIRECTORY = "/opt/config/";
 const char ConfigFile::CHAINED_PROPERTY_NAME_DELIMITER = '.';
 
+Json::Value* ConfigFile::findProperty(Json::Value& root, const string& propertyName, const char chainedPropertyNameDelimiter)
+   {
+   try
+      {
+      Json::Value* currentProperty = &root;
+      vector<string> propertyNames;
+      StringUtilities::tokenizeString(propertyName, propertyNames, chainedPropertyNameDelimiter);
+
+      if (propertyNames.size() > 0 && currentProperty->type() == Json::objectValue)
+         {
+
+         unsigned int i = 0;
+         while (i < propertyNames.size())
+            {
+            string propertyNamePiece(propertyNames[i++]);
+
+            if (currentProperty->type() == Json::objectValue && currentProperty->isMember(propertyNamePiece))
+               {
+               currentProperty = &((*currentProperty)[propertyNamePiece]);
+               }
+            else
+               {
+               return NULL;
+               }
+            }
+
+         return currentProperty;
+         }
+      }
+   catch (...)
+      {
+      cerr << "ConfigFile::findProperty(): failed to find property [" << propertyName << "]!" << endl;
+      }
+
+   return NULL;
+   }
+
 void ConfigFile::revertToDefault()
    {
    // TODO: This method needs better error handling
@@ -162,41 +199,26 @@ const bool ConfigFile::setIndexedUnsignedIntValue(const string& propertyName, co
    return false;
    }
 
-Json::Value* ConfigFile::findProperty(Json::Value& root, const string& propertyName, const char chainedPropertyNameDelimiter) const
+const bool ConfigFile::appendObjectToArray(const string& propertyName, const Json::Value& obj, const char chainedPropertyNameDelimiter)
    {
-   try
+   Json::Value root;
+   if (load(root))
       {
-      Json::Value* currentProperty = &root;
-      vector<string> propertyNames;
-      StringUtilities::tokenizeString(propertyName, propertyNames, chainedPropertyNameDelimiter);
-
-      if (propertyNames.size() > 0 && currentProperty->type() == Json::objectValue)
+      try
          {
-
-         unsigned int i = 0;
-         while (i < propertyNames.size())
+         Json::Value* property = findProperty(root, propertyName, chainedPropertyNameDelimiter);
+         if (property != NULL)
             {
-            string propertyNamePiece(propertyNames[i++]);
-
-            if (currentProperty->type() == Json::objectValue && currentProperty->isMember(propertyNamePiece))
-               {
-               currentProperty = &((*currentProperty)[propertyNamePiece]);
-               }
-            else
-               {
-               return NULL;
-               }
+            (*property).append(obj);
+            return save(root);
             }
-
-         return currentProperty;
+         }
+      catch (...)
+         {
+         cerr << "ConfigFile::appendObjectToArray(): failed append object [" << obj << "] to array property [" << propertyName << "]!" << endl;
          }
       }
-   catch (...)
-      {
-      cerr << "ConfigFile::findProperty(): failed to find property [" << propertyName << "]!" << endl;
-      }
-
-   return NULL;
+   return false;
    }
 
 const bool ConfigFile::load(Json::Value& config) const
