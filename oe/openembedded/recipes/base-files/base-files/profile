@@ -23,7 +23,7 @@ alias ll="ls -l";
 alias la="ls -Al";
 alias cdu="cd ..";
 alias cduu="cd ../..";
-export LD_LIBRARY_PATH=.;
+export LD_LIBRARY_PATH=/opt/lib:.;
 
 if [ -d /etc/profile.d ]; then
   for i in /etc/profile.d/*.sh; do
