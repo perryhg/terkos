@@ -53,8 +53,9 @@ const bool WirelessNetworkingConfigManager::setJson(Json::Value& config)
                   }
                }
             }
-         }
 
+         return true;
+         }
       }
    return false;
    }
