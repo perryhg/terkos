@@ -40,6 +40,31 @@ const void StringUtilities::tokenizeString(const string& str, vector<string>& to
 
 const void StringUtilities::tokenizeString(const string& str, vector<string>& tokens, const char delimiter)
    {
-   string delimiters(1,delimiter);
+   string delimiters(1, delimiter);
    tokenizeString(str, tokens, delimiters);
+   }
+
+const string StringUtilities::trim(const string& str)
+   {
+   // Code based on http://www.codeproject.com/KB/stl/stdstringtrim.aspx
+
+   string s = str;
+
+   const char* whitespaceChars = "\n\t\v\f\r ";
+   string::size_type pos = s.find_last_not_of(whitespaceChars);
+   if (pos != string::npos)
+      {
+      s.erase(pos + 1);
+      pos = s.find_first_not_of(whitespaceChars);
+      if (pos != string::npos)
+         {
+         s.erase(0, pos);
+         }
+      }
+   else
+      {
+      s.erase(s.begin(), s.end());
+      }
+
+   return s;
    }
