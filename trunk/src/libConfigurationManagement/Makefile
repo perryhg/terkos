@@ -3,8 +3,13 @@ BUILD_DIR=build
 RESOURCES_DIR=resources
 OBJ_DIR=$(BUILD_DIR)/objects
 LIB_DIR=$(BUILD_DIR)/libraries
+EXE_DIR=$(BUILD_DIR)/executables
+EXE_SRC_DIR=src-exe
+EXE_OBJ_DIR=$(BUILD_DIR)/objects
 DIST_DIR=dist
 LIBRARY_NAME=libConfigurationManagement.so
+AUDIO_CONFIG_TOOL_NAME=AudioConfigTool
+WIRELESS_NETWORKING_CONFIG_TOOL_NAME=WirelessNetworkingConfigTool
 
 LIB_JSONCPP_DIR=../jsoncpp
 LIB_JSONCPP_SRC_DIR=$(LIB_JSONCPP_DIR)/jsoncpp/include
@@ -39,11 +44,14 @@ SRCS=$(wildcard $(SRC_DIR)/*.cpp)
 OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(SRCS)))
 OBJECTS := $(addprefix $(OBJ_DIR)/,$(OBJECTS))
 
+EXE_SRCS=$(wildcard $(EXE_SRC_DIR)/*.cpp)
+EXE_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(EXE_SRCS)))
+EXE_OBJECTS := $(addprefix $(EXE_OBJ_DIR)/,$(EXE_OBJECTS))
 #-----------------------------------------------------------------------------------------------------------------------
 
 default: all
 
-build: $(LIBRARY_NAME)
+build: $(LIBRARY_NAME) $(AUDIO_CONFIG_TOOL_NAME) $(WIRELESS_NETWORKING_CONFIG_TOOL_NAME)
 
 all: build dist
 
@@ -55,11 +63,33 @@ $(OBJ_DIR):
 $(LIB_DIR):
 	mkdir -p $@
 
+$(EXE_DIR):
+	mkdir -p $@
+
 #-----------------------------------------------------------------------------------------------------------------------
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) $(CFLAGS) -c $< -o $@
+
+$(EXE_OBJ_DIR)/%.o: $(EXE_SRC_DIR)/%.cpp
+	$(CXX) $(CFLAGS) -I$(SRC_DIR) -c $< -o $@
 	
+#-----------------------------------------------------------------------------------------------------------------------
+
+$(AUDIO_CONFIG_TOOL_NAME): $(LIBRARY_NAME) $(EXE_DIR) $(EXE_OBJECTS)
+	@echo 'Building target: $@'
+	$(CXX) -o $(EXE_DIR)/$@ $(EXE_OBJ_DIR)/$@.o $(LDFLAGS) -lConfigurationManagement
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+$(WIRELESS_NETWORKING_CONFIG_TOOL_NAME): $(LIBRARY_NAME) $(EXE_DIR) $(EXE_OBJECTS)
+	@echo 'Building target: $@'
+	$(CXX) -o $(EXE_DIR)/$@ $(EXE_OBJ_DIR)/$@.o $(LDFLAGS) -lConfigurationManagement
+	@echo 'Finished building target: $@'
+	@echo ' '
+
 #-----------------------------------------------------------------------------------------------------------------------
 
 $(LIBRARY_NAME): $(OBJ_DIR) $(LIB_DIR) $(OBJECTS) libjsoncpp.so libUtilities.so libqwerk.so
@@ -101,6 +131,10 @@ dist:
 	@echo 'Copying shared libraries to $(DIST_DIR)...'
 	cp $(LIB_DIR)/*.so $(DIST_DIR)/.
 	@echo 'Finished copying shared libraries'
+	@echo ' '
+	@echo 'Copying executables to $(DIST_DIR)...'
+	cp $(EXE_DIR)/* $(DIST_DIR)/.
+	@echo 'Finished copying executables'
 	@echo ' '
 	@echo 'Copying resources to $(DIST_DIR)...'
 	cp $(RESOURCES_DIR)/* $(DIST_DIR)/.

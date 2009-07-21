@@ -20,6 +20,8 @@ class ConfigFile
       static const string DEFAULT_CONFIG_FILE_DIRECTORY;
       static const char CHAINED_PROPERTY_NAME_DELIMITER;
 
+      static Json::Value* findProperty(Json::Value& root, const string& propertyName, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER);
+
       ConfigFile(const string& configFilename, const string& defaultConfigFilename, const string& configFileDirectory = DEFAULT_CONFIG_FILE_DIRECTORY) :
          configFilename(configFilename), defaultConfigFilename(defaultConfigFilename), configFileDirectory(configFileDirectory)
          {
@@ -58,13 +60,13 @@ class ConfigFile
       const unsigned int getIndexedUnsignedIntValue(const string& propertyName, const unsigned int index, const unsigned int defaultValue = 0, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER) const;
       const bool setIndexedUnsignedIntValue(const string& propertyName, const unsigned int index, const unsigned int value, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER);
 
+      const bool appendObjectToArray(const string& propertyName, const Json::Value& obj, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER);
+
    private:
 
       const string configFilename;
       const string defaultConfigFilename;
       const string configFileDirectory;
-
-      Json::Value* findProperty(Json::Value& root, const string& propertyName, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER) const;
 
       // TODO: For safety, load and save should default to loading from and saving to a particular directory such as /opt/config
       const bool load(Json::Value& config) const;

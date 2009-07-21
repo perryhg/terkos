@@ -6,6 +6,7 @@
 #define WIRELESSNETWORKINGCONFIGMANAGER_H_
 
 #include <algorithm>
+#include <json/json.h>
 #include "ConfigFile.h"
 
 using namespace std;
@@ -29,12 +30,19 @@ class WirelessNetworkingConfigManager : public ConfigFile
 
       bool setWillStartOnBootup(const bool willStart);
 
+      const bool setJson(Json::Value& config);
+
    private:
 
       static const string CONFIG_FILENAME;
       static const string DEFAULT_CONFIG_FILENAME;
       static const string WILL_START_ON_BOOTUP_PROPERTY;
       static const string PROFILES_PROPERTY;
+      static const string SSID_PROPERTY;
+      static const string IS_ENCRYPTED_PROPERTY;
+
+      bool addNetworkProfile(const string& ssid);
+
    };
 
 #endif /* WIRELESSNETWORKINGCONFIGMANAGER_H_ */
