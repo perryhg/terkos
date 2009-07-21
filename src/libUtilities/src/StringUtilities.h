@@ -37,6 +37,12 @@ class StringUtilities
        */
       static const void tokenizeString(const string& str, vector<string>& tokens, const char delimiter = ' ');
 
+      /**
+       * Trims leading and trailing whitespace off the given string, and returns the result.  The given string is not
+       * modified.
+       */
+      static const string trim(const string& str);
+
    private:
 
       StringUtilities()
