@@ -125,7 +125,7 @@ bool CQEMotorTraj::Done(unsigned int axis)
   result = (m_trajectory&QEM_BIT(axis))==0 && done;
   pthread_mutex_unlock(&m_mutex);
   
-  sched_yield(); // yield cpu
+  usleep(0); // yield cpu
 
   return result;
 }
