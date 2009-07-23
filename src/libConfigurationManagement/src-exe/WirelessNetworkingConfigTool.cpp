@@ -9,7 +9,7 @@
  * Chris Bartley (bartley@cmu.edu)
  */
 
-#include <iostream>
+#include <json/json.h>
 #include <WirelessNetworkingConfigManager.h>
 
 using namespace std;
@@ -20,10 +20,16 @@ int main(int argc, char** argv)
    Json::Value config;
    Json::Reader reader;
    bool parsingSuccessful = reader.parse(cin, config, true);
+
+   // if parsing succeeded, then call the config manager and give it the JSON
    if (parsingSuccessful)
       {
       WirelessNetworkingConfigManager configManager;
-      configManager.setJson(config);
+
+      if (!configManager.setJson(config))
+         {
+         return 1;
+         }
       }
 
    return 0;

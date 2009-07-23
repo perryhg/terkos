@@ -109,7 +109,7 @@ if (!JSON)
                                                               wirelessNetworksListContainerId,
                                                               wirelessNetworksListId)
       {
-      var host = '';//http://192.168.0.4'; // TODO: remove me!
+      var host = '';//http://192.168.1.4'; // TODO: remove me!
 
       var selectedWirelessNetwork = null;
       var selectionListeners = new Array();
@@ -145,7 +145,7 @@ if (!JSON)
             json['profiles'][json['profiles'].length] = profilesMap[uuid];
             }
 
-         displayJsonForDebugging();
+         notifyChangeListeners();
          };
 
       var getIsModified = function()
@@ -157,9 +157,10 @@ if (!JSON)
          return getIsModified();
          };
 
-      var displayJsonForDebugging = function()
+      var notifyChangeListeners = function()
          {
-         jQuery("#info").html("<pre>" + JSON.stringify(json, null, "\t") + "</pre>");
+         // TODO: for debugging only
+         // jQuery("#info").html("<pre>" + JSON.stringify(json, null, "\t") + "</pre>");
 
          // compare stringified versions of the original JSON with the updated one to see if
          // anything has changed and then update the listeners accordingly
@@ -179,6 +180,11 @@ if (!JSON)
          jQuery("#" + wirelessNetworkingConfigurationMessageAreaId).html("Loading preferences...");
          jQuery("#" + wirelessNetworkingConfigurationAreaId).addClass("hidden");
 
+         this.loadWirelessNetworkingConfig();
+         };
+
+      this.loadWirelessNetworkingConfig = function(onSuccessCallbackFunction)
+         {
          // clear the list
          jQuery("#" + wirelessNetworksListId).empty();
 
@@ -194,6 +200,11 @@ if (!JSON)
                json = jsonResponse;
                stringifiedOriginalJSON = JSON.stringify(json);
                displayWirelessNetworkingConfig();
+
+               if (onSuccessCallbackFunction)
+                  {
+                  onSuccessCallbackFunction();
+                  }
                },
             error: function()
                {
@@ -310,7 +321,7 @@ if (!JSON)
                   });
                }
 
-            displayJsonForDebugging();
+            notifyChangeListeners();
             }
          else
             {
@@ -417,8 +428,13 @@ if (!JSON)
       this.setWillStartOnBootup = function(willStartOnBootup)
          {
          json["will-start-on-bootup"] = willStartOnBootup;
-         displayJsonForDebugging();
+         notifyChangeListeners();
          };
+
+      this.getJSON = function()
+         {
+         return JSON.stringify(json);
+         }
       };
 
    // ==================================================================================================================
