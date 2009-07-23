@@ -51,18 +51,11 @@ void *CQELEDController::LEDControllerThread(void *arg)
   return NULL;
 }
 
-CQELEDController::CQELEDController(CQwerkHardware *pQwerk)
+CQELEDController::CQELEDController()
 {
   int i;
 
-  if (pQwerk==NULL) {
-    m_pQwerk = new CQwerkHardware();
-    m_allocated = true;
-  }
-  else {
-    m_pQwerk = pQwerk;
-    m_allocated = false;
-  }
+  m_pQwerk = CQwerkHardware::GetObject();
 
   pthread_mutex_init(&m_mutex, NULL);
   pthread_cond_init(&m_cond, NULL);
@@ -104,8 +97,7 @@ CQELEDController::~CQELEDController()
   pthread_mutex_destroy(&m_mutex);
   pthread_cond_destroy(&m_cond);
 
-  if (m_allocated)
-    delete m_pQwerk;
+  CQwerkHardware::ReleaseObject();
 }
 
 void CQELEDController::LEDon(unsigned int led)

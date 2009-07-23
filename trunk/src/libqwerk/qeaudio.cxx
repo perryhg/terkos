@@ -16,18 +16,9 @@
 //  m_mutex (acquire first)
 //  m_playmutex
 
-CQEAudioController::CQEAudioController(CQwerkHardware *pQwerk)
+CQEAudioController::CQEAudioController()
 {
-    if (pQwerk==NULL)
-    {
-        m_pQwerk = new CQwerkHardware();
-        m_allocated = true;
-    }
-    else
-    {
-        m_pQwerk = pQwerk;
-        m_allocated = false;
-    }
+    m_pQwerk = CQwerkHardware::GetObject();
 
     // initialize mutices
     pthread_mutex_init(&m_mutex, NULL);
@@ -65,8 +56,7 @@ CQEAudioController::~CQEAudioController()
     //Flush any remaining commands
     emptyAudioCommandQueue();
 
-    if (m_allocated)
-        delete m_pQwerk;
+    CQwerkHardware::ReleaseObject();
 
     pthread_cond_destroy(&m_notemptycond);
     pthread_cond_destroy(&m_notfullcond);

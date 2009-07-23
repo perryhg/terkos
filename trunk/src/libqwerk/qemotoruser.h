@@ -17,7 +17,7 @@ class CQwerkHardware;
 class CQEMotorUser  
 {
 public:
-  CQEMotorUser(CQwerkHardware *pQwerk, int axis0, int axis1=-1, int axis2=-1, int axis3=-1);
+  CQEMotorUser(int axis0, int axis1=-1, int axis2=-1, int axis3=-1);
   virtual ~CQEMotorUser();
 
   unsigned int GetFrequency();
@@ -46,15 +46,12 @@ public:
   void         FlushWriteQueue(unsigned int axis);
   void         SetWriteQueueSize(unsigned int size);
 
-  CQwerkHardware *GetHardware();
-
 protected:
   int ConstructCall(int axis, int findex, ...);
 
   unsigned int m_servoAxes;
   int m_handle[QEMOT_NUM_MOTORS];
   CQwerkHardware *m_pQwerk; 
-  bool m_allocated;
 };
 
 #endif

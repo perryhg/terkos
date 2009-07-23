@@ -3,6 +3,9 @@
 #include "qwerkhw.h"
 #include "9302hw.h"
 
+CQwerkHardware *CQwerkHardware::m_pQwerk = NULL;
+int CQwerkHardware::m_refCount = 0;
+
 CQwerkHardware::CQwerkHardware()
 {
   m_p9302hw = C9302Hardware::GetObject();
@@ -33,6 +36,24 @@ CQwerkHardware::CQwerkHardware()
 CQwerkHardware::~CQwerkHardware()
 {
   C9302Hardware::ReleaseObject();
+}
+
+CQwerkHardware *CQwerkHardware::GetObject()
+{
+  if (m_pQwerk==NULL)
+    m_pQwerk = new CQwerkHardware();
+  
+  m_refCount++;
+  return m_pQwerk;
+}
+
+void CQwerkHardware::ReleaseObject()
+{
+  if (m_refCount)
+    m_refCount--;
+
+  if (m_refCount==0 && m_pQwerk!=NULL)
+    delete m_pQwerk;
 }
 
 unsigned short CQwerkHardware::GetADRaw(unsigned int channel)
