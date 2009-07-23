@@ -51,6 +51,9 @@ public:
   CQwerkHardware();
   ~CQwerkHardware();
 
+  static CQwerkHardware *GetObject();
+  static void ReleaseObject();
+
   unsigned int   GetVersion();
 
   unsigned short GetADRaw(unsigned int channel);
@@ -72,6 +75,8 @@ public:
 
 private:
   bool m_allocated;
+  static CQwerkHardware *m_pQwerk;
+  static int m_refCount;
 };
 
 #endif

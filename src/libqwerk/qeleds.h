@@ -37,7 +37,7 @@ class CQwerkHardware;
 class CQELEDController
 {
  public:
-  CQELEDController(CQwerkHardware *pQwerk);
+  CQELEDController();
   ~CQELEDController();
 
   /**
@@ -78,7 +78,6 @@ class CQELEDController
 
  protected:
   CQwerkHardware *m_pQwerk; 
-  bool m_allocated;
 
   pthread_t m_thread;
   bool m_threadRun;

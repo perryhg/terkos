@@ -31,7 +31,7 @@ class CQwerkHardware;
 class CQEAudioController
 {
     public:
-        CQEAudioController(CQwerkHardware *pQwerk);
+        CQEAudioController();
         ~CQEAudioController();
 
         /**
@@ -165,8 +165,7 @@ class CQEAudioController
 	};
 
         CQwerkHardware *m_pQwerk; 
-        bool m_allocated;
-
+ 
 	bool enabled;
 	void doEnable(void);
 	void doDisable(void);

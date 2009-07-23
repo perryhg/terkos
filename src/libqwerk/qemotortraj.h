@@ -13,7 +13,7 @@ class CQwerkHardware;
 class CQEMotorTraj : public CQEMotorUser, public CQEMotorRec
 {
 public:
-  CQEMotorTraj(CQwerkHardware *pQwerk, int axis0, int axis1=-1, int axis2=-1, int axis3=-1);
+  CQEMotorTraj(int axis0, int axis1=-1, int axis2=-1, int axis3=-1);
   ~CQEMotorTraj();
 
   bool Done(unsigned int axis);

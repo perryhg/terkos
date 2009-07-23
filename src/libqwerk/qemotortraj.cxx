@@ -48,8 +48,8 @@ void *CQEMotorTraj::TrajThread(void *arg)
     }
 }
 
-CQEMotorTraj::CQEMotorTraj(CQwerkHardware *pQwerk, int axis0, int axis1, int axis2, int axis3) : 
-  CQEMotorUser(pQwerk, axis0, axis1, axis2, axis3),
+CQEMotorTraj::CQEMotorTraj(int axis0, int axis1, int axis2, int axis3) : 
+  CQEMotorUser(axis0, axis1, axis2, axis3),
   CQEMotorRec()	 
 {
   pthread_mutexattr_t mattr;

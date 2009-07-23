@@ -7,22 +7,13 @@
 #include "qemotoruser.h"
 #include "qwerkhw.h"
 
-CQEMotorUser::CQEMotorUser(CQwerkHardware *pQwerk, int axis0, int axis1, int axis2, int axis3)
+CQEMotorUser::CQEMotorUser(int axis0, int axis1, int axis2, int axis3)
 {
   char dev[0x10];
   int len;
   unsigned int axis;
 
-  if (pQwerk==NULL)
-    {
-      m_pQwerk = new CQwerkHardware();
-      m_allocated = true;
-    }
-  else
-    {
-      m_pQwerk = pQwerk;
-      m_allocated = false;
-    }
+  m_pQwerk = CQwerkHardware::GetObject();
 
 #if Q1
   // set voltage divider
@@ -83,8 +74,7 @@ CQEMotorUser::~CQEMotorUser()
 	close(m_handle[axis]);
     }
 
-  if (m_allocated)
-    delete m_pQwerk;
+  CQwerkHardware::ReleaseObject();
 }
 
 int CQEMotorUser::ConstructCall(int axis, int findex, ...)
@@ -330,7 +320,3 @@ void CQEMotorUser::Stop(unsigned int axis)
   ConstructCall(axis, MOT_STOP);
 }
 
-CQwerkHardware *CQEMotorUser::GetHardware()
-{
-  return m_pQwerk;
-}
