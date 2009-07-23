@@ -1,0 +1,4 @@
+# !/bin/bash
+cp /mnt/inspired/c/CharmedLabs/vexqwerk/terkos/src/logic/vexpro/vexpro.bit logic
+
+
