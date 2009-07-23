@@ -12,6 +12,10 @@ span.ui-icon {
    margin: 0 2px;
 }
 
+#alertDialog {
+   display:none;
+}
+
 .blank-line {
    height: 10px;
 }
@@ -26,6 +30,10 @@ span.ui-icon {
 .divider {
    border-width: 1px 0 0 0;
    margin: 5px 0 5px 0
+}
+
+.emphasized {
+   font-weight: bold;
 }
 
 .explanatory-text {
@@ -45,10 +53,6 @@ span.ui-icon {
    margin-left: 20px;
 }
 
-.emphasized {
-   font-weight: bold;
-}
-
 .label {
    font-weight: bold;
 }
@@ -63,6 +67,10 @@ span.ui-icon {
 .main-title {
    font-size: 20pt;
    font-weight: bold;
+}
+
+.non_closable_alert .ui-dialog-titlebar-close {
+   display: none;
 }
 
 .section {

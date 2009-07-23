@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+require "pathUtils.pl";
 require "jsonUtils.pl";
 
-outputJsonFile("/opt/config/wireless_networking_config.json");
+my $pathToJsonConfig = &getPath('wireless_networking_config.json');
+outputJsonFile($pathToJsonConfig);

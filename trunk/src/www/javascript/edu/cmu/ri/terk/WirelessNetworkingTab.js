@@ -80,9 +80,18 @@ if (!window['$'])
    {
    // ==================================================================================================================
    var jQuery = window['$'];
+   jQuery.ajaxSetup({
+      type: 'POST',
+      dataType: 'jsonp',
+      timeout: 3000,
+      cache: false,
+      global: false
+   });
 
    edu.cmu.ri.terk.WirelessNetworkingTab = function(wirelessNetworkingConfigManager, wirelessNetworkScanner)
       {
+      var host = '';//http://192.168.1.4'; // TODO: remove me!
+
       var isNetworkNameValid = function(formFieldID)
          {
          return jQuery(formFieldID).val().length > 0;
@@ -96,7 +105,7 @@ if (!window['$'])
             jQuery("#wirelessNetworkName_edit").val(selectedItemJSON['ssid']);
             jQuery("#wirelessNetworkUUID_edit").val(wirelessNetworkingConfigManager.getSelectedItemUUID());
             jQuery("#wirelessNetworkName_edit").keyup();
-            jQuery('#edit-preferred-wireless-network-dialog').dialog('open');
+            jQuery('#editPreferredWirelessNetworkDialog').dialog('open');
             }
          };
 
@@ -119,12 +128,17 @@ if (!window['$'])
       wirelessNetworkingConfigManager.addChangeListener(
             function(isModified)
                {
-               jQuery("#saveWirelessNetworkingConfigButton").toggleClass("ui-state-default", isModified);
-               jQuery("#saveWirelessNetworkingConfigButton").toggleClass("ui-state-active", !isModified);
-               jQuery("#saveWirelessNetworkingConfigButton").toggleClass("ui-state-disabled", !isModified);
+               // toggle the state of the save button according to whether the config has been modified
+               setSaveButtonEnabled(isModified);
                }
             );
 
+      var setSaveButtonEnabled = function(isEnabled)
+         {
+         jQuery("#saveWirelessNetworkingConfigButton").toggleClass("ui-state-default", isEnabled);
+         jQuery("#saveWirelessNetworkingConfigButton").toggleClass("ui-state-active", !isEnabled);
+         jQuery("#saveWirelessNetworkingConfigButton").toggleClass("ui-state-disabled", !isEnabled);
+         };
       // ---------------------------------------------------------------------------------------------------------------
       // Common configuration
       // ---------------------------------------------------------------------------------------------------------------
@@ -143,7 +157,7 @@ if (!window['$'])
       jQuery('.cancel-preferred-wireless-network-dialog-button').click(
             function()
                {
-               jQuery("#preferred-wireless-network-dialog").dialog('close');
+               jQuery("#preferredWirelessNetworkDialog").dialog('close');
                }
             );
 
@@ -162,7 +176,7 @@ if (!window['$'])
       jQuery('#addPreferredWirelessNetworkButton').click(
             function()
                {
-               jQuery('#preferred-wireless-network-dialog').dialog('open');
+               jQuery('#preferredWirelessNetworkDialog').dialog('open');
                }
             ).disableSelection();
 
@@ -219,18 +233,64 @@ if (!window['$'])
                {
                if (wirelessNetworkingConfigManager.isModified())
                   {
-                  alert("Save not implemented!");
+                  // Show the dialog and set the min-height.  I don't know why, but I *had* to set the min-height
+                  // here...setting it in the HTML or on load didn't work--it kept getting overwritten to
+                  // something like 112 or 114 pixels.
+                  jQuery("#savingWirelessNetworkingConfigurationDialog").dialog('open').css('min-height', '1px');
+
+                  // get the JSON to send to the backend
+                  var json = wirelessNetworkingConfigManager.getJSON();
+
+                  // send the JSON to the backend
+                  jQuery.ajax(
+                  {
+                     url: host + '/cgi-bin/saveWirelessNetworkingConfig.pl',
+                     data: "json=" + json,
+                     success: function(jsonResponse, textStatus)
+                        {
+                        if (jsonResponse)
+                           {
+                           // reload the config
+                           wirelessNetworkingConfigManager.loadWirelessNetworkingConfig(function()
+                              {
+                              jQuery("#savingWirelessNetworkingConfigurationDialog").dialog('close');
+                              });
+                           }
+                        else
+                           {
+                           jQuery("#savingWirelessNetworkingConfigurationDialog").dialog('close');
+                           jQuery("#alertDialogMessage").html("Sorry, an error occurred while saving your preferences.  Please try again.");
+                           jQuery("#alertDialog").dialog('open');
+                           }
+                        },
+                     error: function()
+                        {
+                        jQuery("#savingWirelessNetworkingConfigurationDialog").dialog('close');
+                        jQuery("#alertDialogMessage").html("Sorry, an error occurred while saving your preferences.  Please try again.");
+                        jQuery("#alertDialog").dialog('open');
+                        }
+                  });
                   }
                }
             ).disableSelection();
 
+      jQuery("#savingWirelessNetworkingConfigurationDialog").dialog({
+         bgiframe: true,
+         autoOpen: false,
+         modal: true,
+         draggable: false,
+         resizable: false,
+         closeOnEscape : false,
+         title : 'Saving Preferences',
+         dialogClass: 'non_closable_alert'
+      });
       // ---------------------------------------------------------------------------------------------------------------
       // Dialog for manually adding a preferred wireless network
       // ---------------------------------------------------------------------------------------------------------------
 
       // create the dialog for entering/specifying a preferred wireless network
       var preferredWirelessNetworkDialogFields = jQuery([]).add(jQuery("#wirelessNetworkName_add"));
-      jQuery("#preferred-wireless-network-dialog").dialog({
+      jQuery("#preferredWirelessNetworkDialog").dialog({
          bgiframe: true,
          autoOpen: false,
          modal: true,
@@ -294,7 +354,7 @@ if (!window['$'])
                   wirelessNetworkingConfigManager.addNetwork(network);
 
                   // close the dialog
-                  jQuery("#preferred-wireless-network-dialog").dialog('close');
+                  jQuery("#preferredWirelessNetworkDialog").dialog('close');
                   }
                }
             );
@@ -353,7 +413,7 @@ if (!window['$'])
                   wirelessNetworkingConfigManager.addNetwork(network);
 
                   // close the dialog
-                  jQuery("#preferred-wireless-network-dialog").dialog('close');
+                  jQuery("#preferredWirelessNetworkDialog").dialog('close');
                   }
                }
             );
@@ -364,7 +424,7 @@ if (!window['$'])
 
       // create the dialog for editing a preferred wireless network
       var editWirelessNetworkDialogFields = jQuery([]).add(jQuery("#wirelessNetworkName_edit"));
-      jQuery("#edit-preferred-wireless-network-dialog").dialog({
+      jQuery("#editPreferredWirelessNetworkDialog").dialog({
          bgiframe: true,
          autoOpen: false,
          modal: true,
@@ -427,7 +487,7 @@ if (!window['$'])
                   wirelessNetworkingConfigManager.editNetwork(jQuery("#wirelessNetworkUUID_edit").val(), network);
 
                   // close the dialog
-                  jQuery("#edit-preferred-wireless-network-dialog").dialog('close');
+                  jQuery("#editPreferredWirelessNetworkDialog").dialog('close');
                   }
                }
             );
@@ -435,7 +495,7 @@ if (!window['$'])
       jQuery('#cancelEditWirelessNetworkDialogButton').click(
             function()
                {
-               jQuery("#edit-preferred-wireless-network-dialog").dialog('close');
+               jQuery("#editPreferredWirelessNetworkDialog").dialog('close');
                }
             );
 

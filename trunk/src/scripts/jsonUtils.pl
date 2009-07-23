@@ -42,7 +42,7 @@ sub outputJsonFile()
    {
    my ($jsonFilename) = @_;
 
-   my $fileContents = readFileIntoString($jsonFilename);
+   my $fileContents = &readFileIntoString($jsonFilename);
 
    &outputJson($fileContents);
    }

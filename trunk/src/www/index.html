@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-   <title>VexPro Control Panel</title>
+   <title>TerkOS Control Panel</title>
    <link type="text/css" href="css/smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet"/>
    <link type="text/css" href="css/main.css" rel="stylesheet"/>
    <script type="text/javascript" src="javascript/jquery.js"></script>
@@ -24,12 +24,12 @@
                );
 
          var wirelessNetworkingConfigManager = new edu.cmu.ri.terk.WirelessNetworkingConfigManager(
-            "wirelessNetworkingConfigurationMessageArea",
-            "wirelessNetworkingConfigurationArea",
-            "willStartWirelessNetworkingOnBootupCheckbox",
-            "preferredWirelessNetworksListContainer",
-            "preferredWirelessNetworksList"
-            );
+               "wirelessNetworkingConfigurationMessageArea",
+               "wirelessNetworkingConfigurationArea",
+               "willStartWirelessNetworkingOnBootupCheckbox",
+               "preferredWirelessNetworksListContainer",
+               "preferredWirelessNetworksList"
+               );
 
          // create the WirelessNetworkScanner
          var wirelessNetworkScanner = new edu.cmu.ri.terk.WirelessNetworkScanner(
@@ -85,11 +85,23 @@
                   }
                );
 
+         $("#alertDialog").dialog({
+            bgiframe: true,
+            autoOpen: false,
+            modal: true,
+            draggable: false,
+            resizable: false});
+
+         $("#okAlertDialogButton").click(function()
+            {
+            $("#alertDialog").dialog('close');
+            });
+
          });
    </script>
 </head>
 <body>
-<div class="main-title">VexPro</div>
+<div class="main-title">TerkOS</div>
 <div id="tabs">
    <!-- ============================================================================================================ -->
    <ul>
@@ -126,7 +138,7 @@
             <div class="indented">
                <div id="wirelessNetworkingConfigurationMessageArea">&nbsp;</div>
                <div id="wirelessNetworkingConfigurationArea" class="hidden">
-                  <input id="willStartWirelessNetworkingOnBootupCheckbox" name="willStartWirelessNetworkingOnBootup" type="checkbox"/>Start wireless networking on boot up
+                  <input id="willStartWirelessNetworkingOnBootupCheckbox" name="willStartWirelessNetworkingOnBootup" type="checkbox"/><label for="willStartWirelessNetworkingOnBootupCheckbox">Start wireless networking on boot up</label>
                   <div class="blank-line"></div>
                   <div class="label">Preferred Networks:</div>
                   <div id="preferredWirelessNetworksListContainer">
@@ -149,8 +161,7 @@
             </div>
          </div>
       </form>
-      <div id="info"></div>
-      <div id="preferred-wireless-network-dialog" title="Add a Preferred Wireless Network">
+      <div id="preferredWirelessNetworkDialog" title="Add a Preferred Wireless Network">
          <form id="formToEnterPreferredWirelessNetworkInfo" method="post">
             <p>
                Enter the name of the network you want to add. You can also click
@@ -186,7 +197,7 @@
             </div>
          </div>
       </div>
-      <div id="edit-preferred-wireless-network-dialog" title="Edit a Preferred Wireless Network">
+      <div id="editPreferredWirelessNetworkDialog" title="Edit a Preferred Wireless Network">
          <form id="formToEdiPreferredWirelessNetworkInfo" method="post">
             <p>
                Edit the wireless network's name.
@@ -200,6 +211,15 @@
                <button type="button" style="float:right" id="cancelEditWirelessNetworkDialogButton" class="ui-state-default ui-corner-all button text-button state-has-no-dependency">Cancel</button>
             </div>
          </form>
+      </div>
+      <div id="savingWirelessNetworkingConfigurationDialog">
+         <table border="0" cellpadding="0" cellspacing="0">
+            <tr valign="middle">
+               <td><img src="images/ajax-loader.gif" width="16" height="16" alt=""></td>
+               <td>&nbsp;&nbsp;&nbsp;</td>
+               <td>Please wait while your changes to the wireless networking configuration are being saved.</td>
+            </tr>
+         </table>
       </div>
    </div>
    <!-- ============================================================================================================ -->
@@ -215,6 +235,13 @@
       <p>Factory Reset</p>
    </div>
    <!-- ============================================================================================================ -->
+</div>
+<div id="alertDialog">
+   <div id="alertDialogMessage"></div>
+   <div class="ui-widget-content divider" style="margin-top: 50px"></div>
+   <div id="alertDialogButtonsContainer">
+      <button type="button" style="float:right" id="okAlertDialogButton" class="ui-state-default ui-corner-all button text-button state-has-no-dependency">OK</button>
+   </div>
 </div>
 </body>
 </html>

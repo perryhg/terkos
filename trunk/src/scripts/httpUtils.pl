@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+%CGI = ();
+
 #===================================================================================================
 sub isHttpRequest()
    {
@@ -9,8 +11,6 @@ sub isHttpRequest()
 # Code taken from Matt's Scripts: http://www.scriptarchive.com/
 sub parseHttpRequestParameters()
    {
-   my %queryParameters = ();
-
    # Determine the form's REQUEST_METHOD (GET or POST) and split the form
    # fields up into their name-value pairs.  If the REQUEST_METHOD was
    # not GET or POST, simply return and empty hash.
@@ -30,7 +30,7 @@ sub parseHttpRequestParameters()
       }
    else
       {
-      return %queryParameters;
+      return %CGI;
       }
 
    foreach $pair (@pairs)
@@ -47,10 +47,10 @@ sub parseHttpRequestParameters()
       $value =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack("C", hex($1))/eg;
       $value =~ tr/\0//d;
 
-      $queryParameters{$key}= $value;
+      $CGI{$key}= $value;
       }
 
-   return %queryParameters;
+   return %CGI;
    }
 #===================================================================================================
 return 1;
