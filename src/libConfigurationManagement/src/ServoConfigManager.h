@@ -7,7 +7,7 @@
 
 #include <algorithm>
 #include "ConfigFile.h"
-#include "rcservo.h"
+#include "qeservo.h"
 
 using namespace std;
 
