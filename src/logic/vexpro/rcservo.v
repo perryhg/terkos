@@ -1,6 +1,4 @@
-module RCServo(Addr, DataRd, DataWr, En, Rd, Wr, P, Clk);
-
-   parameter NUM_SERVO = 2;
+module RCServo12(Addr, DataRd, DataWr, En, Rd, Wr, P, Clk);
    
    input  [4:0] Addr;
    output [15:0] DataRd; 
@@ -8,123 +6,176 @@ module RCServo(Addr, DataRd, DataWr, En, Rd, Wr, P, Clk);
    input  En;
    input  Rd;
    input  Wr;
-   output [NUM_SERVO-1:0] P;   
+   output [11:0] P;   
    input  Clk;
-
+	
    reg     [15:0] DataRd;
-   reg     [NUM_SERVO*8-1:0] PwmReg;
-	reg     [4:0] DivCount;
+	
 	reg     DivClk;
-	reg     Enable;
-   integer i;
-   integer j;
-               
-   RCServoLogic #(NUM_SERVO) InstRCServoLogic(PwmReg, P[NUM_SERVO-1:0], DivClk&Enable);
+   reg     [8:0]  DivReg;
+	reg     [8:0]  DivCounter;
+	
+   reg     Freq;
+	reg     [13:0] FreqReg;
+   reg     [13:0] FreqCounter;
+	
+	reg     [13:0] UpReg0;
+	reg     [13:0] UpReg1;
+	reg     [13:0] UpReg2;
+	reg     [13:0] UpReg3;
+	reg     [13:0] UpReg4;
+	reg     [13:0] UpReg5;
+	reg     [13:0] UpReg6;
+	reg     [13:0] UpReg7;
+	reg     [13:0] UpReg8;
+	reg     [13:0] UpReg9;
+	reg     [13:0] UpReg10;
+	reg     [13:0] UpReg11;
+	
+   RCServoLogic InstRCServoLogic0(UpReg0, Freq, P[0], DivClk, Clk);
+   RCServoLogic InstRCServoLogic1(UpReg1, Freq, P[1], DivClk, Clk);
+   RCServoLogic InstRCServoLogic2(UpReg2, Freq, P[2], DivClk, Clk);
+   RCServoLogic InstRCServoLogic3(UpReg3, Freq, P[3], DivClk, Clk);
+   RCServoLogic InstRCServoLogic4(UpReg4, Freq, P[4], DivClk, Clk);
+   RCServoLogic InstRCServoLogic5(UpReg5, Freq, P[5], DivClk, Clk);
+   RCServoLogic InstRCServoLogic6(UpReg6, Freq, P[6], DivClk, Clk);
+   RCServoLogic InstRCServoLogic7(UpReg7, Freq, P[7], DivClk, Clk);
+   RCServoLogic InstRCServoLogic8(UpReg8, Freq, P[8], DivClk, Clk);
+   RCServoLogic InstRCServoLogic9(UpReg9, Freq, P[9], DivClk, Clk);
+   RCServoLogic InstRCServoLogic10(UpReg10, Freq, P[10], DivClk, Clk);
+   RCServoLogic InstRCServoLogic11(UpReg11, Freq, P[11], DivClk, Clk);
    
 	always @(posedge Clk)
 	   begin
-		if (DivCount==22)
+		if (DivCounter==DivReg) // divide 100mhz by 400 -> 4us clock
 		   begin
-			DivCount <= 0;
+			DivCounter <= 0;
 			DivClk <= 1'b1;
 			end
       else
 		   begin
-			DivCount <= DivCount + 1;
-		   DivClk <= 1'b0;
+			DivCounter <= DivCounter + 1;
+			DivClk <= 1'b0;
 			end
+			
+		if (FreqCounter==FreqReg)
+		   begin
+			FreqCounter <= 0;
+			Freq <= 1'b1;
+			end
+		else
+		   begin
+			FreqCounter <= FreqCounter + 1;
+			Freq <= 1'b0;
+			end
+			
 		end
-
+      
    always @(posedge Clk)
       begin
 		if (Wr & En)
 		   begin
-		   if (Addr[4:0]==5'b11111)
-		      Enable <= DataWr[0];
-         for (i=0; i<NUM_SERVO/2; i=i+1)
-            begin
-            if (Addr[4:0]==i)
-               begin
-               for (j=0; j<16; j=j+1)
-                  PwmReg[j+i*16] <= DataWr[j];
-               end
-            end
+		   if (Addr[4:0]==0)
+			   DivReg <= DataWr[8:0];
+			else if (Addr[4:0]==1)
+			   FreqReg <= DataWr[13:0];
+				
+			else if (Addr[4:0]==2)
+			   UpReg0 <= DataWr[13:0];
+			else if (Addr[4:0]==3)
+			   UpReg1 <= DataWr[13:0];
+			else if (Addr[4:0]==4)
+			   UpReg2 <= DataWr[13:0];
+			else if (Addr[4:0]==5)
+			   UpReg3 <= DataWr[13:0];
+			else if (Addr[4:0]==6)
+			   UpReg4 <= DataWr[13:0];
+			else if (Addr[4:0]==7)
+			   UpReg5 <= DataWr[13:0];
+			else if (Addr[4:0]==8)
+			   UpReg6 <= DataWr[13:0];
+			else if (Addr[4:0]==9)
+			   UpReg7 <= DataWr[13:0];
+			else if (Addr[4:0]==10)
+			   UpReg8 <= DataWr[13:0];
+			else if (Addr[4:0]==11)
+			   UpReg9 <= DataWr[13:0];
+			else if (Addr[4:0]==12)
+			   UpReg10 <= DataWr[13:0];
+			else if (Addr[4:0]==13)
+			   UpReg11 <= DataWr[13:0];
          end
       end
 
-   always @(Addr or PwmReg or Enable)
+   always @(Addr or DivReg or FreqReg or
+	   UpReg0 or UpReg1 or UpReg2 or UpReg3 or
+		UpReg4 or UpReg5 or UpReg6 or UpReg7 or
+		UpReg8 or UpReg9 or UpReg10 or UpReg11)
       begin
-      DataRd = 16'hxxxx;
-		if (Addr[4:0]==5'b11111)
-		   DataRd = {14'h0000, Enable};
-      for (i=0; i<NUM_SERVO/2; i=i+1)
-         begin
-         if (Addr[4:0]==i)
-            begin
-            for (j=0; j<16; j=j+1)
-               DataRd[j] = PwmReg[j+i*16];
-            end
-         end
+		if (Addr[4:0]==0)
+		   DataRd = {7'h00, DivReg};
+		else if (Addr[4:0]==1)
+		   DataRd = {2'b00, FreqReg};
+			
+		else if (Addr[4:0]==2)
+		   DataRd = {2'b00, UpReg0};
+		else if (Addr[4:0]==3)
+		   DataRd = {2'b00, UpReg1};
+		else if (Addr[4:0]==4)
+		   DataRd = {2'b00, UpReg2};
+		else if (Addr[4:0]==5)
+		   DataRd = {2'b00, UpReg3};
+		else if (Addr[4:0]==6)
+		   DataRd = {2'b00, UpReg4};
+		else if (Addr[4:0]==7)
+		   DataRd = {2'b00, UpReg5};
+		else if (Addr[4:0]==8)
+		   DataRd = {2'b00, UpReg6};
+		else if (Addr[4:0]==9)
+		   DataRd = {2'b00, UpReg7};
+		else if (Addr[4:0]==10)
+		   DataRd = {2'b00, UpReg8};
+		else if (Addr[4:0]==11)
+		   DataRd = {2'b00, UpReg9};
+		else if (Addr[4:0]==12)
+		   DataRd = {2'b00, UpReg10};
+		else if (Addr[4:0]==13)
+		   DataRd = {2'b00, UpReg11};	
+			
+		else
+		   DataRd = 16'hxxxx;
       end
    
 endmodule
 
    
-module RCServoLogic(ChannelReg, ChannelOut, Clk);
-
-   parameter NUM_PWM = 2;
+module RCServoLogic(UpReg, Freq, Out, DivClk, Clk);
   
-   input  [NUM_PWM*8-1:0] ChannelReg;
-   output [NUM_PWM-1:0] ChannelOut;
-   input  Clk;
+   input  [13:0] UpReg;
+	input  Freq;
+	output Out;
+	input  DivClk;
+	input  Clk;
+	
 
-   reg  [NUM_PWM-1:0] ChannelOut;
-   reg  ClkDiv2;
-   reg  ClkDiv4;
-   reg  ClkDiv8;
-   reg  ClkDiv16;
-   reg  ClkDiv32;
-   reg  ActiveRegion;
-   reg  SubRegion;
-   reg  [NUM_PWM-1:0] PreOut;
-   reg  [10:0] Counter;
-   reg  [7:0] Channel;
-
-   integer i;
-   integer j;
-
+   reg  [13:0] Counter;
+	reg  Out;
+	
    always @(posedge Clk)
-      begin
-      {ClkDiv32, ClkDiv16, ClkDiv8, ClkDiv4, ClkDiv2} = {ClkDiv32, ClkDiv16, ClkDiv8, ClkDiv4, ClkDiv2} + 1;
-      end
-
-   always @(posedge ClkDiv32)
-      begin
-      Counter <= Counter + 1;
-      for (i=0; i<NUM_PWM; i=i+1)
-         ChannelOut[i] <= PreOut[i];
-      end
-
-   always @(Counter)
-      begin
-      if (Counter<12'h130)
-         ActiveRegion = 1'b1;
-      else
-         ActiveRegion = 1'b0;
-      if (Counter<12'h100)
-         SubRegion = 1'b0;
-      else
-         SubRegion = 1'b1;
-      end
-
-   always @(Counter or SubRegion or ActiveRegion or ChannelReg or Channel or i)
-      begin
-      for (i=0; i<NUM_PWM; i=i+1)
-         begin
-         for (j=0; j<8; j=j+1)
-            Channel[j] = ChannelReg[j+i*8];
-         PreOut[i] = ((Channel[7:0]<Counter[7:0]) | SubRegion) & ActiveRegion;
+	   begin
+		if (DivClk)
+		   begin
+		   if (Freq)
+           begin
+		     Counter <= 1; // UpReg==0 means pwm is off, so counter never gets there
+		     Out <= 1'b1;
+		     end
+		   else
+		   Counter <= Counter + 1;
+		
+		   if (Counter==UpReg) 
+	        Out <= 1'b0;
+      
          end
-      end
-             
+      end			
 endmodule

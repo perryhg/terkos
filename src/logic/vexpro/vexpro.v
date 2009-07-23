@@ -162,7 +162,7 @@ module Vexpro(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
 	wire [15:0] RcsDataRd;
    assign RcsEn = Cs & Addr[11:6]==6'b010000;
 
-	RCServo #(12) InstRCServo(.Addr(Addr[5:1]), .DataRd(RcsDataRd), .DataWr(Data), .En(RcsEn), .Rd(Rd), .Wr(Wr), 
+	RCServo12 InstRCServo(.Addr(Addr[5:1]), .DataRd(RcsDataRd), .DataWr(Data), .En(RcsEn), .Rd(Rd), .Wr(Wr), 
 	   .P({P[27], P[26], P[25], P[24], P[23], P[22], P[21], P[20], 
 		    P[19], P[18], P[17], P[16]}), 
 		.Clk(Clk));
