@@ -88,9 +88,9 @@ if (!window['$'])
       global: false
    });
 
-   edu.cmu.ri.terk.WirelessNetworkingTab = function(wirelessNetworkingConfigManager, wirelessNetworkScanner)
+   edu.cmu.ri.terk.WirelessNetworkingTab = function(wirelessNetworkingConfigManager, wirelessNetworkScanner, dialogManager)
       {
-      var host = '';//http://192.168.1.4'; // TODO: remove me!
+      var host = 'http://192.168.4.7'; // TODO: remove me!
 
       var isNetworkNameValid = function(formFieldID)
          {
@@ -233,10 +233,7 @@ if (!window['$'])
                {
                if (wirelessNetworkingConfigManager.isModified())
                   {
-                  // Show the dialog and set the min-height.  I don't know why, but I *had* to set the min-height
-                  // here...setting it in the HTML or on load didn't work--it kept getting overwritten to
-                  // something like 112 or 114 pixels.
-                  jQuery("#savingWirelessNetworkingConfigurationDialog").dialog('open').css('min-height', '1px');
+                  dialogManager.showNonClosableWaitDialog("Please wait while your changes to the wireless networking configuration are being saved.");
 
                   // get the JSON to send to the backend
                   var json = wirelessNetworkingConfigManager.getJSON();
@@ -246,44 +243,31 @@ if (!window['$'])
                   {
                      url: host + '/cgi-bin/saveWirelessNetworkingConfig.pl',
                      data: "json=" + json,
-                     success: function(jsonResponse, textStatus)
+                     success: function(jsonResponse)
                         {
                         if (jsonResponse)
                            {
                            // reload the config
                            wirelessNetworkingConfigManager.loadWirelessNetworkingConfig(function()
                               {
-                              jQuery("#savingWirelessNetworkingConfigurationDialog").dialog('close');
+                              dialogManager.hideNonClosableWaitDialog();
                               });
                            }
                         else
                            {
-                           jQuery("#savingWirelessNetworkingConfigurationDialog").dialog('close');
-                           jQuery("#alertDialogMessage").html("Sorry, an error occurred while saving your preferences.  Please try again.");
-                           jQuery("#alertDialog").dialog('open');
+                           dialogManager.hideNonClosableWaitDialog();
+                           dialogManager.showOKDialog("Sorry, an error occurred while saving your preferences.  Please try again.");
                            }
                         },
                      error: function()
                         {
-                        jQuery("#savingWirelessNetworkingConfigurationDialog").dialog('close');
-                        jQuery("#alertDialogMessage").html("Sorry, an error occurred while saving your preferences.  Please try again.");
-                        jQuery("#alertDialog").dialog('open');
+                        dialogManager.hideNonClosableWaitDialog();
+                        dialogManager.showOKDialog("Sorry, an error occurred while saving your preferences.  Please try again.");
                         }
                   });
                   }
                }
             ).disableSelection();
-
-      jQuery("#savingWirelessNetworkingConfigurationDialog").dialog({
-         bgiframe: true,
-         autoOpen: false,
-         modal: true,
-         draggable: false,
-         resizable: false,
-         closeOnEscape : false,
-         title : 'Saving Preferences',
-         dialogClass: 'non_closable_alert'
-      });
       // ---------------------------------------------------------------------------------------------------------------
       // Dialog for manually adding a preferred wireless network
       // ---------------------------------------------------------------------------------------------------------------

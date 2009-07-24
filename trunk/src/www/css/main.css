@@ -20,6 +20,10 @@ span.ui-icon {
    height: 10px;
 }
 
+.button-container {
+   width:302px;
+}
+
 .button-container div {
    margin: 2px 2px 2px 0;
    padding: 1px 0 2px;
@@ -30,6 +34,10 @@ span.ui-icon {
 .divider {
    border-width: 1px 0 0 0;
    margin: 5px 0 5px 0
+}
+
+.default-widget-width {
+   width:300px;
 }
 
 .emphasized {

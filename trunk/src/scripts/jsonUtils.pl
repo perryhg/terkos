@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
-require "httpUtils.pl";
-require "fileUtils.pl";
+require "/opt/scripts/httpUtils.pl";
+require "/opt/scripts/fileUtils.pl";
 
 #===================================================================================================
 sub outputJson()

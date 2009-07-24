@@ -3,6 +3,6 @@
 require "/opt/scripts/pathUtils.pl";
 require "/opt/scripts/saveJSONHelper.pl";
 
-my $pathToJsonConfig = &getPath('wireless_networking_config.json');
-my $program = &getPath('WirelessNetworkingConfigTool');
+my $pathToJsonConfig = &getPath('audio_config.json');
+my $program = &getPath('AudioConfigTool');
 &saveJSON($pathToJsonConfig, $program);

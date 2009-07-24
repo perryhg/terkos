@@ -3,5 +3,5 @@
 require "/opt/scripts/pathUtils.pl";
 require "/opt/scripts/jsonUtils.pl";
 
-my $pathToJsonConfig = &getPath('wireless_networking_config.json');
+my $pathToJsonConfig = &getPath('audio_config.json');
 outputJsonFile($pathToJsonConfig);
