@@ -22,7 +22,7 @@
 <builder id="org.eclipse.cdt.build.core.settings.default.builder.1752435580" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
 <tool id="org.eclipse.cdt.build.core.settings.holder.libs.1790971840" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs">
 <option id="org.eclipse.cdt.build.core.settings.holder.libfiles.1090718706" name="Library Files" superClass="org.eclipse.cdt.build.core.settings.holder.libfiles" valueType="libFiles">
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/TinyXml++/dist/libticppd.so}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/TinyXml++/dist/libticpp.so}&quot;"/>
 </option>
 </tool>
 <tool id="org.eclipse.cdt.build.core.settings.holder.145343799" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">

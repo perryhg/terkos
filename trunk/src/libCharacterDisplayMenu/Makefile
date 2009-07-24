@@ -14,14 +14,14 @@ LIB_DYNAMIC_CLASS_LOADER_LIB_SHORT_NAME=DynamicClassLoader
 TINY_XML_DIR=../tinyxml++
 TINY_XML_SRC_DIR=$(TINY_XML_DIR)/ticpp
 TINY_XML_DIST_DIR=$(TINY_XML_DIR)/dist
-TINY_XML_LIB_SHORT_NAME=ticppd
+TINY_XML_LIB_SHORT_NAME=ticpp
 
 CXX=arm-oe-linux-uclibcgnueabi-g++
 
 CFLAGS=-fPIC -c -Wall \
        -I$(LIB_DYNAMIC_CLASS_LOADER_SRC_DIR) \
        -I$(TINY_XML_SRC_DIR) \
-       -D "TIXML_USE_TICPP" -D "UNICODE" -D "_UNICODE" -D "DEBUG" -D "_DEBUG"
+       -D "TIXML_USE_TICPP" -D "UNICODE" -D "_UNICODE" -D "NDEBUG"
 
 SRCS=$(wildcard $(SRC_DIR)/*.cpp)
 OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(SRCS)))
@@ -69,7 +69,6 @@ libDynamicClassLoader.so: $(LIB_DIR)
 
 libticpp.so: $(LIB_DIR)
 	@echo 'Building target: $@'
-	$(MAKE) -C $(TINY_XML_SRC_DIR) CXX=$(CXX)
 	cp $(TINY_XML_DIST_DIR)/*.so $(LIB_DIR)/.
 	@echo 'Finished building target: $@'
 	@echo ' '

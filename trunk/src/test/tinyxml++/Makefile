@@ -8,13 +8,13 @@ DIST_DIR=dist
 TINY_XML_DIR=../../tinyxml++
 TINY_XML_SRC_DIR=$(TINY_XML_DIR)/ticpp
 TINY_XML_DIST_DIR=$(TINY_XML_DIR)/dist
-TINY_XML_LIB_SHORT_NAME=ticppd
+TINY_XML_LIB_SHORT_NAME=ticpp
 
-#CXX=arm-linux-gnueabi-g++
+CXX=arm-oe-linux-uclibcgnueabi-g++
 
 CFLAGS=-fPIC -c -Wall \
        -I$(TINY_XML_SRC_DIR) \
-       -D "TIXML_USE_TICPP" -D "UNICODE" -D "_UNICODE" -D "DEBUG" -D "_DEBUG"
+       -D "TIXML_USE_TICPP" -D "UNICODE" -D "_UNICODE" -D "NDEBUG"
 LDFLAGS=-L$(LIB_DIR) \
         -l$(TINY_XML_LIB_SHORT_NAME)
 
@@ -54,7 +54,6 @@ XmlTest: libTinyXml XmlTest.o
 
 libTinyXml: init
 	@echo 'Building target: $@'
-	$(MAKE) -C $(TINY_XML_SRC_DIR)
 	cp $(TINY_XML_DIST_DIR)/*.so $(LIB_DIR)/.
 	@echo 'Finished building target: $@'
 	@echo ' '

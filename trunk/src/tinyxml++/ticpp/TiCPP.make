@@ -39,11 +39,11 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS := \
-	$(OBJDIR)/tinyxmlerror.o \
-	$(OBJDIR)/tinyxmlparser.o \
-	$(OBJDIR)/tinyxml.o \
 	$(OBJDIR)/ticpp.o \
 	$(OBJDIR)/tinystr.o \
+	$(OBJDIR)/tinyxml.o \
+	$(OBJDIR)/tinyxmlerror.o \
+	$(OBJDIR)/tinyxmlparser.o \
 
 MKDIR_TYPE := msdos
 CMD := $(subst \,\\,$(ComSpec)$(COMSPEC))
@@ -85,12 +85,12 @@ else
 	-@if exist $(subst /,\,$(OBJDIR)) rmdir /s /q $(subst /,\,$(OBJDIR))
 endif
 
-$(OBJDIR)/tinyxmlerror.o: tinyxmlerror.cpp
+$(OBJDIR)/ticpp.o: ticpp.cpp
 	-@$(CMD_MKOBJDIR)
 	@echo $(notdir $<)
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/tinyxmlparser.o: tinyxmlparser.cpp
+$(OBJDIR)/tinystr.o: tinystr.cpp
 	-@$(CMD_MKOBJDIR)
 	@echo $(notdir $<)
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
@@ -100,12 +100,12 @@ $(OBJDIR)/tinyxml.o: tinyxml.cpp
 	@echo $(notdir $<)
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/ticpp.o: ticpp.cpp
+$(OBJDIR)/tinyxmlerror.o: tinyxmlerror.cpp
 	-@$(CMD_MKOBJDIR)
 	@echo $(notdir $<)
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/tinystr.o: tinystr.cpp
+$(OBJDIR)/tinyxmlparser.o: tinyxmlparser.cpp
 	-@$(CMD_MKOBJDIR)
 	@echo $(notdir $<)
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"

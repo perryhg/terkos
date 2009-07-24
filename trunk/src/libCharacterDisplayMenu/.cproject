@@ -23,7 +23,7 @@
 <tool id="org.eclipse.cdt.build.core.settings.holder.libs.1569617407" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs">
 <option id="org.eclipse.cdt.build.core.settings.holder.libfiles.785360000" name="Library Files" superClass="org.eclipse.cdt.build.core.settings.holder.libfiles" valueType="libFiles">
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibDynamicClassLoader/dist/libDynamicClassLoader.so}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/TinyXML/dist/libticppd.so}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/TinyXML/dist/libticpp.so}&quot;"/>
 </option>
 </tool>
 <tool id="org.eclipse.cdt.build.core.settings.holder.1364485420" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
