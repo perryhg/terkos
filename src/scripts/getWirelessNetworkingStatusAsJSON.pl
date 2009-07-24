@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-require "wirelessNetworkingUtils.pl";
+require "/opt/scripts/wirelessNetworkingUtils.pl";
 
 my $interfaceName = "wlan0";
 

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-require "jsonUtils.pl";
+require "/opt/scripts/jsonUtils.pl";
 
 #===================================================================================================
 sub printWirelessNetworkingStatusAsJSON()

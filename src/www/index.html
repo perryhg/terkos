@@ -9,14 +9,30 @@
    <script type="text/javascript" src="javascript/jquery.mousecapture.js"></script>
    <script type="text/javascript" src="javascript/Math.uuid.js"></script>
    <script type="text/javascript" src="javascript/json2.js"></script>
+   <script type="text/javascript" src="javascript/edu/cmu/ri/terk/DialogManager.js"></script>
+   <script type="text/javascript" src="javascript/edu/cmu/ri/terk/AudioConfigManager.js"></script>
+   <script type="text/javascript" src="javascript/edu/cmu/ri/terk/AudioTab.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkingStatus.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkingConfigManager.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkScanner.js"></script>
+   <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkingTab.js"></script>
    <script type="text/javascript">
       var tabSelectionHandlers = new Array();
 
       $(function()
          {
+         // create the DialogManager
+         var dialogManager = new edu.cmu.ri.terk.DialogManager(
+               "nonClosableWaitDialog",
+               "nonClosableWaitDialogMessage",
+               "okDialog",
+               "okDialogMessage",
+               "okDialogOkButton"
+               );
+
+         // create the AudioConfigManager
+         var audioConfigManager = new edu.cmu.ri.terk.AudioConfigManager();
+
          // create the WirelessNetworkStatus
          var wirelessNetworkingStatus = new edu.cmu.ri.terk.WirelessNetworkingStatus(
                "wirelessNetworkingStatusMessageArea",
@@ -37,13 +53,16 @@
                "availableWirelessNetworksPleaseWaitIndicator"
                );
 
-         var wirelessNetworkingTab = new edu.cmu.ri.terk.WirelessNetworkingTab(wirelessNetworkingConfigManager, wirelessNetworkScanner);
+         // create instances of the tabs (which initializes them)
+         var audioTab = new edu.cmu.ri.terk.AudioTab(audioConfigManager, dialogManager);
+         var wirelessNetworkingTab = new edu.cmu.ri.terk.WirelessNetworkingTab(wirelessNetworkingConfigManager, wirelessNetworkScanner, dialogManager);
 
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
             };
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
+            audioConfigManager.getAudioConfig();
             };
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
@@ -84,19 +103,6 @@
                   $(this).removeClass('ui-state-hover');
                   }
                );
-
-         $("#alertDialog").dialog({
-            bgiframe: true,
-            autoOpen: false,
-            modal: true,
-            draggable: false,
-            resizable: false});
-
-         $("#okAlertDialogButton").click(function()
-            {
-            $("#alertDialog").dialog('close');
-            });
-
          });
    </script>
 </head>
@@ -119,12 +125,27 @@
    </div>
    <!-- ============================================================================================================ -->
    <div id="Audio">
-      <p>Audio</p>
+      <div class="section">
+         <div class="section-title">Preferences</div>
+         <div class="indented">
+            <div id="audioConfigurationMessageArea">&nbsp;</div>
+            <div id="audioConfigurationArea" class="hidden">
+               <input id="isAudioAlertsEnabled" name="isAudioAlertsEnabled" type="checkbox"/><label for="isAudioAlertsEnabled">Play audio alerts</label>
+               <div class="blank-line"></div>
+               <div style="padding-bottom:5px">
+                  Volume: <span id="volume"></span>
+               </div>
+               <div id="volumeSlider" class="default-widget-width"></div>
+               <div class="blank-line"></div>
+               <div class="button-container">
+                  <button type="button" style="float:right;margin-right:0;" id="saveAudioConfigButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Save</button>
+               </div>
+            </div>
+         </div>
+      </div>
    </div>
    <!-- ============================================================================================================ -->
    <div id="Wireless_Networking">
-      <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkingTab.js"></script>
-
       <form method="post" onsubmit="return false;">
          <div class="section">
             <div class="section-title">Status</div>
@@ -142,9 +163,9 @@
                   <div class="blank-line"></div>
                   <div class="label">Preferred Networks:</div>
                   <div id="preferredWirelessNetworksListContainer">
-                     <div id="preferredWirelessNetworksList" class="ui-widget-content" style="display:block; padding:0; margin:0; overflow: auto; height:150px; width: 260px;"></div>
+                     <div id="preferredWirelessNetworksList" class="ui-widget-content default-widget-width" style="display:block; padding:0; margin:0; overflow: auto; height:150px;"></div>
                   </div>
-                  <div class="button-container" style="width:262px;background-color:#ccccff">
+                  <div class="button-container">
                      <div id="addPreferredWirelessNetworkButton" class="ui-state-default ui-corner-all button state-has-no-dependency" title="Add">
                         <span class="ui-icon ui-icon-plus"></span>
                      </div>
@@ -156,7 +177,6 @@
                      </div>
                      <button type="button" style="float:right;margin-right:0;" id="saveWirelessNetworkingConfigButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Save</button>
                   </div>
-                  <div style="clear:both"></div>
                </div>
             </div>
          </div>
@@ -212,15 +232,6 @@
             </div>
          </form>
       </div>
-      <div id="savingWirelessNetworkingConfigurationDialog">
-         <table border="0" cellpadding="0" cellspacing="0">
-            <tr valign="middle">
-               <td><img src="images/ajax-loader.gif" width="16" height="16" alt=""></td>
-               <td>&nbsp;&nbsp;&nbsp;</td>
-               <td>Please wait while your changes to the wireless networking configuration are being saved.</td>
-            </tr>
-         </table>
-      </div>
    </div>
    <!-- ============================================================================================================ -->
    <div id="Programs">
@@ -236,12 +247,21 @@
    </div>
    <!-- ============================================================================================================ -->
 </div>
-<div id="alertDialog">
-   <div id="alertDialogMessage"></div>
+<div id="okDialog">
+   <div id="okDialogMessage"></div>
    <div class="ui-widget-content divider" style="margin-top: 50px"></div>
-   <div id="alertDialogButtonsContainer">
-      <button type="button" style="float:right" id="okAlertDialogButton" class="ui-state-default ui-corner-all button text-button state-has-no-dependency">OK</button>
+   <div id="okDialogButtonsContainer">
+      <button type="button" style="float:right" id="okDialogOkButton" class="ui-state-default ui-corner-all button text-button state-has-no-dependency">OK</button>
    </div>
+</div>
+<div id="nonClosableWaitDialog">
+   <table border="0" cellpadding="0" cellspacing="0">
+      <tr valign="middle">
+         <td><img src="images/ajax-loader.gif" width="16" height="16" alt=""></td>
+         <td>&nbsp;&nbsp;&nbsp;</td>
+         <td><span id="nonClosableWaitDialogMessage"></span></td>
+      </tr>
+   </table>
 </div>
 </body>
 </html>

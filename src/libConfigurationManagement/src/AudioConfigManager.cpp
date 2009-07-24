@@ -30,3 +30,28 @@ bool AudioConfigManager::setAlertsEnabled(const bool isEnabled)
    {
    return setBooleanValue(ARE_ALERTS_ENABLED_PROPERTY, isEnabled);
    }
+
+const bool AudioConfigManager::setJson(Json::Value& config)
+   {
+   if (config != Json::Value::null)
+      {
+      // now do some simple tests to verify it
+      Json::Value* volumeProperty = ConfigFile::findProperty(config, VOLUME_PROPERTY);
+      Json::Value* areAlertsEnabledProperty = ConfigFile::findProperty(config, ARE_ALERTS_ENABLED_PROPERTY);
+      if (volumeProperty != NULL && areAlertsEnabledProperty != NULL)
+         {
+         // revert to default
+         revertToDefault();
+
+         // set the VOLUME_PROPERTY
+         setVolumeLevel(volumeProperty->asUInt());
+
+         // set the ARE_ALERTS_ENABLED_PROPERTY
+         setAlertsEnabled(areAlertsEnabledProperty->asBool());
+
+         return true;
+         }
+      }
+   return false;
+   }
+

@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 
-require "commandLineUtils.pl";
-require "httpUtils.pl";
-require "jsonUtils.pl";
+require "/opt/scripts/commandLineUtils.pl";
+require "/opt/scripts/httpUtils.pl";
+require "/opt/scripts/jsonUtils.pl";
 
 # parse command line switches or HTTP request params
 my %arguments = ();

@@ -1,5 +1,5 @@
 //======================================================================================================================
-// Class for obtaining the wireless networking status.
+// Class for managing common dialogs.
 //
 // Dependencies:
 // * jQuery (http://jquery.com/)
@@ -67,9 +67,9 @@ else if (typeof edu.cmu.ri.terk != "object")
 //======================================================================================================================
 if (!window['$'])
    {
-   var nojQueryMsg = "The jQuery library is required by edu.cmu.ri.terk.WirelessNetworkingStatus.js";
-   alert(nojQueryMsg);
-   throw new Error(nojQueryMsg);
+   var noJQuery = "The jQuery library is required by edu.cmu.ri.terk.DialogManager.js";
+   alert(noJQuery);
+   throw new Error(noJQuery);
    }
 //======================================================================================================================
 
@@ -78,86 +78,76 @@ if (!window['$'])
 //======================================================================================================================
 (function()
    {
+   // ==================================================================================================================
    var jQuery = window['$'];
-   jQuery.ajaxSetup({
-      type: 'GET',
-      dataType: 'jsonp',
-      timeout: 3000,
-      cache: false,
-      global: false
-   });
 
-   edu.cmu.ri.terk.WirelessNetworkingStatus = function(wirelessNetworkingStatusMessageAreaId,
-                                                       wirelessNetworkingStatusMessageAreaDetailId)
+   edu.cmu.ri.terk.DialogManager = function(
+         nonClosableWaitDialog,
+         nonClosableWaitDialogMessageId,
+         okDialogId,
+         okDialogMessageId,
+         okDialogOkButtonId)
       {
-      var host = 'http://192.168.4.7'; // TODO: remove me!
+      jQuery("#" + okDialogId).dialog({
+         bgiframe: true,
+         autoOpen: false,
+         modal: true,
+         draggable: false,
+         resizable: false});
 
-      this.getWirelessNetworkingStatus = function()
+      jQuery("#" + okDialogOkButtonId).click(function()
          {
-         displayStatus("&nbsp;", "Checking status...");
-
-         var wirelessNetworkingStatus = null;
-
-         // load the wireless status
-         jQuery.ajax(
-         {
-            url: host + '/cgi-bin/getWirelessNetworkingStatusAsJSON.pl',
-            success: function(jsonResponse)
-               {
-               if (jsonResponse && jsonResponse['wireless-networking-status'])
-                  {
-                  wirelessNetworkingStatus = jsonResponse['wireless-networking-status'];
-                  }
-               displayWirelessNetworkingStatus(wirelessNetworkingStatus);
-               },
-            error: function()
-               {
-               displayWirelessNetworkingStatus(wirelessNetworkingStatus);
-               }
+         jQuery("#" + okDialogId).dialog('close');
          });
-         };
 
-      var displayWirelessNetworkingStatus = function(wirelessNetworkingStatusJSON)
+      jQuery("#" + nonClosableWaitDialog).dialog({
+         bgiframe: true,
+         autoOpen: false,
+         modal: true,
+         draggable: false,
+         resizable: false,
+         closeOnEscape : false,
+         title : 'Saving Preferences',
+         dialogClass: 'non_closable_alert'});
+
+      var showDialog = function(dialogId, dialogMessageId, message)
          {
-         if (wirelessNetworkingStatusJSON)
-            {
-            if (wirelessNetworkingStatusJSON["is-installed"])
-               {
-               var wirelessInterface = wirelessNetworkingStatusJSON['wireless-interface'];
-               if (wirelessInterface)
-                  {
-                  if (wirelessInterface['is-enabled'])
-                     {
-                     displayStatus("Connected", "The wireless adapter is connected to " + wirelessInterface['access-point']['ssid'] + " and has the IP address " + wirelessInterface['access-point']['ip-address']);
-                     }
-                  else
-                     {
-                     displayStatus("Off", "The wireless interface is disabled.");
-                     }
-                  }
-               else
-                  {
-                  displayStatus("Unknown", "Failed to retrieve status.");
-                  }
-               }
-            else
-               {
-               displayStatus("Off", "The wireless adapter is unplugged.");
-               }
-            }
-         else
-            {
-            displayStatus("Unknown", "Failed to retrieve status.");
-            }
+         jQuery("#" + dialogMessageId).html(message);
+
+         // Show the dialog and set the min-height.  I don't know why, but I *had* to set the min-height
+         // here...setting it in the HTML or on load didn't work--it kept getting overwritten to
+         // something like 112 or 114 pixels.
+         jQuery("#" + dialogId).dialog('open').css('min-height', '1px');
          };
 
-      var displayStatus = function(message, detail)
+      var hideDialog = function(dialogId)
          {
-         jQuery("#" + wirelessNetworkingStatusMessageAreaId).html(message);
-         jQuery("#" + wirelessNetworkingStatusMessageAreaDetailId).html(detail);
+         jQuery("#" + dialogId).dialog('close');
          };
 
+      this.showOKDialog = function(message)
+         {
+         showDialog(okDialogId, okDialogMessageId, message);
+         };
+
+      this.hideOKDialog = function()
+         {
+         hideDialog(okDialogId);
+         };
+
+      this.showNonClosableWaitDialog = function(message)
+         {
+         showDialog(nonClosableWaitDialog, nonClosableWaitDialogMessageId, message);
+         };
+
+      this.hideNonClosableWaitDialog = function()
+         {
+         hideDialog(nonClosableWaitDialog);
+         };
+
+      // ---------------------------------------------------------------------------------------------------------------
       };
+
    // ==================================================================================================================
    })();
 

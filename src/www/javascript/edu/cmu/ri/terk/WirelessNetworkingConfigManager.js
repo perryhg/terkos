@@ -109,7 +109,7 @@ if (!JSON)
                                                               wirelessNetworksListContainerId,
                                                               wirelessNetworksListId)
       {
-      var host = '';//http://192.168.1.4'; // TODO: remove me!
+      var host = 'http://192.168.4.7'; // TODO: remove me!
 
       var selectedWirelessNetwork = null;
       var selectionListeners = new Array();
@@ -165,7 +165,8 @@ if (!JSON)
          // compare stringified versions of the original JSON with the updated one to see if
          // anything has changed and then update the listeners accordingly
          var isModified = getIsModified();
-         // notify listeners that nothing is selected
+
+         // notify listeners of the modification state
          jQuery.each(changeListeners, function(i, listener)
             {
             if (listener)
@@ -190,7 +191,7 @@ if (!JSON)
 
          clearListSelection();
 
-         // load the wireless config
+         // load the config
          jQuery.ajax(
          {
             url: host + '/cgi-bin/getWirelessNetworkingConfigAsJSON.pl',
@@ -434,7 +435,7 @@ if (!JSON)
       this.getJSON = function()
          {
          return JSON.stringify(json);
-         }
+         };
       };
 
    // ==================================================================================================================
