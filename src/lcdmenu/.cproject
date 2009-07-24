@@ -29,7 +29,7 @@
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/LCDMenu/LibCharacterDisplayMenu/dist/libCharacterDisplayMenu.so}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/LCDMenu/LibDynamicClassLoader/dist/libDynamicClassLoader.so}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/LCDMenu/libqwerk/libqwerk.a}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LCDMenu/TinyXML/dist/libticppd.so}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LCDMenu/TinyXML/dist/libticpp.so}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibConfigurationManagement/dist/libConfigurationManagement.so}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/LibUtilities/dist/libUtilities.so}&quot;"/>
 </option>
