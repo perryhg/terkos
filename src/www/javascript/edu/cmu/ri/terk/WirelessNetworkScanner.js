@@ -126,7 +126,8 @@ if (!Math.uuid)
          // load the network list
          jQuery.ajax(
          {
-            url: host + '/cgi-bin/getWirelessNetworksAsJSON.pl?include-encrypted=false',
+            url: host + '/cgi-bin/getWirelessNetworksAsJSON.pl',
+            data: "include-encrypted=false",
             success: function(wirelessNetworksJSON)
                {
                displayAvailableWirelessNetworks(wirelessNetworksJSON);
