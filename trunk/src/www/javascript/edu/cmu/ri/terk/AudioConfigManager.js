@@ -97,7 +97,7 @@ if (!JSON)
 
    edu.cmu.ri.terk.AudioConfigManager = function()
       {
-      var host = 'http://192.168.4.7'; // TODO: remove me!
+      var host = '';//http://192.168.1.4'; // TODO: remove me!
 
       var eventListeners = new Array();
       var stringifiedOriginalJSON = null;
