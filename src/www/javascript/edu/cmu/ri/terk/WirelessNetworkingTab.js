@@ -90,7 +90,7 @@ if (!window['$'])
 
    edu.cmu.ri.terk.WirelessNetworkingTab = function(wirelessNetworkingConfigManager, wirelessNetworkScanner, dialogManager)
       {
-      var host = 'http://192.168.4.7'; // TODO: remove me!
+      var host = '';//http://192.168.1.4'; // TODO: remove me!
 
       var isNetworkNameValid = function(formFieldID)
          {
