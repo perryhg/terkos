@@ -217,4 +217,5 @@ unsigned short CQwerkHardware::GetBreakerState()
 unsigned int CQwerkHardware::GetBattState()
 {
   // todo put logic here to detect low battery state using hysteresis, etc
+  return 0;
 }
