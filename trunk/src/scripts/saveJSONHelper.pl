@@ -3,7 +3,7 @@
 require "/opt/scripts/fileUtils.pl";
 require "/opt/scripts/httpUtils.pl";
 require "/opt/scripts/jsonUtils.pl";
-require "/opt/scripts/environmentUtils.pl";
+require "/opt/scripts/pathUtils.pl";
 
 #===================================================================================================
 sub saveJSON()
