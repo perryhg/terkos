@@ -24,6 +24,9 @@
 #define QEAUDIO_RETURN_TOO_LARGE                   -6
 #define QEAUDIO_RETURN_ALLOC_ERROR                 -7
 
+#define QEAUDIO_VOLUME              0xfe0
+#define QEAUDIO_PERIOD              0xfe2
+
 
 class CQwerkHardware;
 

@@ -11,7 +11,7 @@
 
 // Globally unique property ID's are useful because we can merge all
 // property interfaces into one.....
-// The 0th object is for intrinsic properties -- reserved
+// The 0th object is reserved
 // 64K of properties should be plenty for each object
 #define PROP_MULTIPLIER                   0x10000
 #define PROP_ID(object, index)            ((object+1)*PROP_MULTIPLIER + index)

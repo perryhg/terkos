@@ -211,8 +211,6 @@ int CTextLcd::SetProperty(int property, long value)
       break;
 
     case TL_PROP_HEIGHT:
-      return PROP_ERROR_READ_ONLY;
-
     case TL_PROP_WIDTH:
       return PROP_ERROR_READ_ONLY;
 

@@ -6,31 +6,43 @@
 CQwerkHardware *CQwerkHardware::m_pQwerk = NULL;
 int CQwerkHardware::m_refCount = 0;
 
+// todo urrent into the processor is not insignificant
+// channel 21 and 24 have 
+#if 1
+const unsigned int CQwerkHardware::m_num[25] = {
+  6583,  6583,  6583,  6583,  6583,  6583,  6583,  6583,
+  6583,  6583,  6583,  6583,  6583,  6583,  6583,  6583,
+  39441, 39441, 39441, 39441, 39441, 50394, 14904, 14904, 
+  26384
+};
+#else
+const unsigned int CQwerkHardware::m_num[25] = {
+  6583,  6583,  6583,  6583,  6583,  6583,  6583,  6583,
+  6583,  6583,  6583,  6583,  6583,  6583,  6583,  6583,
+  39441, 39441, 39441, 39441, 39441, 50394, 14034, 14034, 
+  47665
+};
+#endif
+
 CQwerkHardware::CQwerkHardware()
 {
+  unsigned int val;
+
   m_p9302hw = C9302Hardware::GetObject();
 
-  // set FPGA PROG to high and PHY power to high
-  *m_p9302hw->PortAData() = 0x0008;
-  *m_p9302hw->PortADataDR() = 0x006a;
+  // turn on I/O 5V regulator
+  *m_p9302hw->PortHDataDR() |= 0x0020;  
+  *m_p9302hw->PortHData() |= 0x0020;
 
-#if Q1
-  // turn LEDs off 
-  *m_p9302hw->PortBData() = 0x0000;
-  *m_p9302hw->PortBDataDR() = 0x00ff;
-  *m_p9302hw->PortHData() &= ~0x0028;
-  *m_p9302hw->PortHDataDR() |= 0x0028;
-  *m_p9302hw->PortGData() |= 0x02;
-  *m_p9302hw->PortGDataDR() |= 0x02;
- 
-  // disable audio - it enables automatically on first audio command
-  SetAudioEnable(false);
+  // get a/d dc bias/offset
+  val = m_p9302hw->GetAD(4);
+  val += m_p9302hw->GetAD(4);
+  val += m_p9302hw->GetAD(4);
+  val += m_p9302hw->GetAD(4);
+  m_adcOffset = val>>2;
 
-  // set port H bits 4 as output (audio)
-  *m_p9302hw->PortHDataDR() |= 0x00010;
-
-  SetMotorVoltageScale(QHW_DIV_365TH);
-#endif
+  // todo: set version
+  m_version = 0;
 }
 
 CQwerkHardware::~CQwerkHardware()
@@ -58,28 +70,34 @@ void CQwerkHardware::ReleaseObject()
 
 unsigned short CQwerkHardware::GetADRaw(unsigned int channel)
 {
+  unsigned short val;
+
   if (channel>=QHW_AD_CHANNELS)
     return 0;
-
+  
   // set mux
-#if Q1
-  *m_p9302hw->PortFDataDR() = 0x000e;
-  *m_p9302hw->PortFData() = channel << 1;
-
-  return m_p9302hw->GetAD(QHW_AD_ANALOG_IN_CHANNEL);
-#else
   *m_p9302hw->PortHDataDR() |= 0x001c;
   *m_p9302hw->PortHData() &= ~0x001c;
   *m_p9302hw->PortHData() |= (channel&7)<<2;
 
   if (channel<=7)
-    return m_p9302hw->GetAD(QHW_AD_ANALOG_IN_CHANNEL0_7);
+    val = m_p9302hw->GetAD(QHW_AD_ANALOG_IN_CHANNEL0_7);
   else if (channel>=8 && channel<=15)
-    return m_p9302hw->GetAD(QHW_AD_ANALOG_IN_CHANNEL8_15);
+    val = m_p9302hw->GetAD(QHW_AD_ANALOG_IN_CHANNEL8_15);
+  else if (channel>=16 && channel<=23)
+    val = m_p9302hw->GetAD(QHW_AD_ANALOG_IN_CHANNEL16_23);  
   else
-    return m_p9302hw->GetAD(QHW_AD_ANALOG_IN_CHANNEL16_23);    
-#endif
-  
+    val = m_p9302hw->GetAD(QHW_AD_ANALOG_IN_CHANNEL24);  
+
+
+  #if 1
+  // subtract dc offset
+  if (val>m_adcOffset)
+    val -= m_adcOffset;
+  else 
+    val = 0;
+  #endif
+  return val;
 }
 
 unsigned short CQwerkHardware::GetADVoltage(unsigned int channel)
@@ -91,179 +109,112 @@ unsigned short CQwerkHardware::GetADVoltage(unsigned int channel)
   
   val = GetADRaw(channel);
 
-  val *= QHW_AD_ANALOG_IN_NUMERATOR;
-  val /= QHW_AD_ANALOG_IN_DENOMINATOR;
+  val *= m_num[channel];
+  val >>= QHW_AD_SCALE;
 
   return (unsigned short)val;
 }
 
-unsigned short CQwerkHardware::GetBattVoltage()
+void CQwerkHardware::PowerOff()
 {
-  unsigned int val;
-
-  val = m_p9302hw->GetAD(QHW_AD_BATT_CHANNEL);
-
-  val *= QHW_AD_BATT_NUMERATOR;
-  val /= QHW_AD_BATT_DENOMINATOR;
-
-  return (unsigned short)val;
+  // sync disk
+  sync();
+  // wait a nominal amount
+  sleep(1);
+   *m_p9302hw->PortCData() = 0; // turn off unit
 }
 
-unsigned short CQwerkHardware::GetMotorVoltage()
+int CQwerkHardware::GetProperty(int property, long *value)
 {
-#if Q1
-  unsigned int val;
+  if (value==NULL)
+    return PROP_ERROR;
 
-  val = m_p9302hw->GetAD(QHW_AD_MOTOR_CHANNEL);
-
-  val *= QHW_AD_MOTOR_NUMERATOR;
-  val /= QHW_AD_MOTOR_DENOMINATOR;
-
-  return (unsigned short)val;
-#else
-  return 0;
-#endif
-}
-
-unsigned short CQwerkHardware::GetTemp()
-{
-#if Q1
-  unsigned int val;
-
-  val = m_p9302hw->GetAD(QHW_AD_TEMP_CHANNEL);
-
-  val *= QHW_AD_TEMP_NUMERATOR;
-  val /= QHW_AD_TEMP_DENOMINATOR;
-
-  return (unsigned short)val;
-#else
-  return 0;
-#endif
-}
-
-unsigned short CQwerkHardware::Get5VVoltage()
-{
-#if Q1
-  unsigned int val;
-
-  val = m_p9302hw->GetAD(QHW_AD_5V_CHANNEL);
-
-  val *= QHW_AD_5V_NUMERATOR;
-  val /= QHW_AD_5V_DENOMINATOR;
-
-  return (unsigned short)val;
-#else
-  return 0;
-#endif
-}
-
-unsigned int CQwerkHardware::GetVersion()
-{
-  unsigned int version;
-
-  *m_p9302hw->PortFDataDR() = 0x0000;
-  version = *m_p9302hw->PortFData()&0x000e;
-
-  version >>= 1;
-
-  return version;
-}
-
-void CQwerkHardware::SetPhyEnable(bool state)
-{
-  *m_p9302hw->PortAData() = state ? *m_p9302hw->PortAData() |= 0x0008 :
-    *m_p9302hw->PortAData() &= ~0x0008;
-}
-
-bool CQwerkHardware::GetConfigSwitch()
-{
-  return *m_p9302hw->PortAData()&0x0010 ? false : true;
-}
-
-void CQwerkHardware::SetLED(unsigned int led, bool state)
-{
-  unsigned int resetMask;
-  unsigned int setMask;
-
-  if (led==8)
+  switch(property)
     {
-      if (state)
-	*m_p9302hw->PortHData() |= 0x0008;
-      else
-	*m_p9302hw->PortHData() &= ~0x0008;
+    case QHW_PROP_HARDWARE_VERSION:
+      *value = m_version;
+      break;
+      
+    case QHW_PROP_BREAKER_STATE:
+      *value = GetBreakerState();
+      break;
+
+    case QHW_PROP_MAIN_BATT_VOLTAGE:
+      *value = GetADVoltage(24);
+      break;
+
+    case QHW_PROP_MAIN_BATT_STATE:
+      *value = GetBattState();
+      break;
+
+    case  QHW_PROP_BACKUP_BATT_VOLTAGE:
+      *value = GetADVoltage(21);
+      break;
+
+    case QHW_PROP_BACKUP_BATT_STATE:
+     // todo add state read
+     *value = 0;
+      break;
+
+    case QHW_PROP_MAIN_5V_VOLTAGE:
+      *value = GetADVoltage(23);
+      break;
+
+    case QHW_PROP_IO_5V_VOLTAGE:
+      *value = GetADVoltage(22);
+      break;
+
+    case QHW_PROP_IO_5V_STATE:
+      *value =   *m_p9302hw->PortHData() & 0x0020 ? 1 : 0;
+      break;
+
+    default:
+      return PROP_ERROR_NOT_SUPPORTED;
     }
-  else if (led==9)
+
+  return PROP_OK;
+}
+
+int CQwerkHardware::SetProperty(int property, long value)
+{
+  switch (property)
     {
-      if (state)
+    case QHW_PROP_HARDWARE_VERSION:
+    case QHW_PROP_BREAKER_STATE:
+    case QHW_PROP_MAIN_BATT_VOLTAGE:
+    case QHW_PROP_MAIN_BATT_STATE:
+    case QHW_PROP_BACKUP_BATT_VOLTAGE:
+    case QHW_PROP_BACKUP_BATT_STATE:
+    case QHW_PROP_MAIN_5V_VOLTAGE:
+    case QHW_PROP_IO_5V_VOLTAGE:
+      return PROP_ERROR_READ_ONLY;
+
+    case QHW_PROP_IO_5V_STATE:
+      if (value)
 	*m_p9302hw->PortHData() |= 0x0020;
-      else
-	*m_p9302hw->PortHData() &= ~0x0020;
+      break;
+
+    default:
+      return PROP_ERROR_NOT_SUPPORTED;
     }
-  else if (led==QHW_LED_ATTEN)
-    {
-      if (state)
-	*m_p9302hw->PortGData() &= ~0x0002;
-      else
-	*m_p9302hw->PortGData() |= 0x0002;
-    }
-  else
-    {
-      resetMask = state ? 0 : 1<<led;
-      setMask = state ? 1<<led : 0;
-      
-      *m_p9302hw->PortAData() &= ~((resetMask&0x03)<<5);
-      *m_p9302hw->PortAData() |= (setMask&0x03)<<5;
-      
-      *m_p9302hw->PortBData() &= ~(resetMask&0xfc);
-      *m_p9302hw->PortBData() |= setMask&0xfc;
-    }
+
+  return PROP_OK;
 }
 
-void CQwerkHardware::SetLEDs(unsigned char stateMask)
+unsigned short CQwerkHardware::GetBreakerState()
 {
-  *m_p9302hw->PortAData() &= ~0x0060;
-  *m_p9302hw->PortAData() |= (stateMask&0x03)<<5;
+  unsigned short val;
 
-  *m_p9302hw->PortBData() &= ~0x00fc;
-  *m_p9302hw->PortBData() |= stateMask&0x00fc;
+  val = GetADVoltage(16) < 3000 ? 1 : 0;
+  val |= GetADVoltage(17) < 3000 ? 2 : 0;
+  val |= GetADVoltage(18) < 3000 ? 4 : 0;
+  val |= GetADVoltage(19) < 3000 ? 8 : 0;
+  val |= GetADVoltage(20) < 3000 ? 16 : 0;
+
+  return val;
 }
 
-void CQwerkHardware::SetAudioEnable(bool state)
+unsigned int CQwerkHardware::GetBattState()
 {
-#if Q1
-  *m_p9302hw->PortHData() &= ~0x0010;
-  if (!state) // low going
-    *m_p9302hw->PortHData() |= 0x0010;
-  else
-    usleep(100); // wait for audio amp to power up
-#endif  
+  // todo put logic here to detect low battery state using hysteresis, etc
 }
-
-void CQwerkHardware::SetMotorVoltageScale(EQHWDivScale scale)
-{
-  if (scale==QHW_DIV_365TH)
-    {
-      // clear div bit in motor controller
-      *m_p9302hw->m_fpga.Ushort(0x0a) &= ~0x0100;
-      // set port H bit 2 as input (high-impedance)
-      *m_p9302hw->PortHDataDR() &= ~0x0004;
-    }
-  else if (scale==QHW_DIV_108TH)
-    {
-      // set div bit in motor controller
-      *m_p9302hw->m_fpga.Ushort(0x0a) |= 0x0100;
-      // set port H bit 2 as low
-      *m_p9302hw->PortHData() &= ~0x0004;
-      // set port H bit 2 as output
-      *m_p9302hw->PortHDataDR() |= 0x0004;
-    }
-  else if (scale==QHW_DIV_91TH)
-    {
-      // set div bit in motor controller
-      *m_p9302hw->m_fpga.Ushort(0x0a) |= 0x0100;
-      // set port H bit 2 as input
-      *m_p9302hw->PortHDataDR() &= ~0x0004;
-    }
-}
-
-
