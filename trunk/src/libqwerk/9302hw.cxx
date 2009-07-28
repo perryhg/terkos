@@ -67,12 +67,13 @@ unsigned short C9302Hardware::GetAD(unsigned int channel)
   // wait to settle
   for (d=0; d<10000; d++);
 
-  // read and bias
-  val = (*m_adc.Uint(0x08)&0xffff)-(unsigned short)0xa140;
-
-  // zero out
-  if (val>0xc000)
-    val = 0;
+  // read
+  val = *m_adc.Uint(0x08)&0xffff;
+  if (val>25000 && val<=32767) 
+    val=25000; //Enforce +25000 count limit
+  if (val>=32678 && val<40536) 
+    val=40536;//Enforce -25000 count limit
+  val-=40536; //Adjust bias value
 
   return val;
 }

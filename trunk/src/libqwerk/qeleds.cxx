@@ -38,9 +38,11 @@ void *CQELEDController::LEDControllerThread(void *arg)
 
 //      printf("Processing %d: %d %s\n", currevent->time, currevent->led, (currevent->type == LEDEVENT_ON ? "on" : "off"));
       if (currevent->type == LEDEVENT_ON)
-        ledctl->m_pQwerk->SetLED(currevent->led, 1);
+        // todo ledctl->m_pQwerk->SetLED(currevent->led, 1);
+	;
       else if (currevent->type == LEDEVENT_OFF)
-        ledctl->m_pQwerk->SetLED(currevent->led, 0);
+        // todo ledctl->m_pQwerk->SetLED(currevent->led, 0);
+	;
       currevent->time += ledctl->m_ledState[currevent->led].period;
       ledctl->eventlist_insert(currevent);
     }
@@ -166,13 +168,13 @@ void CQELEDController::LEDset(unsigned int led, unsigned int period, unsigned in
 
   if (on_time == 0) {
     //constant off
-    m_pQwerk->SetLED(led, 0);
+    // todo m_pQwerk->SetLED(led, 0);
     ledstate->flashing = 0;
     ledstate->period = 0;
   }
   else if (on_time == period) {
     //constant on
-    m_pQwerk->SetLED(led, 1);
+    // todo m_pQwerk->SetLED(led, 1);
     ledstate->flashing = 0;
     ledstate->period = 0;
   }
@@ -200,7 +202,8 @@ void CQELEDController::LEDset(unsigned int led, unsigned int period, unsigned in
 
 unsigned int CQELEDController::GetLEDCount()
 {
-	return (m_pQwerk->GetVersion() == 1) ? QEL_REV1_NUM_LEDS : QEL_MAX_NUM_LEDS; 
+  // todo 
+  return 6; 
 }
 
 //mutex must be held when called; does not lock or unlock
