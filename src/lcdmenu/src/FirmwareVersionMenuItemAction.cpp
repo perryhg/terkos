@@ -10,9 +10,8 @@ const string FirmwareVersionMenuItemAction::PROPERTY_LABEL = "label";
 
 void FirmwareVersionMenuItemAction::activate()
    {
-   // TODO: get this version number from the proper place
    getCharacterDisplay()->setLine(0, getProperty(PROPERTY_LABEL, DEFAULT_LABEL));
-   getCharacterDisplay()->setLine(1, "1.0.0f");
+   getCharacterDisplay()->setLine(1, systemInfoManager.getFirmwareVersion());
    }
 
 // required definitions for dynamic loading

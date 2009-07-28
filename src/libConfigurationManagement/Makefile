@@ -9,6 +9,7 @@ EXE_OBJ_DIR=$(BUILD_DIR)/objects
 DIST_DIR=dist
 LIBRARY_NAME=libConfigurationManagement.so
 AUDIO_CONFIG_TOOL_NAME=AudioConfigTool
+SYSTEM_INFO_TOOL_NAME=SystemInfoTool
 WIRELESS_NETWORKING_CONFIG_TOOL_NAME=WirelessNetworkingConfigTool
 
 LIB_JSONCPP_DIR=../jsoncpp
@@ -26,13 +27,17 @@ LIB_QWERK_SRC_DIR=$(LIB_QWERK_DIR)
 LIB_QWERK_DIST_DIR=$(LIB_QWERK_DIR)/dist
 LIB_QWERK_LIB_SHORT_NAME=qwerk
 
+LIB_PSTREAMS_DIR=../pstreams
+LIB_PSTREAMS_SRC_DIR=$(LIB_PSTREAMS_DIR)/src
+
 CXX=arm-oe-linux-uclibcgnueabi-g++
 AR=arm-oe-linux-uclibcgnueabi-ar
 
 CFLAGS=-fPIC -c -Wall \
        -I$(LIB_JSONCPP_SRC_DIR) \
        -I$(LIB_UTILITIES_SRC_DIR) \
-       -I$(LIB_QWERK_SRC_DIR)
+       -I$(LIB_QWERK_SRC_DIR) \
+       -I$(LIB_PSTREAMS_SRC_DIR)
 
 LDFLAGS=-L$(LIB_DIR) \
         -l$(LIB_JSONCPP_LIB_SHORT_NAME) \
@@ -51,7 +56,10 @@ EXE_OBJECTS := $(addprefix $(EXE_OBJ_DIR)/,$(EXE_OBJECTS))
 
 default: all
 
-build: $(LIBRARY_NAME) $(AUDIO_CONFIG_TOOL_NAME) $(WIRELESS_NETWORKING_CONFIG_TOOL_NAME)
+build: $(LIBRARY_NAME) \
+       $(AUDIO_CONFIG_TOOL_NAME) \
+       $(SYSTEM_INFO_TOOL_NAME) \
+       $(WIRELESS_NETWORKING_CONFIG_TOOL_NAME)
 
 all: build dist
 
@@ -77,6 +85,14 @@ $(EXE_OBJ_DIR)/%.o: $(EXE_SRC_DIR)/%.cpp
 #-----------------------------------------------------------------------------------------------------------------------
 
 $(AUDIO_CONFIG_TOOL_NAME): $(LIBRARY_NAME) $(EXE_DIR) $(EXE_OBJECTS)
+	@echo 'Building target: $@'
+	$(CXX) -o $(EXE_DIR)/$@ $(EXE_OBJ_DIR)/$@.o $(LDFLAGS) -lConfigurationManagement
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+$(SYSTEM_INFO_TOOL_NAME): $(LIBRARY_NAME) $(EXE_DIR) $(EXE_OBJECTS)
 	@echo 'Building target: $@'
 	$(CXX) -o $(EXE_DIR)/$@ $(EXE_OBJ_DIR)/$@.o $(LDFLAGS) -lConfigurationManagement
 	@echo 'Finished building target: $@'
