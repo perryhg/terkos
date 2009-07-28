@@ -11,7 +11,7 @@ const string HardwareVersionMenuItemAction::PROPERTY_LABEL = "label";
 void HardwareVersionMenuItemAction::activate()
    {
    getCharacterDisplay()->setLine(0, getProperty(PROPERTY_LABEL, DEFAULT_LABEL));
-   getCharacterDisplay()->setLine(1, StringUtilities::convertIntToString(hardware.GetVersion()));
+   getCharacterDisplay()->setLine(1, systemInfoManager.getHardwareVersion());
    }
 
 // required definitions for dynamic loading

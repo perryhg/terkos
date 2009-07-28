@@ -12,6 +12,7 @@
 
 #include <algorithm>
 #include <string.h>
+#include <SystemInfoManager.h>
 #include "CharacterDisplay.h"
 #include "CharacterDisplayMenuItemAction.h"
 
@@ -38,6 +39,11 @@ class FirmwareVersionMenuItemAction : public CharacterDisplayMenuItemAction
          }
 
       virtual void activate();
+
+   private:
+
+      SystemInfoManager systemInfoManager;
+
    };
 
 #endif /* FIRMWAREVERSIONMENUITEMACTION_H_ */
