@@ -1,19 +1,19 @@
 /*
- * Simple program enabling access to the SystemInfoManager so that
- * the system info can be read via the command line.  The system info
+ * Simple program enabling access to the VersionInfoManager so that
+ * the version info can be read via the command line.  The version info
  * is printed in JSON on stdout.
  *
  * Chris Bartley (bartley@cmu.edu)
  */
 
 #include <json/json.h>
-#include <SystemInfoManager.h>
+#include <VersionInfoManager.h>
 
 using namespace std;
 
 int main(int argc, char** argv)
    {
-   SystemInfoManager manager;
+   VersionInfoManager manager;
 
    cout << manager.getJSON() << endl;
 

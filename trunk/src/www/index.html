@@ -10,6 +10,11 @@
    <script type="text/javascript" src="javascript/Math.uuid.js"></script>
    <script type="text/javascript" src="javascript/json2.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/DialogManager.js"></script>
+   <script type="text/javascript" src="javascript/edu/cmu/ri/terk/PowerInfoManager.js"></script>
+   <script type="text/javascript" src="javascript/edu/cmu/ri/terk/VersionInfoManager.js"></script>
+   <script type="text/javascript" src="javascript/edu/cmu/ri/terk/MemoryUsageManager.js"></script>
+   <script type="text/javascript" src="javascript/edu/cmu/ri/terk/DiskUsageManager.js"></script>
+   <script type="text/javascript" src="javascript/edu/cmu/ri/terk/SystemInfoTab.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/AudioConfigManager.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/AudioTab.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkingStatus.js"></script>
@@ -18,6 +23,7 @@
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkingTab.js"></script>
    <script type="text/javascript">
       var tabSelectionHandlers = new Array();
+      var host = "";
 
       $(function()
          {
@@ -30,44 +36,62 @@
                "okDialogOkButton"
                );
 
+         // create the VersionInfoManager
+         var versionInfoManager = new edu.cmu.ri.terk.VersionInfoManager(host);
+
+         // create the PowerInfoManager
+         var powerInfoManager = new edu.cmu.ri.terk.PowerInfoManager(host);
+
+         // create the MemoryUsageManager
+         var memoryUsageManager = new edu.cmu.ri.terk.MemoryUsageManager(host);
+
+         // create the DiskUsageManager
+         var diskUsageManager = new edu.cmu.ri.terk.DiskUsageManager(host);
+
          // create the AudioConfigManager
-         var audioConfigManager = new edu.cmu.ri.terk.AudioConfigManager();
+         var audioConfigManager = new edu.cmu.ri.terk.AudioConfigManager(host);
 
          // create the WirelessNetworkStatus
          var wirelessNetworkingStatus = new edu.cmu.ri.terk.WirelessNetworkingStatus(
                "wirelessNetworkingStatusMessageArea",
-               "wirelessNetworkingStatusMessageAreaDetail"
-               );
+               "wirelessNetworkingStatusMessageAreaDetail",
+               host);
 
          var wirelessNetworkingConfigManager = new edu.cmu.ri.terk.WirelessNetworkingConfigManager(
                "wirelessNetworkingConfigurationMessageArea",
                "wirelessNetworkingConfigurationArea",
                "willStartWirelessNetworkingOnBootupCheckbox",
                "preferredWirelessNetworksListContainer",
-               "preferredWirelessNetworksList"
-               );
+               "preferredWirelessNetworksList",
+               host);
 
          // create the WirelessNetworkScanner
          var wirelessNetworkScanner = new edu.cmu.ri.terk.WirelessNetworkScanner(
                "availableWirelessNetworksList",
-               "availableWirelessNetworksPleaseWaitIndicator"
-               );
+               "availableWirelessNetworksPleaseWaitIndicator",
+               host);
 
          // create instances of the tabs (which initializes them)
+         var systemInfoTab = new edu.cmu.ri.terk.SystemInfoTab(versionInfoManager, memoryUsageManager, diskUsageManager, powerInfoManager);
          var audioTab = new edu.cmu.ri.terk.AudioTab(audioConfigManager, dialogManager);
-         var wirelessNetworkingTab = new edu.cmu.ri.terk.WirelessNetworkingTab(wirelessNetworkingConfigManager, wirelessNetworkScanner, dialogManager);
+         var wirelessNetworkingTab = new edu.cmu.ri.terk.WirelessNetworkingTab(
+               wirelessNetworkingConfigManager,
+               wirelessNetworkScanner,
+               wirelessNetworkingStatus,
+               dialogManager,
+               host);
 
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
+            systemInfoTab.activate();
             };
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
-            audioConfigManager.getAudioConfig();
+            audioTab.activate();
             };
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
-            wirelessNetworkingConfigManager.getWirelessNetworkingConfig();
-            wirelessNetworkingStatus.getWirelessNetworkingStatus();
+            wirelessNetworkingTab.activate();
             };
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
@@ -106,6 +130,10 @@
                   $(this).removeClass('ui-state-hover');
                   }
                );
+
+         // finally, activate the system info tab
+         systemInfoTab.activate();
+
          });
    </script>
 </head>
@@ -124,8 +152,131 @@
    </ul>
    <!-- ============================================================================================================ -->
    <div id="System_Info">
-      <p>System Info</p>
-      Things like firmware/hardware version, battery status, free disk space, free memory, etc. will go here.
+      <div class="section">
+         <div class="section-title">System</div>
+         <div class="indented">
+            <div id="versionInfoMessageArea">&nbsp;</div>
+            <div id="versionInfoArea" class="hidden">
+               <table border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                     <td>Operating System:</td>
+                     <td rowspan="3">&nbsp;&nbsp;&nbsp;</td>
+                     <td>
+                        <div id="versionInfoOperatingSystem"></div>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>Hardware Version:</td>
+                     <td>
+                        <div id="versionInfoHardwareVersion"></div>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>Firmware Version:</td>
+                     <td>
+                        <div id="versionInfoFirmwareVersion"></div>
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+      <div class="section">
+         <div class="section-title">Memory Usage</div>
+         <div class="indented">
+            <div id="memoryUsageMessageArea">&nbsp;</div>
+            <div id="memoryUsageArea" class="hidden">
+               <table border="0" cellpadding="0" cellspacing="1">
+                  <tr>
+                     <td>&nbsp;</td>
+                     <td class="data-column-label">Total</td>
+                     <td class="data-column-label">Used</td>
+                     <td class="data-column-label">Free</td>
+                  </tr>
+                  <tr>
+                     <td class="data-row-label">Memory</td>
+                     <td class="data-cell align-right"><span id="memoryUsageMemoryTotal"></span></td>
+                     <td class="data-cell align-right"><span id="memoryUsageMemoryUsed"></span></td>
+                     <td class="data-cell align-right"><span id="memoryUsageMemoryFree"></span></td>
+                  </tr>
+                  <tr>
+                     <td class="data-row-label">Swap</td>
+                     <td class="data-cell align-right"><span id="memoryUsageSwapTotal"></span></td>
+                     <td class="data-cell align-right"><span id="memoryUsageSwapUsed"></span></td>
+                     <td class="data-cell align-right"><span id="memoryUsageSwapFree"></span></td>
+                  </tr>
+                  <tr>
+                     <td class="data-row-label">Total</td>
+                     <td class="data-cell align-right"><span id="memoryUsageTotalTotal"></span></td>
+                     <td class="data-cell align-right"><span id="memoryUsageTotalUsed"></span></td>
+                     <td class="data-cell align-right"><span id="memoryUsageTotalFree"></span></td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+      <div class="section">
+         <div class="section-title">Disk Usage</div>
+         <div class="indented">
+            <div id="diskUsageMessageArea">&nbsp;</div>
+            <div id="diskUsageArea" class="hidden">
+               <table border="0" cellpadding="0" cellspacing="1" id="diskUsageTable">
+                  <tr>
+                     <td class="data-column-label">Filesystem</td>
+                     <td class="data-column-label">1<span id="diskUsageBlockSizeUnits"></span>-blocks</td>
+                     <td class="data-column-label">Used</td>
+                     <td class="data-column-label">Free</td>
+                     <td class="data-column-label">Use %</td>
+                     <td class="data-column-label">Mounted On</td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+      <div class="section">
+         <div class="section-title">Power</div>
+         <div class="indented">
+            <div id="powerInfoMessageArea">&nbsp;</div>
+            <div id="powerInfoArea" class="hidden">
+               <table border="0" cellpadding="0" cellspacing="1">
+                  <tr>
+                     <td>&nbsp;</td>
+                     <td class="data-column-label">Voltage</td>
+                     <td class="data-column-label">State</td>
+                  </tr>
+                  <tr>
+                     <td class="data-row-label">Main Battery</td>
+                     <td class="data-cell align-right"><span id="powerInfoMainBatteryVoltage"></span></td>
+                     <td class="data-cell align-right"><span id="powerInfoMainBatteryState"></span></td>
+                  </tr>
+                  <tr>
+                     <td class="data-row-label">Backup Battery</td>
+                     <td class="data-cell align-right"><span id="powerInfoBackupBatteryVoltage"></span></td>
+                     <td class="data-cell align-right"><span id="powerInfoBackupBatteryState"></span></td>
+                  </tr>
+                  <tr>
+                     <td class="data-row-label">I/O 5 Volt</td>
+                     <td class="data-cell align-right"><span id="powerInfoIo5VVoltage"></span></td>
+                     <td class="data-cell align-right"><span id="powerInfoIo5VState"></span></td>
+                  </tr>
+                  <tr>
+                     <td class="data-row-label">Main 5 Volt</td>
+                     <td class="data-cell align-right"><span id="powerInfoMain5VVoltage"></span></td>
+                     <td class="data-cell">n/a</td>
+                  </tr>
+               </table>
+               <div class="blank-line"></div>
+               <table border="0" cellpadding="0" cellspacing="1" id="powerInfoBreakersTable">
+                  <tr id="powerInfoBreakersTableHeadingRow">
+                     <td>&nbsp;</td>
+                  </tr>
+                  <tr id="powerInfoBreakersTableDataRow">
+                     <td class="data-row-label">Breakers</td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
    </div>
    <!-- ============================================================================================================ -->
    <div id="Audio">

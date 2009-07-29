@@ -107,10 +107,9 @@ if (!JSON)
                                                               wirelessNetworkingConfigurationAreaId,
                                                               willStartWirelessNetworkingOnBootupCheckboxId,
                                                               wirelessNetworksListContainerId,
-                                                              wirelessNetworksListId)
+                                                              wirelessNetworksListId,
+                                                              host)
       {
-      var host = '';//http://192.168.1.4'; // TODO: remove me!
-
       var selectedWirelessNetwork = null;
       var selectionListeners = new Array();
       var doubleClickListeners = new Array();

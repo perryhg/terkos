@@ -40,6 +40,30 @@ span.ui-icon {
    width:300px;
 }
 
+.data-cell {
+   border: solid 1px #cccccc;
+   padding: 3px;
+   text-align:center;
+}
+
+.align-left {
+   text-align:left;
+}
+
+.align-right {
+   text-align:right;
+}
+
+
+.data-column-label {
+   padding: 0 5px 5px 5px;
+   text-align:center;
+}
+
+.data-row-label {
+   padding-right: 5px;
+}
+
 .emphasized {
    font-weight: bold;
 }
@@ -100,6 +124,14 @@ span.ui-icon {
    padding: 0;
    margin: 0;
    cursor: pointer;
+}
+
+.status-ok {
+   color: darkgreen;
+}
+
+.status-fault {
+   color: darkred;
 }
 
 .text-button {

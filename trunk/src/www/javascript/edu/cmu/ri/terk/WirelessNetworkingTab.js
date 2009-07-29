@@ -88,10 +88,12 @@ if (!window['$'])
       global: false
    });
 
-   edu.cmu.ri.terk.WirelessNetworkingTab = function(wirelessNetworkingConfigManager, wirelessNetworkScanner, dialogManager)
+   edu.cmu.ri.terk.WirelessNetworkingTab = function(wirelessNetworkingConfigManager,
+                                                    wirelessNetworkScanner,
+                                                    wirelessNetworkingStatus,
+                                                    dialogManager,
+                                                    host)
       {
-      var host = '';//http://192.168.1.4'; // TODO: remove me!
-
       var isNetworkNameValid = function(formFieldID)
          {
          return jQuery(formFieldID).val().length > 0;
@@ -483,6 +485,11 @@ if (!window['$'])
                }
             );
 
+      this.activate = function()
+         {
+         wirelessNetworkingConfigManager.getWirelessNetworkingConfig();
+         wirelessNetworkingStatus.getWirelessNetworkingStatus();
+         };
       // ---------------------------------------------------------------------------------------------------------------
       };
 

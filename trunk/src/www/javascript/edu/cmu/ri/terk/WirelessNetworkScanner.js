@@ -96,10 +96,9 @@ if (!Math.uuid)
    });
 
    edu.cmu.ri.terk.WirelessNetworkScanner = function(wirelessNetworksListId,
-                                                     pleaseWaitIndicatorId)
+                                                     pleaseWaitIndicatorId,
+                                                     host)
       {
-      var host = '';//http://192.168.1.4'; // TODO: remove me!
-
       var selectedWirelessNetwork = null;
       var selectionListeners = new Array();
       var profilesMap = new Array();

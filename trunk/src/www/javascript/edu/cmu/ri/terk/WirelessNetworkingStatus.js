@@ -88,10 +88,9 @@ if (!window['$'])
    });
 
    edu.cmu.ri.terk.WirelessNetworkingStatus = function(wirelessNetworkingStatusMessageAreaId,
-                                                       wirelessNetworkingStatusMessageAreaDetailId)
+                                                       wirelessNetworkingStatusMessageAreaDetailId,
+                                                       host)
       {
-      var host = '';//http://192.168.1.4'; // TODO: remove me!
-
       this.getWirelessNetworkingStatus = function()
          {
          displayStatus("&nbsp;", "Checking status...");

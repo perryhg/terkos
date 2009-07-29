@@ -11,7 +11,7 @@ const string FirmwareVersionMenuItemAction::PROPERTY_LABEL = "label";
 void FirmwareVersionMenuItemAction::activate()
    {
    getCharacterDisplay()->setLine(0, getProperty(PROPERTY_LABEL, DEFAULT_LABEL));
-   getCharacterDisplay()->setLine(1, systemInfoManager.getFirmwareVersion());
+   getCharacterDisplay()->setLine(1, versionInfoManager.getFirmwareVersion());
    }
 
 // required definitions for dynamic loading

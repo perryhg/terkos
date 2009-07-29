@@ -1,10 +1,9 @@
 //======================================================================================================================
-// Class for initializing and configuring the various widgets on the Audio tab.
+// Class for reading the memory usage info.
 //
 // Dependencies:
 // * jQuery (http://jquery.com/)
 // * jQuery UI (http://jqueryui.com/)
-// * main.css
 //
 // Author: Chris Bartley (bartley@cmu.edu)
 //======================================================================================================================
@@ -67,7 +66,7 @@ else if (typeof edu.cmu.ri.terk != "object")
 //======================================================================================================================
 if (!window['$'])
    {
-   var noJQuery = "The jQuery library is required by edu.cmu.ri.terk.AudioTab.js";
+   var noJQuery = "The jQuery library is required by edu.cmu.ri.terk.MemoryUsageManager.js";
    alert(noJQuery);
    throw new Error(noJQuery);
    }
@@ -80,106 +79,130 @@ if (!window['$'])
    {
    // ==================================================================================================================
    var jQuery = window['$'];
+   jQuery.ajaxSetup({
+      type: 'GET',
+      dataType: 'jsonp',
+      timeout: 3000,
+      cache: false,
+      global: false
+   });
 
-   edu.cmu.ri.terk.AudioTab = function(audioConfigManager, dialogManager)
+   edu.cmu.ri.terk.MemoryUsageManager = function(host)
       {
-      jQuery("#volumeSlider")['slider']({
-         animate: true,
-         range: "min",
-         value: 5,
-         min: 0,
-         max: 10,
-         step: 1,
-         slide: function(event, ui)
-            {
-            jQuery("#volume").text(ui.value);
-            audioConfigManager.setVolume(ui.value);
-            }
-      });
+      var eventListeners = new Array();
+      var json = null;
 
-      // configure the checkbox
-      jQuery('#isAudioAlertsEnabled')['change'](
-            function()
-               {
-               audioConfigManager.setAudioAlertsEnabled(jQuery(this).attr("checked"));
-               }
-            );
-
-      // add mouse event handlers to the Save button
-      jQuery('#saveAudioConfigButton').mousecapture({
-         "down": function()
-            {
-            if (audioConfigManager.isModified())
-               {
-               jQuery(this).addClass('ui-state-active');
-               }
-            },
-         "up": function()
-            {
-            if (audioConfigManager.isModified())
-               {
-               jQuery(this).removeClass('ui-state-active');
-               }
-            }}).click(
-            function()
-               {
-               if (audioConfigManager.isModified())
-                  {
-                  audioConfigManager.saveAudioConfig();
-                  }
-               }
-            ).disableSelection();
-
-      // register the event listener
-      audioConfigManager.addEventListener({
-         onBeforeLoad : function()
-            {
-            jQuery("#audioConfigurationMessageArea").html("Loading preferences...");
-            jQuery("#audioConfigurationArea").addClass("hidden");
-            },
-         onLoadSuccess : function()
-            {
-            var isAlertsEnabled = audioConfigManager.isAudioAlertsEnabled();
-            var volume = audioConfigManager.getVolume();
-            jQuery('#isAudioAlertsEnabled').attr('checked', isAlertsEnabled);
-            jQuery("#volumeSlider")['slider']('value', volume);
-            jQuery("#volume").text(volume);
-            jQuery("#audioConfigurationMessageArea").empty();
-            jQuery("#audioConfigurationArea").removeClass("hidden");
-            },
-         onLoadFailure : function()
-            {
-            jQuery("#audioConfigurationMessageArea").html("Sorry, the audio configuration is currently unavailable.");
-            },
-         isModified : function(isModified)
-            {
-            // toggle the state of the save button according to whether the config has been modified
-            jQuery("#saveAudioConfigButton").toggleClass("ui-state-default", isModified);
-            jQuery("#saveAudioConfigButton").toggleClass("ui-state-active", !isModified);
-            jQuery("#saveAudioConfigButton").toggleClass("ui-state-disabled", !isModified);
-            },
-         onBeforeSave: function()
-            {
-            dialogManager.showNonClosableWaitDialog("Please wait while your changes to the audio configuration are being saved.");
-            },
-         onSaveSuccess: function()
-            {
-            dialogManager.hideNonClosableWaitDialog();
-            },
-         onSaveFailure: function()
-            {
-            dialogManager.hideNonClosableWaitDialog();
-            dialogManager.showOKDialog("Sorry, an error occurred while saving your preferences.  Please try again.");
-            }});
-
-      this.activate = function()
+      var notifyEventListeners = function(eventName)
          {
-         audioConfigManager.getAudioConfig();
+         jQuery.each(eventListeners, function(i, listener)
+            {
+            if (listener && listener[eventName])
+               {
+               listener[eventName]();
+               }
+            });
+         };
+
+      this.getMemoryUsage = function()
+         {
+         notifyEventListeners('onBeforeLoad');
+
+         // load the config
+         jQuery.ajax(
+         {
+            url: host + '/cgi-bin/getMemoryUsageAsJSON.pl',
+            success: function(jsonResponse)
+               {
+               json = jsonResponse;
+
+               if (json)
+                  {
+                  notifyEventListeners('onLoadSuccess');
+                  }
+               else
+                  {
+                  notifyEventListeners('onLoadFailure');
+                  }
+               },
+            error: function()
+               {
+               notifyEventListeners('onLoadFailure');
+               json = null;
+               }
+         });
+         };
+
+      /**
+       * Registers the given event listener.  The event listener should implement some or all of the following methods:
+       *
+       *    onBeforeLoad()
+       *    onLoadSuccess()
+       *    onLoadFailure()
+       */
+      this.addEventListener = function(listener)
+         {
+         if (listener)
+            {
+            eventListeners[eventListeners.length] = listener;
+            }
+         };
+
+      var getJSONProperty = function(jsonRoot, propertyPath)
+         {
+         if (jsonRoot)
+            {
+            if (propertyPath)
+               {
+               var propertyNames = propertyPath.split('.');
+               for (var i = 0; i < propertyNames.length; i++)
+                  {
+                  var propertyName = propertyNames[i];
+                  if (typeof jsonRoot[propertyName] == 'undefined')
+                     {
+                     return null;
+                     }
+                  else
+                     {
+                     jsonRoot = jsonRoot[propertyName];
+                     }
+                  }
+               return jsonRoot;
+               }
+
+            return jsonRoot;
+            }
+
+         return null;
+         };
+
+      this.getMainMemoryUsage = function()
+         {
+         return createCopyOfUsageJSON("memory-usage.memory");
+         };
+
+      this.getSwapMemoryUsage = function()
+         {
+         return createCopyOfUsageJSON("memory-usage.swap");
+         };
+
+      this.getTotalMemoryUsage = function()
+         {
+         return createCopyOfUsageJSON("memory-usage.total");
+         };
+
+      var createCopyOfUsageJSON = function(propertyPath)
+         {
+         var usage = getJSONProperty(json, propertyPath);
+         var usageJSON = {
+            "total" : usage['total'],
+            "used" : usage['used'],
+            "free" : usage['free']
+         };
+
+         return usageJSON;
          };
       // ---------------------------------------------------------------------------------------------------------------
       };
 
    // ==================================================================================================================
    })();
-
-         
