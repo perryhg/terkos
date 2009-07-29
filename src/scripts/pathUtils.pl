@@ -3,7 +3,8 @@
 my %paths = ();
 $paths{'audio_config.json'} = '/opt/config/audio_config.json';
 $paths{'AudioConfigTool'} = '/opt/bin/AudioConfigTool';
-$paths{'SystemInfoTool'} = '/opt/bin/SystemInfoTool';
+$paths{'PowerInfoTool'} = '/opt/bin/PowerInfoTool';
+$paths{'VersionInfoTool'} = '/opt/bin/VersionInfoTool';
 $paths{'wireless_networking_config.json'} = '/opt/config/wireless_networking_config.json';
 $paths{'WirelessNetworkingConfigTool'} = '/opt/bin/WirelessNetworkingConfigTool';
 

@@ -67,14 +67,14 @@ else if (typeof edu.cmu.ri.terk != "object")
 //======================================================================================================================
 if (!window['$'])
    {
-   var noJQuery = "The jQuery library is required by edu.cmu.ri.terk.AudioTab.js";
+   var noJQuery = "The jQuery library is required by edu.cmu.ri.terk.AudioConfigManager.js";
    alert(noJQuery);
    throw new Error(noJQuery);
    }
 //======================================================================================================================
 if (!JSON)
    {
-   var msg3 = "The json2.js library is required by edu.cmu.ri.terk.AudioTab.js";
+   var msg3 = "The json2.js library is required by edu.cmu.ri.terk.AudioConfigManager.js";
    alert(msg3);
    throw new Error(msg3);
    }
@@ -95,10 +95,8 @@ if (!JSON)
       global: false
    });
 
-   edu.cmu.ri.terk.AudioConfigManager = function()
+   edu.cmu.ri.terk.AudioConfigManager = function(host)
       {
-      var host = '';//http://192.168.1.4'; // TODO: remove me!
-
       var eventListeners = new Array();
       var stringifiedOriginalJSON = null;
       var json = null;
@@ -190,12 +188,12 @@ if (!JSON)
             });
             }
          };
-         
+
       var getIsModified = function()
          {
          return (JSON.stringify(json) != stringifiedOriginalJSON);
          };
-         
+
       this.isModified = function()
          {
          return getIsModified();

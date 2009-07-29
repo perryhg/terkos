@@ -9,7 +9,8 @@ EXE_OBJ_DIR=$(BUILD_DIR)/objects
 DIST_DIR=dist
 LIBRARY_NAME=libConfigurationManagement.so
 AUDIO_CONFIG_TOOL_NAME=AudioConfigTool
-SYSTEM_INFO_TOOL_NAME=SystemInfoTool
+POWER_INFO_TOOL_NAME=PowerInfoTool
+VERSION_INFO_TOOL_NAME=VersionInfoTool
 WIRELESS_NETWORKING_CONFIG_TOOL_NAME=WirelessNetworkingConfigTool
 
 LIB_JSONCPP_DIR=../jsoncpp
@@ -58,7 +59,8 @@ default: all
 
 build: $(LIBRARY_NAME) \
        $(AUDIO_CONFIG_TOOL_NAME) \
-       $(SYSTEM_INFO_TOOL_NAME) \
+       $(POWER_INFO_TOOL_NAME) \
+       $(VERSION_INFO_TOOL_NAME) \
        $(WIRELESS_NETWORKING_CONFIG_TOOL_NAME)
 
 all: build dist
@@ -92,7 +94,15 @@ $(AUDIO_CONFIG_TOOL_NAME): $(LIBRARY_NAME) $(EXE_DIR) $(EXE_OBJECTS)
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-$(SYSTEM_INFO_TOOL_NAME): $(LIBRARY_NAME) $(EXE_DIR) $(EXE_OBJECTS)
+$(POWER_INFO_TOOL_NAME): $(LIBRARY_NAME) $(EXE_DIR) $(EXE_OBJECTS)
+	@echo 'Building target: $@'
+	$(CXX) -o $(EXE_DIR)/$@ $(EXE_OBJ_DIR)/$@.o $(LDFLAGS) -lConfigurationManagement
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+$(VERSION_INFO_TOOL_NAME): $(LIBRARY_NAME) $(EXE_DIR) $(EXE_OBJECTS)
 	@echo 'Building target: $@'
 	$(CXX) -o $(EXE_DIR)/$@ $(EXE_OBJ_DIR)/$@.o $(LDFLAGS) -lConfigurationManagement
 	@echo 'Finished building target: $@'

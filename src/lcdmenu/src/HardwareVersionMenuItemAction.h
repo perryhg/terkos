@@ -13,7 +13,7 @@
 
 #include <algorithm>
 #include <string.h>
-#include <SystemInfoManager.h>
+#include <VersionInfoManager.h>
 #include "CharacterDisplay.h"
 #include "CharacterDisplayMenuItemAction.h"
 
@@ -43,7 +43,7 @@ class HardwareVersionMenuItemAction : public CharacterDisplayMenuItemAction
 
    private:
 
-      SystemInfoManager systemInfoManager;
+      VersionInfoManager versionInfoManager;
 
    };
 

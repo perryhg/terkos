@@ -2,8 +2,8 @@
  * Chris Bartley (bartley@cmu.edu)
  */
 
-#ifndef SYSTEMINFOMANAGER_H_
-#define SYSTEMINFOMANAGER_H_
+#ifndef VERSIONINFOMANAGER_H_
+#define VERSIONINFOMANAGER_H_
 
 #include <string.h>
 #include <json/json.h>
@@ -14,13 +14,22 @@
 using namespace std;
 using namespace redi;
 
-class SystemInfoManager
+class VersionInfoManager
    {
    public:
 
-      SystemInfoManager()
+      VersionInfoManager()
          {
-         hardwareVersion = StringUtilities::convertIntToString(hardware.GetVersion());
+         long val = 0;
+         if (hardware.GetProperty(QHW_PROP_HARDWARE_VERSION, &val) == PROP_OK)
+            {
+            hardwareVersion = StringUtilities::convertIntToString((int) val);
+            }
+         else
+            {
+            hardwareVersion = UNKNOWN_VALUE;
+            }
+
          firmwareVersion = "1.0.0"; // TODO: get this version number from the proper place
 
          // call uname to get system info
@@ -56,7 +65,7 @@ class SystemInfoManager
             }
          }
 
-      virtual ~SystemInfoManager()
+      virtual ~VersionInfoManager()
          {
          // nothing to do
          }
@@ -70,11 +79,6 @@ class SystemInfoManager
       const string getProcessorType() const;
       const string getMachineType() const;
       const string getHostname() const;
-
-      const unsigned short getBatteryVoltage();
-      const unsigned short getMotorVoltage();
-      const unsigned short get5VVoltage();
-      const unsigned short getTemperature();
 
       Json::Value getJSON();
 
@@ -96,4 +100,4 @@ class SystemInfoManager
 
    };
 
-#endif /* SYSTEMINFOMANAGER_H_ */
+#endif /* VERSIONINFOMANAGER_H_ */
