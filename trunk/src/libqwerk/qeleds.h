@@ -2,96 +2,64 @@
 #define _QELEDS_H
 
 #include <sys/time.h>
-
 #include "qwerkhw.h"
 
-// defines the number of LEDs supported by revision 1 Qwerk
-#define QEL_REV1_NUM_LEDS	8
+// defines the number of LEDs
+#define QEL_NUM_LEDS	         3
+#define QEL_NUM_COLORS	         5
 
-// defines the maximum number of LEDs a qwerk may support.  The actual number
-// supported may be smaller, and should be obtained via CQELEDController::GetLEDCount()
-#define QEL_MAX_NUM_LEDS	10
+#define QEL_DEFAULT_ADDR         0x4c0
 
-typedef enum {
-  LEDEVENT_ON = 0,
-  LEDEVENT_OFF,
-} ledevent_type_t;
+#define QEL_GREEN         0xff00
+#define QEL_RED           0x00ff
+#define QEL_YELLOW        0xff40
+#define QEL_ORANGE        0xffff
 
-typedef struct ledevent_t {
-  unsigned int led;
-  ledevent_type_t type;
-  unsigned int base_time;
-  unsigned int time;
-  ledevent_t *next;
-} ledevent_t;
+typedef enum
+  {
+    LED_ROBOT = 0,
+    LED_VEXNET,
+    LED_GAME
+  }
+ELEDIndex;
 
-typedef struct leddata_t {
-  int flashing;
-  unsigned int period;
-  ledevent_t start;
-  ledevent_t end;
-} leddata_t;
+typedef enum 
+  {
+    LED_COLOR_OFF = 0,
+    LED_COLOR_RED ,
+    LED_COLOR_GREEN,
+    LED_COLOR_YELLOW,
+    LED_COLOR_ORANGE
+  } 
+ELEDColor;
 
-class CQwerkHardware;
+typedef enum
+  {
+    LED_SOLID,
+    LED_SLOW_BLINK,
+    LED_FAST_BLINK,
+    LED_1BLIP,
+    LED_2BLIP
+  } 
+ELEDMode;
 
 class CQELEDController
 {
  public:
-  CQELEDController();
+  CQELEDController(unsigned long addr=QEL_DEFAULT_ADDR);
   ~CQELEDController();
 
-  /**
-   * Causes an LED to turn on
-   *
-   * @param led LED to affect
-   */
-  void LEDon(unsigned int led);
+  void SetLED(ELEDIndex led, ELEDColor color);
 
-  /**
-   * Causes an LED to turn off
-   *
-   * @param led LED to affect
-   */
-  void LEDoff(unsigned int led);
-
-  /**
-   * Causes an LED to blink with 50% duty cycle, 1 second period, no offset
-   *
-   * @param led LED to blink
-   */
-  void LEDblink(unsigned int led);
-
-  /**
-   * Causes an LED to blink with specified parameters
-   *
-   * @param led LED to blink
-   * @param period Period (in ms) of the blinking
-   * @param duty_cycle Fraction (0..100) of the period in which LED is on
-   * @param offset Offset (in ms) into the period before turning on LED
-   */
-  void LEDset(unsigned int led, unsigned int period, unsigned int duty_cycle, unsigned int offset);
-
-  /**
-   * Returns the number of LEDs supported by this qwerk.
-   */
-  unsigned int GetLEDCount();
-
- protected:
+private:
   CQwerkHardware *m_pQwerk; 
+
+  volatile unsigned short *m_ledreg;
 
   pthread_t m_thread;
   bool m_threadRun;
-
   pthread_mutex_t m_mutex;
   pthread_cond_t m_cond;
-
-  leddata_t m_ledState[QEL_MAX_NUM_LEDS];
-
-  struct timeval m_eventStart;
-  ledevent_t *m_eventlist;
-
-  void eventlist_reset(void);
-  void eventlist_insert(ledevent_t *event);
 
   static void *LEDControllerThread(void *arg);
 };
