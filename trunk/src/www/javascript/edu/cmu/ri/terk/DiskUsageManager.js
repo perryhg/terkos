@@ -182,23 +182,31 @@ if (!window['$'])
             var filesystems = getJSONProperty(json, "disk-usage.filesystems");
             jQuery.each(filesystems, function(i, filesystemJSON)
                {
-               callbackFunction(createCopyOfFileSystemJSON(filesystemJSON));
+               var filesystemJSONCopy = createCopyOfFileSystemJSON(filesystemJSON);
+               if (filesystemJSONCopy)
+                  {
+                  callbackFunction(filesystemJSONCopy);
+                  }
                });
             }
          };
 
       var createCopyOfFileSystemJSON = function(originalFilesystemJSON)
          {
-         var originalFilesystemJSON = {
-            "filesystem" : originalFilesystemJSON['filesystem'],
-            "total" : originalFilesystemJSON['total'],
-            "used" : originalFilesystemJSON['used'],
-            "available" : originalFilesystemJSON['available'],
-            "use-percentage" : originalFilesystemJSON['use-percentage'],
-            "mounted-on" : originalFilesystemJSON['mounted-on']
-         };
+         if (originalFilesystemJSON)
+            {
+            var newFilesystemJSON = {
+               "filesystem" : originalFilesystemJSON['filesystem'],
+               "total" : originalFilesystemJSON['total'],
+               "used" : originalFilesystemJSON['used'],
+               "available" : originalFilesystemJSON['available'],
+               "use-percentage" : originalFilesystemJSON['use-percentage'],
+               "mounted-on" : originalFilesystemJSON['mounted-on']
+            };
 
-         return originalFilesystemJSON;
+            return newFilesystemJSON;
+            }
+         return null;
          };
 
       this.getBlockSizeUnits = function()
