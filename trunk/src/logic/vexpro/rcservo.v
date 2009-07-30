@@ -1,4 +1,4 @@
-module RCServo12(Addr, DataRd, DataWr, En, Rd, Wr, P, Clk);
+module RCServo12(Addr, DataRd, DataWr, En, Rd, Wr, P, Reset, Clk);
    
    input  [4:0] Addr;
    output [15:0] DataRd; 
@@ -7,6 +7,7 @@ module RCServo12(Addr, DataRd, DataWr, En, Rd, Wr, P, Clk);
    input  Rd;
    input  Wr;
    output [11:0] P;   
+	input  Reset;
    input  Clk;
 	
    reg     [15:0] DataRd;
@@ -58,55 +59,78 @@ module RCServo12(Addr, DataRd, DataWr, En, Rd, Wr, P, Clk);
 			DivClk <= 1'b0;
 			end
 			
-		if (FreqCounter==FreqReg)
-		   begin
-			FreqCounter <= 0;
-			Freq <= 1'b1;
-			end
-		else
-		   begin
-			FreqCounter <= FreqCounter + 1;
-			Freq <= 1'b0;
+		if (DivClk)
+         begin
+         if (FreqCounter==FreqReg)
+				begin
+				FreqCounter <= 0;
+				Freq <= 1'b1;
+				end
+			else
+				begin
+				FreqCounter <= FreqCounter + 1;
+				Freq <= 1'b0;
+				end
 			end
 			
-		end
-      
+      end 
+		
    always @(posedge Clk)
-      begin
-		if (Wr & En)
-		   begin
-		   if (Addr[4:0]==0)
-			   DivReg <= DataWr[8:0];
-			else if (Addr[4:0]==1)
-			   FreqReg <= DataWr[13:0];
+	   begin
+ 		if (Reset)
+			begin
+			UpReg0 <= 0;
+			UpReg1 <= 0;
+			UpReg2 <= 0;
+			UpReg3 <= 0;
+			UpReg4 <= 0;
+			UpReg5 <= 0;
+			UpReg6 <= 0;
+			UpReg7 <= 0;
+			UpReg8 <= 0;
+			UpReg9 <= 0;
+			UpReg10 <= 0;
+			UpReg11 <= 0;
+			DivReg <= 0;
+			FreqReg <= 0;
+			end
+      else 
+			begin
+			if (Wr & En)
+				begin
+				if (Addr[4:0]==0)
+					DivReg <= DataWr[8:0];
+				else if (Addr[4:0]==1)
+					FreqReg <= DataWr[13:0];
 				
-			else if (Addr[4:0]==2)
-			   UpReg0 <= DataWr[13:0];
-			else if (Addr[4:0]==3)
-			   UpReg1 <= DataWr[13:0];
-			else if (Addr[4:0]==4)
-			   UpReg2 <= DataWr[13:0];
-			else if (Addr[4:0]==5)
-			   UpReg3 <= DataWr[13:0];
-			else if (Addr[4:0]==6)
-			   UpReg4 <= DataWr[13:0];
-			else if (Addr[4:0]==7)
-			   UpReg5 <= DataWr[13:0];
-			else if (Addr[4:0]==8)
-			   UpReg6 <= DataWr[13:0];
-			else if (Addr[4:0]==9)
-			   UpReg7 <= DataWr[13:0];
-			else if (Addr[4:0]==10)
-			   UpReg8 <= DataWr[13:0];
-			else if (Addr[4:0]==11)
-			   UpReg9 <= DataWr[13:0];
-			else if (Addr[4:0]==12)
-			   UpReg10 <= DataWr[13:0];
-			else if (Addr[4:0]==13)
-			   UpReg11 <= DataWr[13:0];
-         end
-      end
-
+				else if (Addr[4:0]==2)
+					UpReg0 <= DataWr[13:0];
+				else if (Addr[4:0]==3)
+					UpReg1 <= DataWr[13:0];
+				else if (Addr[4:0]==4)
+					UpReg2 <= DataWr[13:0];
+				else if (Addr[4:0]==5)
+					UpReg3 <= DataWr[13:0];
+				else if (Addr[4:0]==6)
+					UpReg4 <= DataWr[13:0];
+				else if (Addr[4:0]==7)
+					UpReg5 <= DataWr[13:0];
+				else if (Addr[4:0]==8)
+					UpReg6 <= DataWr[13:0];
+				else if (Addr[4:0]==9)
+					UpReg7 <= DataWr[13:0];
+				else if (Addr[4:0]==10)
+					UpReg8 <= DataWr[13:0];
+				else if (Addr[4:0]==11)
+					UpReg9 <= DataWr[13:0];
+				else if (Addr[4:0]==12)
+					UpReg10 <= DataWr[13:0];
+				else if (Addr[4:0]==13)
+					UpReg11 <= DataWr[13:0];
+				end
+			end
+	   end
+		
    always @(Addr or DivReg or FreqReg or
 	   UpReg0 or UpReg1 or UpReg2 or UpReg3 or
 		UpReg4 or UpReg5 or UpReg6 or UpReg7 or
@@ -166,16 +190,15 @@ module RCServoLogic(UpReg, Freq, Out, DivClk, Clk);
 		if (DivClk)
 		   begin
 		   if (Freq)
-           begin
-		     Counter <= 1; // UpReg==0 means pwm is off, so counter never gets there
-		     Out <= 1'b1;
-		     end
+		      Counter <= 0; // UpReg==0 means pwm is off
 		   else
-		   Counter <= Counter + 1;
-		
-		   if (Counter==UpReg) 
-	        Out <= 1'b0;
-      
+		      Counter <= Counter + 1;
+				
+		   if (Counter==UpReg)
+            Out <= 1'b0;
+		   else if (Counter==0)
+            Out <= 1'b1;			  
+			
          end
       end			
 endmodule
