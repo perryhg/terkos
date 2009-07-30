@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "9302hw.h"
 #include "qemotoruser.h"
+#include "qemotortraj.h"
 
 int main(int argc, char **argv)
 {
@@ -43,7 +44,7 @@ int main(int argc, char **argv)
       sleep(1);
     }
 #endif
-#if 1
+#if 0
   Axis_position pos;
   printf("1\n");
   CQEMotorUser mu(NULL, 0);
@@ -57,6 +58,19 @@ int main(int argc, char **argv)
     {
       pos = mu.GetPosition(0);
       printf("%d\n", pos);
+    }
+#endif
+#if 1
+  CQEMotorTraj motor(NULL, 0);
+  motor.SetPIDVGains(0, 100, 0, 500, 0);
+  printf("running\n");
+
+  while(1)
+    {
+      motor.Move(0, 40000, 20000, 8000);
+      while(!motor.Done(0)); 
+      motor.Move(0, -40000, 20000, 8000);
+      while(!motor.Done(0)); 
     }
 #endif
 }

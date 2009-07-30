@@ -1,14 +1,14 @@
-TARGET=motor
+TARGET=led
 CXX=arm-oe-linux-uclibcgnueabi-g++
 CFLAGS=-g -I../../../include
-LDFLAGS=-L../../../lib -lqwerk -lpthread
+LDFLAGS=-L../../../lib -lqwerk
 SRCS=$(wildcard *.cxx)
 OBJECTS=$(SRCS:.cxx=.o)
 
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
-	$(CXX) -g $(OBJECTS) -o $(TARGET) $(LDFLAGS)
+	$(CXX) $(OBJECTS) -o $(TARGET) $(LDFLAGS)
 
 clean:
 	-rm *.o
