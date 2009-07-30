@@ -13,7 +13,7 @@ span.ui-icon {
 }
 
 #alertDialog {
-   display:none;
+   display: none;
 }
 
 .blank-line {
@@ -21,7 +21,7 @@ span.ui-icon {
 }
 
 .button-container {
-   width:302px;
+   width: 302px;
 }
 
 .button-container div {
@@ -37,27 +37,26 @@ span.ui-icon {
 }
 
 .default-widget-width {
-   width:300px;
+   width: 300px;
 }
 
 .data-cell {
    border: solid 1px #cccccc;
    padding: 3px;
-   text-align:center;
+   text-align: center;
 }
 
 .align-left {
-   text-align:left;
+   text-align: left;
 }
 
 .align-right {
-   text-align:right;
+   text-align: right;
 }
-
 
 .data-column-label {
    padding: 0 5px 5px 5px;
-   text-align:center;
+   text-align: center;
 }
 
 .data-row-label {
@@ -137,4 +136,3 @@ span.ui-icon {
 .text-button {
    padding: 3px 7px;
 }
-
