@@ -4,6 +4,7 @@
 // Dependencies:
 // * jQuery (http://jquery.com/)
 // * jQuery UI (http://jqueryui.com/)
+// * jquery.mousecapture.js (http://benanne.net/code/?p=238)
 // * main.css
 //
 // Author: Chris Bartley (bartley@cmu.edu)

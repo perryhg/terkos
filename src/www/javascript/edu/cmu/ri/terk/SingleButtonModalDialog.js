@@ -1,5 +1,5 @@
 //======================================================================================================================
-// Class for initializing and configuring the various widgets on the Audio tab.
+// Class for a single-button modal dialog.
 //
 // Dependencies:
 // * jQuery (http://jquery.com/)
@@ -68,7 +68,7 @@ else if (typeof edu.cmu.ri.terk != "object")
 //======================================================================================================================
 if (!window['$'])
    {
-   var noJQuery = "The jQuery library is required by edu.cmu.ri.terk.AudioTab.js";
+   var noJQuery = "The jQuery library is required by edu.cmu.ri.terk.SingleButtonModalDialog.js";
    alert(noJQuery);
    throw new Error(noJQuery);
    }
@@ -82,105 +82,92 @@ if (!window['$'])
    // ==================================================================================================================
    var jQuery = window['$'];
 
-   edu.cmu.ri.terk.AudioTab = function(audioConfigManager, dialogManager)
+   edu.cmu.ri.terk.SingleButtonModalDialog = function(title, message, buttonLabel)
       {
-      jQuery("#volumeSlider")['slider']({
-         animate: true,
-         range: "min",
-         value: 5,
-         min: 0,
-         max: 10,
-         step: 1,
-         slide: function(event, ui)
-            {
-            jQuery("#volume").text(ui.value);
-            audioConfigManager.setVolume(ui.value);
-            }
-      });
+      var eventListeners = new Array();
+      var dialog = jQuery('<div></div>');
+      var dialogMessage = jQuery('<div>' + message + '</div>');
+      var button = jQuery('<button type="button" style="float:right" class="ui-state-default ui-corner-all button text-button state-has-no-dependency">' + buttonLabel + '</button>');
 
-      // configure the checkbox
-      jQuery('#isAudioAlertsEnabled')['change'](
-            function()
-               {
-               audioConfigManager.setAudioAlertsEnabled(jQuery(this).attr("checked"));
-               }
-            );
+      jQuery(dialog).append(dialogMessage);
+      jQuery(dialog).append('<div class="ui-widget-content divider" style="margin-top: 50px"></div>');
+      jQuery(dialog).append(button);
 
-      // add mouse event handlers to the Save button
-      jQuery('#saveAudioConfigButton').mousecapture({
+      jQuery(dialog)['dialog']({
+         bgiframe: true,
+         autoOpen: false,
+         modal: true,
+         draggable: false,
+         resizable: false,
+         closeOnEscape : false,
+         title : title,
+         dialogClass: 'non_closable_alert'});
+
+      jQuery(button).mousecapture({
          "down": function()
             {
-            if (audioConfigManager.isModified())
-               {
-               jQuery(this).addClass('ui-state-active');
-               }
+            jQuery(this).addClass('ui-state-active');
             },
          "up": function()
             {
-            if (audioConfigManager.isModified())
-               {
-               jQuery(this).removeClass('ui-state-active');
-               }
-            }}).click(
+            jQuery(this).removeClass('ui-state-active');
+            }
+      }).click(
             function()
                {
-               if (audioConfigManager.isModified())
-                  {
-                  audioConfigManager.saveAudioConfig();
-                  }
-               }
-            ).disableSelection();
+               notifyEventListeners('onButtonClick');
+               });
 
-      // register the event listener
-      audioConfigManager.addEventListener({
-         onBeforeLoad : function()
-            {
-            jQuery("#audioConfigurationMessageArea").html("Loading preferences...");
-            jQuery("#audioConfigurationArea").hide();
-            },
-         onLoadSuccess : function()
-            {
-            var isAlertsEnabled = audioConfigManager.isAudioAlertsEnabled();
-            var volume = audioConfigManager.getVolume();
-            jQuery('#isAudioAlertsEnabled').attr('checked', isAlertsEnabled);
-            jQuery("#volumeSlider")['slider']('value', volume);
-            jQuery("#volume").text(volume);
-            jQuery("#audioConfigurationMessageArea").empty();
-            jQuery("#audioConfigurationArea").show();
-            },
-         onLoadFailure : function()
-            {
-            jQuery("#audioConfigurationMessageArea").html("Sorry, the audio configuration is currently unavailable.");
-            },
-         isModified : function(isModified)
-            {
-            // toggle the state of the save button according to whether the config has been modified
-            jQuery("#saveAudioConfigButton").toggleClass("ui-state-default", isModified);
-            jQuery("#saveAudioConfigButton").toggleClass("ui-state-active", !isModified);
-            jQuery("#saveAudioConfigButton").toggleClass("ui-state-disabled", !isModified);
-            },
-         onBeforeSave: function()
-            {
-            dialogManager.showNonClosableWaitDialog("Please wait while your changes to the audio configuration are being saved.");
-            },
-         onSaveSuccess: function()
-            {
-            dialogManager.hideNonClosableWaitDialog();
-            },
-         onSaveFailure: function()
-            {
-            dialogManager.hideNonClosableWaitDialog();
-            dialogManager.showOKDialog("Sorry, an error occurred while saving your preferences.  Please try again.");
-            }});
-
-      this.activate = function()
+      this.show = function()
          {
-         audioConfigManager.getAudioConfig();
+         notifyEventListeners('onBeforeShow');
+
+         // Show the dialog and set the min-height.  I don't know why, but I *had* to set the min-height
+         // here...setting it in the HTML or on load didn't work--it kept getting overwritten to
+         // something like 112 or 114 pixels.
+         jQuery(dialog)['dialog']('open').css('min-height', '1px');
+
+         notifyEventListeners('onAfterShow');
          };
+
+      this.hide = function()
+         {
+         notifyEventListeners('onBeforeHide');
+         jQuery(dialog)['dialog']('close');
+         notifyEventListeners('onAfterHide');
+         };
+
+      /**
+       * Registers the given event listener.  The event listener should implement some or all of the following methods:
+       *
+       *    onBeforeShow()
+       *    onAfterShow()
+       *    onButtonClick()
+       *    onBeforeHide()
+       *    onAfterHide()
+       */
+      this.addEventListener = function(listener)
+         {
+         if (listener)
+            {
+            eventListeners[eventListeners.length] = listener;
+            }
+         }
+
+      var notifyEventListeners = function(eventName)
+         {
+         jQuery.each(eventListeners, function(i, listener)
+            {
+            if (listener && listener[eventName])
+               {
+               listener[eventName]();
+               }
+            });
+         };
+
       // ---------------------------------------------------------------------------------------------------------------
       };
 
    // ==================================================================================================================
    })();
 
-         
