@@ -3,6 +3,9 @@
 my %paths = ();
 $paths{'audio_config.json'} = '/opt/config/audio_config.json';
 $paths{'AudioConfigTool'} = '/opt/bin/AudioConfigTool';
+$paths{'busybox-httpd'} = '/etc/init.d/busybox-httpd';
+$paths{'httpd'} = '/usr/sbin/httpd';
+$paths{'httpd.conf'} = '/etc/httpd.conf';
 $paths{'PowerInfoTool'} = '/opt/bin/PowerInfoTool';
 $paths{'VersionInfoTool'} = '/opt/bin/VersionInfoTool';
 $paths{'wireless_networking_config.json'} = '/opt/config/wireless_networking_config.json';

@@ -4,6 +4,8 @@
 // Dependencies:
 // * jQuery (http://jquery.com/)
 // * jQuery UI (http://jqueryui.com/)
+// * jquery.mousecapture.js (http://benanne.net/code/?p=238)
+// * edu.cmu.ri.terk.SingleButtonModalDialog
 // * main.css
 //
 // Author: Chris Bartley (bartley@cmu.edu)
@@ -72,6 +74,13 @@ if (!window['$'])
    throw new Error(noJQuery);
    }
 //======================================================================================================================
+if (!edu.cmu.ri.terk.SingleButtonModalDialog)
+   {
+   var noSingleButtonModalDialog = "The edu.cmu.ri.terk.SingleButtonModalDialog library is required by edu.cmu.ri.terk.PasswordsTab.js";
+   alert(noSingleButtonModalDialog);
+   throw new Error(noSingleButtonModalDialog);
+   }
+//======================================================================================================================
 
 //======================================================================================================================
 // CODE
@@ -80,8 +89,15 @@ if (!window['$'])
    {
    // ==================================================================================================================
    var jQuery = window['$'];
+   jQuery.ajaxSetup({
+      type: 'GET',
+      dataType: 'jsonp',
+      timeout: 3000,
+      cache: false,
+      global: false
+   });
 
-   edu.cmu.ri.terk.PasswordsTab = function(dialogManager)
+   edu.cmu.ri.terk.PasswordsTab = function(dialogManager, host)
       {
       var PasswordVerifier = function(
             passwordFieldId,
@@ -89,14 +105,14 @@ if (!window['$'])
             messageAreaId,
             saveButtonId,
             nonMatchingPasswordsErrorMessage,
-            saveFunction,
+            getAjaxUrlAndData,
             additionalValidationFunction,
             additionalFieldsToValidate)
          {
          var isPasswordValid = false;
          var eventListeners = new Array();
 
-         var addEventListener = function(listener)
+         this.addEventListener = function(listener)
             {
             if (listener)
                {
@@ -148,18 +164,21 @@ if (!window['$'])
             validatePasswords();
             });
 
-         if (additionalFieldsToValidate)
+         if (additionalFieldsToValidate && additionalFieldsToValidate.length > 0)
             {
             jQuery.each(additionalFieldsToValidate, function(i, additionalFieldToValidate)
                {
-               additionalFieldsToValidate['keyup'](function()
+               if (additionalFieldToValidate)
                   {
-                  validatePasswords();
-                  });
+                  jQuery(additionalFieldToValidate)['keyup'](function()
+                     {
+                     validatePasswords();
+                     });
+                  }
                });
             }
 
-         addEventListener({
+         this.addEventListener({
             "non-empty" : function(isNonEmpty)
                {
                if (isNonEmpty)
@@ -210,13 +229,51 @@ if (!window['$'])
                }}).click(
                function()
                   {
-                  if (isPasswordValid && saveFunction)
+                  if (isPasswordValid)
                      {
-                     saveFunction();
+                     notifyEventListeners('onBeforeSave');
+
+                     // get the ajax URL and data fields
+                     var urlAndData = getAjaxUrlAndData();
+
+                     // send the JSON to the backend
+                     jQuery.ajax(
+                     {
+                        url: urlAndData['url'],
+                        type: 'POST',
+                        data: urlAndData['data'],
+                        success: function(jsonResponse)
+                           {
+                           if (jsonResponse)
+                              {
+                              notifyEventListeners('onSaveSuccess');
+                              }
+                           else
+                              {
+                              notifyEventListeners('onSaveFailure');
+                              }
+                           },
+                        error: function()
+                           {
+                           notifyEventListeners('onSaveFailure');
+                           }
+                     });
                      }
                   }
                ).disableSelection();
          };
+
+      var webPasswordOkDialog = new edu.cmu.ri.terk.SingleButtonModalDialog(
+            "Password Saved",
+            "The new web control panel password was saved successfully.  You will now need to log in again.",
+            "OK");
+      webPasswordOkDialog.addEventListener({
+         "onButtonClick": function()
+            {
+            webPasswordOkDialog.hide();
+            window.location.reload();
+            }
+      });
 
       var webPasswordVerifier = new PasswordVerifier(
             "#passwordsNewWebPassword",
@@ -226,9 +283,30 @@ if (!window['$'])
             "the passwords do not match",
             function()
                {
-               alert("Save web password not yet implemented.");
+               var urlAndData = {
+                  url: host + '/cgi-bin/setHttpBasicAuthPassword.pl',
+                  data: "newPassword=" + jQuery("#passwordsNewWebPassword").val()
+               };
+
+               return urlAndData;
                }
             );
+      webPasswordVerifier.addEventListener({
+         "onBeforeSave" : function()
+            {
+            dialogManager.showNonClosableWaitDialog("Please wait while the web control panel password is being saved.");
+            },
+         "onSaveSuccess" : function()
+            {
+            dialogManager.hideNonClosableWaitDialog();
+            webPasswordOkDialog.show()
+            },
+         "onSaveFailure" : function()
+            {
+            dialogManager.hideNonClosableWaitDialog();
+            dialogManager.showOKDialog("Sorry, an error occurred while saving the web control panel password.  Please try again.");
+            }
+      });
 
       var rootPasswordVerifier = new PasswordVerifier(
             "#passwordsNewRootUserPassword",
@@ -238,7 +316,12 @@ if (!window['$'])
             "the new passwords do not match",
             function()
                {
-               alert("Save root password not yet implemented.");
+               var urlAndData = {
+                  url: host + '/cgi-bin/setHttpBasicAuthPassword.pl',
+                  data: "newPassword=" + jQuery("#passwordsNewRootUserPassword").val()
+               };
+
+               return urlAndData;
                },
             function()
                {
@@ -247,6 +330,22 @@ if (!window['$'])
                },
             jQuery([]).add(jQuery("#passwordsCurrentRootUserPassword"))
             );
+      rootPasswordVerifier.addEventListener({
+         "onBeforeSave" : function()
+            {
+            dialogManager.showNonClosableWaitDialog("Please wait while the root user password is being saved.");
+            },
+         "onSaveSuccess" : function()
+            {
+            dialogManager.hideNonClosableWaitDialog();
+            dialogManager.showOKDialog("The new root password was saved successfully.");
+            },
+         "onSaveFailure" : function()
+            {
+            dialogManager.hideNonClosableWaitDialog();
+            dialogManager.showOKDialog("Sorry, an error occurred while saving the root user password.  Please try again.");
+            }
+      });
 
       this.activate = function()
          {
@@ -256,4 +355,5 @@ if (!window['$'])
       };
 
    // ==================================================================================================================
-   })();
+   })
+      ();

@@ -9,6 +9,7 @@
    <script type="text/javascript" src="javascript/jquery.mousecapture.js"></script>
    <script type="text/javascript" src="javascript/Math.uuid.js"></script>
    <script type="text/javascript" src="javascript/json2.js"></script>
+   <script type="text/javascript" src="javascript/edu/cmu/ri/terk/SingleButtonModalDialog.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/DialogManager.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/PowerInfoManager.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/VersionInfoManager.js"></script>
@@ -71,7 +72,7 @@
                wirelessNetworkingStatus,
                dialogManager,
                host);
-         var passwordsTab = new edu.cmu.ri.terk.PasswordsTab(dialogManager);
+         var passwordsTab = new edu.cmu.ri.terk.PasswordsTab(dialogManager, host);
 
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
@@ -416,7 +417,7 @@
       <div class="section">
          <div class="section-title">Web Control Panel</div>
          <div class="indented">
-            <form id="formToEditWebPassword" method="post">
+            <form id="formToEditWebPassword" method="post" onsubmit="return false;">
                <table border="0" cellpadding="0" cellspacing="0">
                   <tr>
                      <td><label for="passwordsNewWebPassword">New Password:</label></td>
@@ -445,7 +446,7 @@
       <div class="section">
          <div class="section-title">Root User</div>
          <div class="indented">
-            <form id="formToEditRootUserPassword" method="post">
+            <form id="formToEditRootUserPassword" method="post" onsubmit="return false;">
                <table border="0" cellpadding="0" cellspacing="0">
                   <tr>
                      <td><label for="passwordsCurrentRootUserPassword">Current Password:</label></td>
@@ -477,6 +478,7 @@
             </form>
          </div>
       </div>
+      <div id="info"></div>
    </div>
    <!-- ============================================================================================================ -->
    <div id="Factory_Reset">
