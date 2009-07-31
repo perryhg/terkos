@@ -90,7 +90,7 @@ if (!window['$'])
          onBeforeLoad : function()
             {
             jQuery("#versionInfoMessageArea").html("Loading system information...");
-            jQuery("#versionInfoArea").addClass("hidden");
+            jQuery("#versionInfoArea").hide();
             },
          onLoadSuccess : function()
             {
@@ -102,7 +102,7 @@ if (!window['$'])
             jQuery("#versionInfoOperatingSystem").text(osInfo['name'] + " " + osInfo['release'] + " (" + osInfo['version'] + " " + osInfo['machine-type'] + " " + osInfo['processor-type'] + ")");
 
             jQuery("#versionInfoMessageArea").empty();
-            jQuery("#versionInfoArea").removeClass("hidden");
+            jQuery("#versionInfoArea").show();
             },
          onLoadFailure : function()
             {
@@ -114,7 +114,7 @@ if (!window['$'])
          onBeforeLoad : function()
             {
             jQuery("#powerInfoMessageArea").html("Loading power information...");
-            jQuery("#powerInfoArea").addClass("hidden");
+            jQuery("#powerInfoArea").hide();
             },
          onLoadSuccess : function()
             {
@@ -141,7 +141,7 @@ if (!window['$'])
                });
 
             jQuery("#powerInfoMessageArea").empty();
-            jQuery("#powerInfoArea").removeClass("hidden");
+            jQuery("#powerInfoArea").show();
             },
          onLoadFailure : function()
             {
@@ -153,7 +153,7 @@ if (!window['$'])
          onBeforeLoad : function()
             {
             jQuery("#memoryUsageMessageArea").html("Loading memory usage...");
-            jQuery("#memoryUsageArea").addClass("hidden");
+            jQuery("#memoryUsageArea").hide();
             },
          onLoadSuccess : function()
             {
@@ -182,7 +182,7 @@ if (!window['$'])
                }
 
             jQuery("#memoryUsageMessageArea").empty();
-            jQuery("#memoryUsageArea").removeClass("hidden");
+            jQuery("#memoryUsageArea").show();
             },
          onLoadFailure : function()
             {
@@ -194,7 +194,7 @@ if (!window['$'])
          onBeforeLoad : function()
             {
             jQuery("#diskUsageMessageArea").html("Loading disk usage...");
-            jQuery("#diskUsageArea").addClass("hidden");
+            jQuery("#diskUsageArea").hide();
             },
          onLoadSuccess : function()
             {
@@ -217,7 +217,7 @@ if (!window['$'])
                });
 
             jQuery("#diskUsageMessageArea").empty();
-            jQuery("#diskUsageArea").removeClass("hidden");
+            jQuery("#diskUsageArea").show();
             },
          onLoadFailure : function()
             {

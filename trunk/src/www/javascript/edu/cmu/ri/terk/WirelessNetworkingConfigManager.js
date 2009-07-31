@@ -178,7 +178,7 @@ if (!JSON)
       this.getWirelessNetworkingConfig = function()
          {
          jQuery("#" + wirelessNetworkingConfigurationMessageAreaId).html("Loading preferences...");
-         jQuery("#" + wirelessNetworkingConfigurationAreaId).addClass("hidden");
+         jQuery("#" + wirelessNetworkingConfigurationAreaId).hide();
 
          this.loadWirelessNetworkingConfig();
          };
@@ -196,7 +196,7 @@ if (!JSON)
             url: host + '/cgi-bin/getWirelessNetworkingConfigAsJSON.pl',
             success: function(jsonResponse)
                {
-               jQuery("#" + wirelessNetworkingConfigurationAreaId).removeClass("hidden");
+               jQuery("#" + wirelessNetworkingConfigurationAreaId).show();
                json = jsonResponse;
                stringifiedOriginalJSON = JSON.stringify(json);
                displayWirelessNetworkingConfig();

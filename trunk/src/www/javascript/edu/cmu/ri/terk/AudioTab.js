@@ -135,7 +135,7 @@ if (!window['$'])
          onBeforeLoad : function()
             {
             jQuery("#audioConfigurationMessageArea").html("Loading preferences...");
-            jQuery("#audioConfigurationArea").addClass("hidden");
+            jQuery("#audioConfigurationArea").hide();
             },
          onLoadSuccess : function()
             {
@@ -145,7 +145,7 @@ if (!window['$'])
             jQuery("#volumeSlider")['slider']('value', volume);
             jQuery("#volume").text(volume);
             jQuery("#audioConfigurationMessageArea").empty();
-            jQuery("#audioConfigurationArea").removeClass("hidden");
+            jQuery("#audioConfigurationArea").show();
             },
          onLoadFailure : function()
             {

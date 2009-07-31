@@ -76,10 +76,6 @@ span.ui-icon {
    cursor: pointer;
 }
 
-.hidden {
-   display: none;
-}
-
 .indented {
    margin-left: 20px;
 }
