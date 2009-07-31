@@ -348,8 +348,8 @@ if (!window['$'])
       jQuery('#showAvailableWirelessNetworksButton').click(
             function()
                {
-               jQuery("#formToEnterPreferredWirelessNetworkInfo").addClass("hidden");
-               jQuery("#formToChooseFromAvailableWirelessNetworks").removeClass("hidden");
+               jQuery("#formToEnterPreferredWirelessNetworkInfo").hide();
+               jQuery("#formToChooseFromAvailableWirelessNetworks").show();
 
                wirelessNetworkScanner.scanForWirelessNetworks();
                }
@@ -362,8 +362,8 @@ if (!window['$'])
       jQuery('#manuallyEnterAWirelessNetworkButton').click(
             function()
                {
-               jQuery("#formToEnterPreferredWirelessNetworkInfo").removeClass("hidden");
-               jQuery("#formToChooseFromAvailableWirelessNetworks").addClass("hidden");
+               jQuery("#formToEnterPreferredWirelessNetworkInfo").show();
+               jQuery("#formToChooseFromAvailableWirelessNetworks").hide();
                }
             );
 

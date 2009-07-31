@@ -105,7 +105,7 @@ if (!Math.uuid)
 
       this.scanForWirelessNetworks = function()
          {
-         jQuery("#" + pleaseWaitIndicatorId).removeClass("hidden");
+         jQuery("#" + pleaseWaitIndicatorId).show();
 
          // clear the list
          jQuery("#" + wirelessNetworksListId).empty();
@@ -191,7 +191,7 @@ if (!Math.uuid)
 
       var displayAvailableWirelessNetworks = function(wirelessNetworksJSON)
          {
-         jQuery("#" + pleaseWaitIndicatorId).addClass("hidden");
+         jQuery("#" + pleaseWaitIndicatorId).hide();
 
          if (wirelessNetworksJSON && wirelessNetworksJSON['wireless-networks'])
             {

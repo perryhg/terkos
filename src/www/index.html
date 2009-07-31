@@ -21,6 +21,7 @@
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkingConfigManager.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkScanner.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkingTab.js"></script>
+   <script type="text/javascript" src="javascript/edu/cmu/ri/terk/PasswordsTab.js"></script>
    <script type="text/javascript">
       var tabSelectionHandlers = new Array();
       var host = "";
@@ -36,27 +37,15 @@
                "okDialogOkButton"
                );
 
-         // create the VersionInfoManager
          var versionInfoManager = new edu.cmu.ri.terk.VersionInfoManager(host);
-
-         // create the PowerInfoManager
          var powerInfoManager = new edu.cmu.ri.terk.PowerInfoManager(host);
-
-         // create the MemoryUsageManager
          var memoryUsageManager = new edu.cmu.ri.terk.MemoryUsageManager(host);
-
-         // create the DiskUsageManager
          var diskUsageManager = new edu.cmu.ri.terk.DiskUsageManager(host);
-
-         // create the AudioConfigManager
          var audioConfigManager = new edu.cmu.ri.terk.AudioConfigManager(host);
-
-         // create the WirelessNetworkStatus
          var wirelessNetworkingStatus = new edu.cmu.ri.terk.WirelessNetworkingStatus(
                "wirelessNetworkingStatusMessageArea",
                "wirelessNetworkingStatusMessageAreaDetail",
                host);
-
          var wirelessNetworkingConfigManager = new edu.cmu.ri.terk.WirelessNetworkingConfigManager(
                "wirelessNetworkingConfigurationMessageArea",
                "wirelessNetworkingConfigurationArea",
@@ -64,15 +53,17 @@
                "preferredWirelessNetworksListContainer",
                "preferredWirelessNetworksList",
                host);
-
-         // create the WirelessNetworkScanner
          var wirelessNetworkScanner = new edu.cmu.ri.terk.WirelessNetworkScanner(
                "availableWirelessNetworksList",
                "availableWirelessNetworksPleaseWaitIndicator",
                host);
 
-         // create instances of the tabs (which initializes them)
-         var systemInfoTab = new edu.cmu.ri.terk.SystemInfoTab(versionInfoManager, memoryUsageManager, diskUsageManager, powerInfoManager);
+         // create instances of the tabs (which also initializes them)
+         var systemInfoTab = new edu.cmu.ri.terk.SystemInfoTab(
+               versionInfoManager,
+               memoryUsageManager,
+               diskUsageManager,
+               powerInfoManager);
          var audioTab = new edu.cmu.ri.terk.AudioTab(audioConfigManager, dialogManager);
          var wirelessNetworkingTab = new edu.cmu.ri.terk.WirelessNetworkingTab(
                wirelessNetworkingConfigManager,
@@ -80,6 +71,7 @@
                wirelessNetworkingStatus,
                dialogManager,
                host);
+         var passwordsTab = new edu.cmu.ri.terk.PasswordsTab(dialogManager);
 
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
@@ -101,6 +93,7 @@
             };
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
+            passwordsTab.activate();
             };
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
@@ -131,9 +124,31 @@
                   }
                );
 
-         // finally, activate the system info tab
-         systemInfoTab.activate();
+         // construct a map of URL hashes to tab selection handlers (so we
+         // can activate the appropriate tab if there's a hash on the URL)
+         var urlHashToTabSelectionHandlerMap = new Array();
+         $.each($("#tabsList li a"), function(i, val)
+            {
+            urlHashToTabSelectionHandlerMap[val.hash] = tabSelectionHandlers[i];
+            });
 
+         // finally, activate the appropriate tab depending on whether there's an URL hash
+         if (window.location.hash)
+            {
+            var tabSelectionHandler = urlHashToTabSelectionHandlerMap[window.location.hash];
+            if (tabSelectionHandler)
+               {
+               tabSelectionHandler();
+               }
+            else
+               {
+               tabSelectionHandlers[0]();
+               }
+            }
+         else
+            {
+            tabSelectionHandlers[0]();
+            }
          });
    </script>
 </head>
@@ -141,7 +156,7 @@
 <div class="main-title">TerkOS</div>
 <div id="tabs">
    <!-- ============================================================================================================ -->
-   <ul>
+   <ul id="tabsList">
       <li><a href="#System_Info" title="System Info">System Info</a></li>
       <li><a href="#Audio" title="Audio">Audio</a></li>
       <li><a href="#Wireless_Networking" title="Wireless Networking">Wireless Networking</a></li>
@@ -156,7 +171,7 @@
          <div class="section-title">System</div>
          <div class="indented">
             <div id="versionInfoMessageArea">&nbsp;</div>
-            <div id="versionInfoArea" class="hidden">
+            <div id="versionInfoArea" style="display:none">
                <table border="0" cellpadding="0" cellspacing="0">
                   <tr>
                      <td>Operating System:</td>
@@ -185,7 +200,7 @@
          <div class="section-title">Memory Usage</div>
          <div class="indented">
             <div id="memoryUsageMessageArea">&nbsp;</div>
-            <div id="memoryUsageArea" class="hidden">
+            <div id="memoryUsageArea" style="display:none">
                <table border="0" cellpadding="0" cellspacing="1">
                   <tr>
                      <td>&nbsp;</td>
@@ -219,7 +234,7 @@
          <div class="section-title">Disk Usage</div>
          <div class="indented">
             <div id="diskUsageMessageArea">&nbsp;</div>
-            <div id="diskUsageArea" class="hidden">
+            <div id="diskUsageArea" style="display:none">
                <table border="0" cellpadding="0" cellspacing="1" id="diskUsageTable">
                   <tr>
                      <td class="data-column-label">Filesystem</td>
@@ -237,7 +252,7 @@
          <div class="section-title">Power</div>
          <div class="indented">
             <div id="powerInfoMessageArea">&nbsp;</div>
-            <div id="powerInfoArea" class="hidden">
+            <div id="powerInfoArea" style="display:none">
                <table border="0" cellpadding="0" cellspacing="1">
                   <tr>
                      <td>&nbsp;</td>
@@ -284,7 +299,7 @@
          <div class="section-title">Preferences</div>
          <div class="indented">
             <div id="audioConfigurationMessageArea">&nbsp;</div>
-            <div id="audioConfigurationArea" class="hidden">
+            <div id="audioConfigurationArea" style="display:none">
                <input id="isAudioAlertsEnabled" name="isAudioAlertsEnabled" type="checkbox"/><label for="isAudioAlertsEnabled">Play audio alerts</label>
                <div class="blank-line"></div>
                <div style="padding-bottom:5px">
@@ -313,7 +328,7 @@
             <div class="section-title">Preferences</div>
             <div class="indented">
                <div id="wirelessNetworkingConfigurationMessageArea">&nbsp;</div>
-               <div id="wirelessNetworkingConfigurationArea" class="hidden">
+               <div id="wirelessNetworkingConfigurationArea" style="display:none">
                   <input id="willStartWirelessNetworkingOnBootupCheckbox" name="willStartWirelessNetworkingOnBootup" type="checkbox"/><label for="willStartWirelessNetworkingOnBootupCheckbox">Start wireless networking on boot up</label>
                   <div class="blank-line"></div>
                   <div class="label">Preferred Networks:</div>
@@ -351,7 +366,7 @@
                <button type="button" id="showAvailableWirelessNetworksButton" class="ui-state-default ui-corner-all button text-button state-has-no-dependency">Show Networks</button>
             </div>
          </form>
-         <div id="formToChooseFromAvailableWirelessNetworks" class="hidden">
+         <div id="formToChooseFromAvailableWirelessNetworks" style="display:none">
             <p>
                Select the network you want to add. You can also click
                Other... to manually enter a network.
@@ -398,7 +413,70 @@
    </div>
    <!-- ============================================================================================================ -->
    <div id="Passwords">
-      <p>Passwords</p>
+      <div class="section">
+         <div class="section-title">Web Control Panel</div>
+         <div class="indented">
+            <form id="formToEditWebPassword" method="post">
+               <table border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                     <td><label for="passwordsNewWebPassword">New Password:</label></td>
+                     <td>
+                        <input name="passwordsNewWebPassword" id="passwordsNewWebPassword" type="password" class="text ui-widget-content ui-corner-all" style="margin:0 0 5px 5px">
+                     </td>
+                  </tr>
+                  <tr>
+                     <td><label for="passwordsNewWebPasswordConfirmation">Confirm New Password:</label></td>
+                     <td>
+                        <input name="passwordsNewWebPasswordConfirmation" id="passwordsNewWebPasswordConfirmation" type="password" class="text ui-widget-content ui-corner-all" style="margin:0 0 5px 5px">
+                     </td>
+                  </tr>
+                  <tr>
+                     <td colspan="2">
+                        <div class="button-container" style="width:auto;">
+                           <button type="button" style="float:right;margin-right:0;" id="saveNewWebPasswordButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Save</button>
+                           <span id="editWebPasswordMessage" style="float:right;margin:6px 5px 0 0;"></span>
+                        </div>
+                     </td>
+                  </tr>
+               </table>
+            </form>
+         </div>
+      </div>
+      <div class="section">
+         <div class="section-title">Root User</div>
+         <div class="indented">
+            <form id="formToEditRootUserPassword" method="post">
+               <table border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                     <td><label for="passwordsCurrentRootUserPassword">Current Password:</label></td>
+                     <td>
+                        <input name="passwordsCurrentRootUserPassword" id="passwordsCurrentRootUserPassword" type="password" class="text ui-widget-content ui-corner-all" style="margin:0 0 5px 5px">
+                     </td>
+                  </tr>
+                  <tr>
+                     <td><label for="passwordsNewRootUserPassword">New Password:</label></td>
+                     <td>
+                        <input name="passwordsNewRootUserPassword" id="passwordsNewRootUserPassword" type="password" class="text ui-widget-content ui-corner-all" style="margin:0 0 5px 5px">
+                     </td>
+                  </tr>
+                  <tr>
+                     <td><label for="passwordsNewRootUserPasswordConfirmation">Confirm New Password:</label></td>
+                     <td>
+                        <input name="passwordsNewRootUserPasswordConfirmation" id="passwordsNewRootUserPasswordConfirmation" type="password" class="text ui-widget-content ui-corner-all" style="margin:0 0 5px 5px">
+                     </td>
+                  </tr>
+                  <tr>
+                     <td colspan="2">
+                        <div class="button-container" style="width:auto;">
+                           <button type="button" style="float:right;margin-right:0;" id="saveNewRootUserPasswordButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Save</button>
+                           <span id="editRootUserPasswordMessage" style="float:right;margin:6px 5px 0 0;"></span>
+                        </div>
+                     </td>
+                  </tr>
+               </table>
+            </form>
+         </div>
+      </div>
    </div>
    <!-- ============================================================================================================ -->
    <div id="Factory_Reset">
