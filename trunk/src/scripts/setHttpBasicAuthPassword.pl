@@ -8,7 +8,7 @@
 #
 #       ./setHttpBasicAuthPassword.pl --newPassword=PASSWORD
 #
-# If called as a CGI, it expects the to be a parameter named newPassword whose
+# If called as a CGI, it expects there to be a parameter named newPassword whose
 # value is the new password.
 #
 # Regardless of how the script is called, it returns the result as JSON.
