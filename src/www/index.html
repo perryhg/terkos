@@ -9,8 +9,8 @@
    <script type="text/javascript" src="javascript/jquery.mousecapture.js"></script>
    <script type="text/javascript" src="javascript/Math.uuid.js"></script>
    <script type="text/javascript" src="javascript/json2.js"></script>
+   <script type="text/javascript" src="javascript/edu/cmu/ri/terk/NonClosableWaitDialog.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/SingleButtonModalDialog.js"></script>
-   <script type="text/javascript" src="javascript/edu/cmu/ri/terk/DialogManager.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/PowerInfoManager.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/VersionInfoManager.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/MemoryUsageManager.js"></script>
@@ -25,19 +25,10 @@
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/PasswordsTab.js"></script>
    <script type="text/javascript">
       var tabSelectionHandlers = new Array();
-      var host = "";
+      var host = "";//http://192.168.1.4";
 
       $(function()
          {
-         // create the DialogManager
-         var dialogManager = new edu.cmu.ri.terk.DialogManager(
-               "nonClosableWaitDialog",
-               "nonClosableWaitDialogMessage",
-               "okDialog",
-               "okDialogMessage",
-               "okDialogOkButton"
-               );
-
          var versionInfoManager = new edu.cmu.ri.terk.VersionInfoManager(host);
          var powerInfoManager = new edu.cmu.ri.terk.PowerInfoManager(host);
          var memoryUsageManager = new edu.cmu.ri.terk.MemoryUsageManager(host);
@@ -65,14 +56,13 @@
                memoryUsageManager,
                diskUsageManager,
                powerInfoManager);
-         var audioTab = new edu.cmu.ri.terk.AudioTab(audioConfigManager, dialogManager);
+         var audioTab = new edu.cmu.ri.terk.AudioTab(audioConfigManager);
          var wirelessNetworkingTab = new edu.cmu.ri.terk.WirelessNetworkingTab(
                wirelessNetworkingConfigManager,
                wirelessNetworkScanner,
                wirelessNetworkingStatus,
-               dialogManager,
                host);
-         var passwordsTab = new edu.cmu.ri.terk.PasswordsTab(dialogManager, host);
+         var passwordsTab = new edu.cmu.ri.terk.PasswordsTab(host);
 
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
@@ -485,22 +475,6 @@
       <p>Factory Reset</p>
    </div>
    <!-- ============================================================================================================ -->
-</div>
-<div id="okDialog">
-   <div id="okDialogMessage"></div>
-   <div class="ui-widget-content divider" style="margin-top: 50px"></div>
-   <div id="okDialogButtonsContainer">
-      <button type="button" style="float:right" id="okDialogOkButton" class="ui-state-default ui-corner-all button text-button state-has-no-dependency">OK</button>
-   </div>
-</div>
-<div id="nonClosableWaitDialog">
-   <table border="0" cellpadding="0" cellspacing="0">
-      <tr valign="middle">
-         <td><img src="images/ajax-loader.gif" width="16" height="16" alt=""></td>
-         <td>&nbsp;&nbsp;&nbsp;</td>
-         <td><span id="nonClosableWaitDialogMessage"></span></td>
-      </tr>
-   </table>
 </div>
 </body>
 </html>

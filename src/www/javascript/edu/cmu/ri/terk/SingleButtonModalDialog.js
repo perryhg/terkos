@@ -152,7 +152,7 @@ if (!window['$'])
             {
             eventListeners[eventListeners.length] = listener;
             }
-         }
+         };
 
       var notifyEventListeners = function(eventName)
          {

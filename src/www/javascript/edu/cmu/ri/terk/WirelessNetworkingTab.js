@@ -5,6 +5,8 @@
 // * jQuery (http://jquery.com/)
 // * jQuery UI (http://jqueryui.com/)
 // * jquery.mousecapture.js (http://benanne.net/code/?p=238)
+// * edu.cmu.ri.terk.NonClosableWaitDialog
+// * edu.cmu.ri.terk.SingleButtonModalDialog
 // * main.css
 //
 // Author: Chris Bartley (bartley@cmu.edu)
@@ -73,6 +75,20 @@ if (!window['$'])
    throw new Error(noJQuery);
    }
 //======================================================================================================================
+if (!edu.cmu.ri.terk.NonClosableWaitDialog)
+   {
+   var noNonClosableWaitDialog = "The edu.cmu.ri.terk.NonClosableWaitDialog library is required by edu.cmu.ri.terk.WirelessNetworkingTab.js";
+   alert(noNonClosableWaitDialog);
+   throw new Error(noNonClosableWaitDialog);
+   }
+//======================================================================================================================
+if (!edu.cmu.ri.terk.SingleButtonModalDialog)
+   {
+   var noSingleButtonModalDialog = "The edu.cmu.ri.terk.SingleButtonModalDialog library is required by edu.cmu.ri.terk.WirelessNetworkingTab.js";
+   alert(noSingleButtonModalDialog);
+   throw new Error(noSingleButtonModalDialog);
+   }
+//======================================================================================================================
 
 //======================================================================================================================
 // CODE
@@ -92,7 +108,6 @@ if (!window['$'])
    edu.cmu.ri.terk.WirelessNetworkingTab = function(wirelessNetworkingConfigManager,
                                                     wirelessNetworkScanner,
                                                     wirelessNetworkingStatus,
-                                                    dialogManager,
                                                     host)
       {
       var isNetworkNameValid = function(formFieldID)
@@ -216,6 +231,21 @@ if (!window['$'])
                }
             }});
 
+      var errorOccurredDialog = new edu.cmu.ri.terk.SingleButtonModalDialog(
+            "Error",
+            "Sorry, an error occurred while saving your preferences.  Please try again.",
+            "OK");
+      errorOccurredDialog.addEventListener({
+         "onButtonClick": function()
+            {
+            errorOccurredDialog.hide();
+            }
+      });
+
+      var nonClosableWaitDialog = new edu.cmu.ri.terk.NonClosableWaitDialog(
+            "Saving Preferences",
+            "Please wait while your changes to the wireless networking configuration are being saved.");
+
       // add mouse event handlers to the Save button
       jQuery('#saveWirelessNetworkingConfigButton').mousecapture({
          "down": function()
@@ -236,7 +266,7 @@ if (!window['$'])
                {
                if (wirelessNetworkingConfigManager.isModified())
                   {
-                  dialogManager.showNonClosableWaitDialog("Please wait while your changes to the wireless networking configuration are being saved.");
+                  nonClosableWaitDialog.show();
 
                   // get the JSON to send to the backend
                   var json = wirelessNetworkingConfigManager.getJSON();
@@ -253,19 +283,19 @@ if (!window['$'])
                            // reload the config
                            wirelessNetworkingConfigManager.loadWirelessNetworkingConfig(function()
                               {
-                              dialogManager.hideNonClosableWaitDialog();
+                              nonClosableWaitDialog.hide();
                               });
                            }
                         else
                            {
-                           dialogManager.hideNonClosableWaitDialog();
-                           dialogManager.showOKDialog("Sorry, an error occurred while saving your preferences.  Please try again.");
+                           nonClosableWaitDialog.hide();
+                           errorOccurredDialog.show();
                            }
                         },
                      error: function()
                         {
-                        dialogManager.hideNonClosableWaitDialog();
-                        dialogManager.showOKDialog("Sorry, an error occurred while saving your preferences.  Please try again.");
+                        nonClosableWaitDialog.hide();
+                        errorOccurredDialog.show();
                         }
                   });
                   }

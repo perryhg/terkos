@@ -5,6 +5,8 @@
 // * jQuery (http://jquery.com/)
 // * jQuery UI (http://jqueryui.com/)
 // * jquery.mousecapture.js (http://benanne.net/code/?p=238)
+// * edu.cmu.ri.terk.NonClosableWaitDialog
+// * edu.cmu.ri.terk.SingleButtonModalDialog
 // * main.css
 //
 // Author: Chris Bartley (bartley@cmu.edu)
@@ -73,6 +75,20 @@ if (!window['$'])
    throw new Error(noJQuery);
    }
 //======================================================================================================================
+if (!edu.cmu.ri.terk.NonClosableWaitDialog)
+   {
+   var noNonClosableWaitDialog = "The edu.cmu.ri.terk.NonClosableWaitDialog library is required by edu.cmu.ri.terk.AudioTab.js";
+   alert(noNonClosableWaitDialog);
+   throw new Error(noNonClosableWaitDialog);
+   }
+//======================================================================================================================
+if (!edu.cmu.ri.terk.SingleButtonModalDialog)
+   {
+   var noSingleButtonModalDialog = "The edu.cmu.ri.terk.SingleButtonModalDialog library is required by edu.cmu.ri.terk.AudioTab.js";
+   alert(noSingleButtonModalDialog);
+   throw new Error(noSingleButtonModalDialog);
+   }
+//======================================================================================================================
 
 //======================================================================================================================
 // CODE
@@ -82,7 +98,7 @@ if (!window['$'])
    // ==================================================================================================================
    var jQuery = window['$'];
 
-   edu.cmu.ri.terk.AudioTab = function(audioConfigManager, dialogManager)
+   edu.cmu.ri.terk.AudioTab = function(audioConfigManager)
       {
       jQuery("#volumeSlider")['slider']({
          animate: true,
@@ -131,6 +147,21 @@ if (!window['$'])
                }
             ).disableSelection();
 
+      var errorOccurredDialog = new edu.cmu.ri.terk.SingleButtonModalDialog(
+            "Error",
+            "Sorry, an error occurred while saving your preferences.  Please try again.",
+            "OK");
+      errorOccurredDialog.addEventListener({
+         "onButtonClick": function()
+            {
+            errorOccurredDialog.hide();
+            }
+      });
+
+      var nonClosableWaitDialog = new edu.cmu.ri.terk.NonClosableWaitDialog(
+            "Saving Preferences",
+            "Please wait while your changes to the audio configuration are being saved.");
+
       // register the event listener
       audioConfigManager.addEventListener({
          onBeforeLoad : function()
@@ -161,16 +192,16 @@ if (!window['$'])
             },
          onBeforeSave: function()
             {
-            dialogManager.showNonClosableWaitDialog("Please wait while your changes to the audio configuration are being saved.");
+            nonClosableWaitDialog.show();
             },
          onSaveSuccess: function()
             {
-            dialogManager.hideNonClosableWaitDialog();
+            nonClosableWaitDialog.hide();
             },
          onSaveFailure: function()
             {
-            dialogManager.hideNonClosableWaitDialog();
-            dialogManager.showOKDialog("Sorry, an error occurred while saving your preferences.  Please try again.");
+            nonClosableWaitDialog.hide();
+            errorOccurredDialog.show();
             }});
 
       this.activate = function()
