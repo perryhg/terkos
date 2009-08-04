@@ -113,9 +113,7 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
             messageAreaId,
             saveButtonId,
             nonMatchingPasswordsErrorMessage,
-            getAjaxUrlAndData,
-            additionalValidationFunction,
-            additionalFieldsToValidate)
+            getAjaxUrlAndData)
          {
          var isPasswordValid = false;
          var eventListeners = new Array();
@@ -146,10 +144,6 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
             var areBothNonEmpty = (p1.length > 0) && (p2.length > 0);
             var areEqual = (p1 == p2);
             var additionalValidation = true;
-            if (additionalValidationFunction)
-               {
-               additionalValidation = additionalValidationFunction();
-               }
             notifyEventListeners('non-empty', areBothNonEmpty);
             notifyEventListeners('equal', areEqual);
             notifyEventListeners('valid', areEqual && areBothNonEmpty && additionalValidation);
@@ -171,20 +165,6 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
             {
             validatePasswords();
             });
-
-         if (additionalFieldsToValidate && additionalFieldsToValidate.length > 0)
-            {
-            jQuery.each(additionalFieldsToValidate, function(i, additionalFieldToValidate)
-               {
-               if (additionalFieldToValidate)
-                  {
-                  jQuery(additionalFieldToValidate)['keyup'](function()
-                     {
-                     validatePasswords();
-                     });
-                  }
-               });
-            }
 
          this.addEventListener({
             "non-empty" : function(isNonEmpty)
@@ -340,19 +320,12 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
             function()
                {
                var urlAndData = {
-                  url: host + '/cgi-bin/setRootPassword.pl',
+                  url: host + '/cgi-bin/setRootUserPassword.pl',
                   data: "newPassword=" + jQuery("#passwordsNewRootUserPassword").val()
                };
 
                return urlAndData;
-               },
-            function()
-               {
-               var length = jQuery("#passwordsCurrentRootUserPassword").val().length;
-               return (length > 0);
-               },
-            jQuery([]).add(jQuery("#passwordsCurrentRootUserPassword"))
-            );
+               });
       rootPasswordVerifier.addEventListener({
          "onBeforeSave" : function()
             {
