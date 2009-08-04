@@ -4,7 +4,7 @@ NAME=httpd
 DESC="Busybox HTTP Daemon"
 HTTPROOT="/srv/www"
 HTTPCONF="/etc/httpd.conf"
-HTTPREALM="VexPro"
+HTTPREALM="TerkOS"
 ARGS="-h $HTTPROOT -c $HTTPCONF -r $HTTPREALM"
 
 test -f $DAEMON || exit 0
