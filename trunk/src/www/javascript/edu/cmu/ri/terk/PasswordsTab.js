@@ -5,6 +5,7 @@
 // * jQuery (http://jquery.com/)
 // * jQuery UI (http://jqueryui.com/)
 // * jquery.mousecapture.js (http://benanne.net/code/?p=238)
+// * edu.cmu.ri.terk.NonClosableWaitDialog
 // * edu.cmu.ri.terk.SingleButtonModalDialog
 // * main.css
 //
@@ -74,6 +75,13 @@ if (!window['$'])
    throw new Error(noJQuery);
    }
 //======================================================================================================================
+if (!edu.cmu.ri.terk.NonClosableWaitDialog)
+   {
+   var noNonClosableWaitDialog = "The edu.cmu.ri.terk.NonClosableWaitDialog library is required by edu.cmu.ri.terk.PasswordsTab.js";
+   alert(noNonClosableWaitDialog);
+   throw new Error(noNonClosableWaitDialog);
+   }
+//======================================================================================================================
 if (!edu.cmu.ri.terk.SingleButtonModalDialog)
    {
    var noSingleButtonModalDialog = "The edu.cmu.ri.terk.SingleButtonModalDialog library is required by edu.cmu.ri.terk.PasswordsTab.js";
@@ -97,7 +105,7 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
       global: false
    });
 
-   edu.cmu.ri.terk.PasswordsTab = function(dialogManager, host)
+   edu.cmu.ri.terk.PasswordsTab = function(host)
       {
       var PasswordVerifier = function(
             passwordFieldId,
@@ -263,6 +271,21 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
                ).disableSelection();
          };
 
+      var nonClosableWaitDialog = new edu.cmu.ri.terk.NonClosableWaitDialog(
+            "Saving Password",
+            "Please wait while the password is being saved.");
+
+      var errorOccurredDialog = new edu.cmu.ri.terk.SingleButtonModalDialog(
+            "Error",
+            "Sorry, an error occurred while saving the password.  Please try again.",
+            "OK");
+      errorOccurredDialog.addEventListener({
+         "onButtonClick": function()
+            {
+            errorOccurredDialog.hide();
+            }
+      });
+
       var webPasswordOkDialog = new edu.cmu.ri.terk.SingleButtonModalDialog(
             "Password Saved",
             "The new web control panel password was saved successfully.  You will now need to log in again.",
@@ -294,17 +317,17 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
       webPasswordVerifier.addEventListener({
          "onBeforeSave" : function()
             {
-            dialogManager.showNonClosableWaitDialog("Please wait while the web control panel password is being saved.");
+            nonClosableWaitDialog.show();
             },
          "onSaveSuccess" : function()
             {
-            dialogManager.hideNonClosableWaitDialog();
-            webPasswordOkDialog.show()
+            nonClosableWaitDialog.hide();
+            webPasswordOkDialog.show();
             },
          "onSaveFailure" : function()
             {
-            dialogManager.hideNonClosableWaitDialog();
-            dialogManager.showOKDialog("Sorry, an error occurred while saving the web control panel password.  Please try again.");
+            nonClosableWaitDialog.hide();
+            errorOccurredDialog.show();
             }
       });
 
@@ -317,7 +340,7 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
             function()
                {
                var urlAndData = {
-                  url: host + '/cgi-bin/setHttpBasicAuthPassword.pl',
+                  url: host + '/cgi-bin/setRootPassword.pl',
                   data: "newPassword=" + jQuery("#passwordsNewRootUserPassword").val()
                };
 
@@ -333,17 +356,16 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
       rootPasswordVerifier.addEventListener({
          "onBeforeSave" : function()
             {
-            dialogManager.showNonClosableWaitDialog("Please wait while the root user password is being saved.");
+            nonClosableWaitDialog.show();
             },
          "onSaveSuccess" : function()
             {
-            dialogManager.hideNonClosableWaitDialog();
-            dialogManager.showOKDialog("The new root password was saved successfully.");
+            nonClosableWaitDialog.hide();
             },
          "onSaveFailure" : function()
             {
-            dialogManager.hideNonClosableWaitDialog();
-            dialogManager.showOKDialog("Sorry, an error occurred while saving the root user password.  Please try again.");
+            nonClosableWaitDialog.hide();
+            errorOccurredDialog.show();
             }
       });
 

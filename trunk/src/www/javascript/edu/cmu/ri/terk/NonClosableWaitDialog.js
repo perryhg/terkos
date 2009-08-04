@@ -1,5 +1,5 @@
 //======================================================================================================================
-// Class for managing common dialogs.
+// Class for a button-less modal dialog with a spinning wait icon.
 //
 // Dependencies:
 // * jQuery (http://jquery.com/)
@@ -67,7 +67,7 @@ else if (typeof edu.cmu.ri.terk != "object")
 //======================================================================================================================
 if (!window['$'])
    {
-   var noJQuery = "The jQuery library is required by edu.cmu.ri.terk.DialogManager.js";
+   var noJQuery = "The jQuery library is required by edu.cmu.ri.terk.NonClosableWaitDialog.js";
    alert(noJQuery);
    throw new Error(noJQuery);
    }
@@ -81,68 +81,74 @@ if (!window['$'])
    // ==================================================================================================================
    var jQuery = window['$'];
 
-   edu.cmu.ri.terk.DialogManager = function(
-         nonClosableWaitDialog,
-         nonClosableWaitDialogMessageId,
-         okDialogId,
-         okDialogMessageId,
-         okDialogOkButtonId)
+   edu.cmu.ri.terk.NonClosableWaitDialog = function(title, message)
       {
-      jQuery("#" + okDialogId).dialog({
-         bgiframe: true,
-         autoOpen: false,
-         modal: true,
-         draggable: false,
-         resizable: false});
+      var eventListeners = new Array();
+      var dialog = jQuery('<div></div>');
+      var dialogMessage = jQuery('<table border="0" cellpadding="0" cellspacing="0">' +
+                                 '   <tr valign="middle">' +
+                                 '      <td><img src="images/ajax-loader.gif" width="16" height="16" alt=""></td>' +
+                                 '      <td>&nbsp;&nbsp;&nbsp;</td>' +
+                                 '      <td>' + message + '</td>' +
+                                 '   </tr>' +
+                                 '</table>');
 
-      jQuery("#" + okDialogOkButtonId).click(function()
-         {
-         jQuery("#" + okDialogId).dialog('close');
-         });
+      jQuery(dialog).append(dialogMessage);
 
-      jQuery("#" + nonClosableWaitDialog).dialog({
+      jQuery(dialog)['dialog']({
          bgiframe: true,
          autoOpen: false,
          modal: true,
          draggable: false,
          resizable: false,
          closeOnEscape : false,
-         title : 'Saving Preferences',
+         title : title,
          dialogClass: 'non_closable_alert'});
 
-      var showDialog = function(dialogId, dialogMessageId, message)
+      this.show = function()
          {
-         jQuery("#" + dialogMessageId).html(message);
+         notifyEventListeners('onBeforeShow');
 
          // Show the dialog and set the min-height.  I don't know why, but I *had* to set the min-height
          // here...setting it in the HTML or on load didn't work--it kept getting overwritten to
          // something like 112 or 114 pixels.
-         jQuery("#" + dialogId).dialog('open').css('min-height', '1px');
+         jQuery(dialog)['dialog']('open').css('min-height', '1px');
+
+         notifyEventListeners('onAfterShow');
          };
 
-      var hideDialog = function(dialogId)
+      this.hide = function()
          {
-         jQuery("#" + dialogId).dialog('close');
+         notifyEventListeners('onBeforeHide');
+         jQuery(dialog)['dialog']('close');
+         notifyEventListeners('onAfterHide');
          };
 
-      this.showOKDialog = function(message)
+      /**
+       * Registers the given event listener.  The event listener should implement some or all of the following methods:
+       *
+       *    onBeforeShow()
+       *    onAfterShow()
+       *    onBeforeHide()
+       *    onAfterHide()
+       */
+      this.addEventListener = function(listener)
          {
-         showDialog(okDialogId, okDialogMessageId, message);
+         if (listener)
+            {
+            eventListeners[eventListeners.length] = listener;
+            }
          };
 
-      this.hideOKDialog = function()
+      var notifyEventListeners = function(eventName)
          {
-         hideDialog(okDialogId);
-         };
-
-      this.showNonClosableWaitDialog = function(message)
-         {
-         showDialog(nonClosableWaitDialog, nonClosableWaitDialogMessageId, message);
-         };
-
-      this.hideNonClosableWaitDialog = function()
-         {
-         hideDialog(nonClosableWaitDialog);
+         jQuery.each(eventListeners, function(i, listener)
+            {
+            if (listener && listener[eventName])
+               {
+               listener[eventName]();
+               }
+            });
          };
 
       // ---------------------------------------------------------------------------------------------------------------
