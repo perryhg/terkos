@@ -215,7 +215,7 @@ dist:
 	@echo 'Finished copying executables'
 	@echo ' '
 	@echo 'Copying resources to $(DIST_DIR)...'
-	cp $(RESOURCES_DIR)/menu.xml $(DIST_DIR)/.
+	cp $(RESOURCES_DIR)/lcd_menu.xml $(DIST_DIR)/.
 	@echo 'Finished copying resources'
 	@echo ' '
 
