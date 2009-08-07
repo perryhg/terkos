@@ -17,8 +17,14 @@ using namespace std;
 
 int main(int argc, char** argv)
    {
-   // TODO: define this somewhere else
-   string xmlFilename = "menu.xml";
+   string xmlFilename = "/opt/config/lcd_menu.xml";
+
+   // let the user override the location of the XML file by supplying a command-line argument
+   if (argc == 3 && strcmp(argv[1], "--xml") == 0)
+      {
+      xmlFilename = argv[2];
+      }
+   std::cout << "XML filename = [" << xmlFilename << "]" << std::endl;
 
    std::cout << "Creating CharacterDisplay" << std::endl;
    CharacterDisplay* lcdPanel = new LCDCharacterDisplay(2, 16);
