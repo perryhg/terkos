@@ -10,6 +10,7 @@ DIST_DIR=dist
 LIBRARY_NAME=libConfigurationManagement.so
 AUDIO_CONFIG_TOOL_NAME=AudioConfigTool
 POWER_INFO_TOOL_NAME=PowerInfoTool
+USER_PROGRAMS_CONFIG_TOOL=UserProgramsConfigTool
 VERSION_INFO_TOOL_NAME=VersionInfoTool
 WIRELESS_NETWORKING_CONFIG_TOOL_NAME=WirelessNetworkingConfigTool
 
@@ -60,6 +61,7 @@ default: all
 build: $(LIBRARY_NAME) \
        $(AUDIO_CONFIG_TOOL_NAME) \
        $(POWER_INFO_TOOL_NAME) \
+       $(USER_PROGRAMS_CONFIG_TOOL) \
        $(VERSION_INFO_TOOL_NAME) \
        $(WIRELESS_NETWORKING_CONFIG_TOOL_NAME)
 
@@ -95,6 +97,14 @@ $(AUDIO_CONFIG_TOOL_NAME): $(LIBRARY_NAME) $(EXE_DIR) $(EXE_OBJECTS)
 #-----------------------------------------------------------------------------------------------------------------------
 
 $(POWER_INFO_TOOL_NAME): $(LIBRARY_NAME) $(EXE_DIR) $(EXE_OBJECTS)
+	@echo 'Building target: $@'
+	$(CXX) -o $(EXE_DIR)/$@ $(EXE_OBJ_DIR)/$@.o $(LDFLAGS) -lConfigurationManagement
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+$(USER_PROGRAMS_CONFIG_TOOL): $(LIBRARY_NAME) $(EXE_DIR) $(EXE_OBJECTS)
 	@echo 'Building target: $@'
 	$(CXX) -o $(EXE_DIR)/$@ $(EXE_OBJ_DIR)/$@.o $(LDFLAGS) -lConfigurationManagement
 	@echo 'Finished building target: $@'

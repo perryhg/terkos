@@ -1,0 +1,7 @@
+{
+   "user-programs" :
+   {
+      "program-to-run-on-bootup" : "",
+      "programs" : []
+   }
+}
