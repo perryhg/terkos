@@ -2,7 +2,6 @@
 
 require "/opt/scripts/pathUtils.pl";
 require "/opt/scripts/httpUtils.pl";
-require "/opt/scripts/jsonUtils.pl";
 
 # make sure the LD_LIBRARY_PATH is set correctly since we're calling one of our C++ apps
 if (&isHttpRequest())
@@ -12,13 +11,18 @@ if (&isHttpRequest())
 
 # get the JSON
 my $programPath = &getPath('UserProgramsConfigTool');
-open(JSON_OUTPUT,"$programPath --json |") or die "Failed to call $programPath $!\n";
+open(PROGRAM_OUTPUT,"$programPath --program |") or die "Failed to call $programPath $!\n";
 
 # read the output into a string
-my $json = join("", <JSON_OUTPUT>);
+my $pathToProgram = join("", <PROGRAM_OUTPUT>);
+chomp $pathToProgram;
 
 # close the filehandle
-close(JSON_OUTPUT);
+close(PROGRAM_OUTPUT);
 
-# write out the JSON
-outputJson($json);
+# exec the program
+if ($pathToProgram)
+   {
+   print "About to call [$pathToProgram]...\n";
+   exec($pathToProgram);
+   }
