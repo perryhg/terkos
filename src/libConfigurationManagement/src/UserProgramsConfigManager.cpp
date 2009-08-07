@@ -4,7 +4,7 @@
 
 #include "UserProgramsConfigManager.h"
 
-const string UserProgramsConfigManager::USER_PROGRAMS_DIRECTORY_PATH = "/opt/usr/bin";
+const string UserProgramsConfigManager::USER_PROGRAMS_DIRECTORY_PATH = "/opt/usr/bin/";
 const string UserProgramsConfigManager::EMPTY_PROGRAM_NAME = "";
 
 const string UserProgramsConfigManager::CONFIG_FILENAME = "user_programs_config.json";
@@ -38,6 +38,18 @@ bool UserProgramsConfigManager::setProgramToRunOnBoot(const string programName)
       {
       return setStringValue(PROGRAM_TO_RUN_ON_BOOTUP_PROPERTY, EMPTY_PROGRAM_NAME);
       }
+   }
+
+const string UserProgramsConfigManager::getAbsolutePathToProgramToRunOnBoot()
+   {
+   string programName = getProgramToRunOnBoot();
+
+   if (!programName.empty())
+      {
+      return USER_PROGRAMS_DIRECTORY_PATH + programName;
+      }
+
+   return EMPTY_PROGRAM_NAME;
    }
 
 vector<string> UserProgramsConfigManager::getUserProgramNames() const

@@ -1,6 +1,6 @@
 #!/bin/sh
-DAEMON=/opt/bin/UserProgramLauncher
-NAME=UserProgramLauncher
+DAEMON=/opt/scripts/userProgramLauncher.pl
+NAME=userProgramLauncher.pl
 DESC="TerkOS User Program Launcher"
 ARGS=""
 

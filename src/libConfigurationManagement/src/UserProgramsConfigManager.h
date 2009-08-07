@@ -52,6 +52,12 @@ class UserProgramsConfigManager : public ConfigFile
       bool setProgramToRunOnBoot(const string programName);
 
       /**
+       * If there is a program specified to run on boot, this method returns the absolute path
+       * to it.  Otherwise, this method returns EMPTY_PROGRAM_NAME.
+       */
+      const string getAbsolutePathToProgramToRunOnBoot();
+
+      /**
        * Returns a vector containing the names of the programs in the user programs directory.
        */
       vector<string> getUserProgramNames() const;
