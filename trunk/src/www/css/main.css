@@ -31,6 +31,10 @@ span.ui-icon {
    float: left;
 }
 
+.default-widget-width {
+   width: 302px;
+}
+
 .divider {
    border-width: 1px 0 0 0;
    margin: 5px 0 5px 0

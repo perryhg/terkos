@@ -162,6 +162,42 @@ const bool ConfigFile::setBooleanValue(const string& propertyName, const bool va
    return false;
    }
 
+const string ConfigFile::getStringValue(const string& propertyName, const string defaultValue, const char chainedPropertyNameDelimiter) const
+   {
+   Json::Value root;
+   if (load(root))
+      {
+      Json::Value* property = findProperty(root, propertyName, chainedPropertyNameDelimiter);
+      if (property != NULL)
+         {
+         return property->asString();
+         }
+      }
+   return defaultValue;
+   }
+
+const bool ConfigFile::setStringValue(const string& propertyName, const string value, const char chainedPropertyNameDelimiter)
+   {
+   Json::Value root;
+   if (load(root))
+      {
+      try
+         {
+         Json::Value* property = findProperty(root, propertyName, chainedPropertyNameDelimiter);
+         if (property != NULL)
+            {
+            (*property) = (string) value;
+            return save(root);
+            }
+         }
+      catch (...)
+         {
+         cerr << "ConfigFile::setStringValue(): failed to set property [" << propertyName << "] to value [" << value << "]!" << endl;
+         }
+      }
+   return false;
+   }
+
 const unsigned int ConfigFile::getIndexedUnsignedIntValue(const string& propertyName, const unsigned int index, const unsigned int defaultValue, const char chainedPropertyNameDelimiter) const
    {
    Json::Value root;

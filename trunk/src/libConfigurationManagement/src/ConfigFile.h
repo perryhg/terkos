@@ -57,6 +57,9 @@ class ConfigFile
       const bool getBooleanValue(const string& propertyName, const bool defaultValue = false, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER) const;
       const bool setBooleanValue(const string& propertyName, const bool value, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER);
 
+      const string getStringValue(const string& propertyName, const string defaultValue = "", const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER) const;
+      const bool setStringValue(const string& propertyName, const string value, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER);
+
       const unsigned int getIndexedUnsignedIntValue(const string& propertyName, const unsigned int index, const unsigned int defaultValue = 0, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER) const;
       const bool setIndexedUnsignedIntValue(const string& propertyName, const unsigned int index, const unsigned int value, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER);
 

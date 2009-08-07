@@ -22,10 +22,12 @@
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkingConfigManager.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkScanner.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkingTab.js"></script>
+   <script type="text/javascript" src="javascript/edu/cmu/ri/terk/UserProgramsConfigManager.js"></script>
+   <script type="text/javascript" src="javascript/edu/cmu/ri/terk/UserProgramsTab.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/PasswordsTab.js"></script>
    <script type="text/javascript">
       var tabSelectionHandlers = new Array();
-      var host = "";//http://192.168.4.9";
+      var host = "";//http://192.168.4.15";
 
       $(function()
          {
@@ -49,6 +51,7 @@
                "availableWirelessNetworksList",
                "availableWirelessNetworksPleaseWaitIndicator",
                host);
+         var userProgramsConfigManager = new edu.cmu.ri.terk.UserProgramsConfigManager(host);
 
          // create instances of the tabs (which also initializes them)
          var systemInfoTab = new edu.cmu.ri.terk.SystemInfoTab(
@@ -62,6 +65,7 @@
                wirelessNetworkScanner,
                wirelessNetworkingStatus,
                host);
+         var userProgramsTab = new edu.cmu.ri.terk.UserProgramsTab(userProgramsConfigManager);
          var passwordsTab = new edu.cmu.ri.terk.PasswordsTab(host);
 
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
@@ -78,6 +82,7 @@
             };
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
+            userProgramsTab.activate();
             };
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
@@ -151,7 +156,7 @@
       <li><a href="#System_Info" title="System Info">System Info</a></li>
       <li><a href="#Audio" title="Audio">Audio</a></li>
       <li><a href="#Wireless_Networking" title="Wireless Networking">Wireless Networking</a></li>
-      <li><a href="#Programs" title="Programs">Programs</a></li>
+      <li><a href="#User_Programs" title="User Programs">User Programs</a></li>
       <li><a href="#Logging" title="Logging">Logging</a></li>
       <li><a href="#Passwords" title="Passwords">Passwords</a></li>
       <li><a href="#Factory_Reset" title="Factory Reset">Factory Reset</a></li>
@@ -395,8 +400,23 @@
       </div>
    </div>
    <!-- ============================================================================================================ -->
-   <div id="Programs">
-      <p>Programs</p>
+   <div id="User_Programs">
+      <form method="post" onsubmit="return false;">
+         <div class="section">
+            <div class="section-title">Preferences</div>
+            <div class="indented">
+               <div id="userProgramConfigurationMessageArea">&nbsp;</div>
+               <div id="userProgramConfigurationArea" style="display:none">
+                  Program to run on boot:<br>
+                  <select id="userProgramName" class="default-widget-width"></select>
+                  <div class="blank-line"></div>
+                  <div class="button-container">
+                     <button type="button" style="float:right;margin-right:0;" id="saveUserProgramConfigButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Save</button>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </form>
    </div>
    <!-- ============================================================================================================ -->
    <div id="Logging">
