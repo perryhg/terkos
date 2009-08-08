@@ -14,8 +14,6 @@ sub saveJSON()
 
    if (&isHttpRequest())
       {
-      &setUpLdLibraryPath();
-
       # parse HTTP request params
       my %arguments = &parseHttpRequestParameters();
 
