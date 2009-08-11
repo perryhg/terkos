@@ -133,7 +133,7 @@ if (!window['$'])
             var breakers = powerInfoManager.getBreakersState();
             jQuery.each(breakers, function(i, breakerState)
                {
-               var value = breakerState ? '<span class="status-ok">OK</span>' : '<span class="status-fault">Fault</span>';
+               var value = breakerState ? '<span class="status-fault">Fault</span>' : '<span class="status-ok">OK</span>';
                var labelCell = jQuery('<td class="data-column-label dynamically-generated">' + (i + 1) + '</td>');
                jQuery("#powerInfoBreakersTableHeadingRow").append(labelCell);
                var dataCell = jQuery('<td class="data-cell dynamically-generated">' + value + '</td>');
