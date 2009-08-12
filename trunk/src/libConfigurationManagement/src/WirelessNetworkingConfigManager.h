@@ -7,6 +7,9 @@
 
 #include <algorithm>
 #include <json/json.h>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include "ConfigFile.h"
 
 using namespace std;
@@ -26,6 +29,8 @@ class WirelessNetworkingConfigManager : public ConfigFile
          // nothing to do
          }
 
+      virtual void revertToDefault();
+
       const bool willStartOnBootup() const;
 
       bool setWillStartOnBootup(const bool willStart);
@@ -36,6 +41,15 @@ class WirelessNetworkingConfigManager : public ConfigFile
 
       static const string CONFIG_FILENAME;
       static const string DEFAULT_CONFIG_FILENAME;
+
+      static const string NETWORK_INTERFACES_CONF_PATH;
+      static const string DEFAULT_NETWORK_INTERFACES_CONF_PATH;
+      static const string WPA_SUPPLICANT_CONF_PATH;
+      static const string DEFAULT_WPA_SUPPLICANT_CONF_PATH;
+
+      static const string BEGIN_WLAN0_AUTOSTART;
+      static const string END_WLAN0_AUTOSTART;
+
       static const string WILL_START_ON_BOOTUP_PROPERTY;
       static const string PROFILES_PROPERTY;
       static const string SSID_PROPERTY;
@@ -43,6 +57,7 @@ class WirelessNetworkingConfigManager : public ConfigFile
 
       bool addNetworkProfile(const string& ssid);
 
+      void copyFile(const string& source, const string& destination);
    };
 
 #endif /* WIRELESSNETWORKINGCONFIGMANAGER_H_ */

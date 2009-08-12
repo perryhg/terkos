@@ -44,7 +44,7 @@ class ConfigFile
          // nothing to do
          }
 
-      void revertToDefault();
+      virtual void revertToDefault();
 
    protected:
 
