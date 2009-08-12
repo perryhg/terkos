@@ -1,4 +1,6 @@
 {
-   "will-start-on-bootup" : true,
-   "profiles" : []
+   "wireless-networking" :  {
+      "will-start-on-bootup" : true,
+      "profiles" : []
+   }
 }

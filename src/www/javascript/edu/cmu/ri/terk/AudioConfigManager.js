@@ -234,26 +234,54 @@ if (!JSON)
             }
          };
 
+      var getJSONProperty = function(jsonRoot, propertyPath)
+         {
+         if (jsonRoot)
+            {
+            if (propertyPath)
+               {
+               var propertyNames = propertyPath.split('.');
+               for (var i = 0; i < propertyNames.length; i++)
+                  {
+                  var propertyName = propertyNames[i];
+                  if (typeof jsonRoot[propertyName] == 'undefined')
+                     {
+                     return null;
+                     }
+                  else
+                     {
+                     jsonRoot = jsonRoot[propertyName];
+                     }
+                  }
+               return jsonRoot;
+               }
+
+            return jsonRoot;
+            }
+
+         return null;
+         };
+
       this.setAudioAlertsEnabled = function(isEnabled)
          {
-         json['alerts']['enabled'] = isEnabled;
+         json['audio']['alerts']['enabled'] = isEnabled;
          notifyChangeListeners();
          };
 
       this.setVolume = function(volume)
          {
-         json['volume']['level'] = volume;
+         json['audio']['volume']['level'] = volume;
          notifyChangeListeners();
          };
 
       this.isAudioAlertsEnabled = function()
          {
-         return json['alerts']['enabled'];
+         return getJSONProperty(json, "audio.alerts.enabled");
          };
 
       this.getVolume = function()
          {
-         return json['volume']['level'];
+         return getJSONProperty(json, "audio.volume.level");
          };
       // ---------------------------------------------------------------------------------------------------------------
       };
