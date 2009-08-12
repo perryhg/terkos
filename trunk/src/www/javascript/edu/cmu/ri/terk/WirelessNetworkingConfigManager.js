@@ -132,7 +132,7 @@ if (!JSON)
       var rebuildProfiles = function()
          {
          // wipe the current profile ordering from the JSON
-         json['profiles'] = new Array();
+         json['wireless-networking']['profiles'] = new Array();
 
          // fetch the new ordering
          var desiredProfileOrdering = jQuery('#' + wirelessNetworksListId).sortable("toArray");
@@ -141,7 +141,7 @@ if (!JSON)
          for (var i = 0; i < desiredProfileOrdering.length; i++)
             {
             var uuid = desiredProfileOrdering[i];
-            json['profiles'][json['profiles'].length] = profilesMap[uuid];
+            json['wireless-networking']['profiles'][json['wireless-networking']['profiles'].length] = profilesMap[uuid];
             }
 
          notifyChangeListeners();
@@ -312,10 +312,10 @@ if (!JSON)
          if (json)
             {
             jQuery("#" + wirelessNetworkingConfigurationMessageAreaId).empty();
-            jQuery("#" + willStartWirelessNetworkingOnBootupCheckboxId).attr('checked', json["will-start-on-bootup"]);
-            if (json['profiles'])
+            jQuery("#" + willStartWirelessNetworkingOnBootupCheckboxId).attr('checked', json['wireless-networking']['will-start-on-bootup']);
+            if (json['wireless-networking']['profiles'])
                {
-               jQuery.each(json['profiles'], function(i, networkProfile)
+               jQuery.each(json['wireless-networking']['profiles'], function(i, networkProfile)
                   {
                   addNetworkProfile(networkProfile);
                   });
@@ -427,7 +427,7 @@ if (!JSON)
 
       this.setWillStartOnBootup = function(willStartOnBootup)
          {
-         json["will-start-on-bootup"] = willStartOnBootup;
+         json['wireless-networking']['will-start-on-bootup'] = willStartOnBootup;
          notifyChangeListeners();
          };
 

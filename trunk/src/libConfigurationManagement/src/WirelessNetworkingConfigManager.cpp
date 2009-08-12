@@ -6,8 +6,8 @@
 
 const string WirelessNetworkingConfigManager::CONFIG_FILENAME = "wireless_networking_config.json";
 const string WirelessNetworkingConfigManager::DEFAULT_CONFIG_FILENAME = "wireless_networking_config.default.json";
-const string WirelessNetworkingConfigManager::WILL_START_ON_BOOTUP_PROPERTY = "will-start-on-bootup";
-const string WirelessNetworkingConfigManager::PROFILES_PROPERTY = "profiles";
+const string WirelessNetworkingConfigManager::WILL_START_ON_BOOTUP_PROPERTY = "wireless-networking.will-start-on-bootup";
+const string WirelessNetworkingConfigManager::PROFILES_PROPERTY = "wireless-networking.profiles";
 const string WirelessNetworkingConfigManager::SSID_PROPERTY = "ssid";
 const string WirelessNetworkingConfigManager::IS_ENCRYPTED_PROPERTY = "is-encrypted";
 

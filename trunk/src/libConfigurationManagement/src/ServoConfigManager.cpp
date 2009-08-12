@@ -13,9 +13,9 @@ const unsigned int ServoConfigManager::DEFAULT_INITIAL_POSITION = 127;
 
 const string ServoConfigManager::CONFIG_FILENAME = "servo_config.json";
 const string ServoConfigManager::DEFAULT_CONFIG_FILENAME = "servo_config.default.json";
-const string ServoConfigManager::BOUNDS_MINIMUMS_PROPERTY = "bounds.minimums";
-const string ServoConfigManager::BOUNDS_MAXIMUMS_PROPERTY = "bounds.maximums";
-const string ServoConfigManager::INITIAL_POSITIONS_PROPERTY = "initial-positions";
+const string ServoConfigManager::BOUNDS_MINIMUMS_PROPERTY = "servos.bounds.minimums";
+const string ServoConfigManager::BOUNDS_MAXIMUMS_PROPERTY = "servos.bounds.maximums";
+const string ServoConfigManager::INITIAL_POSITIONS_PROPERTY = "servos.initial-positions";
 
 // TODO: add error logging to these methods once we have a real logging framework
 
