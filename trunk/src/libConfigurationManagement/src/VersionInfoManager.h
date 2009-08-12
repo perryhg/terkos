@@ -7,9 +7,11 @@
 
 #include <string.h>
 #include <json/json.h>
+#include "ConfigFile.h"
 #include <pstream.h>
 #include "qwerkhw.h"
 #include "StringUtilities.h"
+#include "FirmwareVersionManager.h"
 
 using namespace std;
 using namespace redi;
@@ -20,6 +22,7 @@ class VersionInfoManager
 
       VersionInfoManager()
          {
+         // get the hardware version
          long val = 0;
          if (hardware.GetProperty(QHW_PROP_HARDWARE_VERSION, &val) == PROP_OK)
             {
@@ -29,8 +32,6 @@ class VersionInfoManager
             {
             hardwareVersion = UNKNOWN_VALUE;
             }
-
-         firmwareVersion = "1.0.0"; // TODO: get this version number from the proper place
 
          // call uname to get system info
          ipstream uname1("/bin/uname -s");
@@ -72,6 +73,10 @@ class VersionInfoManager
 
       const string getHardwareVersion() const;
       const string getFirmwareVersion() const;
+      const string getFirmwareMajorVersion() const;
+      const string getFirmwareMinorVersion() const;
+      const string getFirmwareRevision() const;
+      const string getFirmwareTimestamp() const;
 
       const string getOperatingSystemName() const;
       const string getOperatingSystemVersion() const;
@@ -84,12 +89,14 @@ class VersionInfoManager
 
    private:
 
+      static const string FIRMWARE_CONFIG_FILENAME;
+
       static const string UNKNOWN_VALUE;
 
       CQwerkHardware hardware;
 
       string hardwareVersion;
-      string firmwareVersion;
+      FirmwareVersionManager firmwareVersionManager;
 
       string unameOperatingSystemName;
       string unameHostname;

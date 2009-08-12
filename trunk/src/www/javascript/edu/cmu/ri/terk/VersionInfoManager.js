@@ -177,7 +177,23 @@ if (!window['$'])
 
       this.getFirmwareVersion = function()
          {
-         return getJSONProperty(json, 'version-info.firmware');
+         var firmware = getJSONProperty(json, 'version-info.firmware.version');
+         if (firmware)
+            {
+            var firmwareCopy = {
+               'major' : firmware['major'],
+               'minor' : firmware['minor'],
+               'revision' : firmware['revision']
+            };
+
+            return firmwareCopy;
+            }
+         return null;
+         };
+
+      this.getFirmwareTimestamp = function()
+         {
+         return getJSONProperty(json, 'version-info.firmware.timestamp');
          };
 
       this.getHardwareVersion = function()
@@ -191,7 +207,7 @@ if (!window['$'])
          if (os)
             {
             var osInfo = {
-               "hostname" : os['hostname'],
+               'hostname' : os['hostname'],
                'machine-type' : os['machine-type'],
                'name' : os['name'],
                'processor-type' : os['processor-type'],

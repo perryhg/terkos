@@ -13,7 +13,27 @@ const string VersionInfoManager::getHardwareVersion() const
 
 const string VersionInfoManager::getFirmwareVersion() const
    {
-   return firmwareVersion;
+   return firmwareVersionManager.getVersion();
+   }
+
+const string VersionInfoManager::getFirmwareMajorVersion() const
+   {
+   return firmwareVersionManager.getMajorVersion();
+   }
+
+const string VersionInfoManager::getFirmwareMinorVersion() const
+   {
+   return firmwareVersionManager.getMinorVersion();
+   }
+
+const string VersionInfoManager::getFirmwareRevision() const
+   {
+   return firmwareVersionManager.getRevision();
+   }
+
+const string VersionInfoManager::getFirmwareTimestamp() const
+   {
+   return firmwareVersionManager.getTimestamp();
    }
 
 const string VersionInfoManager::getOperatingSystemName() const
@@ -58,7 +78,9 @@ Json::Value VersionInfoManager::getJSON()
 
    Json::Value systemInfoElement;
    systemInfoElement["hardware"] = getHardwareVersion();
-   systemInfoElement["firmware"] = getFirmwareVersion();
+
+   Json::Value firmwareElement = firmwareVersionManager.getJSON();
+   systemInfoElement["firmware"] = firmwareElement["firmware"];
    systemInfoElement["operating-system"] = operatingSystemElement;
 
    Json::Value rootElement;
