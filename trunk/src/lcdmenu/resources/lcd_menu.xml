@@ -82,6 +82,7 @@
          </item>
       </item>
    </item>
+   <!--
    <item text="Servos">
       <item text="View/Edit     Servo Configs">
          <item text="">
@@ -100,6 +101,7 @@
          </item>
       </item>
    </item>
+   -->
    <item text="Factory Reset">
       <item text="Reset Audio">
          <item text="">
@@ -112,6 +114,7 @@
             </implementation-class>
          </item>
       </item>
+      <!--
       <item text="Reset Motors">
          <item text="">
             <implementation-class name="ResetMotorsMenuItemAction">
@@ -123,6 +126,7 @@
             </implementation-class>
          </item>
       </item>
+      -->
       <item text="Reset Network">
          <item text="">
             <implementation-class name="ResetNetworkMenuItemAction">
@@ -134,6 +138,7 @@
             </implementation-class>
          </item>
       </item>
+      <!--
       <item text="Reset Servos">
          <item text="">
             <implementation-class name="ResetServosMenuItemAction" library="libServoMenuItemActions.so">
@@ -145,6 +150,7 @@
             </implementation-class>
          </item>
       </item>
+      -->
       <item text="Reset All">
          <item text="">
             <implementation-class name="ResetAllMenuItemAction">
