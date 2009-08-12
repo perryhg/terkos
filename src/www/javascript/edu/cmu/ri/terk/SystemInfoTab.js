@@ -96,7 +96,16 @@ if (!window['$'])
             {
             isVersionInfoLoaded = true;
             jQuery("#versionInfoHardwareVersion").text(versionInfoManager.getHardwareVersion());
-            jQuery("#versionInfoFirmwareVersion").text(versionInfoManager.getFirmwareVersion());
+
+               var firmwareVersion = versionInfoManager.getFirmwareVersion();
+            jQuery("#versionInfoFirmwareVersion").text(firmwareVersion['major'] +
+                                                       "." +
+                                                       firmwareVersion['minor'] +
+                                                       "." +
+                                                       firmwareVersion['revision'] +
+                                                       " (" +
+                                                       versionInfoManager.getFirmwareTimestamp() +
+                                                       ")");
 
             var osInfo = versionInfoManager.getOperatingSystemInfo();
             jQuery("#versionInfoOperatingSystem").text(osInfo['name'] + " " + osInfo['release'] + " (" + osInfo['version'] + " " + osInfo['machine-type'] + " " + osInfo['processor-type'] + ")");
