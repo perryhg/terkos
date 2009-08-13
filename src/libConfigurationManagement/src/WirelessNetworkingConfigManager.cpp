@@ -20,16 +20,18 @@ const string WirelessNetworkingConfigManager::PROFILES_PROPERTY = "wireless-netw
 const string WirelessNetworkingConfigManager::SSID_PROPERTY = "ssid";
 const string WirelessNetworkingConfigManager::IS_ENCRYPTED_PROPERTY = "is-encrypted";
 
-void WirelessNetworkingConfigManager::revertToDefault()
+const bool WirelessNetworkingConfigManager::revertToDefault()
    {
    // call superclass version to revert the JSON
-   ConfigFile::revertToDefault();
+   bool success = ConfigFile::revertToDefault();
 
    // revert wpa_supplicant.conf
    copyFile(DEFAULT_WPA_SUPPLICANT_CONF_PATH, WPA_SUPPLICANT_CONF_PATH);
 
    // revert interfaces
    copyFile(DEFAULT_NETWORK_INTERFACES_CONF_PATH, NETWORK_INTERFACES_CONF_PATH);
+
+   return success;
    }
 
 void WirelessNetworkingConfigManager::copyFile(const string& source, const string& destination)

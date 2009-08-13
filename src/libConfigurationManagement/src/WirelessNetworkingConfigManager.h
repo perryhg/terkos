@@ -30,7 +30,7 @@ class WirelessNetworkingConfigManager : public ConfigFile
          // nothing to do
          }
 
-      virtual void revertToDefault();
+      virtual const bool revertToDefault();
 
       const bool willStartOnBootup() const;
 

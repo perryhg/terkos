@@ -44,7 +44,7 @@ Json::Value* ConfigFile::findProperty(Json::Value& root, const string& propertyN
    return NULL;
    }
 
-void ConfigFile::revertToDefault()
+const bool ConfigFile::revertToDefault()
    {
    // TODO: This method needs better error handling
 
@@ -58,17 +58,22 @@ void ConfigFile::revertToDefault()
          if (!save(config))
             {
             cerr << "ConfigFile::revertToDefault(): failed to save the config file [" << configFilename << "]!" << endl;
+            return false;
             }
          }
       else
          {
          cerr << "ConfigFile::revertToDefault(): failed to load the default config file [" << defaultConfigFilename << "]!" << endl;
+         return false;
          }
       }
    catch (...)
       {
       cerr << "ConfigFile::revertToDefault(): failed to revert to defaults!" << endl;
+      return false;
       }
+
+   return true;
    }
 
 const unsigned int ConfigFile::getUnsignedIntValue(const string& propertyName, const unsigned int defaultValue, const char chainedPropertyNameDelimiter) const

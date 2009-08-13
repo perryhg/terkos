@@ -44,7 +44,7 @@ class ConfigFile
          // nothing to do
          }
 
-      virtual void revertToDefault();
+      virtual const bool revertToDefault();
 
    protected:
 

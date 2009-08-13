@@ -12,6 +12,7 @@ AUDIO_CONFIG_TOOL_NAME=AudioConfigTool
 POWER_INFO_TOOL_NAME=PowerInfoTool
 USER_PROGRAMS_CONFIG_TOOL=UserProgramsConfigTool
 VERSION_INFO_TOOL_NAME=VersionInfoTool
+WEB_CONTROL_PANEL_PASSWORD_TOOL=WebControlPanelPasswordTool
 WIRELESS_NETWORKING_CONFIG_TOOL_NAME=WirelessNetworkingConfigTool
 
 LIB_JSONCPP_DIR=../jsoncpp
@@ -63,6 +64,7 @@ build: $(LIBRARY_NAME) \
        $(POWER_INFO_TOOL_NAME) \
        $(USER_PROGRAMS_CONFIG_TOOL) \
        $(VERSION_INFO_TOOL_NAME) \
+       $(WEB_CONTROL_PANEL_PASSWORD_TOOL) \
        $(WIRELESS_NETWORKING_CONFIG_TOOL_NAME)
 
 all: build dist
@@ -113,6 +115,14 @@ $(USER_PROGRAMS_CONFIG_TOOL): $(LIBRARY_NAME) $(EXE_DIR) $(EXE_OBJECTS)
 #-----------------------------------------------------------------------------------------------------------------------
 
 $(VERSION_INFO_TOOL_NAME): $(LIBRARY_NAME) $(EXE_DIR) $(EXE_OBJECTS)
+	@echo 'Building target: $@'
+	$(CXX) -o $(EXE_DIR)/$@ $(EXE_OBJ_DIR)/$@.o $(LDFLAGS) -lConfigurationManagement
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+$(WEB_CONTROL_PANEL_PASSWORD_TOOL): $(LIBRARY_NAME) $(EXE_DIR) $(EXE_OBJECTS)
 	@echo 'Building target: $@'
 	$(CXX) -o $(EXE_DIR)/$@ $(EXE_OBJ_DIR)/$@.o $(LDFLAGS) -lConfigurationManagement
 	@echo 'Finished building target: $@'
