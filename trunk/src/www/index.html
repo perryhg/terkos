@@ -27,7 +27,7 @@
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/PasswordsTab.js"></script>
    <script type="text/javascript">
       var tabSelectionHandlers = new Array();
-      var host = "";//http://192.168.1.4";
+      var host = "";
 
       $(function()
          {
@@ -351,7 +351,7 @@
          <form id="formToEnterPreferredWirelessNetworkInfo" method="post">
             <p>
                Enter the name of the network you want to add. You can also click
-               Show Networks to choose from a list of available networks.
+               Scan to scan for and then choose from a list of available networks.
             </p>
             <label for="wirelessNetworkName_add">Network Name</label>
             <input type="text" name="wirelessNetworkName_add" id="wirelessNetworkName_add" class="text ui-widget-content ui-corner-all"/>
@@ -359,7 +359,7 @@
             <div id="addManuallyEnteredPreferredWirelessNetworkDialogButtonsContainer">
                <button type="button" style="float:right" id="addManuallyEnteredWirelessNetworkDialogButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Add</button>
                <button type="button" style="float:right" class="ui-state-default ui-corner-all button text-button cancel-preferred-wireless-network-dialog-button state-has-no-dependency">Cancel</button>
-               <button type="button" id="showAvailableWirelessNetworksButton" class="ui-state-default ui-corner-all button text-button state-has-no-dependency">Show Networks</button>
+               <button type="button" id="showAvailableWirelessNetworksButton" class="ui-state-default ui-corner-all button text-button state-has-no-dependency">Scan</button>
             </div>
          </form>
          <div id="formToChooseFromAvailableWirelessNetworks" style="display:none">
@@ -482,7 +482,24 @@
    </div>
    <!-- ============================================================================================================ -->
    <div id="Factory_Reset">
-      <p>Factory Reset</p>
+      <form method="post" onsubmit="return false;">
+         <div class="section">
+            <div class="section-title">Reset Preferences</div>
+            <div class="indented">
+               <input id="willResetAll" name="willResetAll" type="checkbox"/><label for="willResetAll">All of the following:</label>
+               <div class="indented">
+                  <input id="willResetAudio" name="willResetAudio" type="checkbox"/><label for="willResetAudio">Audio</label><br>
+                  <input id="willResetWirelessNetworking" name="willResetWirelessNetworking" type="checkbox"/><label for="willResetWirelessNetworking">Wireless Networking</label><br>
+                  <input id="willResetUserPrograms" name="willResetUserPrograms" type="checkbox"/><label for="willResetUserPrograms">User Programs</label><br>
+                  <input id="willResetPasswords" name="willResetPasswords" type="checkbox"/><label for="willResetPasswords">Passwords</label><br>
+               </div>
+               <div class="blank-line"></div>
+               <div class="button-container">
+                  <button type="button" style="float:right;margin-right:0;" id="resetPreferencesButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Submit</button>
+               </div>
+            </div>
+         </div>
+      </form>
    </div>
    <!-- ============================================================================================================ -->
 </div>
