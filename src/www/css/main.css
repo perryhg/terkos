@@ -12,10 +12,6 @@ span.ui-icon {
    margin: 0 2px;
 }
 
-#alertDialog {
-   display: none;
-}
-
 .blank-line {
    height: 10px;
 }
@@ -135,4 +131,8 @@ span.ui-icon {
 
 .text-button {
    padding: 3px 7px;
+}
+
+.tooltip-text {
+   font-size: 6pt
 }
