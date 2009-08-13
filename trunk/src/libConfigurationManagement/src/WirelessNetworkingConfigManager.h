@@ -11,6 +11,7 @@
 #include <fstream>
 #include <sstream>
 #include "ConfigFile.h"
+#include "StringUtilities.h"
 
 using namespace std;
 

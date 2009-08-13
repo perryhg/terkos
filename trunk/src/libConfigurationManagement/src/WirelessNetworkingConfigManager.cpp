@@ -100,7 +100,11 @@ bool WirelessNetworkingConfigManager::setWillStartOnBootup(const bool willStart)
 
       // open the file for writing and write our new version
       ofstream ofs(NETWORK_INTERFACES_CONF_PATH.c_str());
-      ofs << theFile.str();
+
+      // trim the file to get rid of extra line breaks at the end
+      ofs << StringUtilities::trim(theFile.str()) << endl;
+
+      // close the interfaces file
       ofs.close();
       }
 
