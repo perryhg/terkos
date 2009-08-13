@@ -82,7 +82,7 @@ if (!window['$'])
    jQuery.ajaxSetup({
       type: 'GET',
       dataType: 'jsonp',
-      timeout: 3000,
+      timeout: 10000,
       cache: false,
       global: false
    });

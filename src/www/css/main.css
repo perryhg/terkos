@@ -17,7 +17,7 @@ span.ui-icon {
 }
 
 .button-container {
-   width: 302px;
+   width: 312px;
 }
 
 .button-container div {
@@ -28,16 +28,12 @@ span.ui-icon {
 }
 
 .default-widget-width {
-   width: 302px;
+   width: 310px;
 }
 
 .divider {
    border-width: 1px 0 0 0;
    margin: 5px 0 5px 0
-}
-
-.default-widget-width {
-   width: 300px;
 }
 
 .data-cell {
@@ -131,6 +127,7 @@ span.ui-icon {
 
 .text-button {
    padding: 3px 7px;
+   margin-top:2px;
 }
 
 .tooltip-text {
