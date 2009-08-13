@@ -27,7 +27,7 @@
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/PasswordsTab.js"></script>
    <script type="text/javascript">
       var tabSelectionHandlers = new Array();
-      var host = "";//http://192.168.4.15";
+      var host = "";//http://192.168.1.4";
 
       $(function()
          {
@@ -83,9 +83,6 @@
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
             userProgramsTab.activate();
-            };
-         tabSelectionHandlers[tabSelectionHandlers.length] = function()
-            {
             };
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
@@ -157,7 +154,6 @@
       <li><a href="#Audio" title="Audio">Audio</a></li>
       <li><a href="#Wireless_Networking" title="Wireless Networking">Wireless Networking</a></li>
       <li><a href="#User_Programs" title="User Programs">User Programs</a></li>
-      <li><a href="#Logging" title="Logging">Logging</a></li>
       <li><a href="#Passwords" title="Passwords">Passwords</a></li>
       <li><a href="#Factory_Reset" title="Factory Reset">Factory Reset</a></li>
    </ul>
@@ -341,6 +337,10 @@
                      <div id="editPreferredWirelessNetworkButton" class="ui-state-active ui-state-disabled ui-corner-all button state-depends-on-preferred-wireless-network-list-selection" title="Edit">
                         <span class="ui-icon ui-icon-pencil"></span>
                      </div>
+                     <div class="tooltip-text">
+                        Drag the networks to arrange them in<br>
+                        the order in which you want to join.
+                     </div>
                      <button type="button" style="float:right;margin-right:0;" id="saveWirelessNetworkingConfigButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Save</button>
                   </div>
                </div>
@@ -417,10 +417,6 @@
             </div>
          </div>
       </form>
-   </div>
-   <!-- ============================================================================================================ -->
-   <div id="Logging">
-      <p>Logging</p>
    </div>
    <!-- ============================================================================================================ -->
    <div id="Passwords">
