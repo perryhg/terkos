@@ -6,6 +6,9 @@
  * WirelessNetworkingConfigManager class and wireless_networking_config.json for
  * details on the JSON format.
  *
+ * To reset the configuration, call the program with a "--reset" argument.  The program
+ * will print "1" if the reset was successful and "0" otherwise.
+ *
  * Chris Bartley (bartley@cmu.edu)
  */
 
@@ -16,19 +19,31 @@ using namespace std;
 
 int main(int argc, char** argv)
    {
-   // parse the JSON from stdin
-   Json::Value config;
-   Json::Reader reader;
-   bool parsingSuccessful = reader.parse(cin, config, true);
-
-   // if parsing succeeded, then call the config manager and give it the JSON
-   if (parsingSuccessful)
+   if (argc > 1)
       {
-      WirelessNetworkingConfigManager configManager;
-
-      if (!configManager.setJson(config))
+      if (strcmp(argv[1], "--reset") == 0)
          {
-         return 1;
+         WirelessNetworkingConfigManager configManager;
+         
+         cout << configManager.revertToDefault() << endl;
+         }
+      }
+   else
+      {
+      // parse the JSON from stdin
+      Json::Value config;
+      Json::Reader reader;
+      bool parsingSuccessful = reader.parse(cin, config, true);
+
+      // if parsing succeeded, then call the config manager and give it the JSON
+      if (parsingSuccessful)
+         {
+         WirelessNetworkingConfigManager configManager;
+
+         if (!configManager.setJson(config))
+            {
+            return 1;
+            }
          }
       }
 

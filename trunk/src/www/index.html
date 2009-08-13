@@ -11,6 +11,7 @@
    <script type="text/javascript" src="javascript/json2.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/NonClosableWaitDialog.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/SingleButtonModalDialog.js"></script>
+   <script type="text/javascript" src="javascript/edu/cmu/ri/terk/TwoButtonModalDialog.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/PowerInfoManager.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/VersionInfoManager.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/MemoryUsageManager.js"></script>
@@ -25,6 +26,7 @@
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/UserProgramsConfigManager.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/UserProgramsTab.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/PasswordsTab.js"></script>
+   <script type="text/javascript" src="javascript/edu/cmu/ri/terk/SystemSettingsTab.js"></script>
    <script type="text/javascript">
       var tabSelectionHandlers = new Array();
       var host = "";
@@ -67,6 +69,7 @@
                host);
          var userProgramsTab = new edu.cmu.ri.terk.UserProgramsTab(userProgramsConfigManager);
          var passwordsTab = new edu.cmu.ri.terk.PasswordsTab(host);
+         var systemSettingsTab = new edu.cmu.ri.terk.SystemSettingsTab(host);
 
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
@@ -90,6 +93,7 @@
             };
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
+            systemSettingsTab.activate();
             };
 
          // create the tabbed interface
@@ -155,7 +159,7 @@
       <li><a href="#Wireless_Networking" title="Wireless Networking">Wireless Networking</a></li>
       <li><a href="#User_Programs" title="User Programs">User Programs</a></li>
       <li><a href="#Passwords" title="Passwords">Passwords</a></li>
-      <li><a href="#Factory_Reset" title="Factory Reset">Factory Reset</a></li>
+      <li><a href="#System_Settings" title="System Settings">System Settings</a></li>
    </ul>
    <!-- ============================================================================================================ -->
    <div id="System_Info">
@@ -449,7 +453,7 @@
             </form>
          </div>
       </div>
-      <div class="section">
+      <div class="section" style="display:none">
          <div class="section-title">Root User</div>
          <div class="indented">
             <form id="formToEditRootUserPassword" method="post" onsubmit="return false;">
@@ -481,21 +485,21 @@
       <div id="info"></div>
    </div>
    <!-- ============================================================================================================ -->
-   <div id="Factory_Reset">
+   <div id="System_Settings">
       <form method="post" onsubmit="return false;">
          <div class="section">
             <div class="section-title">Reset Preferences</div>
             <div class="indented">
                <input id="willResetAll" name="willResetAll" type="checkbox"/><label for="willResetAll">All of the following:</label>
                <div class="indented">
-                  <input id="willResetAudio" name="willResetAudio" type="checkbox"/><label for="willResetAudio">Audio</label><br>
-                  <input id="willResetWirelessNetworking" name="willResetWirelessNetworking" type="checkbox"/><label for="willResetWirelessNetworking">Wireless Networking</label><br>
-                  <input id="willResetUserPrograms" name="willResetUserPrograms" type="checkbox"/><label for="willResetUserPrograms">User Programs</label><br>
-                  <input id="willResetPasswords" name="willResetPasswords" type="checkbox"/><label for="willResetPasswords">Passwords</label><br>
+                  <input id="willResetAudio" class="reset-preferences-option" name="willResetAudio" type="checkbox" value="Audio"/><label for="willResetAudio">Audio</label><br>
+                  <input id="willResetWirelessNetworking" class="reset-preferences-option" name="willResetWirelessNetworking" type="checkbox" value="Wireless Networking"/><label for="willResetWirelessNetworking">Wireless Networking</label><br>
+                  <input id="willResetUserPrograms" class="reset-preferences-option" name="willResetUserPrograms" type="checkbox" value="User Programs"/><label for="willResetUserPrograms">User Programs</label><br>
+                  <input id="willResetPasswords" class="reset-preferences-option" name="willResetPasswords" type="checkbox" value="Passwords"/><label for="willResetPasswords">Passwords</label><br>
                </div>
                <div class="blank-line"></div>
-               <div class="button-container">
-                  <button type="button" style="float:right;margin-right:0;" id="resetPreferencesButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Submit</button>
+               <div class="button-container" style="width:200px">
+                  <button type="button" style="float:right;margin-right:0;" id="resetPreferencesButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Reset Preferences</button>
                </div>
             </div>
          </div>

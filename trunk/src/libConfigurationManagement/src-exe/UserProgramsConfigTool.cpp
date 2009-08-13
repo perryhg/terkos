@@ -11,6 +11,9 @@
  * a "--program" argument.  If no program is specified to run on boot, this
  * program will print an empty line.
  *
+ * To reset the configuration, call the program with a "--reset" argument.  The program
+ * will print "1" if the reset was successful and "0" otherwise.
+ *
  * Chris Bartley (bartley@cmu.edu)
  */
 
@@ -34,6 +37,12 @@ int main(int argc, char** argv)
          UserProgramsConfigManager configManager;
 
          cout << configManager.getAbsolutePathToProgramToRunOnBoot() << endl;
+         }
+      else if (strcmp(argv[1], "--reset") == 0)
+         {
+         UserProgramsConfigManager configManager;
+
+         cout << configManager.revertToDefault() << endl;
          }
       }
    else
