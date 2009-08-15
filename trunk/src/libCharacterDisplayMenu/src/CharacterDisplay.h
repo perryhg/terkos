@@ -21,6 +21,7 @@ class CharacterDisplay
 
       virtual const unsigned int getRows() const = 0;
       virtual const unsigned int getColumns() const = 0;
+      virtual const unsigned int getColumnsWhenInScrollingMode() const = 0;
       virtual void setText(const string& text) = 0;;
       virtual void setText(const string& text, const bool willClearFirst) = 0;;
       virtual void setTextWithScrollArrows(const string& text) = 0;;

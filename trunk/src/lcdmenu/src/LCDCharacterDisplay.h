@@ -44,6 +44,11 @@ class LCDCharacterDisplay : public CharacterDisplay
          return numColumns;
          }
 
+      const unsigned int getColumnsWhenInScrollingMode() const
+         {
+         return numColumnsWhenInScrollingMode;
+         }
+
       void setText(const string& text);
       void setText(const string& text, const bool willClearFirst);
       void setTextWithScrollArrows(const string& text);
