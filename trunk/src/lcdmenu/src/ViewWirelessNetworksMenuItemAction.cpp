@@ -140,6 +140,7 @@ void ViewWirelessNetworksMenuItemAction::displayWirelessNetworkDetails()
    {
    Json::Value ssid = wirelessNetworks["wireless-networks"][currentWirelessNetworkIndex]["ssid"];
 
+   // TODO: internationalize this
    string networkLine = "Network: ";
    networkLine += StringUtilities::convertIntToString(currentWirelessNetworkIndex + 1, 2, '0');
    networkLine += "/";
