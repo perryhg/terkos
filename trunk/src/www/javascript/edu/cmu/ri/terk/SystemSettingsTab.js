@@ -296,7 +296,7 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
                   if (jQuery("#willResetPasswords").attr("checked"))
                      {
                      confirmResetDialog.setMessage(defaultConfirmResetDialogMessage +
-                                                   "<br><br>Note that since you have chosen to reset the web control panel password you will need to log in again after the reset is complete.");
+                                                   "<br><br>Note that since you have chosen to reset the web control panel password you may need to log in again after the reset is complete.");
                      }
                   else
                      {
