@@ -97,6 +97,7 @@ SERVO_MENU_ITEM_ACTIONS_OBJECTS := $(addprefix $(OBJ_DIR)/,$(SERVO_MENU_ITEM_ACT
 
 SYSTEM_INFO_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/FirmwareVersionMenuItemAction.cpp \
                                    $(SRC_DIR)/HardwareVersionMenuItemAction.cpp \
+                                   $(SRC_DIR)/MemoryUsageMenuItemAction.cpp \
                                    $(SRC_DIR)/OperatingSystemMenuItemAction.cpp \
                                    $(SRC_DIR)/PowerStatusMenuItemAction.cpp
 SYSTEM_INFO_MENU_ITEM_ACTIONS_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(SYSTEM_INFO_MENU_ITEM_ACTIONS_SRCS)))

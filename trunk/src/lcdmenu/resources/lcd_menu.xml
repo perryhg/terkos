@@ -18,6 +18,15 @@
             </implementation-class>
          </item>
       </item>
+      <item text="Memory Usage">
+         <item text="">
+            <implementation-class name="MemoryUsageMenuItemAction" library="libSystemInfoMenuItemActions.so">
+               <property key="total-memory">Total memory</property>
+               <property key="used-memory.label">Used memory</property>
+               <property key="free-memory.label">Free memory</property>
+            </implementation-class>
+         </item>
+      </item>
       <item text="Firmware      Version">
          <item text="">
             <implementation-class name="FirmwareVersionMenuItemAction" library="libSystemInfoMenuItemActions.so">
