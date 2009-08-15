@@ -13,7 +13,9 @@ bool ResetWirelessNetworkingMenuItemAction::shouldOption1BeSelectedUponActivatio
 
 void ResetWirelessNetworkingMenuItemAction::executeOption1Action()
    {
-   configManager.revertToDefault();
+   WirelessNetworkingConfigManager manager;
+
+   manager.revertToDefault();
    }
 
 void ResetWirelessNetworkingMenuItemAction::executeOption2Action()

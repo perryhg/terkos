@@ -2,26 +2,29 @@
  * Chris Bartley (bartley@cmu.edu)
  */
 
-#ifndef RESETWIRELESSNETWORKINGMENUITEMACTION_H_
-#define RESETWIRELESSNETWORKINGMENUITEMACTION_H_
+#ifndef RESETALLMENUITEMACTION_H_
+#define RESETALLMENUITEMACTION_H_
 
 #include "TwoOptionMenuItemAction.h"
+#include "AudioConfigManager.h"
 #include "WirelessNetworkingConfigManager.h"
+#include "UserProgramsConfigManager.h"
+#include "WebControlPanelPasswordManager.h"
 
-class ResetWirelessNetworkingMenuItemAction : public TwoOptionMenuItemAction
+class ResetAllMenuItemAction : public TwoOptionMenuItemAction
    {
    public:
 
       static const string CLASS_NAME;
 
-      ResetWirelessNetworkingMenuItemAction(void(*delObj)(void*), MenuItem* menuItem, MenuStatusManager* menuStatusManager, CharacterDisplay* characterDisplay,
+      ResetAllMenuItemAction(void(*delObj)(void*), MenuItem* menuItem, MenuStatusManager* menuStatusManager, CharacterDisplay* characterDisplay,
                                map<string, string>& properties) :
          TwoOptionMenuItemAction(delObj, menuItem, menuStatusManager, characterDisplay, properties)
          {
          // nothing to do
          }
 
-      virtual ~ResetWirelessNetworkingMenuItemAction()
+      virtual ~ResetAllMenuItemAction()
          {
          // nothing to do
          }
@@ -36,4 +39,4 @@ class ResetWirelessNetworkingMenuItemAction : public TwoOptionMenuItemAction
 
    };
 
-#endif /* RESETWIRELESSNETWORKINGMENUITEMACTION_H_ */
+#endif /* RESETALLMENUITEMACTION_H_ */

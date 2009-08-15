@@ -2,6 +2,22 @@
 <!DOCTYPE menu PUBLIC "-//CREATE Lab//TeRK//Menu//EN" "http://www.createlab.ri.cmu.edu/dtd/terk/menu/menu.dtd">
 
 <menu welcome-text="   Welcome to        TerkOS">
+   <item text="System Info">
+      <item text="Firmware             Version">
+         <item text="">
+            <implementation-class name="FirmwareVersionMenuItemAction" library="libSystemInfoMenuItemActions.so">
+               <property key="label">Firmware version</property>
+            </implementation-class>
+         </item>
+      </item>
+      <item text="Hardware             Version">
+         <item text="">
+            <implementation-class name="HardwareVersionMenuItemAction" library="libSystemInfoMenuItemActions.so">
+               <property key="label">Hardware version</property>
+            </implementation-class>
+         </item>
+      </item>
+   </item>
    <item text="Audio">
       <item text="Set Volume">
          <item text="">
@@ -21,7 +37,7 @@
       </item>
       <item text="Reset Audio">
          <item text="">
-            <implementation-class name="ResetAudioMenuItemAction" library="libAudioMenuItemActions.so">
+            <implementation-class name="ResetAudioMenuItemAction" library="libResetMenuItemActions.so">
                <property key="action.prompt">Reset Audio?</property>
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
@@ -72,7 +88,7 @@
       </item>
       <item text="Reset WirelessSettings">
          <item text="">
-            <implementation-class name="ResetWirelessNetworkingMenuItemAction" library="libNetworkMenuItemActions.so">
+            <implementation-class name="ResetWirelessNetworkingMenuItemAction" library="libResetMenuItemActions.so">
                <property key="action.prompt">Reset Wireless?</property>
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
@@ -82,30 +98,10 @@
          </item>
       </item>
    </item>
-   <!--
-   <item text="Servos">
-      <item text="View/Edit     Servo Configs">
-         <item text="">
-            <implementation-class name="ViewAndEditServoConfigsMenuItemAction" library="libServoMenuItemActions.so"/>
-         </item>
-      </item>
-      <item text="Reset Servos">
-         <item text="">
-            <implementation-class name="ResetServosMenuItemAction" library="libServoMenuItemActions.so">
-               <property key="action.prompt">Reset Servos?</property>
-               <property key="choice.option1">OK  </property>
-               <property key="choice.option2">Cancel</property>
-               <property key="action.option1">Servos reset to factory defaults</property>
-               <property key="action.option2">Cancelled -- No settings changed</property>
-            </implementation-class>
-         </item>
-      </item>
-   </item>
-   -->
    <item text="Factory Reset">
       <item text="Reset Audio">
          <item text="">
-            <implementation-class name="ResetAudioMenuItemAction" library="libAudioMenuItemActions.so">
+            <implementation-class name="ResetAudioMenuItemAction" library="libResetMenuItemActions.so">
                <property key="action.prompt">Reset Audio?</property>
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
@@ -114,67 +110,47 @@
             </implementation-class>
          </item>
       </item>
-      <!--
-      <item text="Reset Motors">
+      <item text="Reset Wireless">
          <item text="">
-            <implementation-class name="ResetMotorsMenuItemAction">
-               <property key="action.prompt">Reset Motors?</property>
+            <implementation-class name="ResetWirelessNetworkingMenuItemAction" library="libResetMenuItemActions.so">
+               <property key="action.prompt">Reset Wireless?</property>
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
-               <property key="action.option1">Motors reset to factory defaults</property>
+               <property key="action.option1">Wireless set to factory defaults</property>
                <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
       </item>
-      -->
-      <item text="Reset Network">
+      <item text="Reset User    Programs">
          <item text="">
-            <implementation-class name="ResetNetworkMenuItemAction">
-               <property key="action.prompt">Reset Network?</property>
+            <implementation-class name="ResetUserProgramsMenuItemAction" library="libResetMenuItemActions.so">
+               <property key="action.prompt">Reset Programs</property>
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
-               <property key="action.option1">Network reset tofactory defaults</property>
+               <property key="action.option1">Programs set to factory defaults</property>
                <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
       </item>
-      <!--
-      <item text="Reset Servos">
+      <item text="Reset Web CtrlPanel Password">
          <item text="">
-            <implementation-class name="ResetServosMenuItemAction" library="libServoMenuItemActions.so">
-               <property key="action.prompt">Reset Servos?</property>
+            <implementation-class name="ResetWebControlPanelPasswordMenuItemAction" library="libResetMenuItemActions.so">
+               <property key="action.prompt">Reset Password</property>
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
-               <property key="action.option1">Servos reset to factory defaults</property>
+               <property key="action.option1">Password set to factory default</property>
                <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
       </item>
-      -->
       <item text="Reset All">
          <item text="">
-            <implementation-class name="ResetAllMenuItemAction">
+            <implementation-class name="ResetAllMenuItemAction" library="libResetMenuItemActions.so">
                <property key="action.prompt">Reset All?</property>
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
                <property key="action.option1">Reset to factorydefaults</property>
                <property key="action.option2">Cancelled -- No settings changed</property>
-            </implementation-class>
-         </item>
-      </item>
-   </item>
-   <item text="System Info">
-      <item text="Firmware             Version">
-         <item text="">
-            <implementation-class name="FirmwareVersionMenuItemAction" library="libSystemInfoMenuItemActions.so">
-               <property key="label">Firmware version</property>
-            </implementation-class>
-         </item>
-      </item>
-      <item text="Hardware             Version">
-         <item text="">
-            <implementation-class name="HardwareVersionMenuItemAction" library="libSystemInfoMenuItemActions.so">
-               <property key="label">Hardware version</property>
             </implementation-class>
          </item>
       </item>
