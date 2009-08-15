@@ -13,7 +13,9 @@ bool ResetAudioMenuItemAction::shouldOption1BeSelectedUponActivation() const
 
 void ResetAudioMenuItemAction::executeOption1Action()
    {
-   configManager.revertToDefault();
+   AudioConfigManager manager;
+
+   manager.revertToDefault();
    }
 
 void ResetAudioMenuItemAction::executeOption2Action()

@@ -23,18 +23,18 @@ CharacterDisplayMenu::CharacterDisplayMenu(const string& xmlFilename, MenuStatus
       ticpp::Document doc(xmlFilename);
       doc.LoadFile();
 
-      std::cout << "CharacterDisplayMenu: Menu XML file loaded" << std::endl;
+      cout << "CharacterDisplayMenu: Menu XML file loaded" << endl;
 
       // look for the <menu> element (FirstChild() might return the xml or doctype element)
       rootElement = doc.FirstChildElement(false);
 
       if (!rootElement || (rootElement->Value() != "menu") || rootElement->NoChildren())
          {
-         std::cout << "ERROR: Invalid XML: The <menu> element is missing or contains no child elements!" << std::endl;
+         cout << "ERROR: Invalid XML: The <menu> element is missing or contains no child elements!" << endl;
          rootElement = NULL;
          }
 
-      std::cout << "CharacterDisplayMenu: building menu tree" << std::endl;
+      cout << "CharacterDisplayMenu: building menu tree" << endl;
 
       // now build the tree
       if (rootElement != NULL)
@@ -45,8 +45,8 @@ CharacterDisplayMenu::CharacterDisplayMenu(const string& xmlFilename, MenuStatus
       }
    catch (ticpp::Exception& ex)
       {
-      std::cout << "Exception while procesing the menu XML!" << std::endl;
-      std::cout << ex.what();
+      cout << "Exception while procesing the menu XML!" << endl;
+      cout << ex.what() << endl;
       }
    }
 
@@ -55,15 +55,15 @@ MenuItemImpl* CharacterDisplayMenu::buildMenuItemTree(ticpp::Element* parentElem
    {
    if (parentElement != NULL)
       {
-      std::cout << "CharacterDisplayMenu::buildMenuItemTree: processing element <" << parentElement->Value() << ">" << std::endl;
-
       string text = parentElement->GetAttribute("text");
+
+      cout << "CharacterDisplayMenu::buildMenuItemTree: processing element <" << parentElement->Value() << " text=\"" << text << "\">" << endl;
 
       bool hasItemChildElements = (NULL != parentElement->FirstChildElement("item", false));
 
       if (hasItemChildElements)
          {
-         std::cout << "CharacterDisplayMenu::buildMenuItemTree: parent has <item> children" << std::endl;
+         cout << "CharacterDisplayMenu::buildMenuItemTree: parent has <item> children" << endl;
 
          // recursively build the children
          vector<MenuItemImpl*> children;
@@ -100,7 +100,7 @@ MenuItemImpl* CharacterDisplayMenu::buildMenuItemTree(ticpp::Element* parentElem
          }
       else
          {
-         std::cout << "CharacterDisplayMenu::buildMenuItemTree: parent has NO <item> children" << std::endl;
+         cout << "CharacterDisplayMenu::buildMenuItemTree: parent has NO <item> children" << endl;
 
          // create the MenuItem
          MenuItemImpl* menuItem = new MenuItemImpl(text);

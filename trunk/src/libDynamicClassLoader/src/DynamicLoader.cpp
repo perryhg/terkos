@@ -11,6 +11,7 @@ DynamicLibrary* DynamicLoader::loadObjectFile(const char* file, int flags)
    void* objFile = dlopen(file, flags);
    if (objFile == NULL)
       {
+      printf("DynamicLoader::loadObjectFile(%s): dlopen returned NULL.  Reason = [%s]\n",file,dlerror());
       return NULL;
       }
    return new DynamicLibrary(objFile);

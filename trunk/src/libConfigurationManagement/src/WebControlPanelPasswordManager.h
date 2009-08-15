@@ -6,8 +6,11 @@
 #define WEBCONTROLPANELPASSWORDMANAGER_H_
 
 #include <string>
+#include <iostream>
+#include <pstream.h>
 
 using namespace std;
+using namespace redi;
 
 class WebControlPanelPasswordManager
    {
@@ -28,6 +31,9 @@ class WebControlPanelPasswordManager
        * Note that the web server is not restarted, so changes won't take effect until it is restarted.
        */
       const bool revertToDefault();
+
+      
+      const bool restartWebServer();
 
    private:
 

@@ -13,20 +13,46 @@ sub isHttpRequest()
 sub restartWebServer()
    {
    my $pathToBusyboxHttpd = &getPath('busybox-httpd');
-   my $restartCommand = "$pathToBusyboxHttpd restart";
+   my $stopCommand = "$pathToBusyboxHttpd stop";
+   my $startCommand = "$pathToBusyboxHttpd start";
 
-   # issue the restart
-   open(WEB_SERVER_OUTPUT, "$restartCommand |") or die "Failed to call $restartCommand: $!\n";
+   # We do a stop and a start here instead of a restart since the restart fails if the server isn't
+   # already running.  Doing a stop first is safe even if the server is already stopped, so we can
+   # simply follow it up with a start.
+
+   # issue the stop command
+   open(STOP_WEB_SERVER_OUTPUT, "$stopCommand |") or die "Failed to call $stopCommand: $!\n";
 
    # Read the output into an array -- we won't actually do anything with the output but I
    # found that if I don't read it then the command doesn't actually execute.  That seems
-   # weird, but, oh well.  There's also no point in parsing the output because even if it
-   # reports some kind of error there's nothing we can do about it since we've broken the
-   # connection to the user.
-   my @lines = <WEB_SERVER_OUTPUT>;
+   # weird, but, oh well.
+   my @stopWebServerOuput = <STOP_WEB_SERVER_OUTPUT>;
 
    # close the filehandle
-   close(WEB_SERVER_OUTPUT);
+   close(STOP_WEB_SERVER_OUTPUT);
+
+   # issue the start command
+   open(START_WEB_SERVER_OUTPUT, "$startCommand |") or die "Failed to call $startCommand: $!\n";
+
+   # Read the output into an array
+   my @startWebServerOuput = <START_WEB_SERVER_OUTPUT>;
+
+   # close the filehandle
+   close(START_WEB_SERVER_OUTPUT);
+
+   if (scalar(@startWebServerOuput) >= 1)
+      {
+      my $line = $startWebServerOuput[0];
+      if ($line =~ /^starting Busybox HTTP Daemon: httpd...\s*done/)
+         {
+         return 1;
+         }
+      elsif ($line =~ /httpd is already running/)
+         {
+         return 1;
+         }
+      }
+   return 0;
    }
 #===================================================================================================
 # Code taken from Matt's Scripts: http://www.scriptarchive.com/

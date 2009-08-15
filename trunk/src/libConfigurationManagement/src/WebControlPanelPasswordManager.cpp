@@ -15,3 +15,22 @@ const bool WebControlPanelPasswordManager::revertToDefault()
 
    return true;
    }
+
+const bool WebControlPanelPasswordManager::restartWebServer()
+   {
+   // call the Perl script which restarts the web server and return the result as a stream
+   redi::ipstream is("perl -I/opt/scripts /opt/scripts/restartWebServer.pl");
+   string line;
+   getline(is, line);
+   bool success = (line == "1");
+   if (success)
+      {
+      cout << "WebControlPanelPasswordManager::restartWebServer(): web server restarted successfully." << endl;
+      }
+   else
+      {
+      cerr << "WebControlPanelPasswordManager::restartWebServer(): failed to restart web server." << endl;
+      }
+
+   return success;
+   }

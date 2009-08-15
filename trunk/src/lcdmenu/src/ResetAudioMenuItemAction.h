@@ -34,10 +34,6 @@ class ResetAudioMenuItemAction : public TwoOptionMenuItemAction
 
       void executeOption2Action();
 
-   private:
-
-      AudioConfigManager configManager;
-
    };
 
 #endif /* RESETAUDIOMENUITEMACTION_H_ */
