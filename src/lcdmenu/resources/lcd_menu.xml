@@ -17,6 +17,21 @@
             </implementation-class>
          </item>
       </item>
+      <item text="Power Status">
+         <item text="">
+            <implementation-class name="PowerStatusMenuItemAction" library="libSystemInfoMenuItemActions.so">
+               <property key="voltage.label">Voltage</property>
+               <property key="status.label">Status</property>
+               <property key="main-battery.label">Main Battery</property>
+               <property key="backup-battery.label">Backup Battery</property>
+               <property key="io-5-volt.label">I/O 5 Volt</property>
+               <property key="main-5-volt.label">Main 5 Volt</property>
+               <property key="breaker.label">Breaker</property>
+               <property key="breaker-ok.label">OK</property>
+               <property key="breaker-fault.label">Fault</property>
+            </implementation-class>
+         </item>
+      </item>
    </item>
    <item text="Audio">
       <item text="Set Volume">

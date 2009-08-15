@@ -18,6 +18,8 @@ class PowerInfoManager
    {
    public:
 
+      static const unsigned int NUM_BREAKERS;
+
       PowerInfoManager()
          {
          // nothing to do
@@ -43,8 +45,6 @@ class PowerInfoManager
       Json::Value getJSON();
 
    private:
-
-      static const unsigned int NUM_BREAKERS;
 
       CQwerkHardware hardware;
 
