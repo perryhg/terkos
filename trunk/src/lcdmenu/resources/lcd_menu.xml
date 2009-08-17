@@ -27,23 +27,13 @@
             </implementation-class>
          </item>
       </item>
-      <item text="Firmware      Version">
+      <item text="Version Info">
          <item text="">
-            <implementation-class name="FirmwareVersionMenuItemAction" library="libSystemInfoMenuItemActions.so">
-               <property key="label">Firmware version</property>
+            <implementation-class name="VersionInfoMenuItemAction" library="libSystemInfoMenuItemActions.so">
+               <property key="operating-system-version.label">OS Version</property>
+               <property key="firmware-version.label">Firmware Ver</property>
+               <property key="hardware-version.label">Hardware Ver</property>
             </implementation-class>
-         </item>
-      </item>
-      <item text="Hardware      Version">
-         <item text="">
-            <implementation-class name="HardwareVersionMenuItemAction" library="libSystemInfoMenuItemActions.so">
-               <property key="label">Hardware version</property>
-            </implementation-class>
-         </item>
-      </item>
-      <item text="Operating     System">
-         <item text="">
-            <implementation-class name="OperatingSystemMenuItemAction" library="libSystemInfoMenuItemActions.so"/>
          </item>
       </item>
    </item>
