@@ -151,7 +151,7 @@ void PowerStatusMenuItemAction::displayComponentDetails()
    else
       {
       unsigned int breakerId = currentComponentId - NUM_NONBREAKER_COMPONENTS;
-      string line1 = middlePadOrTrimRight(
+      string line1 = StringUtilities::middlePadOrTrimRight(
          getProperty(BREAKER_PROPERTY, BREAKER_DEFAULT_LABEL) + ": ",
          StringUtilities::convertIntToString(breakerId+1, 2, '0') + "/" + StringUtilities::convertIntToString(PowerInfoManager::NUM_BREAKERS, 2, '0'),
          numColumnsWhenInScrollingMode
@@ -167,42 +167,10 @@ void PowerStatusMenuItemAction::displayComponentDetails()
 
 void PowerStatusMenuItemAction::displayComponentDetailsWorkhorse(const string& line1, const string& line2, const string& value)
    {
-   string cleanedLine1 = rightPadOrTrimRight(line1, numColumnsWhenInScrollingMode);
-   string cleanedLine2 = middlePadOrTrimRight(line2 + ": ", value, numColumnsWhenInScrollingMode);
+   string cleanedLine1 = StringUtilities::rightPadOrTrimRight(line1, numColumnsWhenInScrollingMode);
+   string cleanedLine2 = StringUtilities::middlePadOrTrimRight(line2 + ": ", value, numColumnsWhenInScrollingMode);
 
    getCharacterDisplay()->setTextWithScrollArrows(cleanedLine1 + cleanedLine2);
-   }
-
-const string PowerStatusMenuItemAction::rightPadOrTrimRight(const string& str, unsigned int desiredLength)
-   {
-   if (desiredLength > str.length())
-      {
-      string padding(desiredLength - str.length(), ' ');
-      return str + padding;
-      }
-   else if (desiredLength < str.length())
-      {
-      return str.substr(0, desiredLength);
-      }
-
-   return str;
-   }
-
-const string PowerStatusMenuItemAction::middlePadOrTrimRight(const string& str1, const string& str2, unsigned int desiredLength)
-   {
-   unsigned int cattedLength = str1.length() + str2.length();
-   if (desiredLength > cattedLength)
-      {
-      string padding(desiredLength - cattedLength, ' ');
-      return str1 + padding + str2;
-      }
-   else if (desiredLength < cattedLength)
-      {
-      string cattedStr = str1 + str2;
-      return cattedStr.substr(0, desiredLength);
-      }
-
-   return str1 + str2;
    }
 
 // required definitions for dynamic loading

@@ -128,24 +128,9 @@ void MemoryUsageMenuItemAction::displayComponentDetails()
 
 void MemoryUsageMenuItemAction::displayComponentDetailsWorkhorse(const string& label, const string& value)
    {
-   string cleanedLine1 = rightPadOrTrimRight(label + ":", numColumnsWhenInScrollingMode);
+   string cleanedLine1 = StringUtilities::rightPadOrTrimRight(label + ":", numColumnsWhenInScrollingMode);
 
    getCharacterDisplay()->setTextWithScrollArrows(cleanedLine1 + value + " K");
-   }
-
-const string MemoryUsageMenuItemAction::rightPadOrTrimRight(const string& str, unsigned int desiredLength)
-   {
-   if (desiredLength > str.length())
-      {
-      string padding(desiredLength - str.length(), ' ');
-      return str + padding;
-      }
-   else if (desiredLength < str.length())
-      {
-      return str.substr(0, desiredLength);
-      }
-
-   return str;
    }
 
 // required definitions for dynamic loading

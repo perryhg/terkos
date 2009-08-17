@@ -68,3 +68,36 @@ const string StringUtilities::trim(const string& str)
 
    return s;
    }
+
+const string StringUtilities::rightPadOrTrimRight(const string& str, unsigned int desiredLength, const char paddingChar)
+   {
+   if (desiredLength > str.length())
+      {
+      string padding(desiredLength - str.length(), paddingChar);
+      return str + padding;
+      }
+   else if (desiredLength < str.length())
+      {
+      return str.substr(0, desiredLength);
+      }
+
+   return str;
+   }
+
+const string StringUtilities::middlePadOrTrimRight(const string& str1, const string& str2, unsigned int desiredLength, const char paddingChar)
+   {
+   unsigned int cattedLength = str1.length() + str2.length();
+   if (desiredLength > cattedLength)
+      {
+      string padding(desiredLength - cattedLength, ' ');
+      return str1 + padding + str2;
+      }
+   else if (desiredLength < cattedLength)
+      {
+      string cattedStr = str1 + str2;
+      return cattedStr.substr(0, desiredLength);
+      }
+
+   return str1 + str2;
+   }
+
