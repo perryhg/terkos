@@ -66,7 +66,6 @@ class MemoryUsageMenuItemAction : public CharacterDisplayMenuItemAction
       void displayComponentDetails();
       void displayComponentDetailsWorkhorse(const string& label, const string& value);
 
-      const string rightPadOrTrimRight(const string& str, unsigned int desiredLength);
    };
 
 #endif /* MEMORYUSAGEMENUITEMACTION_H_ */

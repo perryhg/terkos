@@ -43,6 +43,22 @@ class StringUtilities
        */
       static const string trim(const string& str);
 
+      /**
+       * Pads or trims the given string and returns a copy.  If the given string is less than the desired length, it is
+       * right-padded with the paddingChar.  If the given string is longer than the desired length the end of the string
+       * is chopped so that the resulting string is the desired length.
+       */
+      static const string rightPadOrTrimRight(const string& str, unsigned int desiredLength, const char paddingChar=' ');
+
+      /**
+       * Creates a new string by concatenating str1 and str2 and either padding or trimming so that the resulting string
+       * is the desired length.  If the concatenation of the two strings would be shorter than the desired length, some
+       * number of paddingChars is inserted between the two strings so that the result is the desired length.  If the
+       * concatenation of the two strings would be shorter than the desired length, Then the strings are simply
+       * concatenated and then the right end is trimmed so that the resulting string is the desired length.
+       */
+      static const string middlePadOrTrimRight(const string& str1, const string& str2, unsigned int desiredLength, const char paddingChar=' ');
+
    private:
 
       StringUtilities()

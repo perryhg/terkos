@@ -72,8 +72,6 @@ class PowerStatusMenuItemAction : public CharacterDisplayMenuItemAction
       void displayComponentDetails();
       void displayComponentDetailsWorkhorse(const string& line1, const string& line2, const string& value);
 
-      const string rightPadOrTrimRight(const string& str, unsigned int desiredLength);
-      const string middlePadOrTrimRight(const string& str1, const string& str2, unsigned int desiredLength);
    };
 
 #endif /* POWERSTATUSMENUITEMACTION_H_ */
