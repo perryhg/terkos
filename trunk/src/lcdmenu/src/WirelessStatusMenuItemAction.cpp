@@ -99,42 +99,20 @@ void WirelessStatusMenuItemAction::WirelessDisabledMenuItemAction::executeOption
       // execute the script and return the results as a stream
       redi::ipstream is("perl -I/opt/scripts /opt/scripts/enableWirelessNetworking.pl");
 
-      // parse the stream
-      Json::Reader reader;
-      Json::Value wirelessNetworkingStatusJson;
-      bool parsingSuccessful = reader.parse(is, wirelessNetworkingStatusJson, true);
+      // parse the stream to get the status
+      Json::Value wirelessNetworkingStatus = parentMenuItemAction->parseJSONStream(is);
+
       is.close();
 
-      // make sure the enabling was successful
-      if (parsingSuccessful)
-         {
-         if (wirelessNetworkingStatusJson != Json::Value::null)
-            {
-            Json::Value isInstalled = wirelessNetworkingStatusJson["wireless-networking-status"]["is-installed"];
-            if (isInstalled != Json::Value::null)
-               {
-               if (isInstalled.asBool())
-                  {
-                  Json::Value wirelessInterface = wirelessNetworkingStatusJson["wireless-networking-status"]["wireless-interface"];
-                  if (wirelessInterface != Json::Value::null)
-                     {
-                     Json::Value isEnabled = wirelessInterface["is-enabled"];
-                     if (isEnabled != Json::Value::null && isEnabled.asBool())
-                        {
-                        getCharacterDisplay()->setText(getProperty(WIRELESS_DISABLED_PROPERTY_ACTION_CHOSE_OPTION1, WIRELESS_DISABLED_DEFAULT_ACTION_CHOSE_OPTION1));
-                        sleepThenPopUpToParentMenuItem(TwoOptionMenuItemAction::DEFAULT_MILLISECONDS_TO_SLEEP);
+      // check the status to see whether the disabling worked
+      bool isEnabled = parentMenuItemAction->parseJSONAndReturnWhetherWirelessNetworkingIsEnabled(wirelessNetworkingStatus);
 
-                        return;
-                        }
-                     }
-                  }
-               }
-            }
-         }
-      else
+      if (isEnabled)
          {
-         cerr << "WirelessDisabledMenuItemAction::executeOption1Action(): failed to parse wireless networking status JSON:" << endl
-                  << reader.getFormatedErrorMessages();
+         getCharacterDisplay()->setText(getProperty(WIRELESS_DISABLED_PROPERTY_ACTION_CHOSE_OPTION1, WIRELESS_DISABLED_DEFAULT_ACTION_CHOSE_OPTION1));
+         sleepThenPopUpToParentMenuItem(TwoOptionMenuItemAction::DEFAULT_MILLISECONDS_TO_SLEEP);
+
+         return;
          }
       }
    catch (...)
@@ -186,11 +164,22 @@ void WirelessStatusMenuItemAction::WirelessEnabledMenuItemAction::executeOption2
       // execute the script and return the results as a stream
       redi::ipstream is("perl -I/opt/scripts /opt/scripts/disableWirelessNetworking.pl");
 
-      // In this case, we don't really care about the returned JSON status.  Just display
-      // a message to the user and then pop up to the parent
+      // parse the stream to get the status
+      Json::Value wirelessNetworkingStatus = parentMenuItemAction->parseJSONStream(is);
+
       is.close();
 
-      getCharacterDisplay()->setText(getProperty(WIRELESS_ENABLED_PROPERTY_ACTION_CHOSE_OPTION2, WIRELESS_ENABLED_DEFAULT_ACTION_CHOSE_OPTION2));
+      // check the status to see whether the disabling worked
+      bool isEnabled = parentMenuItemAction->parseJSONAndReturnWhetherWirelessNetworkingIsEnabled(wirelessNetworkingStatus);
+
+      if (isEnabled)
+         {
+         getCharacterDisplay()->setText(getProperty(WIRELESS_ENABLED_PROPERTY_OPTION2_FAILURE, WIRELESS_ENABLED_DEFAULT_OPTION2_FAILURE));
+         }
+      else
+         {
+         getCharacterDisplay()->setText(getProperty(WIRELESS_ENABLED_PROPERTY_ACTION_CHOSE_OPTION2, WIRELESS_ENABLED_DEFAULT_ACTION_CHOSE_OPTION2));
+         }
       }
    catch (...)
       {

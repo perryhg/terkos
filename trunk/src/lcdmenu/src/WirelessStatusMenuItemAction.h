@@ -13,6 +13,7 @@
 #include <json/json.h>
 #include <CharacterDisplayMenuItemAction.h>
 #include <TwoOptionMenuItemAction.h>
+#include <NoOpMenuItemAction.h>
 #include <StringUtilities.h>
 #include "WirelessStatusCheckingMenuItemAction.h"
 
@@ -108,7 +109,7 @@ class WirelessStatusMenuItemAction : public WirelessStatusCheckingMenuItemAction
          wirelessUnpluggedMenuItemAction
                   = new NoOpMenuItemAction(getProperty(STATUS_UNPLUGGED_PROPERTY_ACTION_PROMPT, STATUS_UNPLUGGED_DEFAULT_ACTION_PROMPT), NULL, menuItem, menuStatusManager, characterDisplay, properties);
          wirelessDisabledMenuItemAction
-                  = new WirelessDisabledMenuItemAction(NULL, menuItem, menuStatusManager, characterDisplay, wirelessDisabledProperties);
+                  = new WirelessDisabledMenuItemAction(this, NULL, menuItem, menuStatusManager, characterDisplay, wirelessDisabledProperties);
          wirelessEnabledMenuItemAction
                   = new WirelessEnabledMenuItemAction(this, NULL, menuItem, menuStatusManager, characterDisplay, wirelessEnabledProperties);
          }
@@ -161,63 +162,15 @@ class WirelessStatusMenuItemAction : public WirelessStatusCheckingMenuItemAction
       MenuItemAction* wirelessEnabledMenuItemAction;
 
       friend class WirelessEnabledMenuItemAction;
-
-      class NoOpMenuItemAction : public CharacterDisplayMenuItemAction
-         {
-         public:
-
-            NoOpMenuItemAction(string message, void(*delObj)(void*), MenuItem* menuItem, MenuStatusManager* menuStatusManager,
-                               CharacterDisplay* characterDisplay, map<string, string>& properties) :
-               CharacterDisplayMenuItemAction(delObj, menuItem, menuStatusManager, characterDisplay, properties), message(message)
-               {
-               // nothing to do
-               }
-
-            virtual ~NoOpMenuItemAction()
-               {
-               // nothing to do
-               }
-
-            void activate()
-               {
-               getCharacterDisplay()->setText(message);
-               }
-
-            void start()
-               {
-               // start and stop should do the same thing, so just call stop()
-               stop();
-               }
-
-            void stop()
-               {
-               // call stop on CharacterDisplayMenuItemAction so that we pop back up to the parent menu item
-               CharacterDisplayMenuItemAction::stop();
-               }
-
-            void upEvent()
-               {
-               // do nothing, just swallow the event
-               }
-
-            void downEvent()
-               {
-               // do nothing, just swallow the event
-               }
-
-         private:
-
-            string message;
-
-         };
+      friend class WirelessDisabledMenuItemAction;
 
       class WirelessDisabledMenuItemAction : public TwoOptionMenuItemAction
          {
          public:
 
-            WirelessDisabledMenuItemAction(void(*delObj)(void*), MenuItem* menuItem, MenuStatusManager* menuStatusManager,
+            WirelessDisabledMenuItemAction(WirelessStatusMenuItemAction* parentMenuItemAction, void(*delObj)(void*), MenuItem* menuItem, MenuStatusManager* menuStatusManager,
                                            CharacterDisplay* characterDisplay, map<string, string>& properties) :
-               TwoOptionMenuItemAction(delObj, menuItem, menuStatusManager, characterDisplay, properties)
+               TwoOptionMenuItemAction(delObj, menuItem, menuStatusManager, characterDisplay, properties), parentMenuItemAction(parentMenuItemAction)
                {
                // nothing to do
                }
@@ -316,6 +269,8 @@ class WirelessStatusMenuItemAction : public WirelessStatusCheckingMenuItemAction
                }
 
          private:
+
+            WirelessStatusMenuItemAction* parentMenuItemAction;
 
             bool isOnChoiceScreen;
 
