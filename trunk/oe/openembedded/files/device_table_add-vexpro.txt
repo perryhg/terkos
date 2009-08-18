@@ -1,0 +1,3 @@
+# Add devices for VexPro and Qwerk
+/dev/qeint	c	664	0	0	210	0	0	1	16
+/dev/qemot	c	664	0	0	214	0	0	1	4
