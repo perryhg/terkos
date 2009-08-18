@@ -42,10 +42,8 @@ class WirelessStatusCheckingMenuItemAction : public CharacterDisplayMenuItemActi
       virtual void handleWirelessUnplugged() = 0;
       virtual void handleWirelessStatusFailure() = 0;
       Json::Value getWirelessNetworkingStatus();
-
-   private:
-
-      Json::Value wirelessNetworkingStatusJson;
+      const bool parseJSONAndReturnWhetherWirelessNetworkingIsEnabled(const Json::Value& json);
+      Json::Value parseJSONStream(redi::ipstream& is);
 
    };
 

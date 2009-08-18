@@ -6,8 +6,56 @@
 
 const string ViewWirelessNetworksMenuItemAction::CLASS_NAME = "ViewWirelessNetworksMenuItemAction";
 
+const string ViewWirelessNetworksMenuItemAction::STATUS_FAILURE_PROPERTY_ACTION_PROMPT = "status.failure";
+const string ViewWirelessNetworksMenuItemAction::STATUS_FAILURE_DEFAULT_ACTION_PROMPT = "Failed to get   wireless status.";
+
+const string ViewWirelessNetworksMenuItemAction::STATUS_UNPLUGGED_PROPERTY_ACTION_PROMPT = "status.unplugged";
+const string ViewWirelessNetworksMenuItemAction::STATUS_UNPLUGGED_DEFAULT_ACTION_PROMPT = "Wireless adapteris unplugged.";
+
+const string ViewWirelessNetworksMenuItemAction::STATUS_DISABLED_PROPERTY_ACTION_PROMPT = "status.disabled";
+const string ViewWirelessNetworksMenuItemAction::STATUS_DISABLED_DEFAULT_ACTION_PROMPT = "Wireless is     turned off.";
+
 void ViewWirelessNetworksMenuItemAction::activate()
    {
+   WirelessStatusCheckingMenuItemAction::activate();
+   currentMenuItemAction->activate();
+   }
+
+void ViewWirelessNetworksMenuItemAction::start()
+   {
+   currentMenuItemAction->start();
+   }
+
+void ViewWirelessNetworksMenuItemAction::stop()
+   {
+   currentMenuItemAction->stop();
+   }
+
+void ViewWirelessNetworksMenuItemAction::upEvent()
+   {
+   currentMenuItemAction->upEvent();
+   }
+
+void ViewWirelessNetworksMenuItemAction::downEvent()
+   {
+   currentMenuItemAction->downEvent();
+   }
+
+void ViewWirelessNetworksMenuItemAction::rightEvent()
+   {
+   currentMenuItemAction->rightEvent();
+   }
+
+void ViewWirelessNetworksMenuItemAction::leftEvent()
+   {
+   currentMenuItemAction->leftEvent();
+   }
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+void ViewWirelessNetworksMenuItemAction::ListModeMenuItemAction::activate()
+   {
+   // TODO: i18n
    getCharacterDisplay()->setText("Scanning...");
 
    // reset the current servo id
@@ -44,99 +92,42 @@ void ViewWirelessNetworksMenuItemAction::activate()
    displayWirelessNetworkDetails();
    }
 
-void ViewWirelessNetworksMenuItemAction::start()
+void ViewWirelessNetworksMenuItemAction::ListModeMenuItemAction::start()
    {
-   if (isDetailViewMode)
+   // todo
+   }
+
+void ViewWirelessNetworksMenuItemAction::ListModeMenuItemAction::upEvent()
+   {
+   // decrement the current servo ID, wrapping around if necessary
+   if (currentWirelessNetworkIndex == 0)
       {
-      // TODO
+      currentWirelessNetworkIndex = getNumberOfWirelessNetworks() - 1;
       }
    else
       {
-      // TODO
+      currentWirelessNetworkIndex--;
       }
+
+   displayWirelessNetworkDetails();
    }
 
-void ViewWirelessNetworksMenuItemAction::stop()
+void ViewWirelessNetworksMenuItemAction::ListModeMenuItemAction::downEvent()
    {
-   if (isDetailViewMode)
+   // increment the current servo ID, wrapping around if necessary
+   if (currentWirelessNetworkIndex >= getNumberOfWirelessNetworks() - 1)
       {
-      // TODO
+      currentWirelessNetworkIndex = 0;
       }
    else
       {
-      CharacterDisplayMenuItemAction::stop();
+      currentWirelessNetworkIndex++;
       }
+
+   displayWirelessNetworkDetails();
    }
 
-void ViewWirelessNetworksMenuItemAction::upEvent()
-   {
-   if (isDetailViewMode)
-      {
-      // TODO
-      }
-   else
-      {
-      // decrement the current servo ID, wrapping around if necessary
-      if (currentWirelessNetworkIndex == 0)
-         {
-         currentWirelessNetworkIndex = getNumberOfWirelessNetworks() - 1;
-         }
-      else
-         {
-         currentWirelessNetworkIndex--;
-         }
-
-      displayWirelessNetworkDetails();
-      }
-   }
-
-void ViewWirelessNetworksMenuItemAction::downEvent()
-   {
-   if (isDetailViewMode)
-      {
-      // TODO
-      }
-   else
-      {
-      // increment the current servo ID, wrapping around if necessary
-      if (currentWirelessNetworkIndex >= getNumberOfWirelessNetworks() - 1)
-         {
-         currentWirelessNetworkIndex = 0;
-         }
-      else
-         {
-         currentWirelessNetworkIndex++;
-         }
-
-      displayWirelessNetworkDetails();
-      }
-   }
-
-void ViewWirelessNetworksMenuItemAction::rightEvent()
-   {
-   if (isDetailViewMode)
-      {
-      // TODO
-      }
-   else
-      {
-      downEvent();
-      }
-   }
-
-void ViewWirelessNetworksMenuItemAction::leftEvent()
-   {
-   if (isDetailViewMode)
-      {
-      // TODO
-      }
-   else
-      {
-      upEvent();
-      }
-   }
-
-void ViewWirelessNetworksMenuItemAction::displayWirelessNetworkDetails()
+void ViewWirelessNetworksMenuItemAction::ListModeMenuItemAction::displayWirelessNetworkDetails()
    {
    Json::Value ssid = wirelessNetworks["wireless-networks"][currentWirelessNetworkIndex]["ssid"];
 
@@ -148,14 +139,7 @@ void ViewWirelessNetworksMenuItemAction::displayWirelessNetworkDetails()
    getCharacterDisplay()->setTextWithScrollArrows(networkLine + ssid.asString());
    }
 
-const unsigned int ViewWirelessNetworksMenuItemAction::getNumberOfWirelessNetworks() const
-   {
-   if (wirelessNetworks != Json::Value::null)
-      {
-      return wirelessNetworks["wireless-networks"].size();
-      }
-   return 0;
-   }
+// ---------------------------------------------------------------------------------------------------------------------
 
 // required definitions for dynamic loading
 extern "C"
