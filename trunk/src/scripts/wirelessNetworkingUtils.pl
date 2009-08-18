@@ -3,6 +3,29 @@
 require "/opt/scripts/jsonUtils.pl";
 
 #===================================================================================================
+sub enableWirelessNetworking()
+   {
+   my ($interfaceName) = @_;
+
+   # make sure the wireless interface is down
+   &disableWirelessNetworking($interfaceName);
+
+   # Call ifup to bring up the wireless interface.  Note: I'm using backticks here because
+   # using open() didn't work because wpa_supplicant would fail with this error message:
+   # "run-parts: /etc/network/if-post-down.d/wpasupplicant exited with code 1013"
+   return `/sbin/ifup $interfaceName`;
+   }
+#===================================================================================================
+sub disableWirelessNetworking()
+   {
+   my ($interfaceName) = @_;
+
+   # Call ifdown to shut down the wireless interface.  Note: I'm using backticks here because
+   # using open() didn't work because wpa_supplicant would fail with this error message:
+   # "run-parts: /etc/network/if-post-down.d/wpasupplicant exited with code 1013"
+   return `/sbin/ifdown $interfaceName`;
+   }
+#===================================================================================================
 sub printWirelessNetworkingStatusAsJSON()
    {
    my ($interfaceName) = @_;

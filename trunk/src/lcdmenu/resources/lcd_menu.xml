@@ -77,15 +77,18 @@
                <property key="wireless-disabled.action.cancel"></property>
                <property key="wireless-disabled.choice.option1">Start   </property>
                <property key="wireless-disabled.choice.option2">OK</property>
-               <property key="wireless-disabled.action.option1">You chose Start.</property>
-               <property key="wireless-disabled.action.option2">Nothing to say here.</property><!--TODO-->
-               
+               <property key="wireless-disabled.action.option1.before">Starting        wireless...</property>
+               <property key="wireless-disabled.action.option1">Wireless is now turned on.</property>
+               <property key="wireless-disabled.option1.failure">Failed to start wireless.</property>
+
                <property key="wireless-enabled.action.prompt">Wireless is on.</property>
                <property key="wireless-enabled.action.cancel"></property>
                <property key="wireless-enabled.choice.option1">Info  </property>
                <property key="wireless-enabled.choice.option2">Stop</property>
+               <property key="wireless-enabled.action.option2.before">Stopping        wireless...</property>
                <property key="wireless-enabled.action.option2">Wireless is now turned off.</property>
                <property key="wireless-enabled.option1.failure">Could not obtainwireless details</property>
+               <property key="wireless-enabled.option2.failure">Failed to stop  wireless.</property>
             </implementation-class>
          </item>
       </item>
