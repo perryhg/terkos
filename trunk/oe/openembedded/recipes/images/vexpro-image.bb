@@ -44,6 +44,7 @@ IMAGE_INSTALL = " \
 	busybox-httpd \
 	usbutils \
 	perl \
+	libjson-perl \
 	wireless-tools \
 	wpa-supplicant \
 	alsa-utils-alsactl \
