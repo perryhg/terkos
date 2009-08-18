@@ -2,7 +2,7 @@ DESCRIPTION = "This package provides the necessary \
 infrastructure for basic TCP/IP based networking."
 SECTION = "base"
 LICENSE = "GPL"
-PR = "r35"
+PR = "r36"
 
 inherit update-rc.d
 
@@ -22,6 +22,7 @@ SRC_URI = "\
   file://init \
   file://hosts \
   file://interfaces \
+  file://interfaces.default \
   file://if-pre-up.d \
   file://if-up.d \
   file://if-down.d \
@@ -54,6 +55,7 @@ do_install () {
 	install -m 0755 update-inetd ${D}${sbindir}/
 	install -m 0644 update-inetd.8 ${D}${mandir}/man8/
 	install -m 0644 ${WORKDIR}/interfaces ${D}${sysconfdir}/network/interfaces
+	install -m 0644 ${WORKDIR}/interfaces.default ${D}${sysconfdir}/network/interfaces.default
 }
 
 CONFFILES_${PN} = "${sysconfdir}/network/options ${sysconfdir}/hosts \
