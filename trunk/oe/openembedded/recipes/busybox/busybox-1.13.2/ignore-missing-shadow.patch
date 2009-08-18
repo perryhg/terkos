@@ -1,0 +1,12 @@
+--- busybox-1.13.2/loginutils/chpasswd.c.old	2008-11-09 12:28:17.000000000 -0500
++++ busybox-1.13.2/loginutils/chpasswd.c	2009-08-18 14:16:48.000000000 -0400
+@@ -54,7 +54,8 @@
+ 		 * we try to find & change his passwd in /etc/passwd */
+ #if ENABLE_FEATURE_SHADOWPASSWDS
+ 		rc = update_passwd(bb_path_shadow_file, name, pass);
+-		if (rc == 0) /* no lines updated, no errors detected */
++		if (rc == 0 /* no lines updated, no errors detected */
++		    || (rc == -1 && errno == ENOENT)) /* no shadow file */
+ #endif
+ 			rc = update_passwd(bb_path_passwd_file, name, pass);
+ 		/* LOGMODE_BOTH logs to syslog also */
