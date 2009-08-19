@@ -25,36 +25,60 @@ class ViewWirelessNetworksMenuItemAction : public WirelessStatusCheckingMenuItem
 
       static const string CLASS_NAME;
 
-      static const string STATUS_FAILURE_PROPERTY_ACTION_PROMPT;
-      static const string STATUS_FAILURE_DEFAULT_ACTION_PROMPT;
+      static const string STATUS_FAILURE_PROPERTY;
+      static const string STATUS_FAILURE_DEFAULT;
 
-      static const string STATUS_UNPLUGGED_PROPERTY_ACTION_PROMPT;
-      static const string STATUS_UNPLUGGED_DEFAULT_ACTION_PROMPT;
+      static const string STATUS_UNPLUGGED_PROPERTY;
+      static const string STATUS_UNPLUGGED_DEFAULT;
 
-      static const string STATUS_DISABLED_PROPERTY_ACTION_PROMPT;
-      static const string STATUS_DISABLED_DEFAULT_ACTION_PROMPT;
+      static const string STATUS_DISABLED_PROPERTY;
+      static const string STATUS_DISABLED_DEFAULT;
+
+      static const string STATUS_NO_NETWORKS_FOUND_PROPERTY;
+      static const string STATUS_NO_NETWORKS_FOUND_DEFAULT;
+
+      static const string SCANNING_LABEL_PROPERTY;
+      static const string SCANNING_LABEL_DEFAULT;
+
+      static const string NETWORK_LABEL_PROPERTY;
+      static const string NETWORK_LABEL_DEFAULT;
+
+      static const string JOIN_NETWORK_PROMPT_PROPERTY;
+      static const string JOIN_NETWORK_PROMPT_DEFAULT;
+
+      static const string YES_OPTION_PROPERTY;
+      static const string YES_OPTION_DEFAULT;
+
+      static const string NO_OPTION_PROPERTY;
+      static const string NO_OPTION_DEFAULT;
+
+      static const string CONNECTING_TO_LABEL_PROPERTY;
+      static const string CONNECTING_TO_LABEL_DEFAULT;
+
+      static const string STATUS_CONNECTION_SUCESS_PROPERTY;
+      static const string STATUS_CONNECTION_SUCESS_DEFAULT;
+
+      static const string STATUS_CONNECTION_FAILURE_PROPERTY;
+      static const string STATUS_CONNECTION_FAILURE_DEFAULT;
 
       ViewWirelessNetworksMenuItemAction(void(*delObj)(void*), MenuItem* menuItem, MenuStatusManager* menuStatusManager,
                                          CharacterDisplay* characterDisplay, map<string, string>& properties) :
          WirelessStatusCheckingMenuItemAction(delObj, menuItem, menuStatusManager, characterDisplay, properties)
          {
          wirelessFailureMenuItemAction
-                  = new NoOpMenuItemAction(getProperty(STATUS_FAILURE_PROPERTY_ACTION_PROMPT, STATUS_FAILURE_DEFAULT_ACTION_PROMPT), NULL, menuItem, menuStatusManager, characterDisplay, properties);
+                  = new NoOpMenuItemAction(getProperty(STATUS_FAILURE_PROPERTY, STATUS_FAILURE_DEFAULT), NULL, menuItem, menuStatusManager, characterDisplay, properties);
          wirelessUnpluggedMenuItemAction
-                  = new NoOpMenuItemAction(getProperty(STATUS_UNPLUGGED_PROPERTY_ACTION_PROMPT, STATUS_UNPLUGGED_DEFAULT_ACTION_PROMPT), NULL, menuItem, menuStatusManager, characterDisplay, properties);
+                  = new NoOpMenuItemAction(getProperty(STATUS_UNPLUGGED_PROPERTY, STATUS_UNPLUGGED_DEFAULT), NULL, menuItem, menuStatusManager, characterDisplay, properties);
          wirelessDisabledMenuItemAction
-                  = new NoOpMenuItemAction(getProperty(STATUS_DISABLED_PROPERTY_ACTION_PROMPT, STATUS_DISABLED_DEFAULT_ACTION_PROMPT), NULL, menuItem, menuStatusManager, characterDisplay, properties);
-         listModeMenuItemAction
-                  = new ListModeMenuItemAction(NULL, menuItem, menuStatusManager, characterDisplay, properties);
+                  = new NoOpMenuItemAction(getProperty(STATUS_DISABLED_PROPERTY, STATUS_DISABLED_DEFAULT), NULL, menuItem, menuStatusManager, characterDisplay, properties);
+         wirelessEnabledMenuItemAction = new WirelessEnabledMenuItemAction(this, NULL, menuItem, menuStatusManager, characterDisplay, properties);
          }
 
       virtual ~ViewWirelessNetworksMenuItemAction()
          {
          currentMenuItemAction = NULL;
 
-         delete listModeMenuItemAction;
-         delete detailModeMenuItemAction;
-
+         delete wirelessEnabledMenuItemAction;
          delete wirelessFailureMenuItemAction;
          delete wirelessUnpluggedMenuItemAction;
          delete wirelessDisabledMenuItemAction;
@@ -72,7 +96,7 @@ class ViewWirelessNetworksMenuItemAction : public WirelessStatusCheckingMenuItem
 
       virtual void handleWirelessEnabled()
          {
-         currentMenuItemAction = listModeMenuItemAction;
+         currentMenuItemAction = wirelessEnabledMenuItemAction;
          }
 
       virtual void handleWirelessDisabled()
@@ -93,58 +117,43 @@ class ViewWirelessNetworksMenuItemAction : public WirelessStatusCheckingMenuItem
    private:
 
       MenuItemAction* currentMenuItemAction;
-
-      MenuItemAction* listModeMenuItemAction;
-      MenuItemAction* detailModeMenuItemAction;
-
+      MenuItemAction* wirelessEnabledMenuItemAction;
       MenuItemAction* wirelessFailureMenuItemAction;
       MenuItemAction* wirelessUnpluggedMenuItemAction;
       MenuItemAction* wirelessDisabledMenuItemAction;
 
-      class ListModeMenuItemAction : public CharacterDisplayMenuItemAction
+      class WirelessEnabledMenuItemAction : public CharacterDisplayMenuItemAction
          {
          public:
 
-            ListModeMenuItemAction(void(*delObj)(void*), MenuItem* menuItem, MenuStatusManager* menuStatusManager,
-                                           CharacterDisplay* characterDisplay, map<string, string>& properties) :
-               CharacterDisplayMenuItemAction(delObj, menuItem, menuStatusManager, characterDisplay, properties), wirelessNetworks(Json::Value::null), currentWirelessNetworkIndex(0)
+            WirelessEnabledMenuItemAction(ViewWirelessNetworksMenuItemAction* parentMenuItemAction, void(*delObj)(void*), MenuItem* menuItem, MenuStatusManager* menuStatusManager,
+                                   CharacterDisplay* characterDisplay, map<string, string>& properties) :
+               CharacterDisplayMenuItemAction(delObj, menuItem, menuStatusManager, characterDisplay, properties),
+                        parentMenuItemAction(parentMenuItemAction), wirelessNetworks(Json::Value::null), currentWirelessNetworkIndex(0), isListMode(true)
                {
                // nothing to do
                }
 
-            virtual ~ListModeMenuItemAction()
+            virtual ~WirelessEnabledMenuItemAction()
                {
                // nothing to do
                }
 
             void activate();
-
             void start();
-
-            void stop()
-               {
-               CharacterDisplayMenuItemAction::stop();
-               }
-
+            void stop();
             void upEvent();
-
             void downEvent();
-
-            void rightEvent()
-               {
-               downEvent();
-               }
-
-            void leftEvent()
-               {
-               upEvent();
-               }
+            void rightEvent();
+            void leftEvent();
 
          private:
 
+            ViewWirelessNetworksMenuItemAction* parentMenuItemAction;
             Json::Value wirelessNetworks;
-
             unsigned int currentWirelessNetworkIndex;
+            bool isListMode;
+            bool willJoinNetwork;
 
             void displayWirelessNetworkDetails();
 
@@ -157,7 +166,43 @@ class ViewWirelessNetworksMenuItemAction : public WirelessStatusCheckingMenuItem
                return 0;
                }
 
+            const string getCurrentNetworkSSID() const
+               {
+               if (currentWirelessNetworkIndex < getNumberOfWirelessNetworks())
+                  {
+                  Json::Value ssid = wirelessNetworks["wireless-networks"][currentWirelessNetworkIndex]["ssid"];
+                  return ssid.asString();
+                  }
+
+               cerr << "WirelessEnabledMenuItemAction::getCurrentNetworkSSID(): no SSID to return since no network is selected" << endl;
+               return "";
+               }
+
+            void switchToListModeMode()
+               {
+               isListMode = true;
+               displayWirelessNetworkDetails();
+               }
+
+            void switchToJoinNetworkMode()
+               {
+               isListMode = false;
+               activate();
+               }
+
+            const string generateJoinNetworkChoiceLine()
+               {
+               const string yesChoice = (willJoinNetwork ? "*" : " ");
+               const string noChoice = (willJoinNetwork ? " " : "*");
+
+               return getProperty(JOIN_NETWORK_PROMPT_PROPERTY, JOIN_NETWORK_PROMPT_DEFAULT) +
+                      "[" + yesChoice + "]" +
+                      getProperty(YES_OPTION_PROPERTY, YES_OPTION_DEFAULT) +
+                      "[" + noChoice + "]" +
+                      getProperty(NO_OPTION_PROPERTY, NO_OPTION_DEFAULT);
+               }
          };
+
    };
 
 #endif /* VIEWWIRELESSNETWORKSMENUITEMACTION_H_ */
