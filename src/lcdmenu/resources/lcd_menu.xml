@@ -98,8 +98,15 @@
                <property key="status.failure">Failed to get   wireless status.</property>
                <property key="status.unplugged">Wireless adapteris unplugged.</property>
                <property key="status.disabled">Wireless is     turned off.</property>
+               <property key="status.no-networks-found">No wireless     networks found.</property>
                <property key="scanning.label">Scanning...</property>
                <property key="network.label">Network</property>
+               <property key="join-network.prompt">Join?</property>
+               <property key="yes.option">Yes</property>
+               <property key="no.option">No</property>
+               <property key="connecting-to.label">Connecting to</property>
+               <property key="status.connection.success">Connection      successful.</property>
+               <property key="status.connection.failure">Connection      failed.</property>
             </implementation-class>
          </item>
       </item>
