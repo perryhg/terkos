@@ -1,15 +1,15 @@
 #!/usr/bin/perl
 
 ################################################################################
-# Program for setting a the root user's password.  Can be # called either via
+# Program for setting a the root user's password.  Can be called either via
 # the command line or as a CGI.
 #
 # If called from the command line, the usage is:
 #
-#       ./setRootUserPassword.pl --newPassword=NEW_PASSWORD
+#       ./setRootUserPassword.pl --oldPassword=OLD_PASSWORD --newPassword=NEW_PASSWORD
 #
-# If called as a CGI, it expects there to be a parameter named newPassword whose
-# value is the new password.
+# If called as a CGI, it expects there to be parameters named oldPassword and
+# newPassword whose values are the old and new passwords.
 #
 # Regardless of how the script is called, it returns the result as JSON.
 ################################################################################
@@ -18,6 +18,7 @@ require "/opt/scripts/commandLineUtils.pl";
 require "/opt/scripts/pathUtils.pl";
 require "/opt/scripts/httpUtils.pl";
 require "/opt/scripts/jsonUtils.pl";
+require "/opt/scripts/passwordUtils.pl";
 
 # parse command line switches or HTTP request params
 my %arguments = ();
@@ -32,19 +33,37 @@ else
 
 # create the JSON output
 my %response = ();
-if (exists($arguments{'newPassword'}))
+my $username = 'root';
+if (exists($arguments{'oldPassword'}) && exists($arguments{'newPassword'}))
    {
-   $response{'statusCode'} = '200';
-   $response{'statusName'} = 'OK';
-   $response{'ok'} = 'true';
-   $response{'message'} = 'password changed';
+   my $oldPasswordPlainText = $arguments{'oldPassword'};
+   my $newPasswordPlainText = $arguments{'newPassword'};
+
+   # first check that the old password is correct
+   my $isOldPasswordVerified = &verifyPassword($username, $oldPasswordPlainText);
+   if ($isOldPasswordVerified)
+      {
+      &setUserPassword($username, $newPasswordPlainText);
+
+      $response{'statusCode'} = '200';
+      $response{'statusName'} = 'OK';
+      $response{'ok'} = 'true';
+      $response{'message'} = 'password changed';
+      }
+   else
+      {
+      $response{'statusCode'} = '400';
+      $response{'statusName'} = 'Bad Request';
+      $response{'ok'} = 'false';
+      $response{'message'} = 'old password is incorrect';
+      }
    }
 else
    {
    $response{'statusCode'} = '400';
    $response{'statusName'} = 'Bad Request';
    $response{'ok'} = 'false';
-   $response{'message'} = 'missing parameter: newPassword';
+   $response{'message'} = 'missing parameter(s): oldPassword and newPassword';
    }
 
 my $jsonOutput = '';
