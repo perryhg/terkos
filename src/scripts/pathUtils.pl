@@ -6,6 +6,7 @@ $paths{'AudioConfigTool'} = '/opt/bin/AudioConfigTool';
 $paths{'busybox-httpd'} = '/etc/init.d/busybox-httpd';
 $paths{'httpd'} = '/usr/sbin/httpd';
 $paths{'httpd.conf'} = '/etc/httpd.conf';
+$paths{'etc_passwd'} = '/etc/passwd';
 $paths{'PowerInfoTool'} = '/opt/bin/PowerInfoTool';
 $paths{'user_programs_config.json'} = '/opt/config/user_programs_config.json';
 $paths{'UserProgramsConfigTool'} = '/opt/bin/UserProgramsConfigTool';
