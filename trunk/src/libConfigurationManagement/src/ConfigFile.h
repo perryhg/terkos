@@ -65,14 +65,14 @@ class ConfigFile
 
       const bool appendObjectToArray(const string& propertyName, const Json::Value& obj, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER);
 
+      const bool load(Json::Value& config) const;
+
    private:
 
       const string configFilename;
       const string defaultConfigFilename;
       const string configFileDirectory;
 
-      // TODO: For safety, load and save should default to loading from and saving to a particular directory such as /opt/config
-      const bool load(Json::Value& config) const;
       const bool load(Json::Value& config, const string& filename) const;
       const bool save(Json::Value& config) const;
    };

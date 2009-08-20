@@ -142,17 +142,60 @@ void ViewWirelessNetworksMenuItemAction::WirelessEnabledMenuItemAction::start()
       }
    else
       {
-      // todo
       cout << "join mode::start()" << endl;
       if (willJoinNetwork)
          {
+         string ssid = getCurrentNetworkSSID();
          getCharacterDisplay()->setLine(0,getProperty(CONNECTING_TO_LABEL_PROPERTY, CONNECTING_TO_LABEL_DEFAULT));
-         getCharacterDisplay()->setLine(1,getCurrentNetworkSSID() + "...");
+         getCharacterDisplay()->setLine(1,ssid + "...");
+
+         cout << "ViewWirelessNetworksMenuItemAction::WirelessEnabledMenuItemAction(): connecting to [" << ssid << "]" << endl;
+
+         // first take down wireless
+         bool isDisabled = WirelessNetworkingManager::disableWirelessNetworking();
+         if (isDisabled)
+            {
+            cout << "ViewWirelessNetworksMenuItemAction::WirelessEnabledMenuItemAction(): wireless successfully disabled" << endl;
+
+            // now write a new wpa_supplicant.conf file so that when we bring wireless back up it'll use the
+            // network specified therein
+            WpaSupplicantConf wpaSupplicantConf(false);
+            wpaSupplicantConf.addNetwork(ssid);
+            wpaSupplicantConf.save();
+
+            cout << "ViewWirelessNetworksMenuItemAction::WirelessEnabledMenuItemAction(): temp wpa_supplicant.conf written" << endl;
+
+            // bring wireless back up
+            bool isEnabled = WirelessNetworkingManager::enableWirelessNetworking();
+
+            if (isEnabled)
+               {
+               cout << "ViewWirelessNetworksMenuItemAction::WirelessEnabledMenuItemAction(): wireless successfully enabled" << endl;
+               getCharacterDisplay()->setText(getProperty(STATUS_CONNECTION_SUCESS_PROPERTY, STATUS_CONNECTION_SUCESS_DEFAULT));
+               }
+            else
+               {
+               cerr << "ViewWirelessNetworksMenuItemAction::WirelessEnabledMenuItemAction(): failed to enable wireless" << endl;
+               getCharacterDisplay()->setText(getProperty(STATUS_CONNECTION_FAILURE_PROPERTY, STATUS_CONNECTION_FAILURE_DEFAULT));
+               }
+
+            // revert to saved configuration
+            WirelessNetworkingConfigManager wirelessNetworkingConfigManager;
+            wirelessNetworkingConfigManager.applyConfiguration();
+
+            cout << "ViewWirelessNetworksMenuItemAction::WirelessEnabledMenuItemAction(): wpa_supplicant.conf reverted to saved config" << endl;
+            }
+         else
+            {
+            cerr << "ViewWirelessNetworksMenuItemAction::WirelessEnabledMenuItemAction(): failed to disable wireless" << endl;
+            getCharacterDisplay()->setText(getProperty(STATUS_CONNECTION_FAILURE_PROPERTY, STATUS_CONNECTION_FAILURE_DEFAULT));
+            }
+
+         // pause, then pop up to parent
+         usleep(1000 * TwoOptionMenuItemAction::DEFAULT_MILLISECONDS_TO_SLEEP);
          }
-      else
-         {
-         stop();
-         }
+         
+      stop();
       }
    }
 

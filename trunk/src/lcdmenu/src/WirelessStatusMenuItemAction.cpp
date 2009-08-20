@@ -93,34 +93,16 @@ void WirelessStatusMenuItemAction::WirelessDisabledMenuItemAction::executeOption
 
    getCharacterDisplay()->setText(getProperty(WIRELESS_DISABLED_PROPERTY_ACTION_CHOSE_OPTION1_BEFORE, WIRELESS_DISABLED_DEFAULT_ACTION_CHOSE_OPTION1_BEFORE));
 
-   // call the Perl script which enables wireless
-   try
+   // enable wireless and display the appropriate status upon completion
+   if (WirelessNetworkingManager::enableWirelessNetworking())
       {
-      // execute the script and return the results as a stream
-      redi::ipstream is("perl -I/opt/scripts /opt/scripts/enableWirelessNetworking.pl");
-
-      // parse the stream to get the status
-      Json::Value wirelessNetworkingStatus = parentMenuItemAction->parseJSONStream(is);
-
-      is.close();
-
-      // check the status to see whether the disabling worked
-      bool isEnabled = parentMenuItemAction->parseJSONAndReturnWhetherWirelessNetworkingIsEnabled(wirelessNetworkingStatus);
-
-      if (isEnabled)
-         {
-         getCharacterDisplay()->setText(getProperty(WIRELESS_DISABLED_PROPERTY_ACTION_CHOSE_OPTION1, WIRELESS_DISABLED_DEFAULT_ACTION_CHOSE_OPTION1));
-         sleepThenPopUpToParentMenuItem(TwoOptionMenuItemAction::DEFAULT_MILLISECONDS_TO_SLEEP);
-
-         return;
-         }
+      getCharacterDisplay()->setText(getProperty(WIRELESS_DISABLED_PROPERTY_ACTION_CHOSE_OPTION1, WIRELESS_DISABLED_DEFAULT_ACTION_CHOSE_OPTION1));
       }
-   catch (...)
+   else
       {
-      cerr << "WirelessDisabledMenuItemAction::executeOption1Action(): failed to call script to enable wireless networking." << endl;
+      getCharacterDisplay()->setText(getProperty(WIRELESS_DISABLED_PROPERTY_OPTION1_FAILURE, WIRELESS_DISABLED_DEFAULT_OPTION1_FAILURE));
       }
 
-   getCharacterDisplay()->setText(getProperty(WIRELESS_DISABLED_PROPERTY_OPTION1_FAILURE, WIRELESS_DISABLED_DEFAULT_OPTION1_FAILURE));
    sleepThenPopUpToParentMenuItem(TwoOptionMenuItemAction::DEFAULT_MILLISECONDS_TO_SLEEP);
    }
 
@@ -139,7 +121,7 @@ bool WirelessStatusMenuItemAction::WirelessEnabledMenuItemAction::shouldOption1B
 void WirelessStatusMenuItemAction::WirelessEnabledMenuItemAction::executeOption1Action()
    {
    isOnChoiceScreen = false;
-   Json::Value status = parentMenuItemAction->getWirelessNetworkingStatus();
+   Json::Value status = WirelessNetworkingManager::getWirelessNetworkingStatus();
    Json::Value accessPointJson = status["wireless-networking-status"]["wireless-interface"]["access-point"];
    if (accessPointJson != Json::Value::null)
       {
@@ -158,32 +140,13 @@ void WirelessStatusMenuItemAction::WirelessEnabledMenuItemAction::executeOption2
 
    isOnChoiceScreen = false;
 
-   // call the Perl script which disables wireless
-   try
+   // disable wireless and display the appropriate status upon completion
+   if (WirelessNetworkingManager::disableWirelessNetworking())
       {
-      // execute the script and return the results as a stream
-      redi::ipstream is("perl -I/opt/scripts /opt/scripts/disableWirelessNetworking.pl");
-
-      // parse the stream to get the status
-      Json::Value wirelessNetworkingStatus = parentMenuItemAction->parseJSONStream(is);
-
-      is.close();
-
-      // check the status to see whether the disabling worked
-      bool isEnabled = parentMenuItemAction->parseJSONAndReturnWhetherWirelessNetworkingIsEnabled(wirelessNetworkingStatus);
-
-      if (isEnabled)
-         {
-         getCharacterDisplay()->setText(getProperty(WIRELESS_ENABLED_PROPERTY_OPTION2_FAILURE, WIRELESS_ENABLED_DEFAULT_OPTION2_FAILURE));
-         }
-      else
-         {
-         getCharacterDisplay()->setText(getProperty(WIRELESS_ENABLED_PROPERTY_ACTION_CHOSE_OPTION2, WIRELESS_ENABLED_DEFAULT_ACTION_CHOSE_OPTION2));
-         }
+      getCharacterDisplay()->setText(getProperty(WIRELESS_ENABLED_PROPERTY_ACTION_CHOSE_OPTION2, WIRELESS_ENABLED_DEFAULT_ACTION_CHOSE_OPTION2));
       }
-   catch (...)
+   else
       {
-      cerr << "WirelessEnabledMenuItemAction::executeOption2Action(): failed to call script to disable wireless networking." << endl;
       getCharacterDisplay()->setText(getProperty(WIRELESS_ENABLED_PROPERTY_OPTION2_FAILURE, WIRELESS_ENABLED_DEFAULT_OPTION2_FAILURE));
       }
 
