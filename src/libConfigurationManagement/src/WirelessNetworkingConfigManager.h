@@ -6,18 +6,23 @@
 #define WIRELESSNETWORKINGCONFIGMANAGER_H_
 
 #include <algorithm>
-#include <json/json.h>
 #include <iostream>
 #include <fstream>
-#include <sstream>
+#include <pstream.h>
+#include <json/json.h>
 #include "ConfigFile.h"
-#include "StringUtilities.h"
+#include "WpaSupplicantConf.h"
+#include "EtcNetworkInterfacesConf.h"
 
 using namespace std;
+using namespace redi;
 
 class WirelessNetworkingConfigManager : public ConfigFile
    {
    public:
+
+      static Json::Value parseWirelessNetworkingStatusJSONStream(redi::ipstream& is);
+      static const bool parseJSONAndReturnWhetherWirelessNetworkingIsEnabled(const Json::Value& json);
 
       WirelessNetworkingConfigManager(const string& configFileDirectory = ConfigFile::DEFAULT_CONFIG_FILE_DIRECTORY) :
          ConfigFile(CONFIG_FILENAME, DEFAULT_CONFIG_FILENAME, configFileDirectory)
@@ -38,27 +43,25 @@ class WirelessNetworkingConfigManager : public ConfigFile
 
       const bool setJson(Json::Value& config);
 
+      /**
+       * Reads in the config and applies it to /etc/network/interfaces and /etc/network/wpa_supplicant.conf as
+       * a way of ensuring that the user's saved configuration is correctly reflected in the system's config
+       * files.
+       */
+      void applyConfiguration();
+
    private:
 
       static const string CONFIG_FILENAME;
       static const string DEFAULT_CONFIG_FILENAME;
-
-      static const string NETWORK_INTERFACES_CONF_PATH;
-      static const string DEFAULT_NETWORK_INTERFACES_CONF_PATH;
-      static const string WPA_SUPPLICANT_CONF_PATH;
-      static const string DEFAULT_WPA_SUPPLICANT_CONF_PATH;
-
-      static const string BEGIN_WLAN0_AUTOSTART;
-      static const string END_WLAN0_AUTOSTART;
 
       static const string WILL_START_ON_BOOTUP_PROPERTY;
       static const string PROFILES_PROPERTY;
       static const string SSID_PROPERTY;
       static const string IS_ENCRYPTED_PROPERTY;
 
-      bool addNetworkProfile(const string& ssid);
+      const bool addNetworkProfile(const string& ssid);
 
-      void copyFile(const string& source, const string& destination);
    };
 
 #endif /* WIRELESSNETWORKINGCONFIGMANAGER_H_ */

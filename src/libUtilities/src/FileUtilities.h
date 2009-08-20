@@ -27,6 +27,15 @@ class FileUtilities
        */
       static vector<string> getFilenamesInDirectory(const string& directoryPath = string(), const bool filesOnly = true);
 
+      /**
+       * Copies the file referenced by the given source path to the destination path.
+       */
+      static void copyFile(const string& source, const string& destination)
+         {
+         string copyCommand = "cp " + source + " " + destination;
+         system(copyCommand.c_str());
+         }
+
    private:
 
       FileUtilities()

@@ -12,6 +12,7 @@
 #include <pstream.h>
 #include <json/json.h>
 #include <CharacterDisplayMenuItemAction.h>
+#include <WirelessNetworkingManager.h>
 #include <StringUtilities.h>
 
 using namespace std;
@@ -41,9 +42,6 @@ class WirelessStatusCheckingMenuItemAction : public CharacterDisplayMenuItemActi
       virtual void handleWirelessDisabled() = 0;
       virtual void handleWirelessUnplugged() = 0;
       virtual void handleWirelessStatusFailure() = 0;
-      Json::Value getWirelessNetworkingStatus();
-      const bool parseJSONAndReturnWhetherWirelessNetworkingIsEnabled(const Json::Value& json);
-      Json::Value parseJSONStream(redi::ipstream& is);
 
    };
 

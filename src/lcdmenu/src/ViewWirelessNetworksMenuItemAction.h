@@ -11,6 +11,7 @@
 #include <iostream>
 #include <pstream.h>
 #include <json/json.h>
+#include <TwoOptionMenuItemAction.h>
 #include <CharacterDisplayMenuItemAction.h>
 #include <NoOpMenuItemAction.h>
 #include <StringUtilities.h>

@@ -109,9 +109,9 @@ class WirelessStatusMenuItemAction : public WirelessStatusCheckingMenuItemAction
          wirelessUnpluggedMenuItemAction
                   = new NoOpMenuItemAction(getProperty(STATUS_UNPLUGGED_PROPERTY_ACTION_PROMPT, STATUS_UNPLUGGED_DEFAULT_ACTION_PROMPT), NULL, menuItem, menuStatusManager, characterDisplay, properties);
          wirelessDisabledMenuItemAction
-                  = new WirelessDisabledMenuItemAction(this, NULL, menuItem, menuStatusManager, characterDisplay, wirelessDisabledProperties);
+                  = new WirelessDisabledMenuItemAction(NULL, menuItem, menuStatusManager, characterDisplay, wirelessDisabledProperties);
          wirelessEnabledMenuItemAction
-                  = new WirelessEnabledMenuItemAction(this, NULL, menuItem, menuStatusManager, characterDisplay, wirelessEnabledProperties);
+                  = new WirelessEnabledMenuItemAction(NULL, menuItem, menuStatusManager, characterDisplay, wirelessEnabledProperties);
          }
 
       virtual ~WirelessStatusMenuItemAction()
@@ -168,9 +168,9 @@ class WirelessStatusMenuItemAction : public WirelessStatusCheckingMenuItemAction
          {
          public:
 
-            WirelessDisabledMenuItemAction(WirelessStatusMenuItemAction* parentMenuItemAction, void(*delObj)(void*), MenuItem* menuItem, MenuStatusManager* menuStatusManager,
+            WirelessDisabledMenuItemAction(void(*delObj)(void*), MenuItem* menuItem, MenuStatusManager* menuStatusManager,
                                            CharacterDisplay* characterDisplay, map<string, string>& properties) :
-               TwoOptionMenuItemAction(delObj, menuItem, menuStatusManager, characterDisplay, properties), parentMenuItemAction(parentMenuItemAction)
+               TwoOptionMenuItemAction(delObj, menuItem, menuStatusManager, characterDisplay, properties)
                {
                // nothing to do
                }
@@ -270,8 +270,6 @@ class WirelessStatusMenuItemAction : public WirelessStatusCheckingMenuItemAction
 
          private:
 
-            WirelessStatusMenuItemAction* parentMenuItemAction;
-
             bool isOnChoiceScreen;
 
             void sleepThenPopUpToParentMenuItem(const int millisecondsToSleep)
@@ -286,9 +284,9 @@ class WirelessStatusMenuItemAction : public WirelessStatusCheckingMenuItemAction
          {
          public:
 
-            WirelessEnabledMenuItemAction(WirelessStatusMenuItemAction* parentMenuItemAction, void(*delObj)(void*), MenuItem* menuItem,
+            WirelessEnabledMenuItemAction(void(*delObj)(void*), MenuItem* menuItem,
                                           MenuStatusManager* menuStatusManager, CharacterDisplay* characterDisplay, map<string, string>& properties) :
-               TwoOptionMenuItemAction(delObj, menuItem, menuStatusManager, characterDisplay, properties), parentMenuItemAction(parentMenuItemAction)
+               TwoOptionMenuItemAction(delObj, menuItem, menuStatusManager, characterDisplay, properties)
                {
                // nothing to do
                }
@@ -382,8 +380,6 @@ class WirelessStatusMenuItemAction : public WirelessStatusCheckingMenuItemAction
                }
 
          private:
-
-            WirelessStatusMenuItemAction* parentMenuItemAction;
 
             bool isOnChoiceScreen;
             
