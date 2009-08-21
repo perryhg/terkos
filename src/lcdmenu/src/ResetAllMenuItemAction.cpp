@@ -16,13 +16,13 @@ void ResetAllMenuItemAction::executeOption1Action()
    AudioConfigManager audioConfigManager;
    WirelessNetworkingConfigManager wirelessNetworkingConfigManager;
    UserProgramsConfigManager userProgramsConfigManager;
-   WebControlPanelPasswordManager webControlPanelPasswordManager;
 
    audioConfigManager.revertToDefault();
    wirelessNetworkingConfigManager.revertToDefault();
    userProgramsConfigManager.revertToDefault();
-   webControlPanelPasswordManager.revertToDefault();
-   webControlPanelPasswordManager.restartWebServer();
+   RootUserPasswordManager::revertToDefault();
+   WebControlPanelPasswordManager::revertToDefault();
+   WebControlPanelPasswordManager::restartWebServer();
    }
 
 void ResetAllMenuItemAction::executeOption2Action()

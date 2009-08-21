@@ -16,6 +16,19 @@ class WebControlPanelPasswordManager
    {
    public:
 
+      /**
+       * Resets the web control panel password to its default value by reverting /etc/httpd.conf to its default.
+       * Note that the web server is not restarted, so changes won't take effect until it is restarted.
+       */
+      static const bool revertToDefault();
+
+      static const bool restartWebServer();
+
+   private:
+
+      static const string HTTPD_CONF_PATH;
+      static const string DEFAULT_HTTPD_CONF_PATH;
+
       WebControlPanelPasswordManager()
          {
          // nothing to do
@@ -25,20 +38,6 @@ class WebControlPanelPasswordManager
          {
          // nothing to do
          }
-
-      /**
-       * Resets the web control panel password to its default value by reverting /etc/httpd.conf to its default.
-       * Note that the web server is not restarted, so changes won't take effect until it is restarted.
-       */
-      const bool revertToDefault();
-
-      
-      const bool restartWebServer();
-
-   private:
-
-      static const string HTTPD_CONF_PATH;
-      static const string DEFAULT_HTTPD_CONF_PATH;
 
    };
 

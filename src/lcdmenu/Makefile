@@ -86,6 +86,7 @@ NETWORK_MENU_ITEM_ACTIONS_OBJECTS := $(addprefix $(OBJ_DIR)/,$(NETWORK_MENU_ITEM
 RESET_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/ResetAudioMenuItemAction.cpp \
                              $(SRC_DIR)/ResetAllMenuItemAction.cpp \
                              $(SRC_DIR)/ResetUserProgramsMenuItemAction.cpp \
+                             $(SRC_DIR)/ResetRootUserControlPanelPasswordMenuItemAction.cpp \
                              $(SRC_DIR)/ResetWebControlPanelPasswordMenuItemAction.cpp \
                              $(SRC_DIR)/ResetWirelessNetworkingMenuItemAction.cpp
 RESET_MENU_ITEM_ACTIONS_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(RESET_MENU_ITEM_ACTIONS_SRCS)))

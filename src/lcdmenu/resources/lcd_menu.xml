@@ -60,7 +60,7 @@
                <property key="action.prompt">Reset Audio?</property>
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
-               <property key="action.option1">Audio reset to  factory defaults</property>
+               <property key="action.option1">Audio reset to  factory default.</property>
                <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
@@ -127,7 +127,7 @@
                <property key="action.prompt">Reset Wireless?</property>
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
-               <property key="action.option1">Wireless set to factory defaults</property>
+               <property key="action.option1">Wireless set to factory default.</property>
                <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
@@ -140,7 +140,7 @@
                <property key="action.prompt">Reset Audio?</property>
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
-               <property key="action.option1">Audio reset to  factory defaults</property>
+               <property key="action.option1">Audio reset to  factory default.</property>
                <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
@@ -151,7 +151,7 @@
                <property key="action.prompt">Reset Wireless?</property>
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
-               <property key="action.option1">Wireless set to factory defaults</property>
+               <property key="action.option1">Wireless set to factory default.</property>
                <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
@@ -159,10 +159,21 @@
       <item text="Reset User    Programs">
          <item text="">
             <implementation-class name="ResetUserProgramsMenuItemAction" library="libResetMenuItemActions.so">
-               <property key="action.prompt">Reset Programs</property>
+               <property key="action.prompt">Reset Programs?</property>
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
-               <property key="action.option1">Programs set to factory defaults</property>
+               <property key="action.option1">Programs set to factory default.</property>
+               <property key="action.option2">Cancelled -- No settings changed</property>
+            </implementation-class>
+         </item>
+      </item>
+      <item text="Reset Root    User Password">
+         <item text="">
+            <implementation-class name="ResetRootUserControlPanelPasswordMenuItemAction" library="libResetMenuItemActions.so">
+               <property key="action.prompt">Reset Password?</property>
+               <property key="choice.option1">OK  </property>
+               <property key="choice.option2">Cancel</property>
+               <property key="action.option1">Password set to factory default.</property>
                <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
@@ -170,10 +181,10 @@
       <item text="Reset Web CtrlPanel Password">
          <item text="">
             <implementation-class name="ResetWebControlPanelPasswordMenuItemAction" library="libResetMenuItemActions.so">
-               <property key="action.prompt">Reset Password</property>
+               <property key="action.prompt">Reset Password?</property>
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
-               <property key="action.option1">Password set to factory default</property>
+               <property key="action.option1">Password set to factory default.</property>
                <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
@@ -184,7 +195,7 @@
                <property key="action.prompt">Reset All?</property>
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
-               <property key="action.option1">Reset to factorydefaults</property>
+               <property key="action.option1">Reset to factorydefaults.</property>
                <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
