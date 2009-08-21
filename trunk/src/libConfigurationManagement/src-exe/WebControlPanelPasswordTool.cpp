@@ -20,9 +20,7 @@ int main(int argc, char** argv)
       {
       if (strcmp(argv[1], "--reset") == 0)
          {
-         WebControlPanelPasswordManager configManager;
-
-         cout << configManager.revertToDefault() << endl;
+         cout << WebControlPanelPasswordManager::revertToDefault() << endl;
          }
       }
 

@@ -15,7 +15,6 @@
 ################################################################################
 
 require "/opt/scripts/commandLineUtils.pl";
-require "/opt/scripts/pathUtils.pl";
 require "/opt/scripts/httpUtils.pl";
 require "/opt/scripts/jsonUtils.pl";
 require "/opt/scripts/passwordUtils.pl";

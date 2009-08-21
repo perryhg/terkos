@@ -13,13 +13,11 @@ bool ResetWebControlPanelPasswordMenuItemAction::shouldOption1BeSelectedUponActi
 
 void ResetWebControlPanelPasswordMenuItemAction::executeOption1Action()
    {
-   WebControlPanelPasswordManager manager;
-
    // revert the password to the default
-   manager.revertToDefault();
+   WebControlPanelPasswordManager::revertToDefault();
 
    // restart the web server
-   manager.restartWebServer();
+   WebControlPanelPasswordManager::restartWebServer();
    }
 
 void ResetWebControlPanelPasswordMenuItemAction::executeOption2Action()
