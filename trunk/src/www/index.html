@@ -29,7 +29,7 @@
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/SystemSettingsTab.js"></script>
    <script type="text/javascript">
       var tabSelectionHandlers = new Array();
-      var host = "";
+      var host = "";//http://192.168.1.4";
 
       $(function()
          {
@@ -146,366 +146,393 @@
             {
             tabSelectionHandlers[0]();
             }
+
+         $('#please-wait').fadeOut("slow", function()
+            {
+            $('#control-panel').fadeIn("slow");
+            });
+
          });
    </script>
 </head>
 <body>
-<div class="main-title">TerkOS</div>
-<div id="tabs">
-   <!-- ============================================================================================================ -->
-   <ul id="tabsList">
-      <li><a href="#System_Info" title="System Info">System Info</a></li>
-      <li><a href="#Audio" title="Audio">Audio</a></li>
-      <li><a href="#Wireless_Networking" title="Wireless Networking">Wireless Networking</a></li>
-      <li><a href="#User_Programs" title="User Programs">User Programs</a></li>
-      <li><a href="#Passwords" title="Passwords">Passwords</a></li>
-      <li><a href="#System_Settings" title="System Settings">System Settings</a></li>
-   </ul>
-   <!-- ============================================================================================================ -->
-   <div id="System_Info">
-      <div class="section">
-         <div class="section-title">System</div>
-         <div class="indented">
-            <div id="versionInfoMessageArea">&nbsp;</div>
-            <div id="versionInfoArea" style="display:none">
-               <table border="0" cellpadding="0" cellspacing="0">
-                  <tr>
-                     <td>Operating System:</td>
-                     <td rowspan="3">&nbsp;&nbsp;&nbsp;</td>
-                     <td>
-                        <div id="versionInfoOperatingSystem"></div>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>Hardware Version:</td>
-                     <td>
-                        <div id="versionInfoHardwareVersion"></div>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>Firmware Version:</td>
-                     <td>
-                        <div id="versionInfoFirmwareVersion"></div>
-                     </td>
-                  </tr>
-               </table>
-            </div>
-         </div>
-      </div>
-      <div class="section">
-         <div class="section-title">Memory Usage</div>
-         <div class="indented">
-            <div id="memoryUsageMessageArea">&nbsp;</div>
-            <div id="memoryUsageArea" style="display:none">
-               <table border="0" cellpadding="0" cellspacing="1">
-                  <tr>
-                     <td>&nbsp;</td>
-                     <td class="data-column-label">Total</td>
-                     <td class="data-column-label">Used</td>
-                     <td class="data-column-label">Free</td>
-                  </tr>
-                  <tr>
-                     <td class="data-row-label">Memory</td>
-                     <td class="data-cell align-right"><span id="memoryUsageMemoryTotal"></span></td>
-                     <td class="data-cell align-right"><span id="memoryUsageMemoryUsed"></span></td>
-                     <td class="data-cell align-right"><span id="memoryUsageMemoryFree"></span></td>
-                  </tr>
-                  <tr>
-                     <td class="data-row-label">Swap</td>
-                     <td class="data-cell align-right"><span id="memoryUsageSwapTotal"></span></td>
-                     <td class="data-cell align-right"><span id="memoryUsageSwapUsed"></span></td>
-                     <td class="data-cell align-right"><span id="memoryUsageSwapFree"></span></td>
-                  </tr>
-                  <tr>
-                     <td class="data-row-label">Total</td>
-                     <td class="data-cell align-right"><span id="memoryUsageTotalTotal"></span></td>
-                     <td class="data-cell align-right"><span id="memoryUsageTotalUsed"></span></td>
-                     <td class="data-cell align-right"><span id="memoryUsageTotalFree"></span></td>
-                  </tr>
-               </table>
-            </div>
-         </div>
-      </div>
-      <div class="section">
-         <div class="section-title">Disk Usage</div>
-         <div class="indented">
-            <div id="diskUsageMessageArea">&nbsp;</div>
-            <div id="diskUsageArea" style="display:none">
-               <table border="0" cellpadding="0" cellspacing="1" id="diskUsageTable">
-                  <tr>
-                     <td class="data-column-label">Filesystem</td>
-                     <td class="data-column-label">1<span id="diskUsageBlockSizeUnits"></span>-blocks</td>
-                     <td class="data-column-label">Used</td>
-                     <td class="data-column-label">Free</td>
-                     <td class="data-column-label">Use %</td>
-                     <td class="data-column-label">Mounted On</td>
-                  </tr>
-               </table>
-            </div>
-         </div>
-      </div>
-      <div class="section">
-         <div class="section-title">Power</div>
-         <div class="indented">
-            <div id="powerInfoMessageArea">&nbsp;</div>
-            <div id="powerInfoArea" style="display:none">
-               <table border="0" cellpadding="0" cellspacing="1">
-                  <tr>
-                     <td>&nbsp;</td>
-                     <td class="data-column-label">Voltage</td>
-                     <td class="data-column-label">State</td>
-                  </tr>
-                  <tr>
-                     <td class="data-row-label">Main Battery</td>
-                     <td class="data-cell align-right"><span id="powerInfoMainBatteryVoltage"></span></td>
-                     <td class="data-cell align-right"><span id="powerInfoMainBatteryState"></span></td>
-                  </tr>
-                  <tr>
-                     <td class="data-row-label">Backup Battery</td>
-                     <td class="data-cell align-right"><span id="powerInfoBackupBatteryVoltage"></span></td>
-                     <td class="data-cell align-right"><span id="powerInfoBackupBatteryState"></span></td>
-                  </tr>
-                  <tr>
-                     <td class="data-row-label">I/O 5 Volt</td>
-                     <td class="data-cell align-right"><span id="powerInfoIo5VVoltage"></span></td>
-                     <td class="data-cell align-right"><span id="powerInfoIo5VState"></span></td>
-                  </tr>
-                  <tr>
-                     <td class="data-row-label">Main 5 Volt</td>
-                     <td class="data-cell align-right"><span id="powerInfoMain5VVoltage"></span></td>
-                     <td class="data-cell">n/a</td>
-                  </tr>
-               </table>
-               <div class="blank-line"></div>
-               <table border="0" cellpadding="0" cellspacing="1" id="powerInfoBreakersTable">
-                  <tr id="powerInfoBreakersTableHeadingRow">
-                     <td>&nbsp;</td>
-                  </tr>
-                  <tr id="powerInfoBreakersTableDataRow">
-                     <td class="data-row-label">Breakers</td>
-                  </tr>
-               </table>
-            </div>
-         </div>
-      </div>
-   </div>
-   <!-- ============================================================================================================ -->
-   <div id="Audio">
-      <div class="section">
-         <div class="section-title">Preferences</div>
-         <div class="indented">
-            <div id="audioConfigurationMessageArea">&nbsp;</div>
-            <div id="audioConfigurationArea" style="display:none">
-               <input id="isAudioAlertsEnabled" name="isAudioAlertsEnabled" type="checkbox"/><label for="isAudioAlertsEnabled">Play audio alerts</label>
-               <div class="blank-line"></div>
-               <div style="padding-bottom:5px">
-                  Volume: <span id="volume"></span>
-               </div>
-               <div id="volumeSlider" class="default-widget-width"></div>
-               <div class="blank-line"></div>
-               <div class="button-container">
-                  <button type="button" style="float:right;margin-right:0;" id="saveAudioConfigButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Save</button>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div>
-   <!-- ============================================================================================================ -->
-   <div id="Wireless_Networking">
-      <form method="post" onsubmit="return false;">
+<table id="please-wait" border="0" cellpadding="0" cellspacing="0" width="100%" height="400">
+   <tr valign="middle">
+      <td align="center">
+         <table border="0" cellpadding="0" cellspacing="0">
+            <tr valign="middle">
+               <td><img src="images/ajax-loader.gif" width="16" height="16" alt=""></td>
+               <td>&nbsp;</td>
+               <td>Loading, please wait...</td>
+            </tr>
+         </table>
+      </td>
+   </tr>
+</table>
+<div id="control-panel" style="display:none">
+   <div class="main-title">TerkOS</div>
+   <div id="tabs">
+      <!-- ============================================================================================================ -->
+      <ul id="tabsList">
+         <li><a href="#System_Info" title="System Info">System Info</a></li>
+         <li><a href="#Audio" title="Audio">Audio</a></li>
+         <li><a href="#Wireless_Networking" title="Wireless Networking">Wireless Networking</a></li>
+         <li><a href="#User_Programs" title="User Programs">User Programs</a></li>
+         <li><a href="#Passwords" title="Passwords">Passwords</a></li>
+         <li><a href="#System_Settings" title="System Settings">System Settings</a></li>
+      </ul>
+      <!-- ============================================================================================================ -->
+      <div id="System_Info">
          <div class="section">
-            <div class="section-title">Status</div>
+            <div class="section-title">System</div>
             <div class="indented">
-               <div id="wirelessNetworkingStatusMessageArea" class="emphasized">&nbsp;</div>
-               <div id="wirelessNetworkingStatusMessageAreaDetail" class="explanatory-text">&nbsp;</div>
+               <div id="versionInfoMessageArea">&nbsp;</div>
+               <div id="versionInfoArea" style="display:none">
+                  <table border="0" cellpadding="0" cellspacing="0">
+                     <tr>
+                        <td>Operating System:</td>
+                        <td rowspan="3">&nbsp;&nbsp;&nbsp;</td>
+                        <td>
+                           <div id="versionInfoOperatingSystem"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>Hardware Version:</td>
+                        <td>
+                           <div id="versionInfoHardwareVersion"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>Firmware Version:</td>
+                        <td>
+                           <div id="versionInfoFirmwareVersion"></div>
+                        </td>
+                     </tr>
+                  </table>
+               </div>
             </div>
          </div>
+         <div class="section">
+            <div class="section-title">Memory Usage</div>
+            <div class="indented">
+               <div id="memoryUsageMessageArea">&nbsp;</div>
+               <div id="memoryUsageArea" style="display:none">
+                  <table border="0" cellpadding="0" cellspacing="1">
+                     <tr>
+                        <td>&nbsp;</td>
+                        <td class="data-column-label">Total</td>
+                        <td class="data-column-label">Used</td>
+                        <td class="data-column-label">Free</td>
+                     </tr>
+                     <tr>
+                        <td class="data-row-label">Memory</td>
+                        <td class="data-cell align-right"><span id="memoryUsageMemoryTotal"></span></td>
+                        <td class="data-cell align-right"><span id="memoryUsageMemoryUsed"></span></td>
+                        <td class="data-cell align-right"><span id="memoryUsageMemoryFree"></span></td>
+                     </tr>
+                     <tr>
+                        <td class="data-row-label">Swap</td>
+                        <td class="data-cell align-right"><span id="memoryUsageSwapTotal"></span></td>
+                        <td class="data-cell align-right"><span id="memoryUsageSwapUsed"></span></td>
+                        <td class="data-cell align-right"><span id="memoryUsageSwapFree"></span></td>
+                     </tr>
+                     <tr>
+                        <td class="data-row-label">Total</td>
+                        <td class="data-cell align-right"><span id="memoryUsageTotalTotal"></span></td>
+                        <td class="data-cell align-right"><span id="memoryUsageTotalUsed"></span></td>
+                        <td class="data-cell align-right"><span id="memoryUsageTotalFree"></span></td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+         </div>
+         <div class="section">
+            <div class="section-title">Disk Usage</div>
+            <div class="indented">
+               <div id="diskUsageMessageArea">&nbsp;</div>
+               <div id="diskUsageArea" style="display:none">
+                  <table border="0" cellpadding="0" cellspacing="1" id="diskUsageTable">
+                     <tr>
+                        <td class="data-column-label">Filesystem</td>
+                        <td class="data-column-label">1<span id="diskUsageBlockSizeUnits"></span>-blocks</td>
+                        <td class="data-column-label">Used</td>
+                        <td class="data-column-label">Free</td>
+                        <td class="data-column-label">Use %</td>
+                        <td class="data-column-label">Mounted On</td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+         </div>
+         <div class="section">
+            <div class="section-title">Power</div>
+            <div class="indented">
+               <div id="powerInfoMessageArea">&nbsp;</div>
+               <div id="powerInfoArea" style="display:none">
+                  <table border="0" cellpadding="0" cellspacing="1">
+                     <tr>
+                        <td>&nbsp;</td>
+                        <td class="data-column-label">Voltage</td>
+                        <td class="data-column-label">State</td>
+                     </tr>
+                     <tr>
+                        <td class="data-row-label">Main Battery</td>
+                        <td class="data-cell align-right"><span id="powerInfoMainBatteryVoltage"></span></td>
+                        <td class="data-cell align-right"><span id="powerInfoMainBatteryState"></span></td>
+                     </tr>
+                     <tr>
+                        <td class="data-row-label">Backup Battery</td>
+                        <td class="data-cell align-right"><span id="powerInfoBackupBatteryVoltage"></span></td>
+                        <td class="data-cell align-right"><span id="powerInfoBackupBatteryState"></span></td>
+                     </tr>
+                     <tr>
+                        <td class="data-row-label">I/O 5 Volt</td>
+                        <td class="data-cell align-right"><span id="powerInfoIo5VVoltage"></span></td>
+                        <td class="data-cell align-right"><span id="powerInfoIo5VState"></span></td>
+                     </tr>
+                     <tr>
+                        <td class="data-row-label">Main 5 Volt</td>
+                        <td class="data-cell align-right"><span id="powerInfoMain5VVoltage"></span></td>
+                        <td class="data-cell">n/a</td>
+                     </tr>
+                  </table>
+                  <div class="blank-line"></div>
+                  <table border="0" cellpadding="0" cellspacing="1" id="powerInfoBreakersTable">
+                     <tr id="powerInfoBreakersTableHeadingRow">
+                        <td>&nbsp;</td>
+                     </tr>
+                     <tr id="powerInfoBreakersTableDataRow">
+                        <td class="data-row-label">Breakers</td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- ============================================================================================================ -->
+      <div id="Audio">
          <div class="section">
             <div class="section-title">Preferences</div>
             <div class="indented">
-               <div id="wirelessNetworkingConfigurationMessageArea">&nbsp;</div>
-               <div id="wirelessNetworkingConfigurationArea" style="display:none">
-                  <input id="willStartWirelessNetworkingOnBootupCheckbox" name="willStartWirelessNetworkingOnBootup" type="checkbox"/><label for="willStartWirelessNetworkingOnBootupCheckbox">Start wireless networking on boot up</label>
+               <div id="audioConfigurationMessageArea">&nbsp;</div>
+               <div id="audioConfigurationArea" style="display:none">
+                  <input id="isAudioAlertsEnabled" name="isAudioAlertsEnabled" type="checkbox"/><label for="isAudioAlertsEnabled">Play audio alerts</label>
                   <div class="blank-line"></div>
-                  <div class="label">Preferred Networks:</div>
-                  <div id="preferredWirelessNetworksListContainer">
-                     <div id="preferredWirelessNetworksList" class="ui-widget-content default-widget-width" style="display:block; padding:0; margin:0; overflow: auto; height:150px;"></div>
+                  <div style="padding-bottom:5px">
+                     Volume: <span id="volume"></span>
                   </div>
+                  <div id="volumeSlider" class="default-widget-width"></div>
+                  <div class="blank-line"></div>
                   <div class="button-container">
-                     <div id="addPreferredWirelessNetworkButton" class="ui-state-default ui-corner-all button state-has-no-dependency" title="Add">
-                        <span class="ui-icon ui-icon-plus"></span>
-                     </div>
-                     <div id="deletePreferredWirelessNetworkButton" class="ui-state-active ui-state-disabled ui-corner-all button state-depends-on-preferred-wireless-network-list-selection" title="Delete">
-                        <span class="ui-icon ui-icon-minus"></span>
-                     </div>
-                     <div id="editPreferredWirelessNetworkButton" class="ui-state-active ui-state-disabled ui-corner-all button state-depends-on-preferred-wireless-network-list-selection" title="Edit">
-                        <span class="ui-icon ui-icon-pencil"></span>
-                     </div>
-                     <div class="tooltip-text">
-                        Drag the networks to arrange them in<br>
-                        the order in which you want to join.
-                     </div>
-                     <button type="button" style="float:right;margin-right:0;" id="saveWirelessNetworkingConfigButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Save</button>
+                     <button type="button" style="float:right;margin-right:0;" id="saveAudioConfigButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Save</button>
                   </div>
                </div>
             </div>
          </div>
-      </form>
-      <div id="preferredWirelessNetworkDialog" title="Add a Preferred Wireless Network">
-         <form id="formToEnterPreferredWirelessNetworkInfo" method="post">
-            <p>
-               Enter the name of the network you want to add. You can also click
-               Scan to scan for and then choose from a list of available networks.
-            </p>
-            <label for="wirelessNetworkName_add">Network Name</label>
-            <input type="text" name="wirelessNetworkName_add" id="wirelessNetworkName_add" class="text ui-widget-content ui-corner-all"/>
-            <div class="ui-widget-content divider" style="margin-top: 50px"></div>
-            <div id="addManuallyEnteredPreferredWirelessNetworkDialogButtonsContainer">
-               <button type="button" style="float:right" id="addManuallyEnteredWirelessNetworkDialogButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Add</button>
-               <button type="button" style="float:right" class="ui-state-default ui-corner-all button text-button cancel-preferred-wireless-network-dialog-button state-has-no-dependency">Cancel</button>
-               <button type="button" id="showAvailableWirelessNetworksButton" class="ui-state-default ui-corner-all button text-button state-has-no-dependency">Scan</button>
-            </div>
-         </form>
-         <div id="formToChooseFromAvailableWirelessNetworks" style="display:none">
-            <p>
-               Select the network you want to add. You can also click
-               Other... to manually enter a network.
-            </p>
-            <div id="availableWirelessNetworksList" class="ui-widget-content" style="overflow: auto; height:150px;"></div>
-            <table id="availableWirelessNetworksPleaseWaitIndicator" border="0" cellpadding="0" cellspacing="0" style="margin:2px 0 2px 0">
-               <tr valign="middle">
-                  <td><img src="images/ajax-loader.gif" width="16" height="16" alt=""></td>
-                  <td>&nbsp;</td>
-                  <td>Scanning for wireless networks...</td>
-               </tr>
-            </table>
-            <div class="ui-widget-content divider" style="margin-top: 50px"></div>
-            <div id="addChosenPreferredWirelessNetworkDialogButtonsContainer">
-               <button type="button" style="float:right" id="addAvailableWirelessNetworkDialogButton" class="ui-state-active ui-state-disabled ui-corner-all button text-button state-depends-on-available-wireless-network-list-selection">Add</button>
-               <button type="button" style="float:right" class="ui-state-default ui-corner-all button text-button cancel-preferred-wireless-network-dialog-button state-has-no-dependency">Cancel</button>
-               <button type="button" id="manuallyEnterAWirelessNetworkButton" class="ui-state-default ui-corner-all button text-button state-has-no-dependency">Other...</button>
-            </div>
-         </div>
       </div>
-      <div id="editPreferredWirelessNetworkDialog" title="Edit a Preferred Wireless Network">
-         <form id="formToEdiPreferredWirelessNetworkInfo" method="post">
-            <p>
-               Edit the wireless network's name.
-            </p>
-            <label for="wirelessNetworkName_edit">Network Name</label>
-            <input type="text" name="wirelessNetworkName_edit" id="wirelessNetworkName_edit" class="text ui-widget-content ui-corner-all"/>
-            <input type="hidden" id="wirelessNetworkUUID_edit"/>
-            <div class="ui-widget-content divider" style="margin-top: 50px"></div>
-            <div id="editPreferredWirelessNetworkDialogButtonsContainer">
-               <button type="button" style="float:right" id="saveManuallyEnteredWirelessNetworkDialogButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">OK</button>
-               <button type="button" style="float:right" id="cancelEditWirelessNetworkDialogButton" class="ui-state-default ui-corner-all button text-button state-has-no-dependency">Cancel</button>
-            </div>
-         </form>
-      </div>
-   </div>
-   <!-- ============================================================================================================ -->
-   <div id="User_Programs">
-      <form method="post" onsubmit="return false;">
-         <div class="section">
-            <div class="section-title">Preferences</div>
-            <div class="indented">
-               <div id="userProgramConfigurationMessageArea">&nbsp;</div>
-               <div id="userProgramConfigurationArea" style="display:none">
-                  Program to run on boot:<br>
-                  <select id="userProgramName" class="default-widget-width"></select>
-                  <div class="blank-line"></div>
-                  <div class="button-container">
-                     <button type="button" style="float:right;margin-right:0;" id="saveUserProgramConfigButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Save</button>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </form>
-   </div>
-   <!-- ============================================================================================================ -->
-   <div id="Passwords">
-      <div class="section">
-         <div class="section-title">Web Control Panel</div>
-         <div class="indented">
-            <form id="formToEditWebPassword" method="post" onsubmit="return false;">
-               <table border="0" cellpadding="0" cellspacing="0">
-                  <tr>
-                     <td><label for="passwordsNewWebPassword">New Password:</label></td>
-                     <td>
-                        <input name="passwordsNewWebPassword" id="passwordsNewWebPassword" type="password" class="text ui-widget-content ui-corner-all" style="margin:0 0 5px 5px">
-                     </td>
-                  </tr>
-                  <tr>
-                     <td><label for="passwordsNewWebPasswordConfirmation">Confirm New Password:</label></td>
-                     <td>
-                        <input name="passwordsNewWebPasswordConfirmation" id="passwordsNewWebPasswordConfirmation" type="password" class="text ui-widget-content ui-corner-all" style="margin:0 0 5px 5px">
-                     </td>
-                  </tr>
-                  <tr>
-                     <td colspan="2">
-                        <div class="button-container" style="width:auto;">
-                           <button type="button" style="float:right;margin-right:0;" id="saveNewWebPasswordButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Save</button>
-                           <span id="editWebPasswordMessage" style="float:right;margin:6px 5px 0 0;"></span>
-                        </div>
-                     </td>
-                  </tr>
-               </table>
-            </form>
-         </div>
-      </div>
-      <div class="section" style="display:none">
-         <div class="section-title">Root User</div>
-         <div class="indented">
-            <form id="formToEditRootUserPassword" method="post" onsubmit="return false;">
-               <table border="0" cellpadding="0" cellspacing="0">
-                  <tr>
-                     <td><label for="passwordsNewRootUserPassword">New Password:</label></td>
-                     <td>
-                        <input name="passwordsNewRootUserPassword" id="passwordsNewRootUserPassword" type="password" class="text ui-widget-content ui-corner-all" style="margin:0 0 5px 5px">
-                     </td>
-                  </tr>
-                  <tr>
-                     <td><label for="passwordsNewRootUserPasswordConfirmation">Confirm New Password:</label></td>
-                     <td>
-                        <input name="passwordsNewRootUserPasswordConfirmation" id="passwordsNewRootUserPasswordConfirmation" type="password" class="text ui-widget-content ui-corner-all" style="margin:0 0 5px 5px">
-                     </td>
-                  </tr>
-                  <tr>
-                     <td colspan="2">
-                        <div class="button-container" style="width:auto;">
-                           <button type="button" style="float:right;margin-right:0;" id="saveNewRootUserPasswordButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Save</button>
-                           <span id="editRootUserPasswordMessage" style="float:right;margin:6px 5px 0 0;"></span>
-                        </div>
-                     </td>
-                  </tr>
-               </table>
-            </form>
-         </div>
-      </div>
-      <div id="info"></div>
-   </div>
-   <!-- ============================================================================================================ -->
-   <div id="System_Settings">
-      <form method="post" onsubmit="return false;">
-         <div class="section">
-            <div class="section-title">Reset Preferences</div>
-            <div class="indented">
-               <input id="willResetAll" name="willResetAll" type="checkbox"/><label for="willResetAll">All of the following:</label>
+      <!-- ============================================================================================================ -->
+      <div id="Wireless_Networking">
+         <form method="post" onsubmit="return false;">
+            <div class="section">
+               <div class="section-title">Status</div>
                <div class="indented">
-                  <input id="willResetAudio" class="reset-preferences-option" name="willResetAudio" type="checkbox" value="Audio"/><label for="willResetAudio">Audio</label><br>
-                  <input id="willResetWirelessNetworking" class="reset-preferences-option" name="willResetWirelessNetworking" type="checkbox" value="Wireless Networking"/><label for="willResetWirelessNetworking">Wireless Networking</label><br>
-                  <input id="willResetUserPrograms" class="reset-preferences-option" name="willResetUserPrograms" type="checkbox" value="User Programs"/><label for="willResetUserPrograms">User Programs</label><br>
-                  <input id="willResetPasswords" class="reset-preferences-option" name="willResetPasswords" type="checkbox" value="Passwords"/><label for="willResetPasswords">Passwords</label><br>
+                  <div id="wirelessNetworkingStatusMessageArea" class="emphasized">&nbsp;</div>
+                  <div id="wirelessNetworkingStatusMessageAreaDetail" class="explanatory-text">&nbsp;</div>
                </div>
-               <div class="blank-line"></div>
-               <div class="button-container" style="width:200px">
-                  <button type="button" style="float:right;margin-right:0;" id="resetPreferencesButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Reset Preferences</button>
+            </div>
+            <div class="section">
+               <div class="section-title">Preferences</div>
+               <div class="indented">
+                  <div id="wirelessNetworkingConfigurationMessageArea">&nbsp;</div>
+                  <div id="wirelessNetworkingConfigurationArea" style="display:none">
+                     <input id="willStartWirelessNetworkingOnBootupCheckbox" name="willStartWirelessNetworkingOnBootup" type="checkbox"/><label for="willStartWirelessNetworkingOnBootupCheckbox">Start wireless networking on boot up</label>
+                     <div class="blank-line"></div>
+                     <div class="label">Preferred Networks:</div>
+                     <div id="preferredWirelessNetworksListContainer">
+                        <div id="preferredWirelessNetworksList" class="ui-widget-content default-widget-width" style="display:block; padding:0; margin:0; overflow: auto; height:150px;"></div>
+                     </div>
+                     <div class="button-container">
+                        <div id="addPreferredWirelessNetworkButton" class="ui-state-default ui-corner-all button state-has-no-dependency" title="Add">
+                           <span class="ui-icon ui-icon-plus"></span>
+                        </div>
+                        <div id="deletePreferredWirelessNetworkButton" class="ui-state-active ui-state-disabled ui-corner-all button state-depends-on-preferred-wireless-network-list-selection" title="Delete">
+                           <span class="ui-icon ui-icon-minus"></span>
+                        </div>
+                        <div id="editPreferredWirelessNetworkButton" class="ui-state-active ui-state-disabled ui-corner-all button state-depends-on-preferred-wireless-network-list-selection" title="Edit">
+                           <span class="ui-icon ui-icon-pencil"></span>
+                        </div>
+                        <div class="tooltip-text">
+                           Drag the networks to arrange them in<br>
+                           the order in which you want to join.
+                        </div>
+                        <button type="button" style="float:right;margin-right:0;" id="saveWirelessNetworkingConfigButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Save</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </form>
+         <div id="preferredWirelessNetworkDialog" title="Add a Preferred Wireless Network">
+            <form id="formToEnterPreferredWirelessNetworkInfo" method="post">
+               <p>
+                  Enter the name of the network you want to add. You can also click
+                  Scan to scan for and then choose from a list of available networks.
+               </p>
+               <label for="wirelessNetworkName_add">Network Name</label>
+               <input type="text" name="wirelessNetworkName_add" id="wirelessNetworkName_add" class="text ui-widget-content ui-corner-all"/>
+               <div class="ui-widget-content divider" style="margin-top: 50px"></div>
+               <div id="addManuallyEnteredPreferredWirelessNetworkDialogButtonsContainer">
+                  <button type="button" style="float:right" id="addManuallyEnteredWirelessNetworkDialogButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Add</button>
+                  <button type="button" style="float:right" class="ui-state-default ui-corner-all button text-button cancel-preferred-wireless-network-dialog-button state-has-no-dependency">Cancel</button>
+                  <button type="button" id="showAvailableWirelessNetworksButton" class="ui-state-default ui-corner-all button text-button state-has-no-dependency">Scan</button>
+               </div>
+            </form>
+            <div id="formToChooseFromAvailableWirelessNetworks" style="display:none">
+               <p>
+                  Select the network you want to add. You can also click
+                  Other... to manually enter a network.
+               </p>
+               <div id="availableWirelessNetworksList" class="ui-widget-content" style="overflow: auto; height:150px;"></div>
+               <table id="availableWirelessNetworksPleaseWaitIndicator" border="0" cellpadding="0" cellspacing="0" style="margin:2px 0 2px 0">
+                  <tr valign="middle">
+                     <td><img src="images/ajax-loader.gif" width="16" height="16" alt=""></td>
+                     <td>&nbsp;</td>
+                     <td>Scanning for wireless networks...</td>
+                  </tr>
+               </table>
+               <div class="ui-widget-content divider" style="margin-top: 50px"></div>
+               <div id="addChosenPreferredWirelessNetworkDialogButtonsContainer">
+                  <button type="button" style="float:right" id="addAvailableWirelessNetworkDialogButton" class="ui-state-active ui-state-disabled ui-corner-all button text-button state-depends-on-available-wireless-network-list-selection">Add</button>
+                  <button type="button" style="float:right" class="ui-state-default ui-corner-all button text-button cancel-preferred-wireless-network-dialog-button state-has-no-dependency">Cancel</button>
+                  <button type="button" id="manuallyEnterAWirelessNetworkButton" class="ui-state-default ui-corner-all button text-button state-has-no-dependency">Other...</button>
                </div>
             </div>
          </div>
-      </form>
+         <div id="editPreferredWirelessNetworkDialog" title="Edit a Preferred Wireless Network">
+            <form id="formToEdiPreferredWirelessNetworkInfo" method="post">
+               <p>
+                  Edit the wireless network's name.
+               </p>
+               <label for="wirelessNetworkName_edit">Network Name</label>
+               <input type="text" name="wirelessNetworkName_edit" id="wirelessNetworkName_edit" class="text ui-widget-content ui-corner-all"/>
+               <input type="hidden" id="wirelessNetworkUUID_edit"/>
+               <div class="ui-widget-content divider" style="margin-top: 50px"></div>
+               <div id="editPreferredWirelessNetworkDialogButtonsContainer">
+                  <button type="button" style="float:right" id="saveManuallyEnteredWirelessNetworkDialogButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">OK</button>
+                  <button type="button" style="float:right" id="cancelEditWirelessNetworkDialogButton" class="ui-state-default ui-corner-all button text-button state-has-no-dependency">Cancel</button>
+               </div>
+            </form>
+         </div>
+      </div>
+      <!-- ============================================================================================================ -->
+      <div id="User_Programs">
+         <form method="post" onsubmit="return false;">
+            <div class="section">
+               <div class="section-title">Preferences</div>
+               <div class="indented">
+                  <div id="userProgramConfigurationMessageArea">&nbsp;</div>
+                  <div id="userProgramConfigurationArea" style="display:none">
+                     Program to run on boot:<br>
+                     <select id="userProgramName" class="default-widget-width"></select>
+                     <div class="blank-line"></div>
+                     <div class="button-container">
+                        <button type="button" style="float:right;margin-right:0;" id="saveUserProgramConfigButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Save</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </form>
+      </div>
+      <!-- ============================================================================================================ -->
+      <div id="Passwords">
+         <div class="section">
+            <div class="section-title">Web Control Panel</div>
+            <div class="indented">
+               <form id="formToEditWebPassword" method="post" onsubmit="return false;">
+                  <table border="0" cellpadding="0" cellspacing="0">
+                     <tr>
+                        <td><label for="passwordsNewWebPassword">New Password:</label></td>
+                        <td>
+                           <input name="passwordsNewWebPassword" id="passwordsNewWebPassword" type="password" class="text ui-widget-content ui-corner-all" style="margin:0 0 5px 5px">
+                        </td>
+                     </tr>
+                     <tr>
+                        <td><label for="passwordsNewWebPasswordConfirmation">Confirm New Password:</label></td>
+                        <td>
+                           <input name="passwordsNewWebPasswordConfirmation" id="passwordsNewWebPasswordConfirmation" type="password" class="text ui-widget-content ui-corner-all" style="margin:0 0 5px 5px">
+                        </td>
+                     </tr>
+                     <tr>
+                        <td colspan="2">
+                           <div class="button-container" style="width:auto;">
+                              <button type="button" style="float:right;margin-right:0;" id="saveNewWebPasswordButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Save</button>
+                              <span id="editWebPasswordMessage" style="float:right;margin:6px 5px 0 0;"></span>
+                           </div>
+                        </td>
+                     </tr>
+                  </table>
+               </form>
+            </div>
+         </div>
+         <div class="section">
+            <div class="section-title">Root User</div>
+            <div class="indented">
+               <form id="formToEditRootUserPassword" method="post" onsubmit="return false;">
+                  <table border="0" cellpadding="0" cellspacing="0">
+                     <tr>
+                        <td><label for="passwordsCurrentRootUserPassword">Current Password:</label></td>
+                        <td>
+                           <input name="passwordsCurrentRootUserPassword" id="passwordsCurrentRootUserPassword" type="password" class="password text ui-widget-content ui-corner-all" style="margin:0 0 5px 5px">
+                        </td>
+                     </tr>
+                     <tr>
+                        <td><label for="passwordsNewRootUserPassword">New Password:</label></td>
+                        <td>
+                           <input name="passwordsNewRootUserPassword" id="passwordsNewRootUserPassword" type="password" class="password text ui-widget-content ui-corner-all" style="margin:0 0 5px 5px">
+                        </td>
+                     </tr>
+                     <tr>
+                        <td><label for="passwordsNewRootUserPasswordConfirmation">Confirm New Password:</label></td>
+                        <td>
+                           <input name="passwordsNewRootUserPasswordConfirmation" id="passwordsNewRootUserPasswordConfirmation" type="password" class="password text ui-widget-content ui-corner-all" style="margin:0 0 5px 5px">
+                        </td>
+                     </tr>
+                     <tr>
+                        <td colspan="2">
+                           <div class="button-container" style="width:auto;">
+                              <button type="button" style="float:right;margin-right:0;" id="saveNewRootUserPasswordButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Save</button>
+                              <span id="editRootUserPasswordMessage" style="float:right;margin:6px 5px 0 0;"></span>
+                           </div>
+                        </td>
+                     </tr>
+                  </table>
+               </form>
+            </div>
+         </div>
+         <div id="info"></div>
+      </div>
+      <!-- ============================================================================================================ -->
+      <div id="System_Settings">
+         <form method="post" onsubmit="return false;">
+            <div class="section">
+               <div class="section-title">Reset Preferences</div>
+               <div class="indented">
+                  <input id="willResetAll" name="willResetAll" type="checkbox"/><label for="willResetAll">All of the following:</label>
+                  <div class="indented">
+                     <input id="willResetAudio" class="reset-preferences-option" name="willResetAudio" type="checkbox" value="Audio"/><label for="willResetAudio">Audio</label><br>
+                     <input id="willResetWirelessNetworking" class="reset-preferences-option" name="willResetWirelessNetworking" type="checkbox" value="Wireless Networking"/><label for="willResetWirelessNetworking">Wireless Networking</label><br>
+                     <input id="willResetUserPrograms" class="reset-preferences-option" name="willResetUserPrograms" type="checkbox" value="User Programs"/><label for="willResetUserPrograms">User Programs</label><br>
+                     <input id="willResetWebControlPanelPassword" class="reset-preferences-option" name="willResetWebControlPanelPassword" type="checkbox" value="Passwords"/><label for="willResetWebControlPanelPassword">Web Control Panel Password</label><br>
+                  </div>
+                  <div class="blank-line"></div>
+                  <div class="button-container" style="width:200px">
+                     <button type="button" style="float:right;margin-right:0;" id="resetPreferencesButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Reset Preferences</button>
+                  </div>
+               </div>
+            </div>
+         </form>
+      </div>
+      <!-- ============================================================================================================ -->
    </div>
-   <!-- ============================================================================================================ -->
 </div>
 </body>
 </html>

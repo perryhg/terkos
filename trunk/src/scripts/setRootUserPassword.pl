@@ -45,18 +45,16 @@ if (exists($arguments{'oldPassword'}) && exists($arguments{'newPassword'}))
       {
       &setUserPassword($username, $newPasswordPlainText);
 
-      $response{'statusCode'} = '200';
-      $response{'statusName'} = 'OK';
       $response{'ok'} = 'true';
       $response{'message'} = 'password changed';
       }
    else
       {
-      $response{'statusCode'} = '400';
-      $response{'statusName'} = 'Bad Request';
       $response{'ok'} = 'false';
       $response{'message'} = 'old password is incorrect';
       }
+   $response{'statusCode'} = '200';
+   $response{'statusName'} = 'OK';
    }
 else
    {
