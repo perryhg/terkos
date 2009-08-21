@@ -77,6 +77,7 @@ dist: $(DIST_CGI_DIR) \
 
 	@echo 'Symlinking CGIs...'
 	ln -s /opt/scripts/getAudioConfigAsJSON.pl                $(DIST_CGI_DIR)/getAudioConfigAsJSON.pl
+	ln -s /opt/scripts/getLCDConfigAsJSON.pl                  $(DIST_CGI_DIR)/getLCDConfigAsJSON.pl
 	ln -s /opt/scripts/getDiskUsageAsJSON.pl                  $(DIST_CGI_DIR)/getDiskUsageAsJSON.pl
 	ln -s /opt/scripts/getMemoryUsageAsJSON.pl                $(DIST_CGI_DIR)/getMemoryUsageAsJSON.pl
 	ln -s /opt/scripts/getPowerInfoAsJSON.pl                  $(DIST_CGI_DIR)/getPowerInfoAsJSON.pl
@@ -87,6 +88,7 @@ dist: $(DIST_CGI_DIR) \
 	ln -s /opt/scripts/getWirelessNetworksAsJSON.pl           $(DIST_CGI_DIR)/getWirelessNetworksAsJSON.pl
 	ln -s /opt/scripts/resetPreferences.pl                    $(DIST_CGI_DIR)/resetPreferences.pl
 	ln -s /opt/scripts/saveAudioConfig.pl                     $(DIST_CGI_DIR)/saveAudioConfig.pl
+	ln -s /opt/scripts/saveLCDConfig.pl                       $(DIST_CGI_DIR)/saveLCDConfig.pl
 	ln -s /opt/scripts/saveUserProgramsConfig.pl              $(DIST_CGI_DIR)/saveUserProgramsConfig.pl
 	ln -s /opt/scripts/saveWirelessNetworkingConfig.pl        $(DIST_CGI_DIR)/saveWirelessNetworkingConfig.pl
 	ln -s /opt/scripts/setHttpBasicAuthPassword.pl            $(DIST_CGI_DIR)/setHttpBasicAuthPassword.pl
