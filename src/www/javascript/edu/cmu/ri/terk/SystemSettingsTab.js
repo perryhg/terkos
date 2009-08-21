@@ -127,7 +127,7 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
 
       var webPasswordOkDialog = new edu.cmu.ri.terk.SingleButtonModalDialog(
             "Reset Successful",
-            "The reset completed successfully.  Since you chose to reset the web control panel password, you may need to log in again.",
+            "The reset completed successfully.  Since you chose to reset the web control panel password, the page will reload and you may need to log in again.",
             "OK");
       webPasswordOkDialog.addEventListener({
          "onButtonClick": function()
@@ -253,7 +253,7 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
             },
          onSaveSuccess: function()
             {
-            var wasPasswordReset = jQuery("#willResetPasswords").attr("checked");
+            var wasPasswordReset = jQuery("#willResetWebControlPanelPassword").attr("checked");
 
             jQuery("#willResetAll").attr("checked", "");
             jQuery(".reset-preferences-option").attr("checked", "");
@@ -293,7 +293,7 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
                   {
                   // give the user a warning about having to login again if they're
                   // resetting the web control panel password.
-                  if (jQuery("#willResetPasswords").attr("checked"))
+                  if (jQuery("#willResetWebControlPanelPassword").attr("checked"))
                      {
                      confirmResetDialog.setMessage(defaultConfirmResetDialogMessage +
                                                    "<br><br>Note that since you have chosen to reset the web control panel password you may need to log in again after the reset is complete.");

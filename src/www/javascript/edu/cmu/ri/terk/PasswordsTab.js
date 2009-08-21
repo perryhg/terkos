@@ -107,13 +107,22 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
 
    edu.cmu.ri.terk.PasswordsTab = function(host)
       {
+      var setSaveButtonEnabled = function(buttonId, isEnabled)
+         {
+         jQuery(buttonId).toggleClass("ui-state-default", isEnabled);
+         jQuery(buttonId).toggleClass("ui-state-active", !isEnabled);
+         jQuery(buttonId).toggleClass("ui-state-disabled", !isEnabled);
+         };
+
       var PasswordVerifier = function(
             passwordFieldId,
             passwordConfirmationFieldId,
             messageAreaId,
             saveButtonId,
             nonMatchingPasswordsErrorMessage,
-            getAjaxUrlAndData)
+            getAjaxUrlAndData,
+            additionalValidationFunction,
+            additionalFieldsToValidate)
          {
          var isPasswordValid = false;
          var eventListeners = new Array();
@@ -144,16 +153,13 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
             var areBothNonEmpty = (p1.length > 0) && (p2.length > 0);
             var areEqual = (p1 == p2);
             var additionalValidation = true;
+            if (additionalValidationFunction)
+               {
+               additionalValidation = additionalValidationFunction();
+               }
             notifyEventListeners('non-empty', areBothNonEmpty);
             notifyEventListeners('equal', areEqual);
             notifyEventListeners('valid', areEqual && areBothNonEmpty && additionalValidation);
-            };
-
-         var setSaveButtonEnabled = function(buttonId, isEnabled)
-            {
-            jQuery(buttonId).toggleClass("ui-state-default", isEnabled);
-            jQuery(buttonId).toggleClass("ui-state-active", !isEnabled);
-            jQuery(buttonId).toggleClass("ui-state-disabled", !isEnabled);
             };
 
          jQuery(passwordFieldId)['keyup'](function()
@@ -165,6 +171,20 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
             {
             validatePasswords();
             });
+
+         if (additionalFieldsToValidate && additionalFieldsToValidate.length > 0)
+            {
+            jQuery.each(additionalFieldsToValidate, function(i, additionalFieldToValidate)
+               {
+               if (additionalFieldToValidate)
+                  {
+                  jQuery(additionalFieldToValidate)['keyup'](function()
+                     {
+                     validatePasswords();
+                     });
+                  }
+               });
+            }
 
          this.addEventListener({
             "non-empty" : function(isNonEmpty)
@@ -232,13 +252,13 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
                         data: urlAndData['data'],
                         success: function(jsonResponse)
                            {
-                           if (jsonResponse)
+                           if (jsonResponse && jsonResponse['ok'])
                               {
-                              notifyEventListeners('onSaveSuccess');
+                              notifyEventListeners('onSaveSuccess', jsonResponse);
                               }
                            else
                               {
-                              notifyEventListeners('onSaveFailure');
+                              notifyEventListeners('onSaveFailure', jsonResponse);
                               }
                            },
                         error: function()
@@ -263,6 +283,17 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
          "onButtonClick": function()
             {
             errorOccurredDialog.hide();
+            }
+      });
+
+      var currentRootPasswordIncorrectDialog = new edu.cmu.ri.terk.SingleButtonModalDialog(
+            "Error",
+            "The password was not changed because the Current Password you entered is incorrect.",
+            "OK");
+      currentRootPasswordIncorrectDialog.addEventListener({
+         "onButtonClick": function()
+            {
+            currentRootPasswordIncorrectDialog.hide();
             }
       });
 
@@ -321,11 +352,22 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
                {
                var urlAndData = {
                   url: host + '/cgi-bin/setRootUserPassword.pl',
-                  data: "newPassword=" + jQuery("#passwordsNewRootUserPassword").val()
+                  data:
+                  {
+                     "oldPassword" : jQuery("#passwordsCurrentRootUserPassword").val(),
+                     "newPassword" : jQuery("#passwordsNewRootUserPassword").val()
+                  }
                };
 
                return urlAndData;
-               });
+               },
+            function()
+               {
+               var length = jQuery("#passwordsCurrentRootUserPassword").val().length;
+               return (length > 0);
+               },
+            jQuery([]).add(jQuery("#passwordsCurrentRootUserPassword"))
+            );
       rootPasswordVerifier.addEventListener({
          "onBeforeSave" : function()
             {
@@ -333,12 +375,23 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
             },
          "onSaveSuccess" : function()
             {
+            // clear the password fields and set the Save button disabled
+            jQuery(".password").val("");
+            setSaveButtonEnabled('#saveNewRootUserPasswordButton', false);
+
             nonClosableWaitDialog.hide();
             },
-         "onSaveFailure" : function()
+         "onSaveFailure" : function(jsonResponse)
             {
             nonClosableWaitDialog.hide();
-            errorOccurredDialog.show();
+            if (jsonResponse && jsonResponse['message'] == "old password is incorrect")
+               {
+               currentRootPasswordIncorrectDialog.show();
+               }
+            else
+               {
+               errorOccurredDialog.show();
+               }
             }
       });
 
