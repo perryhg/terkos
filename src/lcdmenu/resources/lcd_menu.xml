@@ -66,30 +66,6 @@
          </item>
       </item>
    </item>
-   <item text="LCD">
-      <item text="Toggle  LCD   Backlight">
-         <item text="">
-            <implementation-class name="ToggleLCDBacklightMenuItemAction" library="libLCDMenuItemActions.so">
-               <property key="action.prompt">Backlight On?</property>
-               <property key="choice.option1">Yes     </property>
-               <property key="choice.option2">No</property>
-               <property key="action.option1">LCD Backlight   is enabled.</property>
-               <property key="action.option2">LCD Backlight   is disabled.</property>
-            </implementation-class>
-         </item>
-      </item>
-      <item text="Reset LCD">
-         <item text="">
-            <implementation-class name="ResetLCDMenuItemAction" library="libResetMenuItemActions.so">
-               <property key="action.prompt">Reset LCD?</property>
-               <property key="choice.option1">OK  </property>
-               <property key="choice.option2">Cancel</property>
-               <property key="action.option1">LCD reset to    factory default.</property>
-               <property key="action.option2">Cancelled -- No settings changed</property>
-            </implementation-class>
-         </item>
-      </item>
-   </item>
    <item text="Wireless      Networking">
       <item text="Wireless      Status">
          <item text="">
@@ -165,17 +141,6 @@
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
                <property key="action.option1">Audio reset to  factory default.</property>
-               <property key="action.option2">Cancelled -- No settings changed</property>
-            </implementation-class>
-         </item>
-      </item>
-      <item text="Reset LCD">
-         <item text="">
-            <implementation-class name="ResetLCDMenuItemAction" library="libResetMenuItemActions.so">
-               <property key="action.prompt">Reset LCD?</property>
-               <property key="choice.option1">OK  </property>
-               <property key="choice.option2">Cancel</property>
-               <property key="action.option1">LCD reset to    factory default.</property>
                <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
