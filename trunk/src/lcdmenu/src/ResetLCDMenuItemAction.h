@@ -2,31 +2,26 @@
  * Chris Bartley (bartley@cmu.edu)
  */
 
-#ifndef RESETALLMENUITEMACTION_H_
-#define RESETALLMENUITEMACTION_H_
+#ifndef RESETLCDMENUITEMACTION_H_
+#define RESETLCDMENUITEMACTION_H_
 
 #include "TwoOptionMenuItemAction.h"
-#include "AudioConfigManager.h"
 #include "LCDConfigManager.h"
-#include "WirelessNetworkingConfigManager.h"
-#include "UserProgramsConfigManager.h"
-#include "RootUserPasswordManager.h"
-#include "WebControlPanelPasswordManager.h"
 
-class ResetAllMenuItemAction : public TwoOptionMenuItemAction
+class ResetLCDMenuItemAction : public TwoOptionMenuItemAction
    {
    public:
 
       static const string CLASS_NAME;
 
-      ResetAllMenuItemAction(void(*delObj)(void*), MenuItem* menuItem, MenuStatusManager* menuStatusManager, CharacterDisplay* characterDisplay,
+      ResetLCDMenuItemAction(void(*delObj)(void*), MenuItem* menuItem, MenuStatusManager* menuStatusManager, CharacterDisplay* characterDisplay,
                                map<string, string>& properties) :
          TwoOptionMenuItemAction(delObj, menuItem, menuStatusManager, characterDisplay, properties)
          {
          // nothing to do
          }
 
-      virtual ~ResetAllMenuItemAction()
+      virtual ~ResetLCDMenuItemAction()
          {
          // nothing to do
          }
@@ -41,4 +36,4 @@ class ResetAllMenuItemAction : public TwoOptionMenuItemAction
 
    };
 
-#endif /* RESETALLMENUITEMACTION_H_ */
+#endif /* RESETLCDMENUITEMACTION_H_ */

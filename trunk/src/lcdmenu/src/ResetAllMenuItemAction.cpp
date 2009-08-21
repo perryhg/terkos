@@ -14,10 +14,12 @@ bool ResetAllMenuItemAction::shouldOption1BeSelectedUponActivation() const
 void ResetAllMenuItemAction::executeOption1Action()
    {
    AudioConfigManager audioConfigManager;
+   LCDConfigManager lcdConfigManager;
    WirelessNetworkingConfigManager wirelessNetworkingConfigManager;
    UserProgramsConfigManager userProgramsConfigManager;
 
    audioConfigManager.revertToDefault();
+   lcdConfigManager.revertToDefault();
    wirelessNetworkingConfigManager.revertToDefault();
    userProgramsConfigManager.revertToDefault();
    RootUserPasswordManager::revertToDefault();

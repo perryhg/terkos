@@ -9,6 +9,7 @@ EXE_OBJ_DIR=$(BUILD_DIR)/objects
 DIST_DIR=dist
 LIBRARY_NAME=libConfigurationManagement.so
 AUDIO_CONFIG_TOOL_NAME=AudioConfigTool
+LCD_CONFIG_TOOL_NAME=LCDConfigTool
 POWER_INFO_TOOL_NAME=PowerInfoTool
 USER_PROGRAMS_CONFIG_TOOL=UserProgramsConfigTool
 VERSION_INFO_TOOL_NAME=VersionInfoTool
@@ -61,6 +62,7 @@ default: all
 
 build: $(LIBRARY_NAME) \
        $(AUDIO_CONFIG_TOOL_NAME) \
+       $(LCD_CONFIG_TOOL_NAME) \
        $(POWER_INFO_TOOL_NAME) \
        $(USER_PROGRAMS_CONFIG_TOOL) \
        $(VERSION_INFO_TOOL_NAME) \
@@ -91,6 +93,14 @@ $(EXE_OBJ_DIR)/%.o: $(EXE_SRC_DIR)/%.cpp
 #-----------------------------------------------------------------------------------------------------------------------
 
 $(AUDIO_CONFIG_TOOL_NAME): $(LIBRARY_NAME) $(EXE_DIR) $(EXE_OBJECTS)
+	@echo 'Building target: $@'
+	$(CXX) -o $(EXE_DIR)/$@ $(EXE_OBJ_DIR)/$@.o $(LDFLAGS) -lConfigurationManagement
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+$(LCD_CONFIG_TOOL_NAME): $(LIBRARY_NAME) $(EXE_DIR) $(EXE_OBJECTS)
 	@echo 'Building target: $@'
 	$(CXX) -o $(EXE_DIR)/$@ $(EXE_OBJ_DIR)/$@.o $(LDFLAGS) -lConfigurationManagement
 	@echo 'Finished building target: $@'

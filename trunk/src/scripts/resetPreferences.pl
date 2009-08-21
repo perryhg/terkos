@@ -12,6 +12,7 @@
 # names are:
 #
 #    Audio
+#    LCD
 #    Wireless Networking
 #    User Programs
 #    Passwords
@@ -50,6 +51,10 @@ if (exists($arguments{'systemsToReset'}))
    if (exists($systemsToReset{'Audio'}))
       {
       $success = $success && &resetSystem('AudioConfigTool');
+      }
+   if (exists($systemsToReset{'LCD'}))
+      {
+      $success = $success && &resetSystem('LCDConfigTool');
       }
    if (exists($systemsToReset{'Wireless Networking'}))
       {
