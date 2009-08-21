@@ -19,6 +19,8 @@
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/SystemInfoTab.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/AudioConfigManager.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/AudioTab.js"></script>
+   <script type="text/javascript" src="javascript/edu/cmu/ri/terk/LCDConfigManager.js"></script>
+   <script type="text/javascript" src="javascript/edu/cmu/ri/terk/LCDTab.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkingStatus.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkingConfigManager.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/WirelessNetworkScanner.js"></script>
@@ -29,7 +31,7 @@
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/SystemSettingsTab.js"></script>
    <script type="text/javascript">
       var tabSelectionHandlers = new Array();
-      var host = "";//http://192.168.1.4";
+      var host = "";//http://192.168.4.15";
 
       $(function()
          {
@@ -38,6 +40,7 @@
          var memoryUsageManager = new edu.cmu.ri.terk.MemoryUsageManager(host);
          var diskUsageManager = new edu.cmu.ri.terk.DiskUsageManager(host);
          var audioConfigManager = new edu.cmu.ri.terk.AudioConfigManager(host);
+         var lcdConfigManager = new edu.cmu.ri.terk.LCDConfigManager(host);
          var wirelessNetworkingStatus = new edu.cmu.ri.terk.WirelessNetworkingStatus(
                "wirelessNetworkingStatusMessageArea",
                "wirelessNetworkingStatusMessageAreaDetail",
@@ -62,6 +65,7 @@
                diskUsageManager,
                powerInfoManager);
          var audioTab = new edu.cmu.ri.terk.AudioTab(audioConfigManager);
+         var lcdTab = new edu.cmu.ri.terk.LCDTab(lcdConfigManager);
          var wirelessNetworkingTab = new edu.cmu.ri.terk.WirelessNetworkingTab(
                wirelessNetworkingConfigManager,
                wirelessNetworkScanner,
@@ -78,6 +82,10 @@
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
             audioTab.activate();
+            };
+         tabSelectionHandlers[tabSelectionHandlers.length] = function()
+            {
+            lcdTab.activate();
             };
          tabSelectionHandlers[tabSelectionHandlers.length] = function()
             {
@@ -176,6 +184,7 @@
       <ul id="tabsList">
          <li><a href="#System_Info" title="System Info">System Info</a></li>
          <li><a href="#Audio" title="Audio">Audio</a></li>
+         <li><a href="#LCD" title="LCD">LCD</a></li>
          <li><a href="#Wireless_Networking" title="Wireless Networking">Wireless Networking</a></li>
          <li><a href="#User_Programs" title="User Programs">User Programs</a></li>
          <li><a href="#Passwords" title="Passwords">Passwords</a></li>
@@ -325,6 +334,22 @@
                   <div class="blank-line"></div>
                   <div class="button-container">
                      <button type="button" style="float:right;margin-right:0;" id="saveAudioConfigButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Save</button>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- ============================================================================================================ -->
+      <div id="LCD">
+         <div class="section">
+            <div class="section-title">Preferences</div>
+            <div class="indented">
+               <div id="lcdConfigurationMessageArea">&nbsp;</div>
+               <div id="lcdConfigurationArea" style="display:none">
+                  <input id="isLCDBacklightEnabled" name="isLCDBacklightEnabled" type="checkbox"/><label for="isLCDBacklightEnabled">Backlight</label>
+                  <div class="blank-line"></div>
+                  <div class="button-container">
+                     <button type="button" style="float:right;margin-right:0;" id="saveLCDConfigButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Save</button>
                   </div>
                </div>
             </div>
@@ -519,6 +544,7 @@
                   <input id="willResetAll" name="willResetAll" type="checkbox"/><label for="willResetAll">All of the following:</label>
                   <div class="indented">
                      <input id="willResetAudio" class="reset-preferences-option" name="willResetAudio" type="checkbox" value="Audio"/><label for="willResetAudio">Audio</label><br>
+                     <input id="willResetLCD" class="reset-preferences-option" name="willResetLCD" type="checkbox" value="LCD"/><label for="willResetLCD">LCD</label><br>
                      <input id="willResetWirelessNetworking" class="reset-preferences-option" name="willResetWirelessNetworking" type="checkbox" value="Wireless Networking"/><label for="willResetWirelessNetworking">Wireless Networking</label><br>
                      <input id="willResetUserPrograms" class="reset-preferences-option" name="willResetUserPrograms" type="checkbox" value="User Programs"/><label for="willResetUserPrograms">User Programs</label><br>
                      <input id="willResetWebControlPanelPassword" class="reset-preferences-option" name="willResetWebControlPanelPassword" type="checkbox" value="Passwords"/><label for="willResetWebControlPanelPassword">Web Control Panel Password</label><br>

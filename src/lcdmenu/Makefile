@@ -76,6 +76,10 @@ AUDIO_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/ToggleAudioAlertsMenuItemAction.cpp \
 AUDIO_MENU_ITEM_ACTIONS_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(AUDIO_MENU_ITEM_ACTIONS_SRCS)))
 AUDIO_MENU_ITEM_ACTIONS_OBJECTS := $(addprefix $(OBJ_DIR)/,$(AUDIO_MENU_ITEM_ACTIONS_OBJECTS))
 
+LCD_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/ToggleLCDBacklightMenuItemAction.cpp
+LCD_MENU_ITEM_ACTIONS_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(LCD_MENU_ITEM_ACTIONS_SRCS)))
+LCD_MENU_ITEM_ACTIONS_OBJECTS := $(addprefix $(OBJ_DIR)/,$(LCD_MENU_ITEM_ACTIONS_OBJECTS))
+
 NETWORK_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/WirelessStatusCheckingMenuItemAction.cpp \
                                $(SRC_DIR)/WirelessStatusMenuItemAction.cpp \
                                $(SRC_DIR)/ViewWirelessNetworksMenuItemAction.cpp \
@@ -85,6 +89,7 @@ NETWORK_MENU_ITEM_ACTIONS_OBJECTS := $(addprefix $(OBJ_DIR)/,$(NETWORK_MENU_ITEM
 
 RESET_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/ResetAudioMenuItemAction.cpp \
                              $(SRC_DIR)/ResetAllMenuItemAction.cpp \
+                             $(SRC_DIR)/ResetLCDMenuItemAction.cpp \
                              $(SRC_DIR)/ResetUserProgramsMenuItemAction.cpp \
                              $(SRC_DIR)/ResetRootUserControlPanelPasswordMenuItemAction.cpp \
                              $(SRC_DIR)/ResetWebControlPanelPasswordMenuItemAction.cpp \
@@ -142,6 +147,15 @@ libAudioMenuItemActions.so: $(OBJ_DIR) $(LIB_DIR) $(AUDIO_MENU_ITEM_ACTIONS_OBJE
 
 #-----------------------------------------------------------------------------------------------------------------------
 
+libLCDMenuItemActions.so: $(OBJ_DIR) $(LIB_DIR) $(LCD_MENU_ITEM_ACTIONS_OBJECTS)
+	@echo 'Building target: $@'
+	$(CXX) -shared -Wl,-soname,libLCDMenuItemActions.so -o $(LIB_DIR)/libLCDMenuItemActions.so \
+	                                                         $(LCD_MENU_ITEM_ACTIONS_OBJECTS)
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+#-----------------------------------------------------------------------------------------------------------------------
+
 libNetworkMenuItemActions.so: $(OBJ_DIR) $(LIB_DIR) $(NETWORK_MENU_ITEM_ACTIONS_OBJECTS)
 	@echo 'Building target: $@'
 	$(CXX) -shared -Wl,-soname,libNetworkMenuItemActions.so -o $(LIB_DIR)/libNetworkMenuItemActions.so \
@@ -184,6 +198,7 @@ LCDMenu: $(EXE_DIR) \
          libqwerk.so \
          libSystemInfoMenuItemActions.so \
          libAudioMenuItemActions.so \
+         libLCDMenuItemActions.so \
          libNetworkMenuItemActions.so \
          libResetMenuItemActions.so \
          libServoMenuItemActions.so \

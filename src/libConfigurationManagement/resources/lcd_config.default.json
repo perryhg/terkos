@@ -1,0 +1,7 @@
+{
+   "lcd": {
+      "backlight" : {
+         "enabled" : true
+      }
+   }
+}
