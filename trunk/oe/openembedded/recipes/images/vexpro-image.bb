@@ -50,6 +50,7 @@ IMAGE_INSTALL = " \
 	alsa-utils-alsactl \
 	alsa-utils-amixer \
 	alsa-utils-aplay \
+	vexutils \
 	   "
 
 export IMAGE_BASENAME = "vexpro-image"
