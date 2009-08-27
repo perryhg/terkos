@@ -196,16 +196,6 @@ static int qe_motor_init(void)
       syscon[0x20] |= 0x08000800;
       iounmap((void *)syscon);
       release_mem_region(0x80930000, 0xc4);
-      
-      retval = (int)request_mem_region(0x80840000, 0x1c, "gpio ports");
-      if (retval)
-	{
-	  volatile unsigned long *gpio = ioremap(0x80840000, 0x1c);
-	  gpio[0x06] |= 0x01;
-	  gpio[0x02] |= 0x01;
-	  iounmap((void *)gpio);
-	  release_mem_region(0x80840000, 0x1c);
-	}
     }
   
   mot_init(io_base);
