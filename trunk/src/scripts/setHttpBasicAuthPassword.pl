@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 ################################################################################
-# Program for setting the HTTP Basic Auth password for the admin user.  Can be
+# Script for setting the HTTP Basic Auth password for the admin user.  Can be
 # called either via the command line or as a CGI.
 #
 # If called from the command line, the usage is:

@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 ################################################################################
-# Program for resetting the configuration for the various systems.
+# Script for resetting the configuration for the various systems.
 #
 # If called from the command line, the usage is:
 #
