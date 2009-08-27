@@ -3,7 +3,7 @@
 use strict;
 
 ################################################################################
-# Program for resetting the root user's password.  Can be called either via
+# Script for resetting the root user's password.  Can be called either via
 # the command line or as a CGI.
 #
 # If called from the command line, the usage is:
