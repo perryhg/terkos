@@ -28,3 +28,9 @@ vector<string> FileUtilities::getFilenamesInDirectory(const string& directoryPat
       }
    return result;
    }
+
+const bool FileUtilities::isReadable(const string& filename)
+   {
+   ifstream ifile(filename.c_str());
+   return ifile;
+   }
