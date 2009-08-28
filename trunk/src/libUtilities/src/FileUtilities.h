@@ -10,6 +10,8 @@
 #include <vector>
 #include <dirent.h>
 #include <sys/types.h>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -35,6 +37,11 @@ class FileUtilities
          string copyCommand = "cp " + source + " " + destination;
          system(copyCommand.c_str());
          }
+
+      /**
+       * Returns true if the file represented by the given file path is readable, false otherwise.
+       */
+      static const bool isReadable(const string& filename);
 
    private:
 
