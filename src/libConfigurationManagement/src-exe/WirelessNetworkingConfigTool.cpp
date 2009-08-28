@@ -9,6 +9,9 @@
  * To reset the configuration, call the program with a "--reset" argument.  The program
  * will print "1" if the reset was successful and "0" otherwise.
  *
+ * To apply the configuration to the system, call the program with a "--apply-config"
+ * argument.
+ *
  * Chris Bartley (bartley@cmu.edu)
  */
 
@@ -26,6 +29,12 @@ int main(int argc, char** argv)
          WirelessNetworkingConfigManager configManager;
          
          cout << configManager.revertToDefault() << endl;
+         }
+      else if (strcmp(argv[1], "--apply-config") == 0)
+         {
+         WirelessNetworkingConfigManager configManager;
+
+         configManager.applyConfiguration();
          }
       }
    else

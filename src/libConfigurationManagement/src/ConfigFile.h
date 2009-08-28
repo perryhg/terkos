@@ -46,6 +46,16 @@ class ConfigFile
 
       virtual const bool revertToDefault();
 
+      /**
+       * Reads in the config and does whatever necessary to ensure that the user's saved configuration is correctly
+       * reflected in the system's config files, current state, etc.  This method does nothing by default, so subclasses
+       * which need this functionality will need to override it to implement the appropriate custom behavior.
+       */
+      virtual void applyConfiguration()
+         {
+         // do nothing by default
+         }
+
    protected:
 
       const unsigned int getUnsignedIntValue(const string& propertyName, const unsigned int defaultValue = 0, const char chainedPropertyNameDelimiter = CHAINED_PROPERTY_NAME_DELIMITER) const;

@@ -11,6 +11,12 @@ const string EtcNetworkInterfacesConf::END_WLAN0_AUTOSTART = "# END_WLAN0_AUTOST
 
 void EtcNetworkInterfacesConf::save()
    {
+   // Make sure the file exists.  If not, revert to default.
+   if (!FileUtilities::isReadable(ETC_NETWORK_INTERFACES_CONF_PATH))
+      {
+      EtcNetworkInterfacesConf::revertToDefault();
+      }
+      
    // read in the existing conf line-by-line until we find the BEGIN_WLAN0_AUTOSTART line
    ostringstream theFile(ostringstream::out);
    bool foundAutoStartMarker = false;

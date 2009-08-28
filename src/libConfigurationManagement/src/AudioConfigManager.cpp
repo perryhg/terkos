@@ -18,6 +18,7 @@ const unsigned int AudioConfigManager::getVolumeLevel() const
 
 bool AudioConfigManager::setVolumeLevel(unsigned int volume)
    {
+   // TODO: also set the volume in libqwerk or somesuch
    return setUnsignedIntValue(VOLUME_PROPERTY, std::min(volume, MAX_VOLUME));
    }
 
@@ -28,6 +29,7 @@ const bool AudioConfigManager::areAlertsEnabled() const
 
 bool AudioConfigManager::setAlertsEnabled(const bool isEnabled)
    {
+   // TODO: also set the volume in libqwerk or somesuch (?)
    return setBooleanValue(ARE_ALERTS_ENABLED_PROPERTY, isEnabled);
    }
 
@@ -55,3 +57,12 @@ const bool AudioConfigManager::setJson(Json::Value& config)
    return false;
    }
 
+void AudioConfigManager::applyConfiguration()
+   {
+   // load the configuration from disk
+   Json::Value config;
+   load(config);
+
+   // call setJson which ensures that the config prefs are applied to the system
+   setJson(config);
+   }

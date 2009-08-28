@@ -37,3 +37,12 @@ const bool LCDConfigManager::setJson(Json::Value& config)
    return false;
    }
 
+void LCDConfigManager::applyConfiguration()
+   {
+   // load the configuration from disk
+   Json::Value config;
+   load(config);
+
+   // call setJson which ensures that the config prefs are applied to the system
+   setJson(config);
+   }
