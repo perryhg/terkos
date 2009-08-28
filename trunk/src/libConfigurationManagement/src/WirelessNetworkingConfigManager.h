@@ -48,7 +48,7 @@ class WirelessNetworkingConfigManager : public ConfigFile
        * a way of ensuring that the user's saved configuration is correctly reflected in the system's config
        * files.
        */
-      void applyConfiguration();
+      virtual void applyConfiguration();
 
    private:
 

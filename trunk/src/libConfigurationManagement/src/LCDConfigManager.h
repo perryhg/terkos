@@ -32,6 +32,8 @@ class LCDConfigManager : public ConfigFile
 
       const bool setJson(Json::Value& config);
 
+      virtual void applyConfiguration();
+
    private:
 
       CTextLcd lcd;

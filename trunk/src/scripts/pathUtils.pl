@@ -11,6 +11,7 @@ $paths{'lcd_config.json'} = '/opt/config/lcd_config.json';
 $paths{'LCDConfigTool'} = '/opt/bin/LCDConfigTool';
 $paths{'PowerInfoTool'} = '/opt/bin/PowerInfoTool';
 $paths{'user_programs_config.json'} = '/opt/config/user_programs_config.json';
+$paths{'user_programs_dir'} = '/opt/usr/bin';
 $paths{'UserProgramsConfigTool'} = '/opt/bin/UserProgramsConfigTool';
 $paths{'VersionInfoTool'} = '/opt/bin/VersionInfoTool';
 $paths{'WebControlPanelPasswordTool'} = '/opt/bin/WebControlPanelPasswordTool';

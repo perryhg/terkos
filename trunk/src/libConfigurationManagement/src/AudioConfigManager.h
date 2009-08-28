@@ -38,6 +38,8 @@ class AudioConfigManager : public ConfigFile
 
       const bool setJson(Json::Value& config);
 
+      virtual void applyConfiguration();
+
    private:
 
       static const string CONFIG_FILENAME;
