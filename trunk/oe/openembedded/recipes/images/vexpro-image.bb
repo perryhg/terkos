@@ -45,6 +45,7 @@ IMAGE_INSTALL = " \
 	usbutils \
 	perl \
 	libjson-perl \
+	libexpect-perl \
 	wireless-tools \
 	wpa-supplicant \
 	alsa-utils-alsactl \
