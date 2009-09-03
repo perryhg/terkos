@@ -208,7 +208,7 @@ cyg_start(void)
   HAL_READ_UINT32(EP9312_GPIO_PCDDR, reg);
   HAL_WRITE_UINT32(EP9312_GPIO_PCDDR, reg | 0x01);
   HAL_READ_UINT32(EP9312_GPIO_PCDR, reg);
-  HAL_WRITE_UINT32(EP9312_GPIO_PCDR, reg | 0x01);
+  HAL_WRITE_UINT32(EP9312_GPIO_PCDR, reg & ~0x01);
 
   // delay for double reset of Qwerk/VEXPro
     for (d=0; d<3000000; d++);
