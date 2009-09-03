@@ -11,6 +11,11 @@ default: all
 
 all: $(TARGET).a $(TARGET).so
 
+html: 
+	-rm -rf doc
+	doxygen Doxyfile
+	./docupload
+
 $(DIST_DIR):
 	mkdir -p $@
 

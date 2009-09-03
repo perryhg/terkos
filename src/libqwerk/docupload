@@ -1,0 +1,5 @@
+cd doc/html
+for i in `find -type f`
+    do
+    ncftpput -m -f ~/terk/ncftpinfo www/terk/doc/libqwerk/html $i
+    done
