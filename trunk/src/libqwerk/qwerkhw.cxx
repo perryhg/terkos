@@ -6,9 +6,9 @@
 CQwerkHardware *CQwerkHardware::m_pQwerk = NULL;
 int CQwerkHardware::m_refCount = 0;
 
-// todo urrent into the processor is not insignificant
+// todo current into the processor is not insignificant
 // channel 21 and 24 have 
-#if 1
+#if 0
 const unsigned int CQwerkHardware::m_num[25] = {
   6639,  6639,  6639,  6639,  6639,  6639,  6639,  6639,
   6639,  6639,  6639,  6639,  6639,  6639,  6639,  6639,
