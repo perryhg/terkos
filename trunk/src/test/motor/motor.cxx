@@ -61,7 +61,7 @@ int main(int argc, char **argv)
     }
 #endif
 #if 1
-  CQEMotorTraj motor(NULL, 0);
+  CQEMotorTraj motor(0);
   motor.SetPIDVGains(0, 100, 0, 500, 0);
   printf("running\n");
 
