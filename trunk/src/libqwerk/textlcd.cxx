@@ -9,13 +9,13 @@ SINGLETON_REGISTER(CTextLcd);
 
 CTextLcd::CTextLcd()
 {
-  m_p9302hw = C9302Hardware::GetObject();
+  m_p9302hw = C9302Hardware::GetPtr();
   Init();
 }
 
 CTextLcd::~CTextLcd()
 {
-  C9302Hardware::ReleaseObject();
+  C9302Hardware::Release();
 }
 
 void CTextLcd::Clear()

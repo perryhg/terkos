@@ -1,7 +1,6 @@
 #ifndef _QEMOTORUSER_H
 #define _QEMOTORUSER_H
 
-#include "singleton.h"
 #include "qemotor.h"
 
 #define QEM_DEVICE                      "/dev/qemot"
@@ -18,7 +17,7 @@ class CQwerkHardware;
 class CQEMotorUser  
 {
 public:
-  
+
   CQEMotorUser(int axis0, int axis1=-1, int axis2=-1, int axis3=-1);
   virtual ~CQEMotorUser();
 
@@ -53,7 +52,6 @@ protected:
 
   unsigned int m_servoAxes;
   int m_handle[QEMOT_NUM_MOTORS];
-  CQwerkHardware *m_pQwerk; 
 };
 
 #endif

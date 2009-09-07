@@ -12,7 +12,7 @@
 #include <queue>
 #include <map>
 
-#include "qwerkhw.h"
+#include "9302hw.h"
 
 #define QEAUDIO_RETURN_UNAVAILABLE                 1
 #define QEAUDIO_RETURN_OK                          0
@@ -27,8 +27,6 @@
 #define QEAUDIO_VOLUME              0xfe0
 #define QEAUDIO_PERIOD              0xfe2
 
-
-class CQwerkHardware;
 
 
 class CQEAudioController
@@ -167,7 +165,7 @@ class CQEAudioController
 	    } data;
 	};
 
-        CQwerkHardware *m_pQwerk; 
+        static C9302Hardware *m_p9302hw; 
  
 	bool enabled;
 	void doEnable(void);
@@ -182,7 +180,7 @@ class CQEAudioController
         pthread_cond_t m_notemptycond;
         pthread_cond_t m_notfullcond;
 
-	static int doPlayTone(CQwerkHardware *qwerk, long frequency, int amplitude, long duration);
+	static int doPlayTone(long frequency, int amplitude, long duration);
         static int doPlayClip(char clip[], int length);
         static int doPlayClip(char *filename);
 

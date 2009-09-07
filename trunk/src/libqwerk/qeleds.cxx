@@ -18,7 +18,7 @@ void *CQELEDController::LEDControllerThread(void *arg)
 
 CQELEDController::CQELEDController()
 {
-  m_p9302hw = C9302Hardware::GetObject();
+  m_p9302hw = C9302Hardware::GetPtr();
 
   m_ledreg = m_p9302hw->m_fpga.Ushort(QEL_DEFAULT_ADDR);
  
@@ -50,7 +50,7 @@ CQELEDController::~CQELEDController()
   pthread_cond_destroy(&m_cond);
 #endif
 
-  C9302Hardware::ReleaseObject();
+  C9302Hardware::Release();
 }
   
 void CQELEDController::SetLED(ELEDIndex led, ELEDColor color)

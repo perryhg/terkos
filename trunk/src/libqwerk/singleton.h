@@ -8,18 +8,24 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdexcept>
+#include "singleton.h"
 
 // put this in your class declaration
 #define SINGLETON(T)\
   friend class TSingleton<T>;\
   static TSingleton<T> m_singleton;\
-  static T *GetObject()\
+  static T *GetPtr()\
   {\
-    return m_singleton.GetObject();\
+    return m_singleton.GetPtr();\
   }\
-  static void ReleaseObject()\
+  static T &GetRef()\
   {\
-    m_singleton.ReleaseObject();\
+    return m_singleton.GetRef();\
+  }\
+  static void Release()\
+  {\
+    m_singleton.Release();\
   }
 
 #define SINGLETON_REGISTER(T)\
@@ -30,8 +36,9 @@ template <class T>
 class TSingleton
 {
 public:
-  static T *GetObject();
-  static void ReleaseObject();
+  static T *GetPtr();
+  static T &GetRef();
+  static void Release();
 
   TSingleton();
   TSingleton(const char *identifier);
@@ -51,7 +58,7 @@ template <class T> T *TSingleton<T>::m_pInstance = NULL;
 template <class T> const char *TSingleton<T>::m_identifier = NULL;
 template <class T> int TSingleton<T>::m_fd = -1;
 
-template <class T> T* TSingleton<T>::GetObject()
+template <class T> T *TSingleton<T>::GetPtr()
 {
   if (m_pInstance==NULL)
     {
@@ -78,7 +85,19 @@ template <class T> T* TSingleton<T>::GetObject()
   return m_pInstance;
 }
 
-template <class T> void TSingleton<T>::ReleaseObject()
+template <class T> T &TSingleton<T>::GetRef()
+{
+  T *p;
+ 
+  p = GetPtr();
+
+  if (p==NULL)
+    throw std::runtime_error("cannot create object");
+  else 
+    return *p;
+}
+
+template <class T> void TSingleton<T>::Release()
 {
   if (m_refCount)
     m_refCount--;

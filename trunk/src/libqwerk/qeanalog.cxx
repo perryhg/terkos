@@ -24,7 +24,7 @@ CQEAnalog::CQEAnalog()
 {
   unsigned int val;
 
-  m_p9302hw = C9302Hardware::GetObject();
+  m_p9302hw = C9302Hardware::GetPtr();
 
   // turn on I/O 5V regulator
   *m_p9302hw->PortHDataDR() |= 0x0020;  
@@ -40,7 +40,7 @@ CQEAnalog::CQEAnalog()
 
 CQEAnalog::~CQEAnalog()
 {
-  C9302Hardware::ReleaseObject();
+  C9302Hardware::Release();
 }
 
 unsigned short CQEAnalog::GetADRaw(unsigned int channel)
