@@ -1,7 +1,7 @@
 TARGET=analog
 CXX=arm-oe-linux-uclibcgnueabi-g++
 CFLAGS=-g -I../../../include
-LDFLAGS=-L../../../lib -lqwerk
+LDFLAGS=-L../../../lib -lqwerk 
 SRCS=$(wildcard *.cxx)
 OBJECTS=$(SRCS:.cxx=.o)
 

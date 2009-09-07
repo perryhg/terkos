@@ -4,7 +4,7 @@
 
 int main(int argc, char **argv)
 {
-  CKeypad kp;
+  CKeypad &kp = CKeypad::GetRef();
 
 #if 1
   while(1)

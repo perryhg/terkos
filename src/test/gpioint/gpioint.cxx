@@ -3,12 +3,12 @@
 
 int main()
 {
-  CQEGpioInt gpio;
+  CQEGpioInt *pgpio = CQEGpioInt::GetPtr();
   
-  *gpio.DataDir() = 0x0000;
-  *gpio.Data() = 0x00aa;
+  *pgpio->DataDir() = 0x0000;
+  *pgpio->Data() = 0x00aa;
 
   while(1)
-    printf("%x\n", *gpio.Data());
+    printf("%x\n", *pgpio->Data());
 
 }

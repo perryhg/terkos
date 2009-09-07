@@ -9,7 +9,7 @@ using namespace std;
 
 int main(int argc, char **argv)
    {
-   CTextLcd lcd;
+     CTextLcd &lcd = CTextLcd::GetRef();
 
    long width = -1;
    long height = -1;

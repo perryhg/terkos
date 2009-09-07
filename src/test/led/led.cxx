@@ -3,11 +3,11 @@
 
 int main()
 {
-  CQELEDController led;
+  CQELEDController &led = CQELEDController::GetRef();
 
   led.SetLED(LED_ROBOT, LED_COLOR_YELLOW);
-  led.SetLED(LED_VEXNET, LED_COLOR_RED);
-  led.SetLED(LED_GAME, LED_COLOR_GREEN);
+  led.SetLED(LED_VEXNET, LED_COLOR_YELLOW);
+  led.SetLED(LED_GAME, LED_COLOR_YELLOW);
 }
  
   

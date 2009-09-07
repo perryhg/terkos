@@ -5,7 +5,7 @@ int main()
 {
   int i;
   volatile unsigned int d;
-  CQEServo servo;
+  CQEServo &servo = CQEServo::GetRef();
 
   while(1)
     {

@@ -1,6 +1,28 @@
 # !/bin/bash
 ../../../bin/fpgac logic/vexpro.bit
 #
+mknod /dev/qemot0 c 214 0
+mknod /dev/qemot1 c 214 1
+mknod /dev/qemot2 c 214 2
+mknod /dev/qemot3 c 214 3
+#
+mknod /dev/qeint0 c 210 0
+mknod /dev/qeint1 c 210 1
+mknod /dev/qeint2 c 210 2
+mknod /dev/qeint3 c 210 3
+mknod /dev/qeint4 c 210 4
+mknod /dev/qeint5 c 210 5
+mknod /dev/qeint6 c 210 6
+mknod /dev/qeint7 c 210 7
+mknod /dev/qeint8 c 210 8
+mknod /dev/qeint9 c 210 9
+mknod /dev/qeint10 c 210 10
+mknod /dev/qeint11 c 210 11
+mknod /dev/qeint12 c 210 12
+mknod /dev/qeint13 c 210 13
+mknod /dev/qeint14 c 210 14
+mknod /dev/qeint15 c 210 15
+#
 rmmod qemotor
 rmmod qeinterrupt
 insmod ../../module/qeinterrupt/qeinterrupt.ko
