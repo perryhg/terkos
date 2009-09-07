@@ -5,7 +5,6 @@
 #include <string.h>
 #include <stdarg.h>
 #include "qemotoruser.h"
-#include "qwerkhw.h"
 
 CQEMotorUser::CQEMotorUser(int axis0, int axis1, int axis2, int axis3)
 {
@@ -13,19 +12,6 @@ CQEMotorUser::CQEMotorUser(int axis0, int axis1, int axis2, int axis3)
   int len;
   unsigned int axis;
 
-  m_pQwerk = CQwerkHardware::GetObject();
-
-#if Q1
-  // set voltage divider
-  unsigned short motorVoltage = m_pQwerk->GetBattVoltage();
-  if (motorVoltage<10000)
-    m_pQwerk->SetMotorVoltageScale(QHW_DIV_365TH);
-  else if (motorVoltage>20000)
-    m_pQwerk->SetMotorVoltageScale(QHW_DIV_91TH);
-  else
-    m_pQwerk->SetMotorVoltageScale(QHW_DIV_108TH);
-#endif
-  
   // open motor device
   strcpy(dev, QEM_DEVICE);
   len = strlen(dev);
@@ -73,8 +59,6 @@ CQEMotorUser::~CQEMotorUser()
       if (m_handle[axis]>=0)
 	close(m_handle[axis]);
     }
-
-  CQwerkHardware::ReleaseObject();
 }
 
 int CQEMotorUser::ConstructCall(int axis, int findex, ...)

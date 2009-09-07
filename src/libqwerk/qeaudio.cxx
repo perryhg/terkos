@@ -18,7 +18,7 @@
 
 CQEAudioController::CQEAudioController()
 {
-    m_pQwerk = CQwerkHardware::GetObject();
+    m_p9302hw = C9302Hardware::GetPtr();
 
     // initialize mutices
     pthread_mutex_init(&m_mutex, NULL);
@@ -56,7 +56,7 @@ CQEAudioController::~CQEAudioController()
     //Flush any remaining commands
     emptyAudioCommandQueue();
 
-    CQwerkHardware::ReleaseObject();
+    C9302Hardware::Release();
 
     pthread_cond_destroy(&m_notemptycond);
     pthread_cond_destroy(&m_notfullcond);
@@ -173,7 +173,7 @@ void CQEAudioController::disable()
 
 void CQEAudioController::doEnable()
 {
-    *(m_pQwerk->m_p9302hw)->m_fpga.Ushort(QEAUDIO_VOLUME) = 0;
+    *m_p9302hw->m_fpga.Ushort(QEAUDIO_VOLUME) = 0;
 
     //If experiencing problems with audio being cut short at start,
     //  try inserting usleep(100000) here
@@ -181,7 +181,7 @@ void CQEAudioController::doEnable()
 
 void CQEAudioController::doDisable()
 {
-    *(m_pQwerk->m_p9302hw)->m_fpga.Ushort(QEAUDIO_VOLUME) = 0;
+    *m_p9302hw->m_fpga.Ushort(QEAUDIO_VOLUME) = 0;
 }
 
 //m_mutex must not be held when called
@@ -195,7 +195,7 @@ int CQEAudioController::executeAudioCommand(CQEAudioControllerCommand &command)
   switch (command.type) {
     case AUDIOCOMMAND_TYPE_TONE:
       enable();
-      ret = doPlayTone(m_pQwerk, command.data.tone.frequency, command.data.tone.amplitude, command.data.tone.duration);
+      ret = doPlayTone(command.data.tone.frequency, command.data.tone.amplitude, command.data.tone.duration);
       break;
     case AUDIOCOMMAND_TYPE_CLIP:
       enable();
@@ -351,18 +351,18 @@ int CQEAudioController::playTone(long frequency, int amplitude, long duration)
   int ret;
 
   pthread_mutex_lock(&m_playmutex);
-  ret = doPlayTone(m_pQwerk, frequency, amplitude, duration);
+  ret = doPlayTone(frequency, amplitude, duration);
   pthread_mutex_unlock(&m_playmutex);
 
   return ret;
 }
 
-int CQEAudioController::doPlayTone(CQwerkHardware *qwerk, long frequency, int amplitude, long duration)
+int CQEAudioController::doPlayTone(long frequency, int amplitude, long duration)
 {
-    *(qwerk->m_p9302hw)->m_fpga.Ushort(QEAUDIO_PERIOD) = 1562500/frequency;
-    *(qwerk->m_p9302hw)->m_fpga.Ushort(QEAUDIO_VOLUME) = amplitude;
+    *m_p9302hw->m_fpga.Ushort(QEAUDIO_PERIOD) = 1562500/frequency;
+    *m_p9302hw->m_fpga.Ushort(QEAUDIO_VOLUME) = amplitude;
     usleep(duration*1000);
-    *(qwerk->m_p9302hw)->m_fpga.Ushort(QEAUDIO_VOLUME) = 0;
+    *m_p9302hw->m_fpga.Ushort(QEAUDIO_VOLUME) = 0;
 
     return QEAUDIO_RETURN_OK;
 }

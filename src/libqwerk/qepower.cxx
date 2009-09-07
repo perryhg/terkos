@@ -4,8 +4,8 @@ SINGLETON_REGISTER(CQEPower);
 
 CQEPower::CQEPower()
 {
-  m_p9302hw = C9302Hardware::GetObject();
-  m_pAnalog = CQEAnalog::GetObject();
+  m_p9302hw = C9302Hardware::GetPtr();
+  m_pAnalog = CQEAnalog::GetPtr();
 
   // todo: set version
   m_version = 0;
@@ -13,8 +13,8 @@ CQEPower::CQEPower()
 
 CQEPower::~CQEPower()
 {
-  C9302Hardware::ReleaseObject();
-  CQEAnalog::ReleaseObject();
+  C9302Hardware::Release();
+  CQEAnalog::Release();
 }
 
 void CQEPower::PowerOff()

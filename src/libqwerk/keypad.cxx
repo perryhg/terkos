@@ -12,7 +12,7 @@ const unsigned int CKeypad::KEY_DOWN = KP_KEY_DOWN;
 
 CKeypad::CKeypad()
 {
-  m_p9302hw = C9302Hardware::GetObject();
+  m_p9302hw = C9302Hardware::GetPtr();
 
   // set as input
   *m_p9302hw->PortFDataDR() &= ~0x0e;
@@ -21,7 +21,7 @@ CKeypad::CKeypad()
 
 CKeypad::~CKeypad()
 {
-  C9302Hardware::ReleaseObject();
+  C9302Hardware::Release();
 }
 
 const unsigned int CKeypad::GetKey(bool wait)

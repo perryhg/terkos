@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "qwerkhw.h"
 #include "qeservo.h"
 
 SINGLETON_REGISTER(CQEServo);
@@ -8,7 +7,7 @@ CQEServo::CQEServo()
 {
   long addr = QES_DEFAULT_ADDR;
 
-  m_p9302hw = C9302Hardware::GetObject();
+  m_p9302hw = C9302Hardware::GetPtr();
 
   m_num = QES_DEFAULT_SERVOS;
   m_divider = m_p9302hw->m_fpga.Ushort(addr);
@@ -24,7 +23,7 @@ CQEServo::CQEServo()
 
 CQEServo::~CQEServo()
 {
-  C9302Hardware::ReleaseObject();
+  C9302Hardware::Release();
 }
 
 void CQEServo::SetTiming(unsigned short min, unsigned short max)
