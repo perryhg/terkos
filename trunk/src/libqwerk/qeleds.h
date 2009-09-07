@@ -2,7 +2,8 @@
 #define _QELEDS_H
 
 #include <sys/time.h>
-#include "qwerkhw.h"
+#include "9302hw.h"
+#include "singleton.h"
 
 // defines the number of LEDs
 #define QEL_NUM_LEDS	         3
@@ -45,14 +46,16 @@ ELEDMode;
 
 class CQELEDController
 {
- public:
-  CQELEDController(unsigned long addr=QEL_DEFAULT_ADDR);
-  ~CQELEDController();
-
+public:
+  SINGLETON(CQELEDController);
+  
   void SetLED(ELEDIndex led, ELEDColor color);
 
 private:
-  CQwerkHardware *m_pQwerk; 
+  CQELEDController();
+  ~CQELEDController();
+
+  C9302Hardware *m_p9302hw; 
 
   volatile unsigned short *m_ledreg;
 

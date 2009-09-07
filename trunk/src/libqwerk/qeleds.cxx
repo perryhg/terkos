@@ -5,7 +5,9 @@
 #include <pthread.h>
 
 #include "qeleds.h"
-#include "qwerkhw.h"
+
+
+SINGLETON_REGISTER(CQELEDController);
 
 void *CQELEDController::LEDControllerThread(void *arg)
 {
@@ -14,11 +16,11 @@ void *CQELEDController::LEDControllerThread(void *arg)
   return NULL;
 }
 
-CQELEDController::CQELEDController(unsigned long addr)
+CQELEDController::CQELEDController()
 {
-  m_pQwerk = CQwerkHardware::GetObject();
+  m_p9302hw = C9302Hardware::GetObject();
 
-  m_ledreg = m_pQwerk->m_p9302hw->m_fpga.Ushort(addr);
+  m_ledreg = m_p9302hw->m_fpga.Ushort(QEL_DEFAULT_ADDR);
  
 #if 0
   pthread_mutex_init(&m_mutex, NULL);
@@ -48,7 +50,7 @@ CQELEDController::~CQELEDController()
   pthread_cond_destroy(&m_cond);
 #endif
 
-  CQwerkHardware::ReleaseObject();
+  C9302Hardware::ReleaseObject();
 }
   
 void CQELEDController::SetLED(ELEDIndex led, ELEDColor color)

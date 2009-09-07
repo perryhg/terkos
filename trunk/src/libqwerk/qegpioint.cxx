@@ -1,11 +1,15 @@
 #include "qegpioint.h"
 
-CQEGpioInt::CQEGpioInt(unsigned int base, unsigned int vectorStart) :
-  m_map(0x20000000, 0x1000)
+SINGLETON_REGISTER(CQEGpioInt);
+
+CQEGpioInt::CQEGpioInt()
 {
-  m_base = base;
+  m_p9302hw = C9302Hardware::GetObject();
+  m_base = QEG_DEFAULT_BASE;
+  
 }
   
 CQEGpioInt::~CQEGpioInt()
 {
+  C9302Hardware::ReleaseObject();
 }

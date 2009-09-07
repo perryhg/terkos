@@ -1,7 +1,8 @@
 #ifndef _QEGPIOINT_H
 #define _QEGPIOINT_H
 
-#include "memmap.h"
+#include "singleton.h"
+#include "9302hw.h"
 
 #define QEG_DEFAULT_BASE                                0x440
 #define QEG_DEFAULT_VECTOR_START                        8
@@ -11,17 +12,15 @@
 class CQEGpioInt 
 {
 public:
-  CQEGpioInt(unsigned int base=QEG_DEFAULT_BASE, 
-	     unsigned int vectorStart=QEG_DEFAULT_VECTOR_START);
-  ~CQEGpioInt();
+  SINGLETON(CQEGpioInt);
 
   inline volatile unsigned short *Data()
   {
-    return m_map.Ushort(m_base + 0x00);
+    return m_p9302hw->m_fpga.Ushort(m_base + 0x00);
   }
   inline volatile unsigned short *DataDir()
   {
-    return m_map.Ushort(m_base + 0x02);
+    return m_p9302hw->m_fpga.Ushort(m_base + 0x02);
   }
 
 
@@ -32,7 +31,7 @@ public:
   // edge.
   inline volatile unsigned short *IntMask()
   {
-    return m_map.Ushort(m_base + 0x04);
+    return m_p9302hw->m_fpga.Ushort(m_base + 0x04);
   }
 
   // Bits 0 thru 7 in this register determines which edge (rising or falling) 
@@ -44,13 +43,15 @@ public:
   // An interrupt is only generated for pins that are unmasked.
   inline volatile unsigned short *IntEdge()
   {
-    return m_map.Ushort(m_base + 0x06);
+    return m_p9302hw->m_fpga.Ushort(m_base + 0x06);
   }
 
 private:
-  CMemMap m_map;
+  CQEGpioInt();
+  ~CQEGpioInt();
+
+  C9302Hardware *m_p9302hw;
   unsigned int m_base;
-  int m_interrupts[QEG_NUM_VECTORS];
 };
 
 #endif

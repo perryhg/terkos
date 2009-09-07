@@ -1,6 +1,7 @@
 #ifndef _9302HW_H
 #define _9302HW_H
 
+#include "singleton.h"
 #include "memmap.h"
 
 #define HW_AD_CHANNELS             5
@@ -8,13 +9,9 @@
 class C9302Hardware
 {
 public:
-  C9302Hardware();
-  ~C9302Hardware();
+  SINGLETON(C9302Hardware);
 
   unsigned short GetAD(unsigned int channel);
-
-  static C9302Hardware *GetObject();
-  static void ReleaseObject();
 
   inline void SetGreenLED(bool state)
   {
@@ -90,8 +87,8 @@ public:
   CMemMap m_uart1;
 
 private:
-  static C9302Hardware *m_p9302hw;
-  static int m_refCount;
+  C9302Hardware();
+  ~C9302Hardware();
 };
 
 #endif

@@ -46,6 +46,7 @@ void *CQEMotorTraj::TrajThread(void *arg)
 	  motor->WriteTrajectory();
 	}
     }
+  return NULL;
 }
 
 CQEMotorTraj::CQEMotorTraj(int axis0, int axis1, int axis2, int axis3) : 

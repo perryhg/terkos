@@ -5,6 +5,8 @@ const unsigned int CTextLcd::NUM_ROWS = 2;
 const unsigned int CTextLcd::NUM_COLUMNS = 16;
 const string CTextLcd::BLANK_LINE(CTextLcd::NUM_COLUMNS, ' ');
 
+SINGLETON_REGISTER(CTextLcd);
+
 CTextLcd::CTextLcd()
 {
   m_p9302hw = C9302Hardware::GetObject();

@@ -1,0 +1,117 @@
+#ifndef _SINGLETON_H
+#define _SINGLETON_H
+
+#include <sys/types.h>
+#include <sys/fcntl.h>
+#include <sys/file.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+// put this in your class declaration
+#define SINGLETON(T)\
+  friend class TSingleton<T>;\
+  static TSingleton<T> m_singleton;\
+  static T *GetObject()\
+  {\
+    return m_singleton.GetObject();\
+  }\
+  static void ReleaseObject()\
+  {\
+    m_singleton.ReleaseObject();\
+  }
+
+#define SINGLETON_REGISTER(T)\
+  TSingleton<T> T::m_singleton( #T )
+
+  
+template <class T>
+class TSingleton
+{
+public:
+  static T *GetObject();
+  static void ReleaseObject();
+
+  TSingleton();
+  TSingleton(const char *identifier);
+  ~TSingleton();
+ 
+private:
+  static void Cleanup();
+
+  static int m_refCount;
+  static T *m_pInstance;  
+  static const char *m_identifier;
+  static int m_fd;
+};
+
+template <class T> int TSingleton<T>::m_refCount = 0;
+template <class T> T *TSingleton<T>::m_pInstance = NULL;
+template <class T> const char *TSingleton<T>::m_identifier = NULL;
+template <class T> int TSingleton<T>::m_fd = -1;
+
+template <class T> T* TSingleton<T>::GetObject()
+{
+  if (m_pInstance==NULL)
+    {
+      if (m_identifier!=NULL)
+	{
+	  char fn[64];
+	  strcpy(fn, "/tmp/");
+	  strcat(fn, m_identifier);
+	  m_fd = open(fn, O_RDWR | O_CREAT);
+	  if (m_fd<0)
+	    {
+	      fprintf(stderr, "ERROR: cannot create lockfile %s.\n", fn);
+	      return NULL;
+	    }
+	  if (flock(m_fd, LOCK_EX | LOCK_NB)<0)
+	    {
+	      fprintf(stderr, "ERROR: %s object already exists in another process.\n", m_identifier);
+	      return NULL;
+	    }
+	}
+      m_pInstance = new T();
+    }
+  m_refCount++;  
+  return m_pInstance;
+}
+
+template <class T> void TSingleton<T>::ReleaseObject()
+{
+  if (m_refCount)
+    m_refCount--;
+  
+  if (m_refCount==0)
+    Cleanup();
+}
+
+template <class T> TSingleton<T>::TSingleton()
+{
+}
+
+template <class T> void TSingleton<T>::Cleanup()
+{
+  if (m_fd>=0)
+    {
+      flock(m_fd, LOCK_UN | LOCK_NB);
+      close(m_fd);
+    }
+  if (m_pInstance)
+    delete m_pInstance;
+}
+
+template <class T> TSingleton<T>::TSingleton(const char *identifier)
+{
+  m_identifier = identifier;
+}
+
+template <class T> TSingleton<T>::~TSingleton()
+{
+  Cleanup();
+}
+
+
+#endif
+
