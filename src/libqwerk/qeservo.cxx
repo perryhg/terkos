@@ -2,13 +2,18 @@
 #include "qwerkhw.h"
 #include "qeservo.h"
 
-CQEServo::CQEServo(unsigned int num, unsigned long addr)
+SINGLETON_REGISTER(CQEServo);
+
+CQEServo::CQEServo()
 {
-  m_pQwerk = CQwerkHardware::GetObject();
-  m_num = num;
-  m_divider = m_pQwerk->m_p9302hw->m_fpga.Ushort(addr);
-  m_freq = m_pQwerk->m_p9302hw->m_fpga.Ushort(addr+2);
-  m_up = m_pQwerk->m_p9302hw->m_fpga.Ushort(addr+4);
+  long addr = QES_DEFAULT_ADDR;
+
+  m_p9302hw = C9302Hardware::GetObject();
+
+  m_num = QES_DEFAULT_SERVOS;
+  m_divider = m_p9302hw->m_fpga.Ushort(addr);
+  m_freq = m_p9302hw->m_fpga.Ushort(addr+2);
+  m_up = m_p9302hw->m_fpga.Ushort(addr+4);
 
   *m_divider = QES_DEFAULT_DIVIDER; 
   *m_freq = QES_DEFAULT_FREQ; 
@@ -19,7 +24,7 @@ CQEServo::CQEServo(unsigned int num, unsigned long addr)
 
 CQEServo::~CQEServo()
 {
-  CQwerkHardware::ReleaseObject();
+  C9302Hardware::ReleaseObject();
 }
 
 void CQEServo::SetTiming(unsigned short min, unsigned short max)

@@ -1,12 +1,14 @@
 #include <unistd.h>
 #include "keypad.h"
 
-const unsigned int CKeypad::KEY_OK = 0x0002;
-const unsigned int CKeypad::KEY_CANCEL = 0x0004;
-const unsigned int CKeypad::KEY_RIGHT = 0x0008;
-const unsigned int CKeypad::KEY_LEFT = 0x0010;
-const unsigned int CKeypad::KEY_UP = 0x0020;
-const unsigned int CKeypad::KEY_DOWN = 0x0040;
+SINGLETON_REGISTER(CKeypad);
+
+const unsigned int CKeypad::KEY_OK = KP_KEY_OK;
+const unsigned int CKeypad::KEY_CANCEL = KP_KEY_CANCEL;
+const unsigned int CKeypad::KEY_RIGHT = KP_KEY_RIGHT;
+const unsigned int CKeypad::KEY_LEFT = KP_KEY_LEFT;
+const unsigned int CKeypad::KEY_UP = KP_KEY_UP;
+const unsigned int CKeypad::KEY_DOWN = KP_KEY_DOWN;
 
 CKeypad::CKeypad()
 {
@@ -34,6 +36,8 @@ const unsigned int CKeypad::GetKey(bool wait)
 
       if (!wait || key)
 	break;
+
+      usleep(10000);
     }
 
   if (wait)

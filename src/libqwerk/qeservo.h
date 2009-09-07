@@ -1,11 +1,10 @@
 #ifndef _QESERVO_H
 #define _QESERVO_H
 
-#if Q1
-#define QES_DEFAULT_SERVOS       16
-#else
+#include "singleton.h"
+#include "9302hw.h"
+
 #define QES_DEFAULT_SERVOS       12
-#endif
 
 #define QES_DEFAULT_DIVIDER      400  // divide 100mhz by 400->250khz, 4us 
 #define QES_DEFAULT_FREQ         4650 // 4650 * 4us = 18.6ms->53.76hz
@@ -14,13 +13,10 @@
 
 #define QES_DEFAULT_ADDR         0x400
 
-class CQwerkHardware;
-
 class CQEServo
 {
 public:
-  CQEServo(unsigned int num=QES_DEFAULT_SERVOS, unsigned long addr=QES_DEFAULT_ADDR);
-  ~CQEServo();
+  SINGLETON(CQEServo);
 
   void Disable(unsigned int index);
   unsigned short GetPosition(unsigned int index);
@@ -30,6 +26,9 @@ public:
   void SetTiming(unsigned short min, unsigned short max);
 
 private:
+  CQEServo();
+  ~CQEServo();
+
   unsigned short m_min;
   unsigned short m_max;
   unsigned int m_num;
@@ -38,7 +37,7 @@ private:
   volatile unsigned short *m_freq;
   volatile unsigned short *m_up;
 
-  CQwerkHardware *m_pQwerk; 
+  C9302Hardware *m_p9302hw; 
 };
 
 #endif

@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include "9302hw.h"
 
-C9302Hardware *C9302Hardware::m_p9302hw = NULL;
-int C9302Hardware::m_refCount = 0;
-
 C9302Hardware::C9302Hardware() :
   m_scr(0x80080000, 0x44),
   m_gpio(0x80840000, 0xca),
@@ -31,23 +28,6 @@ C9302Hardware::~C9302Hardware()
 {
 }
 
-C9302Hardware *C9302Hardware::GetObject()
-{
-  if (m_p9302hw==NULL)
-    m_p9302hw = new C9302Hardware();
-  
-  m_refCount++;
-  return m_p9302hw;
-}
-
-void C9302Hardware::ReleaseObject()
-{
-  if (m_refCount)
-    m_refCount--;
-
-  if (m_refCount==0 && m_p9302hw!=NULL)
-    delete m_p9302hw;
-}
 
 unsigned short C9302Hardware::GetAD(unsigned int channel)
 {
