@@ -1,4 +1,3 @@
-
 #include "textlcd.h"
 
 const unsigned int CTextLcd::NUM_ROWS = 2;
@@ -28,24 +27,24 @@ void CTextLcd::Clear()
 }
 
 void CTextLcd::ClearLine(unsigned int lineNumber)
-   {
-   if (IsValidRow(lineNumber))
-      {
+{
+  if (IsValidRow(lineNumber))
+    {
       MoveCursor(lineNumber, 0);
       printf("%s", CTextLcd::BLANK_LINE.c_str());
-      }
-   }
+    }
+}
 
 void CTextLcd::MoveCursor(const unsigned int row, const unsigned int col)
 {
-   if (IsValidPosition(row, col))
-      {
+  if (IsValidPosition(row, col))
+    {
       // RS low
       *m_p9302hw->PortGDataDR() |= 0x02;
       TL_DELAY();
 
       PutByte(0x80 | (col&0x0f) + (row ? 0x40 : 0));
-      }
+    }
 }
 
 int CTextLcd::printf(const char *format, ...)
@@ -68,56 +67,64 @@ int CTextLcd::printf(const char *format, ...)
   return i;
 }
 
+void CTextLcd::SetCharacter(const char character)
+{
+  // RS High
+  *m_p9302hw->PortGDataDR() &= ~0x02;
+  TL_DELAY();
+  PutByte(character);
+}
+
 void CTextLcd::SetCharacter(const unsigned int row, const unsigned int col, const char character)
-   {
-   if (IsValidPosition(row, col))
-      {
+{
+  if (IsValidPosition(row, col))
+    {
       MoveCursor(row, col);
-      printf("%c", character);
-      }
-   }
+      SetCharacter(character);
+    }
+}
 
 void CTextLcd::SetLine(const unsigned int lineNumber, const string& text, const bool willClearLineFirst)
-   {
-   if (IsValidRow(lineNumber))
-      {
+{
+  if (IsValidRow(lineNumber))
+    {
       if (willClearLineFirst)
-         {
-         ClearLine(lineNumber);
-         }
+	{
+	  ClearLine(lineNumber);
+	}
       if (text.length() > 0)
-         {
-         MoveCursor(lineNumber, 0);
-         printf("%s", text.substr(0, CTextLcd::NUM_COLUMNS).c_str());
-         }
-      }
-   }
+	{
+	  MoveCursor(lineNumber, 0);
+	  printf("%s", text.substr(0, CTextLcd::NUM_COLUMNS).c_str());
+	}
+    }
+}
 
 void CTextLcd::SetText(const string& text, const bool willClearFirst)
-   {
-   if (willClearFirst)
-      {
+{
+  if (willClearFirst)
+    {
       Clear();
-      }
+    }
 
-   if (text.length() > 0)
-      {
+  if (text.length() > 0)
+    {
       string theText = text;
       int lineNumber = 0;
       do
-         {
-         string textPiece = theText.substr(0, CTextLcd::NUM_COLUMNS);
-         theText = theText.substr(textPiece.length());
-         SetLine(lineNumber++, textPiece, false);
-         }
+	{
+	  string textPiece = theText.substr(0, CTextLcd::NUM_COLUMNS);
+	  theText = theText.substr(textPiece.length());
+	  SetLine(lineNumber++, textPiece, false);
+	}
       while (!theText.empty() && IsValidRow(lineNumber));
-      }
-   }
+    }
+}
 
 void CTextLcd::SetBacklight(const bool isOn)
-   {
-   SetProperty(TL_PROP_BACKLIGHT, isOn);
-   }
+{
+  SetProperty(TL_PROP_BACKLIGHT, isOn);
+}
 
 // RS eedat portg1
 // R/W egpio10 portb2
@@ -141,14 +148,152 @@ void CTextLcd::Init()
   *m_p9302hw->PortGData() &= ~0x02;
   *m_p9302hw->PortGDataDR() |= 0x02;
 
+  DefineChars();
   Clear();
+
 }
 
 void CTextLcd::DefineChars()
 {
+  // **** 0 ****
+  // RS Low
+  *m_p9302hw->PortGDataDR() |= 0x02;
+  TL_DELAY();
+  PutByte(0x40);
+  // RS High
+  *m_p9302hw->PortGDataDR() &= ~0x02;
+  TL_DELAY();
+  PutByte(0x00); // 00000
+  PutByte(0x04); // 00100
+  PutByte(0x04); // 00100
+  PutByte(0x0e); // 01110
+  PutByte(0x0e); // 01110
+  PutByte(0x1f); // 11111
+  PutByte(0x1f); // 11111
+  PutByte(0x00); // 00000
+
+  // **** 1 ****
+  // RS Low
+  *m_p9302hw->PortGDataDR() |= 0x02;
+  TL_DELAY();
+  PutByte(0x48);
+  // RS High
+  *m_p9302hw->PortGDataDR() &= ~0x02;
+  TL_DELAY();
+  PutByte(0x0e); // 01110
+  PutByte(0x1b); // 11011
+  PutByte(0x11); // 10001
+  PutByte(0x11); // 10001
+  PutByte(0x11); // 10001
+  PutByte(0x11); // 10001
+  PutByte(0x1f); // 11111
+  PutByte(0x1f); // 11111
+
+  // **** 2 ****
+  // RS Low
+  *m_p9302hw->PortGDataDR() |= 0x02;
+  TL_DELAY();
+  PutByte(0x50);
+  // RS High
+  *m_p9302hw->PortGDataDR() &= ~0x02;
+  TL_DELAY();
+  PutByte(0x00); // 00000
+  PutByte(0x1f); // 11111
+  PutByte(0x0e); // 01110
+  PutByte(0x04); // 00100
+  PutByte(0x04); // 00100
+  PutByte(0x04); // 00100
+  PutByte(0x04); // 00100
+  PutByte(0x04); // 00100
+
+  // **** 3 ****
+  // RS Low
+  *m_p9302hw->PortGDataDR() |= 0x02;
+  TL_DELAY();
+  PutByte(0x58);
+  // RS High
+  *m_p9302hw->PortGDataDR() &= ~0x02;
+  TL_DELAY();
+  PutByte(0x00); // 00000
+  PutByte(0x1f); // 11111
+  PutByte(0x0e); // 01110
+  PutByte(0x04); // 00100
+  PutByte(0x04); // 00100
+  PutByte(0x04); // 00100
+  PutByte(0x05); // 00100
+  PutByte(0x05); // 00101
+
+  // **** 4 ****
+  // RS Low
+  *m_p9302hw->PortGDataDR() |= 0x02;
+  TL_DELAY();
+  PutByte(0x60);
+  // RS High
+  *m_p9302hw->PortGDataDR() &= ~0x02;
+  TL_DELAY();
+  PutByte(0x00); // 00000
+  PutByte(0x00); // 00000
+  PutByte(0x00); // 00000
+  PutByte(0x00); // 00000
+  PutByte(0x10); // 10000
+  PutByte(0x10); // 10000
+  PutByte(0x10); // 10000
+  PutByte(0x10); // 10000
+
+  // **** 5 ****
+  // RS Low
+  *m_p9302hw->PortGDataDR() |= 0x02;
+  TL_DELAY();
+  PutByte(0x68);
+  // RS High
+  *m_p9302hw->PortGDataDR() &= ~0x02;
+  TL_DELAY();
+  PutByte(0x00); // 00000
+  PutByte(0x00); // 00000
+  PutByte(0x04); // 00100
+  PutByte(0x04); // 00100
+  PutByte(0x14); // 10100
+  PutByte(0x14); // 10100
+  PutByte(0x14); // 10100
+  PutByte(0x14); // 10100
+
+  // **** 6 ****
+  // RS Low
+  *m_p9302hw->PortGDataDR() |= 0x02;
+  TL_DELAY();
+  PutByte(0x70);
+  // RS High
+  *m_p9302hw->PortGDataDR() &= ~0x02;
+  TL_DELAY();
+  PutByte(0x01); // 00001
+  PutByte(0x01); // 00001
+  PutByte(0x05); // 00101
+  PutByte(0x05); // 00101
+  PutByte(0x15); // 10101
+  PutByte(0x15); // 10101
+  PutByte(0x15); // 10101
+  PutByte(0x15); // 10101
+
+  // **** 7 ****
+  // RS Low
+  *m_p9302hw->PortGDataDR() |= 0x02;
+  TL_DELAY();
+  PutByte(0x78);
+  // RS High
+  *m_p9302hw->PortGDataDR() &= ~0x02;
+  TL_DELAY();
+  PutByte(0x00);
+  PutByte(0x00);
+  PutByte(0x00);
+  PutByte(0x00);
+  PutByte(0x00);
+  PutByte(0x00);
+  PutByte(0x00);
+  PutByte(0x00);
+  
 }
 
-  void CTextLcd::PutNibble(unsigned char c)
+void CTextLcd::PutNibble(unsigned char c)
 {
   *m_p9302hw->PortBDataDR() = (~(c << 4)&0xf0) | (*m_p9302hw->PortBDataDR() & 0x0f);
   TL_DELAY();

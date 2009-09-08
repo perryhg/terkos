@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "9302hw.h"
 
+
 C9302Hardware::C9302Hardware() :
   m_scr(0x80080000, 0x44),
   m_gpio(0x80840000, 0xca),
