@@ -20,6 +20,19 @@ using namespace std;
 #define TL_PROP_HEIGHT      PROP_ID(TL_OBJECT, 1)
 #define TL_PROP_WIDTH       PROP_ID(TL_OBJECT, 2)
 
+#define TL_CHAR_UP          0x00
+#define TL_CHAR_DOWN        0xf5
+#define TL_CHAR_LEFT        0xf7
+#define TL_CHAR_RIGHT       0xf6
+#define TL_CHAR_LOWBATT     0x01
+#define TL_CHAR_COPYRIGHT   0xcf 
+#define TL_CHAR_WSA0        0x02 // wireless strength (just antenna)
+#define TL_CHAR_WSA1        0x03 // wireless strength (antenna with 1 bar)
+#define TL_CHAR_WSB0        0x20 // wireless strength (2nd char, 0 bars)
+#define TL_CHAR_WSB1        0x04 // wireless strength (2nd char, 1 bar)
+#define TL_CHAR_WSB2        0x05 // wireless strength (2nd char, 2 bars)
+#define TL_CHAR_WSB3        0x06 // wireless strength (2nd char, 2 bars)
+
 #define TL_DELAY()          Delay(20)
 #define TL_DELAYL()         Delay(2000)
 
@@ -35,6 +48,7 @@ public:
   void ClearLine(unsigned int lineNumber);
   void MoveCursor(const unsigned int row, const unsigned int col);
   int printf(const char *format, ...);
+  void SetCharacter(const char character);
   void SetCharacter(const unsigned int row, const unsigned int col, const char character);
   void SetLine(const unsigned int lineNumber, const string& text, const bool willClearLineFirst = true);
   void SetText(const string& text, const bool willClearFirst = true);
