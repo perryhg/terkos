@@ -38,6 +38,23 @@ int main(int argc, char **argv)
    lcd.SetText("This is some really long text that will not fit.");
    sleep(1);
 
+   printf("Special characters\n");
+   lcd.Clear();
+   lcd.SetCharacter(TL_CHAR_UP);
+   lcd.SetCharacter(TL_CHAR_DOWN);
+   lcd.SetCharacter(TL_CHAR_LEFT);
+   lcd.SetCharacter(TL_CHAR_RIGHT);
+   lcd.SetCharacter(TL_CHAR_LOWBATT);
+   lcd.SetCharacter(TL_CHAR_COPYRIGHT);
+   lcd.SetCharacter(TL_CHAR_WSA0);
+   lcd.SetCharacter(TL_CHAR_WSB0);
+   lcd.SetCharacter(TL_CHAR_WSA1);
+   lcd.SetCharacter(TL_CHAR_WSB3);
+   lcd.SetCharacter(TL_CHAR_WSB0);
+   lcd.SetCharacter(TL_CHAR_WSB1);
+   lcd.SetCharacter(TL_CHAR_WSB2);
+   sleep(1);
+
    printf("backlight off (via property)\n");
    lcd.SetProperty(TL_PROP_BACKLIGHT, false);
    sleep(1);
