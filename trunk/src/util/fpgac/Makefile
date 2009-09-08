@@ -14,4 +14,4 @@ $(TARGET): $(OBJECTS)
 	$(CXX) $(OBJECTS) -o $(TARGET) $(LDFLAGS)
 
 %.o: %.cxx
-	$(CXX) -c $(CFLAGS) $<#export PATH=${TERKOS_ROOT}/oe/openembedded/bitbake/bin:/usr/local/arm-linux-gnueabi/bin:/usr/local/arm/3.2.1-elf/bin:$PATH
+	$(CXX) -c $(CFLAGS) $<
