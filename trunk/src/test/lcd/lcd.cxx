@@ -9,7 +9,7 @@ using namespace std;
 
 int main(int argc, char **argv)
    {
-     CTextLcd &lcd = CTextLcd::GetRef();
+   CTextLcd &lcd = CTextLcd::GetRef();
 
    long width = -1;
    long height = -1;
@@ -142,5 +142,7 @@ int main(int argc, char **argv)
 
    printf("Clearing LCD and quitting\n");
    lcd.Clear();
+
+   CTextLcd::Release();
    }
 
