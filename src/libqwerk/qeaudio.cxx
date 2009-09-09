@@ -195,7 +195,7 @@ int CQEAudioController::executeAudioCommand(CQEAudioControllerCommand &command)
   switch (command.type) {
     case AUDIOCOMMAND_TYPE_TONE:
       enable();
-      ret = doPlayTone(command.data.tone.frequency, command.data.tone.amplitude, command.data.tone.duration);
+      ret = doPlayTone(m_p9302hw, command.data.tone.frequency, command.data.tone.amplitude, command.data.tone.duration);
       break;
     case AUDIOCOMMAND_TYPE_CLIP:
       enable();
@@ -351,13 +351,13 @@ int CQEAudioController::playTone(long frequency, int amplitude, long duration)
   int ret;
 
   pthread_mutex_lock(&m_playmutex);
-  ret = doPlayTone(frequency, amplitude, duration);
+  ret = doPlayTone(m_p9302hw, frequency, amplitude, duration);
   pthread_mutex_unlock(&m_playmutex);
 
   return ret;
 }
 
-int CQEAudioController::doPlayTone(long frequency, int amplitude, long duration)
+int CQEAudioController::doPlayTone(C9302Hardware *m_p9302hw, long frequency, int amplitude, long duration)
 {
     *m_p9302hw->m_fpga.Ushort(QEAUDIO_PERIOD) = 1562500/frequency;
     *m_p9302hw->m_fpga.Ushort(QEAUDIO_VOLUME) = amplitude;
