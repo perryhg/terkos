@@ -15,7 +15,18 @@ const bool LCDConfigManager::isBacklightEnabled() const
 
 bool LCDConfigManager::setBacklightEnabled(const bool isEnabled)
    {
-   lcd.SetBacklight(isEnabled);
+   try
+      {
+      CTextLcd &lcd = CTextLcd::GetRef();
+      lcd.SetBacklight(isEnabled);
+      }
+   catch (...)
+      {
+      // TODO: add logging
+      cerr << "LCDConfigManager::setBacklightEnabled(): failed to get CTextLcd reference required to set backlight state." << endl;
+      }
+   CTextLcd::Release();
+
    return setBooleanValue(IS_BACKLIGHT_ENABLED, isEnabled);
    }
 

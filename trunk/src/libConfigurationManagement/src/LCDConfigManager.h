@@ -36,8 +36,6 @@ class LCDConfigManager : public ConfigFile
 
    private:
 
-      CTextLcd lcd;
-
       static const string CONFIG_FILENAME;
       static const string DEFAULT_CONFIG_FILENAME;
       static const string IS_BACKLIGHT_ENABLED;
