@@ -26,4 +26,6 @@ int main()
       printf("Pos: %d\n", servo.GetPosition(0));
       for (d=0; d<30000000; d++);
     }
+
+  CQEServo::Release();
 }
