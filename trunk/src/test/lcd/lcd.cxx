@@ -143,6 +143,11 @@ int main(int argc, char **argv)
    printf("Clearing LCD and quitting\n");
    lcd.Clear();
 
+   printf("Releasing the LCD reference\n");
    CTextLcd::Release();
+
+   printf("Done!\n");
+
+   return 0;
    }
 
