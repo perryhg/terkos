@@ -4,14 +4,16 @@
 
 #include <iostream>
 #include <string>
+#include <unistd.h>
 
-#include "CharacterDisplay.h"
+#include <CharacterDisplay.h>
+#include <CharacterDisplayMenu.h>
+#include <MenuStatusManager.h>
+#include <DefaultMenuStatusManager.h>
+#include <Menu.h>
+#include <keypad.h>
+
 #include "LCDCharacterDisplay.h"
-#include "MenuStatusManager.h"
-#include "DefaultMenuStatusManager.h"
-#include "CharacterDisplayMenu.h"
-#include "Menu.h"
-#include "keypad.h"
 
 using namespace std;
 
@@ -56,19 +58,31 @@ int main(int argc, char** argv)
    eventHandlers[CKeypad::KEY_RIGHT] = &DefaultMenuStatusManager::handleRightEvent;
 
    // loop forever getting the current key press and passing to the appropriate event handler
-   CKeypad keypad;
-   while (true)
+   try
       {
-      const unsigned int key = keypad.GetKey();
-      if (eventHandlers[key])
+      CKeypad &keypad = CKeypad::GetRef();
+      while (true)
          {
-         (menuStatusManager->*eventHandlers[key])();
-         }
-      else
-         {
-         std::cerr << "Unexpected key [" << key << "]" << std::endl;
+         const unsigned int key = keypad.GetKey();
+         if (eventHandlers[key])
+            {
+            (menuStatusManager->*eventHandlers[key])();
+            }
+         else
+            {
+            std::cerr << "Unexpected key [" << key << "]" << std::endl;
+            }
+         usleep(33333);   // roughly 30 Hz
          }
       }
+   catch (...)
+      {
+      // TODO: change to real logging
+      std::cerr << "Caught exception, aborting..." << std::endl;
+      }
+
+   // release the keypad reference
+   CKeypad::Release();
 
    return 0;
    }

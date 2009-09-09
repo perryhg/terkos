@@ -9,7 +9,7 @@
 #include <json/json.h>
 #include <pstream.h>
 #include <math.h>
-#include "qwerkhw.h"
+#include <qepower.h>
 
 using namespace std;
 using namespace redi;
@@ -27,7 +27,7 @@ class PowerInfoManager
 
       virtual ~PowerInfoManager()
          {
-         // nothing to do
+         CQEPower::Release();
          }
 
       const int getMainBatteryVoltage();
@@ -46,9 +46,8 @@ class PowerInfoManager
 
    private:
 
-      CQwerkHardware hardware;
-
       int getHardwareProperty(const int property);
+      
    };
 
 #endif /* POWERINFOMANAGER_H_ */

@@ -8,8 +8,8 @@
 #include <algorithm>
 #include <iostream>
 #include <string>
+#include <textlcd.h>
 #include "CharacterDisplay.h"
-#include "textlcd.h"
 
 using namespace std;
 
@@ -23,7 +23,7 @@ class LCDCharacterDisplay : public CharacterDisplay
       static const string LCD_PADDING_FOR_LINES_WITHOUT_ARROWS_WHEN_IN_SCROLLING_MODE;
 
       LCDCharacterDisplay(const unsigned int numRows, const unsigned int numColumns) :
-         numRows(numRows), numColumns(numColumns), totalCharacterCount(numRows * numColumns), numColumnsWhenInScrollingMode(numColumns
+         lcd(CTextLcd::GetRef()), numRows(numRows), numColumns(numColumns), totalCharacterCount(numRows * numColumns), numColumnsWhenInScrollingMode(numColumns
                   - LCDCharacterDisplay::LCD_WIDTH_OF_SCROLL_ARROW_AND_PADDING)
          {
          // nothing to do
@@ -31,7 +31,7 @@ class LCDCharacterDisplay : public CharacterDisplay
 
       virtual ~LCDCharacterDisplay()
          {
-         // nothing to do
+         CTextLcd::Release();
          }
 
       const unsigned int getRows() const
@@ -60,7 +60,7 @@ class LCDCharacterDisplay : public CharacterDisplay
 
    private:
 
-      CTextLcd lcd;
+      CTextLcd &lcd;
       const unsigned int numRows;
       const unsigned int numColumns;
       const unsigned int totalCharacterCount;

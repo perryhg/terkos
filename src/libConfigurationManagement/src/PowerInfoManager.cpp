@@ -8,44 +8,44 @@ const unsigned int PowerInfoManager::NUM_BREAKERS = 5;
 
 const int PowerInfoManager::getMainBatteryVoltage()
    {
-   return getHardwareProperty(QHW_PROP_MAIN_BATT_VOLTAGE);
+   return getHardwareProperty(QP_PROP_MAIN_BATT_VOLTAGE);
    }
 
 const int PowerInfoManager::getBackupBatteryVoltage()
    {
-   return getHardwareProperty(QHW_PROP_BACKUP_BATT_VOLTAGE);
+   return getHardwareProperty(QP_PROP_BACKUP_BATT_VOLTAGE);
    }
 
 const int PowerInfoManager::getIO5VVoltage()
    {
-   return getHardwareProperty(QHW_PROP_IO_5V_VOLTAGE);
+   return getHardwareProperty(QP_PROP_IO_5V_VOLTAGE);
    }
 
 const int PowerInfoManager::getMain5VVoltage()
    {
-   return getHardwareProperty(QHW_PROP_MAIN_5V_VOLTAGE);
+   return getHardwareProperty(QP_PROP_MAIN_5V_VOLTAGE);
    }
 
 const int PowerInfoManager::getMainBatteryState()
    {
-   return getHardwareProperty(QHW_PROP_MAIN_BATT_STATE);
+   return getHardwareProperty(QP_PROP_MAIN_BATT_STATE);
    }
 
 const int PowerInfoManager::getBackupBatteryState()
    {
-   return getHardwareProperty(QHW_PROP_BACKUP_BATT_STATE);
+   return getHardwareProperty(QP_PROP_BACKUP_BATT_STATE);
    }
 
 const int PowerInfoManager::getIO5VState()
    {
-   return getHardwareProperty(QHW_PROP_IO_5V_STATE);
+   return getHardwareProperty(QP_PROP_IO_5V_STATE);
    }
 
 const bool PowerInfoManager::getBreakerState(const unsigned int breakerId)
    {
    if (breakerId < NUM_BREAKERS)
       {
-      const int breakersState = getHardwareProperty(QHW_PROP_BREAKER_STATE);
+      const int breakersState = getHardwareProperty(QP_PROP_BREAKER_STATE);
       if (breakersState >= 0)
          {
          return (breakersState >> breakerId & 1) == 1;
@@ -92,15 +92,22 @@ Json::Value PowerInfoManager::getJSON()
 
 int PowerInfoManager::getHardwareProperty(const int property)
    {
-   long val = 0;
-   if (hardware.GetProperty(property, &val) == PROP_OK)
-      {
-      return (int)val;
-      }
-   else
-      {
-      // TODO: add some logging here
-      }
+   long val = -1;
 
-   return -1;
+   try
+      {
+      CQEPower &power = CQEPower::GetRef();
+      if (power.GetProperty(property, &val) != PROP_OK)
+         {
+         // TODO: add some logging here
+         }
+      }
+   catch (...)
+      {
+      // TODO: add logging
+      cerr << "PowerInfoManager::getHardwareProperty(): failed to get CQEPower reference required to get property." << endl;
+      }
+   CQEPower::Release();
+
+   return (int)val;
    }

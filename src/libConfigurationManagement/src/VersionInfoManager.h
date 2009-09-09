@@ -7,9 +7,9 @@
 
 #include <string.h>
 #include <json/json.h>
-#include "ConfigFile.h"
 #include <pstream.h>
-#include "qwerkhw.h"
+#include <qepower.h>
+#include "ConfigFile.h"
 #include "StringUtilities.h"
 #include "FirmwareVersionManager.h"
 
@@ -24,14 +24,22 @@ class VersionInfoManager
          {
          // get the hardware version
          long val = 0;
-         if (hardware.GetProperty(QHW_PROP_HARDWARE_VERSION, &val) == PROP_OK)
+
+         hardwareVersion = UNKNOWN_VALUE;
+         try
             {
-            hardwareVersion = StringUtilities::convertIntToString((int) val);
+            CQEPower &power = CQEPower::GetRef();
+            if (power.GetProperty(QP_PROP_HARDWARE_VERSION, &val) == PROP_OK)
+               {
+               hardwareVersion = StringUtilities::convertIntToString((int) val);
+               }
             }
-         else
+         catch (...)
             {
-            hardwareVersion = UNKNOWN_VALUE;
+            // TODO: add logging
+            cerr << "VersionInfoManager::VersionInfoManager(): failed to get CQEPower reference required to get property." << endl;
             }
+         CQEPower::Release();
 
          // call uname to get system info
          ipstream uname1("/bin/uname -s");
@@ -92,8 +100,6 @@ class VersionInfoManager
       static const string FIRMWARE_CONFIG_FILENAME;
 
       static const string UNKNOWN_VALUE;
-
-      CQwerkHardware hardware;
 
       string hardwareVersion;
       FirmwareVersionManager firmwareVersionManager;
