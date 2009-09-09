@@ -165,7 +165,7 @@ class CQEAudioController
 	    } data;
 	};
 
-        static C9302Hardware *m_p9302hw; 
+        C9302Hardware *m_p9302hw; 
  
 	bool enabled;
 	void doEnable(void);
@@ -180,7 +180,7 @@ class CQEAudioController
         pthread_cond_t m_notemptycond;
         pthread_cond_t m_notfullcond;
 
-	static int doPlayTone(long frequency, int amplitude, long duration);
+	static int doPlayTone(C9302Hardware *m_p9302hw, long frequency, int amplitude, long duration);
         static int doPlayClip(char clip[], int length);
         static int doPlayClip(char *filename);
 
