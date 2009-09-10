@@ -116,9 +116,13 @@ template <class T> void TSingleton<T>::Cleanup()
     {
       flock(m_fd, LOCK_UN | LOCK_NB);
       close(m_fd);
+      m_fd = -1;
     }
   if (m_pInstance)
-    delete m_pInstance;
+    {
+      delete m_pInstance;
+      m_pInstance = NULL;
+    }
 }
 
 template <class T> TSingleton<T>::TSingleton(const char *identifier)
