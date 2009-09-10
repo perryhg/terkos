@@ -101,13 +101,13 @@ int PowerInfoManager::getHardwareProperty(const int property)
          {
          // TODO: add some logging here
          }
+      CQEPower::Release();
       }
    catch (...)
       {
       // TODO: add logging
       cerr << "PowerInfoManager::getHardwareProperty(): failed to get CQEPower reference required to get property." << endl;
       }
-   CQEPower::Release();
 
    return (int)val;
    }

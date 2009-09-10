@@ -33,13 +33,13 @@ class VersionInfoManager
                {
                hardwareVersion = StringUtilities::convertIntToString((int) val);
                }
+            CQEPower::Release();
             }
          catch (...)
             {
             // TODO: add logging
             cerr << "VersionInfoManager::VersionInfoManager(): failed to get CQEPower reference required to get property." << endl;
             }
-         CQEPower::Release();
 
          // call uname to get system info
          ipstream uname1("/bin/uname -s");

@@ -74,15 +74,15 @@ int main(int argc, char** argv)
             }
          usleep(33333);   // roughly 30 Hz
          }
+         
+      // release the keypad reference
+      CKeypad::Release();
       }
    catch (...)
       {
       // TODO: change to real logging
       std::cerr << "Caught exception, aborting..." << std::endl;
       }
-
-   // release the keypad reference
-   CKeypad::Release();
 
    return 0;
    }
