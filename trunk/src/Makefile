@@ -93,6 +93,7 @@ dist: $(DIST_CGI_DIR) \
 	ln -s /opt/scripts/saveWirelessNetworkingConfig.pl        $(DIST_CGI_DIR)/saveWirelessNetworkingConfig.pl
 	ln -s /opt/scripts/setHttpBasicAuthPassword.pl            $(DIST_CGI_DIR)/setHttpBasicAuthPassword.pl
 	ln -s /opt/scripts/setRootUserPassword.pl                 $(DIST_CGI_DIR)/setRootUserPassword.pl
+	ln -s /opt/scripts/setTerkOSConfig.pl                     $(DIST_CGI_DIR)/setTerkOSConfig.pl
 
 	@echo 'Removing .svn directories...'
 	rm -rf `find $(DIST_DIR) -type d -name .svn`

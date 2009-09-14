@@ -137,6 +137,11 @@ if (!window['$'])
          notifyEventListeners('onAfterHide');
          };
 
+      this.setMessage = function(message)
+         {
+         jQuery(dialogMessage).html(message);
+         };
+
       /**
        * Registers the given event listener.  The event listener should implement some or all of the following methods:
        *
