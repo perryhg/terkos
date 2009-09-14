@@ -6,8 +6,9 @@
 #define STRINGUTILITIES_H_
 
 #include <algorithm>
-#include <sstream>
 #include <string>
+#include <sstream>
+#include <iostream>
 #include <vector>
 
 using namespace std;
@@ -22,6 +23,16 @@ class StringUtilities
        * is greater than the length of the string representation of the int.
        */
       static const string convertIntToString(const int val, const unsigned int desiredPaddedLength=0, const char paddingChar=' ');
+
+      /**
+       * Converts the given string to a number, returning a boolean which is true if the conversion succeeded, false
+       * otherwise.
+       */
+      template <class T>
+      static const bool convertStringToNum(const std::string& s, T& t)
+         {
+         return convertStringToNumWorkhorse(s, t, std::dec);
+         }
 
       /**
        * Tokenizes the given string, breaking it wherever it finds one of the given delimiters (defaults to a space
@@ -60,6 +71,14 @@ class StringUtilities
       static const string middlePadOrTrimRight(const string& str1, const string& str2, unsigned int desiredLength, const char paddingChar=' ');
 
    private:
+
+      // code taken from: http://www.codeguru.com/forum/showthread.php?t=231054
+      template <class T>
+      static const bool convertStringToNumWorkhorse(const std::string& s, T& t, std::ios_base& (*f)(std::ios_base&))
+         {
+         std::istringstream iss(s);
+         return !(iss >> f >> t).fail();
+         }
 
       StringUtilities()
          {
