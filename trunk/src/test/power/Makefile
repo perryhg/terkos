@@ -1,4 +1,4 @@
-TARGET=PowerTest2
+TARGET=PowerTest
 CXX=arm-oe-linux-uclibcgnueabi-g++
 CFLAGS=-g -I../../libqwerk
 LDFLAGS=-L../../libqwerk -lqwerk
