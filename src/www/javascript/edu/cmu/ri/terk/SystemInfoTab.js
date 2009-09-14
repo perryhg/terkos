@@ -155,6 +155,15 @@ if (!window['$'])
          onLoadFailure : function()
             {
             jQuery("#powerInfoMessageArea").html("Sorry, the power information is currently unavailable.");
+            },
+         onLoadComplete : function()
+            {
+            // Only load the version info once since it won't change.  See the note in the activate() method which
+            // explains why I'm loading version info here instead.
+            if (!isVersionInfoLoaded)
+               {
+               versionInfoManager.getVersionInfo();
+               }
             }});
 
       // register the MemoryUsageManager event listener
@@ -235,11 +244,12 @@ if (!window['$'])
 
       this.activate = function()
          {
-         // only load the version info once since it won't change
-         if (!isVersionInfoLoaded)
-            {
-            versionInfoManager.getVersionInfo();
-            }
+         // Note that we don't call versionInfoManager.getVersionInfo() here due to a race condition: both the
+         // PowerInfoManager and VersionInfoManager ultimately depend on the CQEPower class in libqwerk (because
+         // the hardware version number is kept in CQEPower) so if they both try to fetch the status at the same time,
+         // sometimes one will fail if the other has a lock on CQEPower.  I don't love solving this in the front end,
+         // but it'll do for now.  The simple solution is to call versionInfoManager.getVersionInfo() AFTER the
+         // call to powerInfoManager.getPowerInfo() is complete.
          powerInfoManager.getPowerInfo();
          memoryUsageManager.getMemoryUsage();
          diskUsageManager.getDiskUsage();

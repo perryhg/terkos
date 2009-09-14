@@ -128,6 +128,10 @@ if (!window['$'])
                {
                notifyEventListeners('onLoadFailure');
                json = null;
+               },
+            complete: function()
+               {
+               notifyEventListeners('onLoadComplete');
                }
          });
          };
@@ -138,6 +142,7 @@ if (!window['$'])
        *    onBeforeLoad()
        *    onLoadSuccess()
        *    onLoadFailure()
+       *    onLoadComplete()
        */
       this.addEventListener = function(listener)
          {
