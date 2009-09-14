@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-   <title>TerkOS Control Panel</title>
+   <title>TerkOS Web Control Panel</title>
    <link type="text/css" href="css/smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet"/>
    <link type="text/css" href="css/main.css" rel="stylesheet"/>
    <script type="text/javascript" src="javascript/jquery.js"></script>
@@ -9,6 +9,7 @@
    <script type="text/javascript" src="javascript/jquery.mousecapture.js"></script>
    <script type="text/javascript" src="javascript/Math.uuid.js"></script>
    <script type="text/javascript" src="javascript/json2.js"></script>
+   <script type="text/javascript" src="javascript/ajaxupload.3.5.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/NonClosableWaitDialog.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/SingleButtonModalDialog.js"></script>
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/TwoButtonModalDialog.js"></script>
@@ -29,7 +30,7 @@
    <script type="text/javascript" src="javascript/edu/cmu/ri/terk/SystemSettingsTab.js"></script>
    <script type="text/javascript">
       var tabSelectionHandlers = new Array();
-      var host = "";
+      var host = "http://192.168.4.17";
 
       $(function()
          {
@@ -151,7 +152,6 @@
             {
             $('#control-panel').fadeIn("slow");
             });
-
          });
    </script>
 </head>
@@ -512,8 +512,44 @@
       </div>
       <!-- ============================================================================================================ -->
       <div id="System_Settings">
-         <form method="post" onsubmit="return false;">
-            <div class="section">
+         <div class="section">
+            <div class="section-title">Backup Preferences</div>
+            <div class="indented">
+               <div class="default-widget-width">
+                  Click the Backup Preferences button to download the current preferences as a single file. For security, neither the Web Control Panel password nor the
+                  root user password will be included in the settings file.
+               </div>
+               <div class="blank-line"></div>
+               <div class="button-container">
+                  <button type="button" style="float:right;margin-right:0;" id="backupPreferencesButton" class="ui-state-default ui-corner-all button text-button">Backup Preferences</button>
+               </div>
+            </div>
+         </div>
+         <div class="blank-line"></div>
+         <div class="blank-line"></div>
+         <div class="blank-line"></div>
+         <div class="section">
+            <div class="section-title">Restore Preferences</div>
+            <div class="indented">
+               <div class="default-widget-width">
+                  To restore previously saved preferences, first click the Choose Backup File... button to select the settings file and then click the Restore Preferences
+                  button to upload it.
+               </div>
+               <div class="blank-line"></div>
+               <span class="">Selected File:</span>
+               <span id="selectedFileToUpload">[unspecified]</span>
+               <div class="blank-line"></div>
+               <div class="button-container">
+                  <button type="button" style="float:right;margin-right:0;" id="restorePreferencesButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Restore Preferences</button>
+                  <button type="button" style="float:right;margin-right:0;" id="restorePreferencesFileChooserButton" class="ui-state-default ui-corner-all button text-button">Choose Backup File...</button>
+               </div>
+            </div>
+         </div>
+         <div class="blank-line"></div>
+         <div class="blank-line"></div>
+         <div class="blank-line"></div>
+         <div class="section">
+            <form method="post" onsubmit="return false;">
                <div class="section-title">Reset Preferences</div>
                <div class="indented">
                   <input id="willResetAll" name="willResetAll" type="checkbox"/><label for="willResetAll">All of the following:</label>
@@ -524,12 +560,12 @@
                      <input id="willResetWebControlPanelPassword" class="reset-preferences-option" name="willResetWebControlPanelPassword" type="checkbox" value="Passwords"/><label for="willResetWebControlPanelPassword">Web Control Panel Password</label><br>
                   </div>
                   <div class="blank-line"></div>
-                  <div class="button-container" style="width:200px">
+                  <div class="button-container">
                      <button type="button" style="float:right;margin-right:0;" id="resetPreferencesButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">Reset Preferences</button>
                   </div>
                </div>
-            </div>
-         </form>
+            </form>
+         </div>
       </div>
       <!-- ============================================================================================================ -->
    </div>
