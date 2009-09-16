@@ -1,7 +1,9 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "ymodem.h"
+
 
 /* Some important defines for YModem */
 #define YMODEM_SOH	0x01
@@ -15,7 +17,10 @@
 
 #define CPUCLK      294912000
 
+#define BLKSIZE     8192
+
 extern unsigned char comecho;
+extern int comfd;
 
 int getonebyte(void);
 inline void putonebyte(char c);
@@ -103,17 +108,28 @@ void ymodem_send_block(const unsigned char *data, int block_no)
 {
   int count;
   int crc;
-  unsigned char block[128];
+  unsigned char block[BLKSIZE];
 
-  memcpy(block, data, 128);
-  crc = calcrc((char *)block, 128);
+  memcpy(block, data, BLKSIZE);
+  crc = calcrc((char *)block, BLKSIZE);
   putonebyte(YMODEM_SOH);
   putonebyte(block_no & 0xFF);
   putonebyte(~block_no & 0xFF);
-  for(count = 0; count < 128; count++)
+#if 0
+  for(count = 0; count < BLKSIZE; count++)
+    putonebyte(block[count]);
+#else
+  int res;
+  count = 0;
+  while(1)
     {
-      putonebyte(block[count]);
+      if (count>=BLKSIZE)
+	break;
+      res = write(comfd, block + count, BLKSIZE - count);
+      if (res>0)
+	count += res;
     }
+#endif
   putonebyte((crc >> 8) & 0xFF);
   putonebyte(crc & 0xFF);
 }
@@ -122,10 +138,10 @@ void ymodem_send_block(const unsigned char *data, int block_no)
 void ymodem_send_block0(const char* filename, unsigned int size)
 {
   int count;
-  unsigned char block[128];
+  unsigned char block[BLKSIZE];
   const char* num;
 
-  memset(block, 0, 128);
+  memset(block, 0, BLKSIZE);
 
   if(filename != NULL)
     {
@@ -155,9 +171,9 @@ void ymodem_send_data_blocks(const unsigned char* data, unsigned int size)
 
   while(size > 0)
     {
-      if(size > 128)
+      if(size > BLKSIZE)
 	{
-	  send_size = 128;
+	  send_size = BLKSIZE;
 	}
       else
 	{
@@ -165,14 +181,13 @@ void ymodem_send_data_blocks(const unsigned char* data, unsigned int size)
 	}
 
       ymodem_send_block(data, blockno);
-
       ch = ymodem_getc_minute();
       if(ch == YMODEM_ACK)
 	{
 	  blockno++;
 	  data += send_size;
 	  size -= send_size;
-	  if (blockno%100==0 && comecho)
+	  if (blockno%3==0 && comecho)
 	    {
 	      printf(".");
 	      fflush(stdout);
