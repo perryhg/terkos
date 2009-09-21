@@ -41,6 +41,8 @@ class WirelessNetworkingConfigManager : public ConfigFile
 
       bool setWillStartOnBootup(const bool willStart);
 
+      Json::Value getJSON();
+
       const bool setJson(Json::Value& config);
 
       /**

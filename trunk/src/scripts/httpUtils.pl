@@ -10,6 +10,13 @@ sub isHttpRequest()
    return (exists($ENV{SERVER_SOFTWARE}) && exists($ENV{REQUEST_METHOD}));
    }
 #===================================================================================================
+sub printContentDispositionHeader()
+   {
+   my ($filename) = @_;
+
+   print "Content-Disposition: attachment; filename=$filename\n";
+   }
+#===================================================================================================
 sub restartWebServer()
    {
    my $pathToBusyboxHttpd = &getPath('busybox-httpd');

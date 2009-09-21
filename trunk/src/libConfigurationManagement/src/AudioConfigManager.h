@@ -36,6 +36,8 @@ class AudioConfigManager : public ConfigFile
 
       bool setAlertsEnabled(const bool isEnabled);
 
+      Json::Value getJSON();
+
       const bool setJson(Json::Value& config);
 
       virtual void applyConfiguration();

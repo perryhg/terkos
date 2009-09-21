@@ -4,12 +4,14 @@
 
 #include "LCDCharacterDisplay.h"
 
-const string LCDCharacterDisplay::LCD_SCROLL_UP_ARROW = "^ ";
-const string LCDCharacterDisplay::LCD_SCROLL_DOWN_ARROW = "v ";
-const int LCDCharacterDisplay::LCD_WIDTH_OF_SCROLL_ARROW_AND_PADDING =
-         std::max(LCDCharacterDisplay::LCD_SCROLL_UP_ARROW.length(), LCDCharacterDisplay::LCD_SCROLL_DOWN_ARROW.length());
-const string
-         LCDCharacterDisplay::LCD_PADDING_FOR_LINES_WITHOUT_ARROWS_WHEN_IN_SCROLLING_MODE(LCDCharacterDisplay::LCD_WIDTH_OF_SCROLL_ARROW_AND_PADDING, ' ');
+const char LCDCharacterDisplay::PADDING_CHARACTER = ' ';
+const string LCDCharacterDisplay::SCROLL_ARROW_PADDING(1, PADDING_CHARACTER);
+const string LCDCharacterDisplay::LCD_SCROLL_UP_ARROW(1, '^');
+const string LCDCharacterDisplay::LCD_SCROLL_DOWN_ARROW(1, TL_CHAR_DOWN);
+const string LCDCharacterDisplay::LCD_SCROLL_UP_ARROW_PLUS_PADDING = LCD_SCROLL_UP_ARROW + SCROLL_ARROW_PADDING;
+const string LCDCharacterDisplay::LCD_SCROLL_DOWN_ARROW_PLUS_PADDING = LCD_SCROLL_DOWN_ARROW + SCROLL_ARROW_PADDING;
+const int LCDCharacterDisplay::LCD_WIDTH_OF_SCROLL_ARROW_AND_PADDING = std::max(LCD_SCROLL_UP_ARROW_PLUS_PADDING.length(), LCD_SCROLL_DOWN_ARROW_PLUS_PADDING.length());
+const string LCDCharacterDisplay::LCD_PADDING_FOR_LINES_WITHOUT_ARROWS_WHEN_IN_SCROLLING_MODE(LCD_WIDTH_OF_SCROLL_ARROW_AND_PADDING, PADDING_CHARACTER);
 
 void LCDCharacterDisplay::setText(const string& text)
    {
@@ -43,15 +45,15 @@ void LCDCharacterDisplay::setTextWithScrollArrows(const string& text)
 
          if (line == 0)
             {
-            textWithScrollArrows += LCDCharacterDisplay::LCD_SCROLL_UP_ARROW;
+            textWithScrollArrows += LCD_SCROLL_UP_ARROW_PLUS_PADDING;
             }
          else if (line == numRows - 1)
             {
-            textWithScrollArrows += LCDCharacterDisplay::LCD_SCROLL_DOWN_ARROW;
+            textWithScrollArrows += LCD_SCROLL_DOWN_ARROW_PLUS_PADDING;
             }
          else
             {
-            textWithScrollArrows += LCDCharacterDisplay::LCD_PADDING_FOR_LINES_WITHOUT_ARROWS_WHEN_IN_SCROLLING_MODE;
+            textWithScrollArrows += LCD_PADDING_FOR_LINES_WITHOUT_ARROWS_WHEN_IN_SCROLLING_MODE;
             }
 
          textWithScrollArrows += lineText;

@@ -146,7 +146,7 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
             }}).click(
             function()
                {
-               alert("not yet implemented!");
+               location.href = host + '/cgi-bin/getTerkOSConfig.pl';
                }
             ).disableSelection();
 
