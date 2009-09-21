@@ -88,24 +88,24 @@ module Vexpro(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
 
 	wire BemfIntStatus;
 	wire BemfIntReset;
-	wire GpioIntStatus;
-	wire GpioIntReset;
-	wire [13:0] IntDummy;
+	wire [15:0] GpioIntStatus;
+	wire [15:0] GpioIntReset;
+	wire [14:0] IntDummy;
 	reg  TestIntStatus;
 	wire TestIntReset;
 	Primary InstPrimary(.Addr(Addr), .Data(Data), .RdN(RdN), .WrN(WrN), .Dq(Dq), 
 	   .CsN(CsN), .Wait(Wait), .Int(Int), .Clk(Clk), 
       .Async(Async), .Asdo(Asdo), .Arstn(Arstn), .Asdi(Asdi), .AbitClk(AbitClk), .AudioOut(Audio),
 		.Rd(Rd), .Wr(Wr), .Cs(Cs), .DataRd(DataRd), .Identifier(16'hc002), .Reset(Reset),
-		.IntStatus({14'h0000, GpioIntStatus, BemfIntStatus}), 
-		.IntReset({IntDummy, GpioIntReset, BemfIntReset}));
+		.IntStatus({GpioIntStatus, 15'h0000, BemfIntStatus}), 
+		.IntReset({GpioIntReset, IntDummy, BemfIntReset}));
 
 	wire BemfEn;
-	wire [15:0]BemfDataRd;
-   wire [3:0] PwmOut;
-   wire [7:0] PwmCont;
-	wire [3:0] Active;
-	wire [3:0] Measure;
+	wire [15:0] BemfDataRd;
+   wire [3:0]  PwmOut;
+   wire [7:0]  PwmCont;
+	wire [3:0]  Active;
+	wire [3:0]  Measure;
 	wire AdcDir;
    wire AdcOut;
 	

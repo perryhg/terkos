@@ -27,8 +27,8 @@ module Primary(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
 	input  [15:0] Identifier;
 	output Reset;
 
-   input  [15:0] IntStatus;
-   output [15:0] IntReset;
+   input  [31:0] IntStatus;
+   output [31:0] IntReset;
 
    reg [15:0] TempDataRd;
 
@@ -53,7 +53,7 @@ module Primary(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
    wire IntEn;
    assign IntEn = Cs & Addr[11:4]==8'hff;
    wire [15:0] IntDataRd;
-   InterruptCont InstInterruptCont(.Addr(Addr[1]), .DataRd(IntDataRd), .DataWr(Data), 
+   InterruptCont InstInterruptCont(.Addr(Addr[3:1]), .DataRd(IntDataRd), .DataWr(Data), 
       .En(IntEn), .Rd(Rd), .Wr(Wr), .IntStatus(IntStatus), .IntReset(IntReset), .Int(Int), .Reset(Reset), .Clk(Clk));
 
  	// Audio DAC
