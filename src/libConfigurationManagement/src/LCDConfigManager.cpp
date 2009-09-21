@@ -30,6 +30,18 @@ bool LCDConfigManager::setBacklightEnabled(const bool isEnabled)
    return setBooleanValue(IS_BACKLIGHT_ENABLED, isEnabled);
    }
 
+Json::Value LCDConfigManager::getJSON()
+   {
+   Json::Value config;
+   if (!load(config))
+      {
+      cerr << "LCDConfigManager::getJSON(): failed to load config file, returning null JSON instead." << endl;
+      return Json::Value::null;
+      }
+
+   return config;
+   }
+
 const bool LCDConfigManager::setJson(Json::Value& config)
    {
    if (config != Json::Value::null)

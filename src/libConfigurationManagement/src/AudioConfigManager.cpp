@@ -33,6 +33,18 @@ bool AudioConfigManager::setAlertsEnabled(const bool isEnabled)
    return setBooleanValue(ARE_ALERTS_ENABLED_PROPERTY, isEnabled);
    }
 
+Json::Value AudioConfigManager::getJSON()
+   {
+   Json::Value config;
+   if (!load(config))
+      {
+      cerr << "AudioConfigManager::getJSON(): failed to load config file, returning null JSON instead." << endl;
+      return Json::Value::null;
+      }
+
+   return config;
+   }
+
 const bool AudioConfigManager::setJson(Json::Value& config)
    {
    if (config != Json::Value::null)

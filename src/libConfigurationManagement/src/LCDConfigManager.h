@@ -30,6 +30,8 @@ class LCDConfigManager : public ConfigFile
 
       bool setBacklightEnabled(const bool isEnabled);
 
+      Json::Value getJSON();
+
       const bool setJson(Json::Value& config);
 
       virtual void applyConfiguration();

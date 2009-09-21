@@ -81,6 +81,7 @@ dist: $(DIST_CGI_DIR) \
 	ln -s /opt/scripts/getDiskUsageAsJSON.pl                  $(DIST_CGI_DIR)/getDiskUsageAsJSON.pl
 	ln -s /opt/scripts/getMemoryUsageAsJSON.pl                $(DIST_CGI_DIR)/getMemoryUsageAsJSON.pl
 	ln -s /opt/scripts/getPowerInfoAsJSON.pl                  $(DIST_CGI_DIR)/getPowerInfoAsJSON.pl
+	ln -s /opt/scripts/getTerkOSConfig.pl                     $(DIST_CGI_DIR)/getTerkOSConfig.pl
 	ln -s /opt/scripts/getUserProgramsConfigAsJSON.pl         $(DIST_CGI_DIR)/getUserProgramsConfigAsJSON.pl
 	ln -s /opt/scripts/getVersionInfoAsJSON.pl                $(DIST_CGI_DIR)/getVersionInfoAsJSON.pl
 	ln -s /opt/scripts/getWirelessNetworkingConfigAsJSON.pl   $(DIST_CGI_DIR)/getWirelessNetworkingConfigAsJSON.pl

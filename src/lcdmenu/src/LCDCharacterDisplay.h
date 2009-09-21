@@ -17,11 +17,6 @@ class LCDCharacterDisplay : public CharacterDisplay
    {
    public:
 
-      static const string LCD_SCROLL_UP_ARROW;
-      static const string LCD_SCROLL_DOWN_ARROW;
-      static const int LCD_WIDTH_OF_SCROLL_ARROW_AND_PADDING;
-      static const string LCD_PADDING_FOR_LINES_WITHOUT_ARROWS_WHEN_IN_SCROLLING_MODE;
-
       LCDCharacterDisplay(const unsigned int numRows, const unsigned int numColumns) :
          lcd(CTextLcd::GetRef()), numRows(numRows), numColumns(numColumns), totalCharacterCount(numRows * numColumns), numColumnsWhenInScrollingMode(numColumns
                   - LCDCharacterDisplay::LCD_WIDTH_OF_SCROLL_ARROW_AND_PADDING)
@@ -59,6 +54,15 @@ class LCDCharacterDisplay : public CharacterDisplay
       void clearLine(const unsigned int lineNumber);
 
    private:
+
+      static const char PADDING_CHARACTER;
+      static const string SCROLL_ARROW_PADDING;
+      static const string LCD_SCROLL_UP_ARROW;
+      static const string LCD_SCROLL_DOWN_ARROW;
+      static const string LCD_SCROLL_UP_ARROW_PLUS_PADDING;
+      static const string LCD_SCROLL_DOWN_ARROW_PLUS_PADDING;
+      static const int LCD_WIDTH_OF_SCROLL_ARROW_AND_PADDING;
+      static const string LCD_PADDING_FOR_LINES_WITHOUT_ARROWS_WHEN_IN_SCROLLING_MODE;
 
       CTextLcd &lcd;
       const unsigned int numRows;

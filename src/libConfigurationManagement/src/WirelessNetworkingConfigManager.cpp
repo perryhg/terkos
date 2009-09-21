@@ -94,6 +94,18 @@ bool WirelessNetworkingConfigManager::setWillStartOnBootup(const bool willStart)
    return success;
    }
 
+Json::Value WirelessNetworkingConfigManager::getJSON()
+   {
+   Json::Value config;
+   if (!load(config))
+      {
+      cerr << "WirelessNetworkingConfigManager::getJSON(): failed to load config file, returning null JSON instead." << endl;
+      return Json::Value::null;
+      }
+
+   return config;
+   }
+
 const bool WirelessNetworkingConfigManager::setJson(Json::Value& config)
    {
    if (config != Json::Value::null)
