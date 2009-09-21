@@ -7,20 +7,21 @@ module GpioInt(Addr, DataRd, DataWr, En, Rd, Wr, Port, IntStatus, IntReset, Rese
 	input  Rd;
 	input  Wr;
 	inout  [15:0] Port;
-	output IntStatus;
-	input  IntReset;
+	output [15:0] IntStatus;
+	input  [15:0] IntReset;
 	input  Reset;
 	input  Clk;
 
 	reg  [15:0] DataRd;
 	reg  [15:0] DataDir;
 	reg  [15:0] DataOut;
-	reg  IntStatus;
-	reg  [15:0] IntFilt;
-	reg  [15:0] IntMask;
+	reg  [15:0] IntStatus;
+	wire [15:0] IntFilt;
 	reg  [15:0] IntEdge;
-
-	//assign PortInPos = (PortInPrev^IntEdge)&(~PortInSync^IntEdge);
+	reg  [15:0] PortSync;
+	reg  [15:0] PortSyncPrev;
+	
+	assign IntFilt = (PortSyncPrev^IntEdge)&(~PortSync^IntEdge);
 	
 	assign Port[0]  = DataDir[0]  ? DataOut[0]  : 1'bZ;
 	assign Port[1]  = DataDir[1]  ? DataOut[1]  : 1'bZ;
@@ -41,23 +42,22 @@ module GpioInt(Addr, DataRd, DataWr, En, Rd, Wr, Port, IntStatus, IntReset, Rese
 
 	always @(posedge Clk)
 	   begin
-//		PortInSync <= PortIn;
-//		PortInPrev <= PortInSync;
+		PortSync <= Port;
+		PortSyncPrev <= PortSync;
 
 		if (Reset)
 		   begin
 			DataDir <= 0;
 			DataOut <= 0;
 			IntStatus <= 0;
-			IntMask <= 0;
 			IntEdge <= 0;
 			end
       else
 		   begin
-//			if (IntReset!=0) // reset status bits
-//			   IntState <= IntStatus & ~IntReset;
-//		   else
-//			   IntState <= (IntStatus | PortInPos)&IntMask;	 // IntMask will reset interrupt
+			if (IntReset!=0) // reset status bits
+			   IntStatus <= IntStatus & ~IntReset;
+		   else
+			   IntStatus <= IntStatus | IntFilt;	
          
 			if (En & Wr)
 			   begin
@@ -66,24 +66,20 @@ module GpioInt(Addr, DataRd, DataWr, En, Rd, Wr, Port, IntStatus, IntReset, Rese
         		else if (Addr==1)
 				   DataDir <= DataWr;
         		else if (Addr==2)
-				   IntMask <= DataWr;
-        		else if (Addr==3)
 				   IntEdge <= DataWr;
 				end
 			end
       end
 
-   always @(En or Addr or Port or DataDir or IntMask or IntEdge or IntFilt)
+   always @(En or Addr or Port or DataDir or IntEdge or IntFilt)
 	   begin
 	   if (En & Addr==0)
 			DataRd = Port;
 	   else if (En & Addr==1)
 	      DataRd = DataDir;
-      else if (En & Addr==2)
-	      DataRd = IntMask;
-      else if (En & Addr==3)
+       else if (En & Addr==2)
 	      DataRd = IntEdge;
-      else if (En & Addr==4)
+      else if (En & Addr==3)
 	      DataRd = IntFilt;
 		else 
 		   DataRd = 16'hxxxx;      
