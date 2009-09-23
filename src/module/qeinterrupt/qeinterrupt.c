@@ -26,7 +26,7 @@
 MODULE_LICENSE("Dual BSD/GPL");
 
 #define QEINT_INT_MASK     io_base
-#define QEINT_INT_STATUS   (io_base+2)
+#define QEINT_INT_STATUS   (io_base+4)
 #if 1 // debug
 #define DPK(format, ...) printk(KERN_NOTICE "qe_interrupt: " format, ## __VA_ARGS__)
 #else
@@ -44,7 +44,7 @@ EXPORT_SYMBOL(qe_interrupt_time);
 
 struct qe_interrupt_data
 {
-  unsigned char vector; // interrupt number (0 through 15)
+  unsigned char vector; // interrupt number (0 through 31)
   unsigned char used;    // is interrupt being used by a process?
   unsigned char mode;
   void (*callback)(unsigned char);
@@ -88,7 +88,7 @@ int qe_interrupt_enable(unsigned char vector)
     return -EACCES;
 
   //DPK("enable %d\n", vector);
-  writew(1<<vector | readw(QEINT_INT_MASK), QEINT_INT_MASK);	      
+  writel(1<<vector | readl(QEINT_INT_MASK), QEINT_INT_MASK);	      
   return 0;
 }
 
@@ -101,7 +101,7 @@ int qe_interrupt_disable(unsigned char vector)
     return -EINVAL;
 
   //DPK("disable %d\n", vector);
-  writew(1<<vector & ~readw(QEINT_INT_MASK), QEINT_INT_MASK);	      
+  writel(1<<vector & ~readl(QEINT_INT_MASK), QEINT_INT_MASK);	      
   return 0;
 }
 
@@ -149,10 +149,10 @@ static irqreturn_t
 qe_interrupt_callback(int irq, void *desc)
 {
   unsigned char i = 0;
-  unsigned short mask;
-  unsigned short status;
+  unsigned long mask;
+  unsigned long status;
 
-  while((status=readw(QEINT_INT_STATUS)))
+  while((status=readl(QEINT_INT_STATUS)))
     {
       for (i=0; i<QEINT_NUM_INTERRUPTS; i++)
 	{
@@ -175,7 +175,7 @@ qe_interrupt_callback(int irq, void *desc)
 		    }
 		}
 	      // clear interrupt
-	      writew(mask, QEINT_INT_STATUS);	      
+	      writel(mask, QEINT_INT_STATUS);	      
 	    }
 	}
     }
@@ -240,7 +240,7 @@ static int qe_interrupt_init(void)
     }
 
   // disable all interrupts 
-  writew(0, QEINT_INT_MASK);
+  writel(0, QEINT_INT_MASK);
 
   // enable main QwerkEngine interrupt
   retval = request_irq(QEINT_INTERRUPT, qe_interrupt_callback, 0, "qe_interrupt", NULL);
@@ -272,7 +272,7 @@ static void qe_interrupt_exit(void)
   DPK("exit\n");
 
   // disable all interrupts 
-  writew(0, QEINT_INT_MASK);
+  writel(0, QEINT_INT_MASK);
 
   free_irq(QEINT_INTERRUPT, NULL);
 
@@ -301,12 +301,15 @@ static int qe_interrupt_open(struct inode *inode, struct file *filp)
   DPK("data %x\n", (int)data);
   filp->private_data = data;
 
+
   // check to see if interrupt is already being used
   if (data->used)
     return -EBUSY;
   data->used = TRUE; // if not, set to true
+  data->mode = QEINT_MODE_FAST;
+  qe_interrupt_enable(data->vector);
 
-  DPK("minor %x\n", data->vector);
+  DPK("minor %d\n", data->vector);
   //DPK("%d %d\n", imajor(inode), iminor(inode));
   return 0;
 }
@@ -316,6 +319,8 @@ static int qe_interrupt_release(struct inode *inode, struct file *filp)
   struct qe_interrupt_data *data;
   DPK("release\n");
   DPK("private_data %x\n", (int)filp->private_data);
+
+  qe_interrupt_disable(data->vector);
 
   data = (struct qe_interrupt_data *)filp->private_data;
 

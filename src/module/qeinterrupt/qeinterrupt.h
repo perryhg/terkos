@@ -11,7 +11,7 @@
 #define QEINT_MAJOR_NUMBER     210
 #define QEINT_MINOR_NUMBER     0
 
-#define QEINT_NUM_INTERRUPTS   16
+#define QEINT_NUM_INTERRUPTS   32
 #define QEINT_BASE_ADDR        0x20000ff0
 #define QEINT_WIDTH            0x10
 #define QEINT_INTERRUPT        IRQ_EP93XX_EXT0
