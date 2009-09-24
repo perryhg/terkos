@@ -16,13 +16,17 @@ module GpioInt(Addr, DataRd, DataWr, En, Rd, Wr, Port, IntStatus, IntReset, Rese
 	reg  [15:0] DataDir;
 	reg  [15:0] DataOut;
 	reg  [15:0] IntStatus;
-	wire [15:0] IntFilt;
+	reg  [15:0] IntFilt;
 	reg  [15:0] IntEdge;
 	reg  [15:0] PortSync;
 	reg  [15:0] PortSyncPrev;
+	reg  [15:0] IntFiltPrev;
+	reg  [15:0] IntFiltEdge;
+	reg  [7:0] DivCount;
+	wire DivClk;
 	
-	assign IntFilt = (PortSyncPrev^IntEdge)&(~PortSync^IntEdge);
-	
+	EdgePos InstEdgePos(.In(DivCount[6]), .Out(DivClk), .Clk(Clk));
+		
 	assign Port[0]  = DataDir[0]  ? DataOut[0]  : 1'bZ;
 	assign Port[1]  = DataDir[1]  ? DataOut[1]  : 1'bZ;
 	assign Port[2]  = DataDir[2]  ? DataOut[2]  : 1'bZ;
@@ -42,8 +46,11 @@ module GpioInt(Addr, DataRd, DataWr, En, Rd, Wr, Port, IntStatus, IntReset, Rese
 
 	always @(posedge Clk)
 	   begin
-		PortSync <= Port;
-		PortSyncPrev <= PortSync;
+		if (DivClk)
+			begin
+			PortSync <= Port;
+			PortSyncPrev <= PortSync;
+			end
 
 		if (Reset)
 		   begin
@@ -54,11 +61,13 @@ module GpioInt(Addr, DataRd, DataWr, En, Rd, Wr, Port, IntStatus, IntReset, Rese
 			end
       else
 		   begin
-			if (IntReset!=0) // reset status bits
-			   IntStatus <= IntStatus & ~IntReset;
-		   else
-			   IntStatus <= IntStatus | IntFilt;	
-         
+			DivCount <= DivCount + 1;
+			IntFilt <= (PortSyncPrev^IntEdge)&(~PortSync^IntEdge);
+			IntFiltPrev <= IntFilt;
+			IntFiltEdge <= IntFiltPrev & ~IntFilt;
+			
+			IntStatus <= ~IntReset & (IntStatus | IntFiltEdge);
+		
 			if (En & Wr)
 			   begin
 			   if (Addr==0)
@@ -77,10 +86,8 @@ module GpioInt(Addr, DataRd, DataWr, En, Rd, Wr, Port, IntStatus, IntReset, Rese
 			DataRd = Port;
 	   else if (En & Addr==1)
 	      DataRd = DataDir;
-       else if (En & Addr==2)
+      else if (En & Addr==2)
 	      DataRd = IntEdge;
-      else if (En & Addr==3)
-	      DataRd = IntFilt;
 		else 
 		   DataRd = 16'hxxxx;      
 		end

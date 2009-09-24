@@ -1,5 +1,5 @@
 module InterruptCont(Addr, DataRd, DataWr, En, Rd, Wr, IntStatus, IntReset, Int, Reset, Clk);
-   
+
    input  [2:0] Addr;
    output [15:0] DataRd; 
    input  [15:0] DataWr;
@@ -51,7 +51,7 @@ module InterruptCont(Addr, DataRd, DataWr, En, Rd, Wr, IntStatus, IntReset, Int,
          DataRd = IntMask[31:16];
       else if (Addr==2) // msw
          DataRd = IntFilt[15:0];
-      else if (Addr==4) // msw
+      else if (Addr==3) // msw
          DataRd = IntFilt[31:16];
 		else
          DataRd = 16'hxxxx;
