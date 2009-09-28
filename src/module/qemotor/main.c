@@ -2,6 +2,7 @@
 #include <linux/module.h>
 #include <linux/moduleparam.h>
 #include <linux/init.h>
+#include <linux/device.h>
 
 #include <linux/sched.h>
 #include <linux/kernel.h>
@@ -57,6 +58,7 @@ static int qe_motor_ioctl(struct inode *inode, struct file *filp,
 static void qe_motor_callback(unsigned char vector);
 static int qe_motor_call(unsigned int index, unsigned int, long *args);
 static struct qe_motor_data *qe_motors = 0;
+static struct class *qemot_class;
 
 int qe_motor_time_usec_prev = -1;
 int qe_motor_period_usec = -1; 
@@ -133,7 +135,7 @@ static void qe_motor_callback(unsigned char vector)
   qe_motor_time_usec_prev = tv.tv_usec;
 }
 
-static int qe_motor_init(void)
+static int __init qe_motor_init(void)
 {
   int retval, i;
   dev_t dev;
@@ -148,6 +150,15 @@ static int qe_motor_init(void)
       PK("unable to register");
       return retval;
     }
+
+  qemot_class = class_create(THIS_MODULE, "qemot");
+  if (IS_ERR(qemot_class))
+    {
+      PK("unable to create qemot class");
+      qemot_class = NULL;
+      goto fail_mem;
+    }
+  PK("created qemot class");
 
   retval = (int)request_mem_region(QEMOT_BASE_ADDR, QEMOT_WIDTH, "qemot_ports");
   if (retval)
@@ -185,6 +196,8 @@ static int qe_motor_init(void)
       retval = cdev_add(&qe_motors[i].cdev, dev, 1);
       if (retval)
 	PK("error adding device %d\n", i);
+      device_create(qemot_class, NULL, dev,
+		    NULL, "qemot%d", QEMOT_MINOR_NUMBER + i);
     }
 
   // set enable bit in H-bridges
@@ -211,11 +224,16 @@ static int qe_motor_init(void)
  fail_mem:
   dev = MKDEV(QEMOT_MAJOR_NUMBER, QEMOT_MINOR_NUMBER);
   unregister_chrdev_region(dev, QEMOT_NUM_MOTORS);
+  if (qemot_class)
+    {
+      class_destroy(qemot_class);
+      qemot_class = NULL; /* FIXME: not necessary, probably */
+    }
   
   return retval;
 }
 
-static void qe_motor_exit(void)
+static void __exit qe_motor_exit(void)
 {
   int i;
   dev_t dev;
@@ -229,15 +247,26 @@ static void qe_motor_exit(void)
       iounmap(io_base);
       release_mem_region(QEMOT_BASE_ADDR, QEMOT_WIDTH);
     }
-  dev = MKDEV(QEMOT_MAJOR_NUMBER, QEMOT_MINOR_NUMBER);
-  unregister_chrdev_region(dev, QEMOT_NUM_MOTORS);
 
   if (qe_motors)
     {
       for (i=0; i<QEMOT_NUM_MOTORS; i++)
-	cdev_del(&qe_motors[i].cdev);
+	{
+	  cdev_del(&qe_motors[i].cdev);
+	  device_destroy(qemot_class, MKDEV(QEMOT_MAJOR_NUMBER, QEMOT_MINOR_NUMBER + i));
+	}
       kfree(qe_motors);
     }
+
+  if (qemot_class)
+    {
+      class_destroy(qemot_class);
+      qemot_class = NULL;
+    }
+
+  dev = MKDEV(QEMOT_MAJOR_NUMBER, QEMOT_MINOR_NUMBER);
+  unregister_chrdev_region(dev, QEMOT_NUM_MOTORS);
+
 }
 
 static int qe_motor_open(struct inode *inode, struct file *filp)

@@ -1,7 +1,9 @@
+/* -*- c-file-style: "gnu" -*- */
 #include <linux/autoconf.h>
 #include <linux/module.h>
 #include <linux/moduleparam.h>
 #include <linux/init.h>
+#include <linux/device.h>
 
 #include <linux/sched.h>
 #include <linux/kernel.h>
@@ -65,7 +67,7 @@ static int qe_interrupt_ioctl(struct inode *inode, struct file *filp,
 		unsigned int cmd, unsigned long arg);
 static int qe_interrupt_fasync(int fd, struct file *filp, int mode);
 static struct qe_interrupt_data *qe_interrupts = 0;
-
+static struct class *qeint_class;
 
 struct file_operations qe_interrupt_fops = 
 {
@@ -183,7 +185,7 @@ qe_interrupt_callback(int irq, void *desc)
   return IRQ_HANDLED;
 }
 
-static int qe_interrupt_init(void)
+static int __init qe_interrupt_init(void)
 {
   int retval, i;
   dev_t dev;
@@ -198,6 +200,15 @@ static int qe_interrupt_init(void)
       PK("unable to register");
       return retval;
     }
+
+  qeint_class = class_create(THIS_MODULE, "qeint");
+  if (IS_ERR(qeint_class))
+    {
+      PK("unable to create qeint class");
+      qeint_class = NULL;
+      goto fail_mem;
+    }
+  PK("created qeint class\n");
 
   // set chip select timing for FPGA
   retval = (int)request_mem_region(0x80080000, 0xc, "scr ports");
@@ -237,6 +248,8 @@ static int qe_interrupt_init(void)
       retval = cdev_add(&qe_interrupts[i].cdev, dev, 1);
       if (retval)
 	PK("error adding device %d\n", i);
+      device_create(qeint_class, NULL, dev,
+		    NULL, "qeint%d", QEINT_MINOR_NUMBER + i);
     }
 
   // disable all interrupts 
@@ -260,11 +273,16 @@ static int qe_interrupt_init(void)
  fail_mem:
   dev = MKDEV(QEINT_MAJOR_NUMBER, QEINT_MINOR_NUMBER);
   unregister_chrdev_region(dev, QEINT_NUM_INTERRUPTS);
+  if (qeint_class)
+    {
+      class_destroy(qeint_class);
+      qeint_class = NULL; /* FIXME: not necessary, probably */
+    }
   
   return retval;
 }
 
-static void qe_interrupt_exit(void)
+static void __exit qe_interrupt_exit(void)
 {
   int i;
   dev_t dev;
@@ -282,15 +300,24 @@ static void qe_interrupt_exit(void)
       release_mem_region(QEINT_BASE_ADDR, QEINT_WIDTH);
     }
 
-  dev = MKDEV(QEINT_MAJOR_NUMBER, QEINT_MINOR_NUMBER);
-  unregister_chrdev_region(dev, QEINT_NUM_INTERRUPTS);
-
   if (qe_interrupts)
     {
       for (i=0; i<QEINT_NUM_INTERRUPTS; i++)
-	cdev_del(&qe_interrupts[i].cdev);
+	{
+	  cdev_del(&qe_interrupts[i].cdev);
+	  device_destroy(qeint_class, MKDEV(QEINT_MAJOR_NUMBER, QEINT_MINOR_NUMBER + i));
+	}
       kfree(qe_interrupts);
     }
+
+  if (qeint_class)
+    {
+      class_destroy(qeint_class);
+      qeint_class = NULL;
+    }
+
+  dev = MKDEV(QEINT_MAJOR_NUMBER, QEINT_MINOR_NUMBER);
+  unregister_chrdev_region(dev, QEINT_NUM_INTERRUPTS);
 }
 
 static int qe_interrupt_open(struct inode *inode, struct file *filp)
@@ -317,12 +344,13 @@ static int qe_interrupt_open(struct inode *inode, struct file *filp)
 static int qe_interrupt_release(struct inode *inode, struct file *filp)
 {
   struct qe_interrupt_data *data;
+
   DPK("release\n");
   DPK("private_data %x\n", (int)filp->private_data);
 
-  qe_interrupt_disable(data->vector);
-
   data = (struct qe_interrupt_data *)filp->private_data;
+
+  qe_interrupt_disable(data->vector);
 
   // interrupt is no longer being used
   data->used = FALSE;
