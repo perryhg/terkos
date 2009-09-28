@@ -48,7 +48,7 @@ uclibc_baselibs = "/lib/libcrypt*.so* /lib/libdl*.so \
 FILES_${PN} = "${sysconfdir} ${uclibc_baselibs} /sbin/ldconfig \
 	       ${libexecdir} ${datadir}/zoneinfo ${libdir}/locale"
 FILES_ldd = "${bindir}/ldd"
-FILES_uclibc-dev += "${libdir}/*.o"
+FILES_uclibc-dev += "${libdir}/*.o /usr/lib/libc.so"
 FILES_uclibc-utils = "${bindir} ${sbindir}"
 FILES_uclibc-utils-dbg += "${bindir}/.debug ${sbindir}/.debug"
 FILES_uclibc-gconv = "${libdir}/gconv"
