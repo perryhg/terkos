@@ -1,4 +1,3 @@
-//
 
 #include <unistd.h>
 #include <stdio.h>
@@ -40,19 +39,11 @@ int main(int argc, char **argv)
 
    printf("Special characters\n");
    lcd.Clear();
-   lcd.SetCharacter(TL_CHAR_UP);
-   lcd.SetCharacter(TL_CHAR_DOWN);
-   lcd.SetCharacter(TL_CHAR_LEFT);
-   lcd.SetCharacter(TL_CHAR_RIGHT);
-   lcd.SetCharacter(TL_CHAR_LOWBATT);
-   lcd.SetCharacter(TL_CHAR_COPYRIGHT);
-   lcd.SetCharacter(TL_CHAR_WSA0);
-   lcd.SetCharacter(TL_CHAR_WSB0);
-   lcd.SetCharacter(TL_CHAR_WSA1);
-   lcd.SetCharacter(TL_CHAR_WSB3);
-   lcd.SetCharacter(TL_CHAR_WSB0);
-   lcd.SetCharacter(TL_CHAR_WSB1);
-   lcd.SetCharacter(TL_CHAR_WSB2);
+   lcd.SetText("Special chars   " 
+	       TL_STRING_UP TL_STRING_DOWN TL_STRING_LEFT TL_STRING_RIGHT
+	       TL_STRING_LOWBATT TL_STRING_COPYRIGHT TL_STRING_WSA0
+	       TL_STRING_WSB0 TL_STRING_WSA1 TL_STRING_WSB3 TL_STRING_WSB0
+	       TL_STRING_WSB1 TL_STRING_WSB2);
    sleep(1);
 
    printf("backlight off (via property)\n");
