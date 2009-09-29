@@ -155,11 +155,11 @@ void CTextLcd::Init()
 
 void CTextLcd::DefineChars()
 {
-  // **** 0 ****
+  // **** 1 ****
   // RS Low
   *m_p9302hw->PortGDataDR() |= 0x02;
   TL_DELAY();
-  PutByte(0x40);
+  PutByte(0x48);
   // RS High
   *m_p9302hw->PortGDataDR() &= ~0x02;
   TL_DELAY();
@@ -172,11 +172,11 @@ void CTextLcd::DefineChars()
   PutByte(0x1f); // 11111
   PutByte(0x00); // 00000
 
-  // **** 1 ****
+  // **** 2 ****
   // RS Low
   *m_p9302hw->PortGDataDR() |= 0x02;
   TL_DELAY();
-  PutByte(0x48);
+  PutByte(0x50);
   // RS High
   *m_p9302hw->PortGDataDR() &= ~0x02;
   TL_DELAY();
@@ -188,23 +188,6 @@ void CTextLcd::DefineChars()
   PutByte(0x11); // 10001
   PutByte(0x1f); // 11111
   PutByte(0x1f); // 11111
-
-  // **** 2 ****
-  // RS Low
-  *m_p9302hw->PortGDataDR() |= 0x02;
-  TL_DELAY();
-  PutByte(0x50);
-  // RS High
-  *m_p9302hw->PortGDataDR() &= ~0x02;
-  TL_DELAY();
-  PutByte(0x00); // 00000
-  PutByte(0x1f); // 11111
-  PutByte(0x0e); // 01110
-  PutByte(0x04); // 00100
-  PutByte(0x04); // 00100
-  PutByte(0x04); // 00100
-  PutByte(0x04); // 00100
-  PutByte(0x04); // 00100
 
   // **** 3 ****
   // RS Low
@@ -220,8 +203,8 @@ void CTextLcd::DefineChars()
   PutByte(0x04); // 00100
   PutByte(0x04); // 00100
   PutByte(0x04); // 00100
-  PutByte(0x05); // 00100
-  PutByte(0x05); // 00101
+  PutByte(0x04); // 00100
+  PutByte(0x04); // 00100
 
   // **** 4 ****
   // RS Low
@@ -232,13 +215,13 @@ void CTextLcd::DefineChars()
   *m_p9302hw->PortGDataDR() &= ~0x02;
   TL_DELAY();
   PutByte(0x00); // 00000
-  PutByte(0x00); // 00000
-  PutByte(0x00); // 00000
-  PutByte(0x00); // 00000
-  PutByte(0x10); // 10000
-  PutByte(0x10); // 10000
-  PutByte(0x10); // 10000
-  PutByte(0x10); // 10000
+  PutByte(0x1f); // 11111
+  PutByte(0x0e); // 01110
+  PutByte(0x04); // 00100
+  PutByte(0x04); // 00100
+  PutByte(0x04); // 00100
+  PutByte(0x05); // 00100
+  PutByte(0x05); // 00101
 
   // **** 5 ****
   // RS Low
@@ -250,12 +233,12 @@ void CTextLcd::DefineChars()
   TL_DELAY();
   PutByte(0x00); // 00000
   PutByte(0x00); // 00000
-  PutByte(0x04); // 00100
-  PutByte(0x04); // 00100
-  PutByte(0x14); // 10100
-  PutByte(0x14); // 10100
-  PutByte(0x14); // 10100
-  PutByte(0x14); // 10100
+  PutByte(0x00); // 00000
+  PutByte(0x00); // 00000
+  PutByte(0x10); // 10000
+  PutByte(0x10); // 10000
+  PutByte(0x10); // 10000
+  PutByte(0x10); // 10000
 
   // **** 6 ****
   // RS Low
@@ -265,14 +248,14 @@ void CTextLcd::DefineChars()
   // RS High
   *m_p9302hw->PortGDataDR() &= ~0x02;
   TL_DELAY();
-  PutByte(0x01); // 00001
-  PutByte(0x01); // 00001
-  PutByte(0x05); // 00101
-  PutByte(0x05); // 00101
-  PutByte(0x15); // 10101
-  PutByte(0x15); // 10101
-  PutByte(0x15); // 10101
-  PutByte(0x15); // 10101
+  PutByte(0x00); // 00000
+  PutByte(0x00); // 00000
+  PutByte(0x04); // 00100
+  PutByte(0x04); // 00100
+  PutByte(0x14); // 10100
+  PutByte(0x14); // 10100
+  PutByte(0x14); // 10100
+  PutByte(0x14); // 10100
 
   // **** 7 ****
   // RS Low
@@ -282,14 +265,14 @@ void CTextLcd::DefineChars()
   // RS High
   *m_p9302hw->PortGDataDR() &= ~0x02;
   TL_DELAY();
-  PutByte(0x00);
-  PutByte(0x00);
-  PutByte(0x00);
-  PutByte(0x00);
-  PutByte(0x00);
-  PutByte(0x00);
-  PutByte(0x00);
-  PutByte(0x00);
+  PutByte(0x01); // 00001
+  PutByte(0x01); // 00001
+  PutByte(0x05); // 00101
+  PutByte(0x05); // 00101
+  PutByte(0x15); // 10101
+  PutByte(0x15); // 10101
+  PutByte(0x15); // 10101
+  PutByte(0x15); // 10101
   
 }
 
