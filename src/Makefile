@@ -7,6 +7,8 @@ LIB_QWERK_DIR=libqwerk
 LIB_UTILITIES_DIR=libUtilities
 
 LCD_MENU_DIR=lcdmenu
+FPGAC_DIR=util/fpgac
+LOGIC_DIR=logic/vexpro
 SCRIPTS_DIR=scripts
 WWW_DIR=www
 
@@ -58,13 +60,20 @@ dist: $(DIST_CGI_DIR) \
 	@echo 'Making lcdmenu...'
 	$(MAKE) -C $(LCD_MENU_DIR) all
 
+	@echo 'Making fpgac...'
+	$(MAKE) -C $(FPGAC_DIR) all
+
 	@echo 'Copying binaries...'
 	cp $(LCD_MENU_DIR)/dist/LCDMenu $(DIST_BIN_DIR)
+	cp $(FPGAC_DIR)/fpgac $(DIST_BIN_DIR)
 	cp $(LIB_CONFIGURATION_MANAGEMENT_DIR)/dist/*Tool $(DIST_BIN_DIR)
 
 	@echo 'Copying configs...'
 	cp $(LCD_MENU_DIR)/dist/*.xml $(DIST_CONFIG_DIR)
 	cp $(LIB_CONFIGURATION_MANAGEMENT_DIR)/dist/*.json $(DIST_CONFIG_DIR)
+
+	@echo 'Copying FPGA logic...'
+	cp $(LOGIC_DIR)/vexpro.bit $(DIST_LIB_DIR)
 
 	@echo 'Copying libraries...'
 	cp $(LCD_MENU_DIR)/dist/*.so $(DIST_LIB_DIR)
