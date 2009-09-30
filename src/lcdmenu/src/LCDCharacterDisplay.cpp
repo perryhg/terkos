@@ -6,8 +6,8 @@
 
 const char LCDCharacterDisplay::PADDING_CHARACTER = ' ';
 const string LCDCharacterDisplay::SCROLL_ARROW_PADDING(1, PADDING_CHARACTER);
-const string LCDCharacterDisplay::LCD_SCROLL_UP_ARROW(1, '^');
-const string LCDCharacterDisplay::LCD_SCROLL_DOWN_ARROW(1, TL_CHAR_DOWN);
+const string LCDCharacterDisplay::LCD_SCROLL_UP_ARROW = TL_STRING_UP;
+const string LCDCharacterDisplay::LCD_SCROLL_DOWN_ARROW = TL_STRING_DOWN;
 const string LCDCharacterDisplay::LCD_SCROLL_UP_ARROW_PLUS_PADDING = LCD_SCROLL_UP_ARROW + SCROLL_ARROW_PADDING;
 const string LCDCharacterDisplay::LCD_SCROLL_DOWN_ARROW_PLUS_PADDING = LCD_SCROLL_DOWN_ARROW + SCROLL_ARROW_PADDING;
 const int LCDCharacterDisplay::LCD_WIDTH_OF_SCROLL_ARROW_AND_PADDING = std::max(LCD_SCROLL_UP_ARROW_PLUS_PADDING.length(), LCD_SCROLL_DOWN_ARROW_PLUS_PADDING.length());
