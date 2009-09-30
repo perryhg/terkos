@@ -1,7 +1,7 @@
 TARGET=fpgac
 CXX=arm-oe-linux-uclibcgnueabi-g++
-CFLAGS=-I../../../include
-LDFLAGS=-L../../../lib -lmmap
+CFLAGS=-I../../libmmap
+LDFLAGS=-L../../libmmap -lmmap
 SRCS=$(wildcard *.cxx)
 OBJECTS=$(SRCS:.cxx=.o)
 
