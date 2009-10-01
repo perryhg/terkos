@@ -1,0 +1,10 @@
+{
+   "firmware" : {
+      "version" : {
+         "major" : "4",
+         "minor" : "0",
+         "revision" : "__REVISION__"
+      },
+      "timestamp" : "__DATE__"
+   }
+}
