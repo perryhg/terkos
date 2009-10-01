@@ -1,0 +1,47 @@
+Setting up TerkOS build on Ubuntu Linux
+---------------------------------------
+David Huggins-Daines <dhuggins@cs.cmu.edu>
+
+First, install all mandatory packages, as described at:
+
+http://wiki.openembedded.net/index.php/OEandYourDistro#Debian
+
+Now, reconfigure dash so that /bin/sh points to bash rather than dash:
+
+  sudo dpkg-reconfigure dash
+
+You will also have to change the sysctl parameter vm.mmap_min_addr:
+
+  sysctl vm.mmap_min_addr=0
+
+To make this change persistent across reboot, create a file in
+/etc/sysctl.d:
+
+  echo vm.mmap_min_addr=0 | sudo tee /etc/sysctl.d/60-openembedded.conf
+
+Now you should be ready to build!  Be aware that the version of CVS on
+Ubuntu 8.04 LTS is broken, so if you are using that version of Ubuntu,
+you will need to install the one from 8.10:
+
+  http://packages.ubuntu.com/intrepid/cvs
+
+Next, change to the oe/ directory and source the 'oe.vars' file in your shell:
+
+  cd oe
+  . oe.vars
+
+Finally, edit oe/build/conf/local.conf to set the OEBASE variable:
+
+  perl -i.orig -pe 's/OEBASE = .*/OEBASE = "$ENV{OEBASE}"/' build/conf/local.conf
+
+Now you are ready to build!  The command to build the VexPro kernel and image is:
+
+  bitbake vexpro-image
+
+To build the SDK, run:
+
+  bitbake meta-toolchain
+
+And to build the Windows SDK:
+
+  bitbake canadian-sdk
