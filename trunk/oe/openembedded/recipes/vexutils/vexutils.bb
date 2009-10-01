@@ -8,6 +8,7 @@ SRC_URI = "svn://terkos.googlecode.com/svn/trunk;module=src;proto=http \
 	file://terkos-init \
 	file://terkos-lcd-menu \
 	file://terkos-user-program-launcher \
+	file://firmware.json.in \
 	"
 S = "${WORKDIR}/src"
 
@@ -19,6 +20,8 @@ do_install() {
 	   install -m 0755 ${WORKDIR}/terkos-init ${D}${sysconfdir}/init.d/
 	   install -m 0755 ${WORKDIR}/terkos-lcd-menu ${D}${sysconfdir}/init.d/
 	   install -m 0755 ${WORKDIR}/terkos-user-program-launcher ${D}${sysconfdir}/init.d/
+	   sed -e "s,__REVISION__,${SRCREV},g;s,__DATE__,`date +%Y-%m-%d\ %H:%M:%S`,g" \
+	       < ${WORKDIR}/firmware.json.in > ${D}/opt/config/firmware.json
 }
 
 pkg_postinst() {
