@@ -10,48 +10,6 @@ diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/Makefile linux-2.6.29.6/arch/
  obj-m			:=
  obj-n			:=
  obj-			:=
-diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/core.c linux-2.6.29.6/arch/arm/mach-ep93xx/core.c
---- linux-2.6.29.6.orig/arch/arm/mach-ep93xx/core.c	2009-07-02 19:41:20.000000000 -0400
-+++ linux-2.6.29.6/arch/arm/mach-ep93xx/core.c	2009-09-30 16:57:10.000000000 -0400
-@@ -537,6 +537,32 @@
- 	platform_device_register(&ep93xx_i2c_device);
- }
- 
-+static struct resource ep93xx_ac97_resources[] = {
-+	[0] = {
-+		.start		= EP93XX_AC97_PHY_BASE,
-+		.end		= EP93XX_AC97_PHY_BASE + 0x6C,
-+		.flags		= IORESOURCE_MEM,
-+	},
-+	[1] = {
-+		.start		= NO_IRQ,
-+		.end		= NO_IRQ,
-+		.flags		= IORESOURCE_IRQ,
-+	},
-+};
-+
-+static u64 ep93xx_ac97_dma_mask = 0xffffffffUL;
-+
-+static struct platform_device ep93xx_ac97_device = {
-+	.name		= "ep93xx-ac97",
-+	.id		= 0,
-+	.num_resources	= 2,
-+	.resource	= ep93xx_ac97_resources,
-+	.dev = {
-+		.dma_mask		= &ep93xx_ac97_dma_mask,
-+		.coherent_dma_mask	= 0xffffffffUL,
-+	},
-+};
-+
- extern void ep93xx_gpio_init(void);
- 
- void __init ep93xx_init_devices(void)
-@@ -559,4 +585,5 @@
- 
- 	platform_device_register(&ep93xx_rtc_device);
- 	platform_device_register(&ep93xx_ohci_device);
-+	platform_device_register(&ep93xx_ac97_device);
- }
 diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/dma_ep93xx.c linux-2.6.29.6/arch/arm/mach-ep93xx/dma_ep93xx.c
 --- linux-2.6.29.6.orig/arch/arm/mach-ep93xx/dma_ep93xx.c	1969-12-31 19:00:00.000000000 -0500
 +++ linux-2.6.29.6/arch/arm/mach-ep93xx/dma_ep93xx.c	2009-09-30 16:57:10.000000000 -0400
@@ -4551,14 +4509,13 @@ diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/ep93xx-regs.h li
  #define EP93XX_WATCHDOG_BASE		(EP93XX_APB_VIRT_BASE + 0x00140000)
 diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/hardware.h linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/hardware.h
 --- linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/hardware.h	2009-07-02 19:41:20.000000000 -0400
-+++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/hardware.h	2009-09-30 16:57:10.000000000 -0400
-@@ -5,6 +5,13 @@
++++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/hardware.h	2009-09-30 22:25:12.000000000 -0400
+@@ -5,6 +5,12 @@
  #define __ASM_ARCH_HARDWARE_H
  
  #include "ep93xx-regs.h"
 +#include "regs_syscon.h"
 +#include "regs_dma.h"
-+#include "regs_ac97.h"
 +#include "regs_smc.h"
 +#include "regs_spi.h"
 +
@@ -4566,7 +4523,7 @@ diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/hardware.h linux
  
  #define pcibios_assign_all_busses()	0
  
-@@ -12,4 +19,31 @@
+@@ -12,4 +18,31 @@
  
  #include "ts72xx.h"
  
@@ -4598,190 +4555,6 @@ diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/hardware.h linux
 +#endif
 +
  #endif
-diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/regs_ac97.h linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/regs_ac97.h
---- linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/regs_ac97.h	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/regs_ac97.h	2009-09-30 16:57:10.000000000 -0400
-@@ -0,0 +1,180 @@
-+/*=============================================================================
-+ *  FILE:           regs_ac97.h
-+ *
-+ *  DESCRIPTION:    Ac'97 Register Definition
-+ *
-+ *  Copyright Cirrus Logic, 2001-2003
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; either version 2 of the License, or
-+ * (at your option) any later version.
-+ *
-+ * This program is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+ * GNU General Public License for more details.
-+ *
-+ * You should have received a copy of the GNU General Public License
-+ * along with this program; if not, write to the Free Software
-+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-+ *=============================================================================
-+ */
-+#ifndef _REGS_AC97_H_
-+#define _REGS_AC97_H_
-+
-+//-----------------------------------------------------------------------------
-+// Bit definitionses
-+//-----------------------------------------------------------------------------
-+#define AC97ISR_RIS                     8
-+#define AC97ISR_TIS                     4
-+#define AC97ISR_RTIS                    2
-+#define AC97ISR_TCIS                    1
-+
-+#define AC97RGIS_SLOT1TXCOMPLETE     0x01
-+#define AC97RGIS_SLOT2RXVALID        0x02
-+#define AC97RGIS_GPIOTXCOMPLETE      0x04
-+#define AC97RGIS_GPIOINTRX           0x08
-+#define AC97RGIS_RWIS                0x10
-+#define AC97RGIS_CODECREADY          0x20
-+#define AC97RGIS_SLOT2TXCOMPLETE     0x40
-+
-+#define AC97SR_RXFE                 0x0001
-+#define AC97SR_TXFE                 0x0002      
-+#define AC97SR_RXFF                 0x0004
-+#define AC97SR_TXFF                 0x0008
-+#define AC97SR_TXBUSY               0x0010
-+#define AC97SR_RXOE                 0x0020
-+#define AC97SR_TXUE                 0x0040
-+
-+#define AC97GSR_IFE                     0x1
-+#define AC97GSR_LOOP                    0x2
-+#define AC97GSR_OVERRIDECODECREADY      0x4
-+
-+#define AC97RESET_TIMEDRESET            0x1
-+#define AC97RESET_FORCEDRESET           0x2
-+#define AC97RESET_EFORCER               0x4
-+
-+#define AC97RXCR_REN                    0x1
-+
-+#define AC97TXCR_TEN                    0x1
-+
-+
-+//****************************************************************************
-+//
-+// The Ac97 Codec registers, accessable through the Ac-link.
-+// These are not controller registers and are not memory mapped.
-+// Includes registers specific to CS4202 (Beavis).
-+//
-+//****************************************************************************
-+#define AC97_REG_OFFSET_MASK                0x0000007E
-+
-+#define AC97_00_RESET                          0x00000000
-+#define AC97_02_MASTER_VOL                     0x00000002
-+#define AC97_04_HEADPHONE_VOL                  0x00000004
-+#define AC97_06_MONO_VOL                       0x00000006
-+#define AC97_08_TONE                           0x00000008
-+#define AC97_0A_PC_BEEP_VOL                    0x0000000A
-+#define AC97_0C_PHONE_VOL                      0x0000000C
-+#define AC97_0E_MIC_VOL                        0x0000000E
-+#define AC97_10_LINE_IN_VOL                    0x00000010
-+#define AC97_12_CD_VOL                         0x00000012
-+#define AC97_14_VIDEO_VOL                      0x00000014
-+#define AC97_16_AUX_VOL                        0x00000016
-+#define AC97_18_PCM_OUT_VOL                    0x00000018
-+#define AC97_1A_RECORD_SELECT                  0x0000001A
-+#define AC97_1C_RECORD_GAIN                    0x0000001C
-+#define AC97_1E_RESERVED_1E                    0x0000001E
-+#define AC97_20_GENERAL_PURPOSE                0x00000020
-+#define AC97_22_3D_CONTROL                     0x00000022
-+#define AC97_24_MODEM_RATE                     0x00000024
-+#define AC97_26_POWERDOWN                      0x00000026
-+#define AC97_28_EXT_AUDIO_ID                   0x00000028
-+#define AC97_2A_EXT_AUDIO_POWER                0x0000002A
-+#define AC97_2C_PCM_FRONT_DAC_RATE             0x0000002C
-+#define AC97_2E_PCM_SURR_DAC_RATE              0x0000002E
-+#define AC97_30_PCM_LFE_DAC_RATE               0x00000030
-+#define AC97_32_PCM_LR_ADC_RATE                0x00000032
-+#define AC97_34_MIC_ADC_RATE                   0x00000034
-+#define AC97_36_6CH_VOL_C_LFE                  0x00000036
-+#define AC97_38_6CH_VOL_SURROUND               0x00000038
-+#define AC97_3A_SPDIF_CONTROL                  0x0000003A
-+#define AC97_3C_EXT_MODEM_ID                   0x0000003C
-+#define AC97_3E_EXT_MODEM_POWER                0x0000003E
-+#define AC97_40_LINE1_CODEC_RATE               0x00000040
-+#define AC97_42_LINE2_CODEC_RATE               0x00000042
-+#define AC97_44_HANDSET_CODEC_RATE             0x00000044
-+#define AC97_46_LINE1_CODEC_LEVEL              0x00000046
-+#define AC97_48_LINE2_CODEC_LEVEL              0x00000048
-+#define AC97_4A_HANDSET_CODEC_LEVEL            0x0000004A
-+#define AC97_4C_GPIO_PIN_CONFIG                0x0000004C
-+#define AC97_4E_GPIO_PIN_TYPE                  0x0000004E
-+#define AC97_50_GPIO_PIN_STICKY                0x00000050
-+#define AC97_52_GPIO_PIN_WAKEUP                0x00000052
-+#define AC97_54_GPIO_PIN_STATUS                0x00000054
-+#define AC97_56_RESERVED                       0x00000056
-+#define AC97_58_RESERVED                       0x00000058
-+#define AC97_5A_CRYSTAL_REV_N_FAB_ID           0x0000005A
-+#define AC97_5C_TEST_AND_MISC_CTRL             0x0000005C
-+#define AC97_5E_AC_MODE                        0x0000005E
-+#define AC97_60_MISC_CRYSTAL_CONTROL           0x00000060
-+#define AC97_62_VENDOR_RESERVED                0x00000062
-+#define AC97_64_DAC_SRC_PHASE_INCR             0x00000064
-+#define AC97_66_ADC_SRC_PHASE_INCR             0x00000066
-+#define AC97_68_RESERVED_68                    0x00000068
-+#define AC97_6A_SERIAL_PORT_CONTROL            0x0000006A
-+#define AC97_6C_VENDOR_RESERVED                0x0000006C
-+#define AC97_6E_VENDOR_RESERVED                0x0000006E
-+#define AC97_70_BDI_CONFIG                     0x00000070
-+#define AC97_72_BDI_WAKEUP                     0x00000072
-+#define AC97_74_VENDOR_RESERVED                0x00000074
-+#define AC97_76_CAL_ADDRESS                    0x00000076
-+#define AC97_78_CAL_DATA                       0x00000078
-+#define AC97_7A_VENDOR_RESERVED                0x0000007A
-+#define AC97_7C_VENDOR_ID1                     0x0000007C
-+#define AC97_7E_VENDOR_ID2                     0x0000007E
-+
-+
-+#ifndef __ASSEMBLY__
-+
-+//
-+// enum type for use with reg AC97_RECORD_SELECT
-+//
-+typedef enum{
-+    RECORD_MIC          = 0x0000,
-+    RECORD_CD           = 0x0101,
-+    RECORD_VIDEO_IN     = 0x0202,
-+    RECORD_AUX_IN       = 0x0303,
-+    RECORD_LINE_IN      = 0x0404,
-+    RECORD_STEREO_MIX   = 0x0505,
-+    RECORD_MONO_MIX     = 0x0606,
-+    RECORD_PHONE_IN     = 0x0707
-+} Ac97RecordSources;
-+
-+#endif /* __ASSEMBLY__ */
-+
-+//
-+// Sample rates supported directly in AC97_PCM_FRONT_DAC_RATE and 
-+// AC97_PCM_LR_ADC_RATE.
-+//
-+#define Ac97_Fs_8000        0x1f40
-+#define Ac97_Fs_11025       0x2b11
-+#define Ac97_Fs_16000       0x3e80
-+#define Ac97_Fs_22050       0x5622
-+#define Ac97_Fs_32000       0x7d00
-+#define Ac97_Fs_44100       0xac44
-+#define Ac97_Fs_48000       0xbb80
-+
-+//
-+// RSIZE and TSIZE in AC97RXCR and AC97TXCR
-+//
-+#define Ac97_SIZE_20            2
-+#define Ac97_SIZE_18            1
-+#define Ac97_SIZE_16            0
-+#define Ac97_SIZE_12            3
-+
-+//=============================================================================
-+//=============================================================================
-+
-+
-+#endif /* _REGS_AC97_H_ */
 diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/regs_dma.h linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/regs_dma.h
 --- linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/regs_dma.h	1969-12-31 19:00:00.000000000 -0500
 +++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/regs_dma.h	2009-09-30 16:57:10.000000000 -0400
@@ -6658,21 +6431,18 @@ diff -urN linux-2.6.29.6.orig/sound/arm/Kconfig linux-2.6.29.6/sound/arm/Kconfig
  	depends on ARM_AMBA
 diff -urN linux-2.6.29.6.orig/sound/arm/Makefile linux-2.6.29.6/sound/arm/Makefile
 --- linux-2.6.29.6.orig/sound/arm/Makefile	2009-07-02 19:41:20.000000000 -0400
-+++ linux-2.6.29.6/sound/arm/Makefile	2009-09-30 16:57:10.000000000 -0400
-@@ -17,3 +17,9 @@
++++ linux-2.6.29.6/sound/arm/Makefile	2009-10-01 01:35:49.000000000 -0400
+@@ -17,3 +17,6 @@
  
  obj-$(CONFIG_SND_PXA2XX_AC97)	+= snd-pxa2xx-ac97.o
  snd-pxa2xx-ac97-objs		:= pxa2xx-ac97.o
 +
 +obj-$(CONFIG_SND_EP93XX_IIS) 	+= snd-ep93xx-i2s.o
 +snd-ep93xx-i2s-objs 		:= ep93xx-i2s.o
-+
-+obj-$(CONFIG_SND_EP93XX_AC97)   += snd-ep93xx-ac97.o
-+snd-ep93xx-ac97-objs            := ep93xx-ac97.o
 diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep93xx-i2s.c
 --- linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.29.6/sound/arm/ep93xx-i2s.c	2009-09-30 22:12:25.000000000 -0400
-@@ -0,0 +1,2966 @@
++++ linux-2.6.29.6/sound/arm/ep93xx-i2s.c	2009-10-01 01:29:53.000000000 -0400
+@@ -0,0 +1,3013 @@
 +/*
 + * linux/sound/arm/ep93xx-i2s.c -- ALSA PCM interface for the edb93xx i2s audio
 + */
@@ -8394,7 +8164,7 @@ diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep
 +    for( i = 0 ; i < stream->dma_num_channels ;i++ ){
 +	if (stream->dmahandles[i])
 +	    ep93xx_dma_free( stream->dmahandles[i] );
-+	stream->dmahandles[i] = NULL;
++	stream->dmahandles[i] = 0;
 +    }
 +    DPRINTK("snd_ep93xx_dma_free - exit\n");
 +    return 0;	       
@@ -8432,8 +8202,9 @@ diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep
 +	    return err;
 +	}
 +
++	/* Add all the buffers to the DMA queue - we won't actually
++	 * start it until there is some data in there, though. */
 +	dma_channel = &stream->dma_channels[i];
-+		
 +	memset(dma_channel->area,0,dma_channel->bytes);
 +	for(count = 0 ;count < dma_channel->audio_buff_count; count++){
 +		audio_buf_t *buf; 
@@ -8471,7 +8242,7 @@ diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep
 +    DPRINTK("snd_ep93xx_dma_pause - enter\n");
 +
 +    for(i = 0 ;i < stream->dma_num_channels;i++)
-+	ep93xx_dma_pause( stream->dmahandles[i], 1,(unsigned int *)stream->dmahandles );
++	ep93xx_dma_pause( stream->dmahandles[i], 1, NULL );
 +
 +    stream->active = 0;
 +    DPRINTK("snd_ep93xx_dma_pause - exit\n");
@@ -8567,8 +8338,11 @@ diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep
 +	if( bufextsize > 0 ){
 +	    channel->audio_buff_count++;
 +	}
++	DPRINTK(AUDIO_NAME ": allocating %d buffers of %d bytes\n",
++		channel->audio_buff_count, bufsize);
 +	
-+	channel->audio_buffers = (audio_buf_t *)kmalloc(sizeof(audio_buf_t) * channel->audio_buff_count , GFP_KERNEL);
++	channel->audio_buffers = (audio_buf_t *)
++	    kmalloc(sizeof(audio_buf_t) * channel->audio_buff_count , GFP_KERNEL);
 +		    
 +	if (!channel->audio_buffers){
 +	    printk(AUDIO_NAME ": unable to allocate audio memory\n ");
@@ -8580,6 +8354,7 @@ diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep
 +	for( j = 0; j < channel->audio_buff_count; j++){
 +
 +	    channel->audio_buffers[j].dma_addr = channel->addr + j * bufsize;		
++	    channel->audio_buffers[j].area = channel->area + j * bufsize;		
 +
 +	    if( tmpsize >= bufsize ){
 +		tmpsize -= bufsize;
@@ -8620,16 +8395,16 @@ diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep
 +    switch( device )              
 +    {
 +	case DMATx_I2S3:
-+//	    DPRINTK( "snd_ep93xx_dma_tx_callback - DMATx_I2S3\n");
++	    //DPRINTK( "snd_ep93xx_dma_tx_callback - DMATx_I2S3\n");
 +	    i = 2;
 +	    break;
 +    	case DMATx_I2S2:
-+//	    DPRINTK( "snd_ep93xx_dma_tx_callback - DMATx_I2S2\n");
++	    //DPRINTK( "snd_ep93xx_dma_tx_callback - DMATx_I2S2\n");
 +       	    i = 1;
 +	    break;
 +	case DMATx_I2S1:
-+	    default:
-+//	    DPRINTK( "snd_ep93xx_dma_tx_callback - DMATx_I2S1\n");
++	default:
++	    //DPRINTK( "snd_ep93xx_dma_tx_callback - DMATx_I2S1\n");
 +       	    i = 0;
 +	    break;
 +    }
@@ -8640,7 +8415,6 @@ diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep
 +    if(stream->stopped == 0){
 +
 +	if( ep93xx_dma_remove_buffer( handle, &buf_id ) >= 0 ){
-+
 +	    buf = (audio_buf_t *)buf_id;
 +            stream->bytecount += buf->reportedbytes;
 +	    ep93xx_dma_add_buffer( stream->dmahandles[i],
@@ -8652,6 +8426,7 @@ diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep
 +
 +            if(chan == i)
 +	        snd_pcm_period_elapsed(substream);
++	    DPRINTK("snd_ep93xx_dma_tx_callback removed buffer %p\n", buf);
 +	}
 +    }
 +}
@@ -8918,13 +8693,15 @@ diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep
 +            stream->stopped = 0;
 +            if( !stream->active && !stream->stopped ){
 +	        stream->active = 1;
++		/* Start the DMA engine (buffers are lined up already) */
 +    		snd_ep93xx_dma_start( state, stream );
 +            }
 +	    break;
 +
 +	case SNDRV_PCM_TRIGGER_STOP:
-+	    stream->stopped = 1;
 +	    snd_ep93xx_dma_pause( state, stream );
++	    stream->stopped = 1;
++	    /* Stop the DMA engine (cancels any pending buffers) */
 +	    snd_ep93xx_dma_flush( state, stream );
 +	    break;
 +
@@ -8949,6 +8726,8 @@ diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep
 +    audio_stream_t *stream = state->output_stream;
 +    snd_pcm_uframes_t pointer = 0;
 +
++    DPRINTK("snd_ep93xx_pcm_pointer_playback - enter - pointer %d\n",
++	    stream->bytecount);
 +    pointer = bytes_to_frames( runtime,stream->bytecount );
 +
 +    if (pointer >= runtime->buffer_size){
@@ -8956,7 +8735,8 @@ diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep
 +	stream->bytecount = 0;
 +    }
 +			    
-+    DPRINTK("snd_ep93xx_pcm_pointer_playback - exit\n");
++    DPRINTK("snd_ep93xx_pcm_pointer_playback - exit - pointer %d\n",
++	    stream->bytecount);
 +    return pointer;
 +}
 +
@@ -9035,20 +8815,57 @@ diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep
 +    int i;
 +    int tocount = frames_to_bytes(runtime,count);
 +    
-+    for( i = 0; i < stream->dma_num_channels; i++ ){
-+
-+	dma_channel = &stream->dma_channels[i];	
-+	stream->hwbuf[i] = dma_channel->area + ( frames_to_bytes(runtime,pos) * stream->dma2usr_ratio / stream->dma_num_channels );
-+    
-+    }
-+
-+    if(copy_from_user_with_conversion(stream ,(const char*)src,(tocount * stream->dma2usr_ratio)) <=0 ){
-+	DPRINTK(KERN_ERR "copy_from_user_with_conversion() failed\n");
-+	return -EFAULT;
-+    }
-+
-+//printk("snd_ep93xx_pcm_copy_playback %x %x %x- exit\n",stream->dma_num_channels,stream->dma2usr_ratio,frames_to_bytes(runtime,pos));
++    DPRINTK("snd_ep93xx_pcm_copy_playback - enter nchannels %d ratio %d pos %d bytecount %d tocount %d\n",
++	    stream->dma_num_channels,
++	    stream->dma2usr_ratio,
++	    frames_to_bytes(runtime,pos),
++	    stream->bytecount,
++	    tocount);
 +					
++    for( i = 0; i < stream->dma_num_channels; i++ ){
++	dma_channel = &stream->dma_channels[i];	
++	stream->hwbuf[i] = dma_channel->area
++	    + (frames_to_bytes(runtime,pos)
++	       * stream->dma2usr_ratio / stream->dma_num_channels);
++	DPRINTK("hwbuf ptr %p channel area %p offset %d\n",
++		stream->hwbuf[i], dma_channel->area,
++		stream->hwbuf[i] - (char *)dma_channel->area);
++    }
++
++    if(copy_from_user_with_conversion(stream,
++				      (const char*)src,
++				      (tocount * stream->dma2usr_ratio)) <=0 ){
++	DPRINTK(KERN_ERR "copy_from_user_with_conversion() failed\n");
++	return -EFAULT; 
++   }
++
++    /* Zero out junk left in the last buffer (FIXME: actually we
++     * should just zero out buffers when they are deactivated, but
++     * that can't be done safely in interrupt context) */
++    for( i = 0; i < stream->dma_num_channels; i++ ){
++	int j, offset;
++	dma_channel = &stream->dma_channels[i];	
++	stream->hwbuf[i] += (tocount * stream->dma2usr_ratio
++			     / stream->dma_num_channels);
++	DPRINTK("hwbuf ptr %p channel area %p offset %d\n",
++		stream->hwbuf[i], dma_channel->area,
++		stream->hwbuf[i] - (char *)dma_channel->area);
++	for (j = dma_channel->audio_buff_count - 1; j >= 0; --j) {
++	    if (stream->hwbuf[i] >= (char *)dma_channel->audio_buffers[j].area)
++		break;
++	}
++	offset = stream->hwbuf[i] - (char *)dma_channel->audio_buffers[j].area;
++	DPRINTK("end of data in buffer %d=%p offset %d (size %d)\n",
++		j, &dma_channel->audio_buffers[j],
++		offset, dma_channel->audio_buffers[j].bytes);
++	if (j < dma_channel->audio_buff_count && offset > 0) {
++	    DPRINTK("clearing remaining %d bytes\n",
++		   dma_channel->audio_buffers[j].bytes - offset);
++	    memset(stream->hwbuf[i], 0, 
++		   dma_channel->audio_buffers[j].bytes - offset);
++	}
++    }
++
 +    DPRINTK("snd_ep93xx_pcm_copy_playback - exit\n");
 +    return 0;
 +}
@@ -9129,10 +8946,10 @@ diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep
 +
 +    DPRINTK("The substream item (ret %d) : \n", ret);
 +    DPRINTK("pcm->streams[0].substream->dma_buffer.addr  = 0x%x\n", pcm->streams[0].substream->dma_buffer.addr);
-+    DPRINTK("pcm->streams[0].substream->dma_buffer.area  = 0x%x\n", pcm->streams[0].substream->dma_buffer.area);
++    DPRINTK("pcm->streams[0].substream->dma_buffer.area  = %p\n", pcm->streams[0].substream->dma_buffer.area);
 +    DPRINTK("pcm->streams[0].substream->dma_buffer.bytes = 0x%x\n", pcm->streams[0].substream->dma_buffer.bytes);
 +    DPRINTK("pcm->streams[1].substream->dma_buffer.addr  = 0x%x\n", pcm->streams[1].substream->dma_buffer.addr);
-+    DPRINTK("pcm->streams[1].substream->dma_buffer.area  = 0x%x\n", pcm->streams[1].substream->dma_buffer.area);
++    DPRINTK("pcm->streams[1].substream->dma_buffer.area  = %p\n", pcm->streams[1].substream->dma_buffer.area);
 +    DPRINTK("pcm->streams[1].substream->dma_buffer.bytes = 0x%x\n", pcm->streams[1].substream->dma_buffer.bytes);	
 +
 +    pcm->private_data = state;
@@ -9641,8 +9458,8 @@ diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep
 +MODULE_LICENSE("GPL");
 diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.h linux-2.6.29.6/sound/arm/ep93xx-i2s.h
 --- linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.h	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.29.6/sound/arm/ep93xx-i2s.h	2009-09-30 16:57:10.000000000 -0400
-@@ -0,0 +1,87 @@
++++ linux-2.6.29.6/sound/arm/ep93xx-i2s.h	2009-10-01 00:56:30.000000000 -0400
+@@ -0,0 +1,86 @@
 +/*
 + * linux/sound/arm/ep93xx-i2s.c -- ALSA PCM interface for the edb93xx i2s audio
 + *
@@ -9681,7 +9498,6 @@ diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.h linux-2.6.29.6/sound/arm/ep
 +    unsigned char	*area;  		/* virtual pointer */
 +    dma_addr_t 		addr;        		/* physical address */
 +    size_t 		bytes;          	/* buffer size in bytes */
-+    unsigned char      	*buff_pos;              /* virtual pointer */
 +    audio_buf_t        	*audio_buffers; 	/* array of audio buffer structures */
 +    int 		audio_buff_count;
 +		
