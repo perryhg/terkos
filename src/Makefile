@@ -7,6 +7,7 @@ LIB_QWERK_DIR=libqwerk
 LIB_UTILITIES_DIR=libUtilities
 
 LCD_MENU_DIR=lcdmenu
+LIBMMAP_DIR=libmmap
 FPGAC_DIR=util/fpgac
 LOGIC_DIR=logic/vexpro
 SCRIPTS_DIR=scripts
@@ -61,6 +62,7 @@ dist: $(DIST_CGI_DIR) \
 	$(MAKE) -C $(LCD_MENU_DIR) all
 
 	@echo 'Making fpgac...'
+	$(MAKE) -C $(LIBMMAP_DIR) all
 	$(MAKE) -C $(FPGAC_DIR) all
 
 	@echo 'Copying binaries...'
