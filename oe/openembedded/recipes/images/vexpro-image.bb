@@ -21,10 +21,6 @@ IMAGE_INSTALL = " \
 	kernel-module-sd-mod \
 	kernel-module-scsi-mod \
 	kernel-module-usb-storage \
-	kernel-module-snd-usb-audio \
-	kernel-module-snd-mixer-oss \
-	kernel-module-snd-pcm-oss \
-	kernel-module-snd-ep93xx-i2s \
 	kernel-module-uvcvideo \
 	kernel-module-gspca-zc3xx \
 	kernel-module-v4l1-compat \
