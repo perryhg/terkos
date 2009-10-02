@@ -3,7 +3,7 @@ LICENSE = "unknown"
 
 PR = "r1"
 
-SRC_URI = "http://www.ralink.com.tw/download.php?t=U0wyRnpjMlYwY3k4eU1EQTVMekF6THpNeEwyUnZkMjVzYjJGa056YzVPVE13TmpZMk9TNTZhWEE5UFQxU1ZEY3hWMTlHYVhKdGQyRnlaVjlXTVM0NEM%3D"
+SRC_URI = "file://RT71W_Firmware_V${PV}.zip"
 
 S = "${WORKDIR}/RT71W_Firmware_V${PV}"
 
