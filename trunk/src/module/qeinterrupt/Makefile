@@ -1,6 +1,6 @@
 ifeq ($(KERNELRELEASE),)
 
-KERNELDIR ?= /home/rich/terk/terkos/trunk/oe/tmp/work/qwerk-oe-linux-uclibcgnueabi/linux-2.6.29.4-r2/linux-2.6.29.4
+KERNELDIR ?= $(TERKOS_ROOT)/oe/tmp/work/qwerk-oe-linux-uclibcgnueabi/linux-2.6.29.6-r2/linux-2.6.29.6
 
 PWD := $(shell pwd)
 
