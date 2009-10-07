@@ -14,14 +14,17 @@ module AudioDAC(Async, Asdo, Arstn, Asdi, AbitClk, Out, Reset, Clk,
 	
 	// Original Regs
 	reg [11:0] DivCount;
+	reg [11:0] TimeoutCount;
 	reg [11:0] LeftAudioData;
 	reg [11:0] RightAudioData;
 	reg [11:0] RightInputReg;
 	reg [11:0] LeftInputReg;
 	reg AsyncEdgeDetect;
 	reg WaveOut;
+	reg Out;
 	reg [15:0] MixedAudioData;
 	reg [11:0] MixedCompare;
+	reg [11:0] MixedComparePrev;
 	reg Oldsign;
 	
    reg AbitClkSync;
@@ -47,7 +50,7 @@ module AudioDAC(Async, Asdo, Arstn, Asdi, AbitClk, Out, Reset, Clk,
 	reg [15:0] FreqData;
 	reg FreqOut;
 	reg [15:0] DataRd;
-	
+		
 	// Asdi = TO Audio Sound Input. Since we're not digitizing, we'll tie this low.
 	assign Asdi = 1'b0;
 	// Asdo = TO Audio Sound Output. This is our input.
@@ -103,13 +106,12 @@ module AudioDAC(Async, Asdo, Arstn, Asdi, AbitClk, Out, Reset, Clk,
 			BitCount <= 0;
 			RightAudioData <= RightInputReg;
 			end
-		if ({AsyncEdgeDetect, AsyncSync} == 2'b10)
+		else if ({AsyncEdgeDetect, AsyncSync} == 2'b10)
 		   begin
 			BitCount <= 0;
 			LeftAudioData <= LeftInputReg;
 			end
-
-		if (~AbitClkEdgeDetect&AbitClkSync)
+		else if (~AbitClkEdgeDetect&AbitClkSync)
 		   begin
 			if (BitCount < 13)
 			   begin
@@ -131,12 +133,21 @@ module AudioDAC(Async, Asdo, Arstn, Asdi, AbitClk, Out, Reset, Clk,
 			WaveOut <= 0;
 			MixedAudioData = 0;
 			Volume <= 100;
+			Out <= 0;
+			TimeoutCount <= 0;
 		   end
 		else
 		   begin
 			DivCount <= DivCount + 1;
+			
 			if (DivCount == 0)
 			   begin
+				MixedComparePrev <= MixedCompare;
+				if (MixedComparePrev != MixedCompare)
+					TimeoutCount <= 0;
+				else if (TimeoutCount != 12'b111111111111)
+					TimeoutCount <= TimeoutCount + 1;
+					
 				WaveOut <= 1'b1;
 				MixedAudioData = {LeftAudioData[11],  LeftAudioData[11], LeftAudioData[11], LeftAudioData[11], LeftAudioData[11], LeftAudioData[11:1]} +
 					{RightAudioData[11],  RightAudioData[11], RightAudioData[11], RightAudioData[11], RightAudioData[11], RightAudioData[11:1]};
@@ -146,6 +157,13 @@ module AudioDAC(Async, Asdo, Arstn, Asdi, AbitClk, Out, Reset, Clk,
 			else if (DivCount >= MixedCompare) // && {MixedAudioData[17], MixedAudioData[16]} == 2'b00)
 				WaveOut <= 1'b0; 
 		   end
+			
+		if (VolumeData != 0) 
+			Out <= VolumeOut & FreqOut;
+		else if (TimeoutCount != 12'b111111111111)
+			Out <= WaveOut;
+		else
+			Out <= 1'b0;
 	   end
    
 	always @(Oldsign or MixedAudioData)
@@ -159,21 +177,21 @@ module AudioDAC(Async, Asdo, Arstn, Asdi, AbitClk, Out, Reset, Clk,
 		end
 		
 	always @(posedge Clk)
-	begin
-		if (Reset)
 		begin
+		if (Reset)
+			begin
 			VolumeAcc <= 0;
 			VolumeOut <= 0;
-		end
+			end
 		else
-		begin
+			begin
 			VolumeAcc <= VolumeAcc + 1;
 			if (VolumeAcc == VolumeData)
 				VolumeOut <= 1'b0;
 			else if (VolumeAcc == 8'h00)
-				VolumeOut <= 1'b1;
+				VolumeOut <= 1'b1;		
+			end		
 		end
-	end
 	
 // Tone PWM - Frequency
 	always @(posedge Clk)
@@ -197,6 +215,5 @@ module AudioDAC(Async, Asdo, Arstn, Asdi, AbitClk, Out, Reset, Clk,
 // End ToneGenerator
 
 // Output is the OR of Tone and Wave outputs so that either can be used when the other isn't active.
-   assign Out = (VolumeData == 0) ? WaveOut : (VolumeOut & FreqOut);
 endmodule
 
