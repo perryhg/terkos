@@ -12,6 +12,7 @@
 #include <queue>
 #include <map>
 
+#include "singleton.h"
 #include "9302hw.h"
 
 #define QEAUDIO_RETURN_UNAVAILABLE                 1
@@ -32,8 +33,7 @@
 class CQEAudioController
 {
     public:
-        CQEAudioController();
-        ~CQEAudioController();
+  SINGLETON(CQEAudioController);
 
         /**
          * @brief Immediately enable audio
@@ -195,6 +195,9 @@ class CQEAudioController
         int executeAudioCommand(CQEAudioControllerCommand &command);
 	static int getCommandSize(CQEAudioControllerCommand &command);
 
+private:
+        CQEAudioController();
+        ~CQEAudioController();
 };
 
 #endif

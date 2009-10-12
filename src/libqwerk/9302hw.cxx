@@ -8,21 +8,29 @@ C9302Hardware::C9302Hardware() :
   m_syscon(0x80930000, 0xc4),
   m_fpga(0x20000000, 0x1000),
   m_adc(0x80900000, 0x28),
-  m_uart1(0x808c0000, 0x21c)
+  m_uart1(0x808c0000, 0x21c),
+  m_uart2(0x808d0000, 0x21c)
 {
   // set up A/D converter
   *m_syscon.Uint(0xc0) = 0xaa; // unlock
   *m_syscon.Uint(0x90) = 0x80010000; // enable ADC clk
   *m_syscon.Uint(0xc0) = 0xaa; // unlock
-  *m_syscon.Uint(0x80) |= 0x08020800; // set ADCEN
+  *m_syscon.Uint(0x80) |= 0x08120800; // set ADCEN, U2EN
   *m_syscon.Uint(0xc0) = 0xaa; // unlock
   *m_syscon.Uint(0x80) &= ~0x00000004; // reset ADCPD
   
   // set fpga bus timing
   *m_scr.Uint(0x08) = 0x10000440; 
 
+  // enable UART2
+  *m_uart2.Uint(0x14) = 0x01;
+
   // set LEDs for output
   *PortEDataDR() = 0x03;
+
+  // turn on 5V I/O regulator
+  *PortHDataDR() |= 0x0020;
+  *PortHData() |= 0x0020;
 }
 
 C9302Hardware::~C9302Hardware()
