@@ -85,6 +85,7 @@ public:
   CMemMap m_fpga;
   CMemMap m_adc;
   CMemMap m_uart1;
+  CMemMap m_uart2;
 
 private:
   C9302Hardware();

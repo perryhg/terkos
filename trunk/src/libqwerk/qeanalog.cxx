@@ -26,10 +26,6 @@ CQEAnalog::CQEAnalog()
 
   m_p9302hw = C9302Hardware::GetPtr();
 
-  // turn on I/O 5V regulator
-  *m_p9302hw->PortHDataDR() |= 0x0020;  
-  *m_p9302hw->PortHData() |= 0x0020;
-
   // get a/d dc bias/offset
   val = m_p9302hw->GetAD(4);
   val += m_p9302hw->GetAD(4);
