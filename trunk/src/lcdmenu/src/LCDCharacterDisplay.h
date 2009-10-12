@@ -18,8 +18,12 @@ class LCDCharacterDisplay : public CharacterDisplay
    public:
 
       LCDCharacterDisplay(const unsigned int numRows, const unsigned int numColumns) :
-         lcd(CTextLcd::GetRef()), numRows(numRows), numColumns(numColumns), totalCharacterCount(numRows * numColumns), numColumnsWhenInScrollingMode(numColumns
-                  - LCDCharacterDisplay::LCD_WIDTH_OF_SCROLL_ARROW_AND_PADDING)
+         lcd(CTextLcd::GetRef()),
+         numRows(numRows),
+         numColumns(numColumns),
+         totalCharacterCount(numRows * numColumns),
+         numColumnsWhenInScrollingMode(numColumns - LCDCharacterDisplay::LCD_WIDTH_OF_SCROLL_ARROW_AND_PADDING),
+         blankLine(numColumns, ' ')
          {
          // nothing to do
          }
@@ -69,6 +73,7 @@ class LCDCharacterDisplay : public CharacterDisplay
       const unsigned int numColumns;
       const unsigned int totalCharacterCount;
       const unsigned int numColumnsWhenInScrollingMode;
+      const string blankLine;
 
       const bool isValidRow(const unsigned int row) const
          {
