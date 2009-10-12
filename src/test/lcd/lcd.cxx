@@ -22,28 +22,43 @@ int main(int argc, char **argv)
    sleep(1);
 
    printf("Setting text ''\n");
-   lcd.SetText("");
+   lcd.MoveCursor(0,0);
+   lcd.printf("");
    sleep(1);
 
    printf("Setting text 'Hello there'\n");
-   lcd.SetText("Hello there");
+   lcd.MoveCursor(0,0);
+   lcd.printf("Hello there");
    sleep(1);
 
    printf("Setting text 'Hello there.    How are you?'\n");
-   lcd.SetText("Hello there.    How are you?");
+   lcd.MoveCursor(0,0);
+   lcd.printf("Hello there.    How are you?");
    sleep(1);
 
    printf("Setting text 'This is some really long text that will not fit'\n");
-   lcd.SetText("This is some really long text that will not fit.");
+   lcd.MoveCursor(0,0);
+   lcd.printf("This is some really long text that will not fit.");
    sleep(1);
 
    printf("Special characters\n");
    lcd.Clear();
-   lcd.SetText("Special chars   " 
-	       TL_STRING_UP TL_STRING_DOWN TL_STRING_LEFT TL_STRING_RIGHT
-	       TL_STRING_LOWBATT TL_STRING_COPYRIGHT TL_STRING_WSA0
-	       TL_STRING_WSB0 TL_STRING_WSA1 TL_STRING_WSB3 TL_STRING_WSB0
-	       TL_STRING_WSB1 TL_STRING_WSB2);
+   lcd.printf("Special chars:");
+   lcd.MoveCursor(1,0);
+   lcd.printf("%s%s%s%s%s%s%s%s%s%s%s%s%s",
+	       TL_STRING_UP          ,
+	       TL_STRING_DOWN        ,
+	       TL_STRING_LEFT        ,
+	       TL_STRING_RIGHT       ,
+	       TL_STRING_LOWBATT     ,
+	       TL_STRING_COPYRIGHT   ,
+	       TL_STRING_WSA0        ,
+	       TL_STRING_WSB0        ,
+	       TL_STRING_WSA1        ,
+	       TL_STRING_WSB3        ,
+	       TL_STRING_WSB0        ,
+	       TL_STRING_WSB1        ,
+	       TL_STRING_WSB2);
    sleep(1);
 
    printf("backlight off (via property)\n");
@@ -53,83 +68,6 @@ int main(int argc, char **argv)
    printf("backlight on (via property)\n");
    lcd.SetProperty(TL_PROP_BACKLIGHT, true);
    sleep(1);
-
-   printf("backlight off (via method)\n");
-   lcd.SetBacklight(false);
-   sleep(1);
-
-   printf("backlight on (via method)\n");
-   lcd.SetBacklight(true);
-   sleep(1);
-
-   printf("Clearing LCD\n");
-   lcd.Clear();
-   sleep(1);
-
-   printf("Printing 'Hello World' on line 0\n");
-   lcd.SetLine(0, "Hello World");
-   sleep(1);
-
-   printf("Printing 'What up Moon' on line 1\n");
-   lcd.SetLine(1, "What up Moon");
-   sleep(1);
-
-   printf("Printing 'Goodbye World' on line 0 (clearing it first)\n");
-   lcd.SetLine(0, "Goodbye World");
-   sleep(1);
-
-   printf("Printing 'Peace Out Moon' on line 1 (clearing it first)\n");
-   lcd.SetLine(1, "Peace Out Moon");
-   sleep(1);
-
-   printf("Printing 'GOODBYE' on line 0 (NOT clearing it first)\n");
-   lcd.SetLine(0, "GOODBYE", false);
-   sleep(1);
-
-   printf("Printing 'PEACE OUT Moon' on line 1 (NOT clearing it first)\n");
-   lcd.SetLine(1, "PEACE OUT Moon", false);
-   sleep(1);
-
-   printf("Clearing LCD\n");
-   lcd.Clear();
-   sleep(1);
-
-   printf("Printing 20 digits on line 0 (NOT clearing it first)\n");
-   lcd.SetLine(0, "01234567890123456789", false);
-   sleep(1);
-
-   printf("Printing 20 digits on line 1 (NOT clearing it first)\n");
-   lcd.SetLine(1, "01234567890123456789", false);
-   sleep(1);
-
-   printf("Clearing Line 0\n");
-   lcd.ClearLine(0);
-   sleep(1);
-
-   printf("Clearing Line 1\n");
-   lcd.ClearLine(1);
-   sleep(1);
-
-   printf("Printing Characters...\n");
-   lcd.SetCharacter(0, 0, 'A');
-   lcd.SetCharacter(0, 2, 'B');
-   lcd.SetCharacter(0, 4, 'C');
-   lcd.SetCharacter(0, 6, 'D');
-   lcd.SetCharacter(0, 8, 'E');
-   lcd.SetCharacter(0, 10, 'F');
-   lcd.SetCharacter(0, 12, 'G');
-   lcd.SetCharacter(0, 14, 'H');
-   lcd.SetCharacter(0, 16, 'I');
-   lcd.SetCharacter(1, 1, 'J');
-   lcd.SetCharacter(1, 3, 'K');
-   lcd.SetCharacter(1, 5, 'L');
-   lcd.SetCharacter(1, 7, 'M');
-   lcd.SetCharacter(1, 9, 'N');
-   lcd.SetCharacter(1, 11, 'O');
-   lcd.SetCharacter(1, 13, 'P');
-   lcd.SetCharacter(1, 15, 'Q');
-   lcd.SetCharacter(1, 17, 'R');
-   sleep(5);
 
    printf("Clearing LCD and quitting\n");
    lcd.Clear();

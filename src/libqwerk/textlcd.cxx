@@ -2,7 +2,6 @@
 
 const unsigned int CTextLcd::NUM_ROWS = 2;
 const unsigned int CTextLcd::NUM_COLUMNS = 16;
-const string CTextLcd::BLANK_LINE(CTextLcd::NUM_COLUMNS, ' ');
 
 SINGLETON_REGISTER(CTextLcd);
 
@@ -24,15 +23,6 @@ void CTextLcd::Clear()
   TL_DELAY();
 
   PutByte(1);
-}
-
-void CTextLcd::ClearLine(unsigned int lineNumber)
-{
-  if (IsValidRow(lineNumber))
-    {
-      MoveCursor(lineNumber, 0);
-      printf("%s", CTextLcd::BLANK_LINE.c_str());
-    }
 }
 
 void CTextLcd::MoveCursor(const unsigned int row, const unsigned int col)
@@ -73,57 +63,6 @@ void CTextLcd::SetCharacter(const char character)
   *m_p9302hw->PortGDataDR() &= ~0x02;
   TL_DELAY();
   PutByte(character);
-}
-
-void CTextLcd::SetCharacter(const unsigned int row, const unsigned int col, const char character)
-{
-  if (IsValidPosition(row, col))
-    {
-      MoveCursor(row, col);
-      SetCharacter(character);
-    }
-}
-
-void CTextLcd::SetLine(const unsigned int lineNumber, const string& text, const bool willClearLineFirst)
-{
-  if (IsValidRow(lineNumber))
-    {
-      if (willClearLineFirst)
-	{
-	  ClearLine(lineNumber);
-	}
-      if (text.length() > 0)
-	{
-	  MoveCursor(lineNumber, 0);
-	  printf("%s", text.substr(0, CTextLcd::NUM_COLUMNS).c_str());
-	}
-    }
-}
-
-void CTextLcd::SetText(const string& text, const bool willClearFirst)
-{
-  if (willClearFirst)
-    {
-      Clear();
-    }
-
-  if (text.length() > 0)
-    {
-      string theText = text;
-      int lineNumber = 0;
-      do
-	{
-	  string textPiece = theText.substr(0, CTextLcd::NUM_COLUMNS);
-	  theText = theText.substr(textPiece.length());
-	  SetLine(lineNumber++, textPiece, false);
-	}
-      while (!theText.empty() && IsValidRow(lineNumber));
-    }
-}
-
-void CTextLcd::SetBacklight(const bool isOn)
-{
-  SetProperty(TL_PROP_BACKLIGHT, isOn);
 }
 
 // RS eedat portg1

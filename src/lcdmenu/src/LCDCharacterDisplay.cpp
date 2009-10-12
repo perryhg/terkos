@@ -20,7 +20,23 @@ void LCDCharacterDisplay::setText(const string& text)
 
 void LCDCharacterDisplay::setText(const string& text, const bool willClearFirst)
    {
-   lcd.SetText(text, willClearFirst);
+   if (willClearFirst)
+      {
+      lcd.Clear();
+      }
+
+   if (text.length() > 0)
+      {
+      string theText = text;
+      int lineNumber = 0;
+      do
+         {
+         string textPiece = theText.substr(0, CTextLcd::NUM_COLUMNS);
+         theText = theText.substr(textPiece.length());
+         setLine(lineNumber++, textPiece, false);
+         }
+      while (!theText.empty() && isValidRow(lineNumber));
+      }
    }
 
 void LCDCharacterDisplay::setTextWithScrollArrows(const string& text)
@@ -72,7 +88,15 @@ void LCDCharacterDisplay::setLine(const unsigned int lineNumber, const string& t
    {
    if (this->isValidRow(lineNumber))
       {
-      lcd.SetLine(lineNumber, text, willClearLineFirst);
+      if (willClearLineFirst)
+         {
+         clearLine(lineNumber);
+         }
+      if (text.length() > 0)
+         {
+         lcd.MoveCursor(lineNumber, 0);
+         lcd.printf("%s", text.substr(0, numColumns).c_str());
+         }
       }
    }
 
@@ -80,7 +104,8 @@ void LCDCharacterDisplay::setCharacter(const unsigned int row, const unsigned in
    {
    if (isValidPosition(row, col))
       {
-      lcd.SetCharacter(row, col, character);
+      lcd.MoveCursor(row, col);
+      lcd.SetCharacter(character);
       }
    }
 
@@ -93,7 +118,8 @@ void LCDCharacterDisplay::clearLine(const unsigned int lineNumber)
    {
    if (isValidRow(lineNumber))
       {
-      lcd.ClearLine(lineNumber);
+      lcd.MoveCursor(lineNumber, 0);
+      lcd.printf("%s", blankLine.c_str());
       }
    }
 

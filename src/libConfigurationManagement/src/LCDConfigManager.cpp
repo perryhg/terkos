@@ -18,7 +18,7 @@ bool LCDConfigManager::setBacklightEnabled(const bool isEnabled)
    try
       {
       CTextLcd &lcd = CTextLcd::GetRef();
-      lcd.SetBacklight(isEnabled);
+      lcd.SetProperty(TL_PROP_BACKLIGHT, isEnabled);
       CTextLcd::Release();
       }
    catch (...)

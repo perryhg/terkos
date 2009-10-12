@@ -60,14 +60,9 @@ public:
   static const unsigned int NUM_COLUMNS;
           
   void Clear();
-  void ClearLine(unsigned int lineNumber);
   void MoveCursor(const unsigned int row, const unsigned int col);
   int printf(const char *format, ...);
   void SetCharacter(const char character);
-  void SetCharacter(const unsigned int row, const unsigned int col, const char character);
-  void SetLine(const unsigned int lineNumber, const string& text, const bool willClearLineFirst = true);
-  void SetText(const string& text, const bool willClearFirst = true);
-  void SetBacklight(const bool isOn);
 
   // Save(CContext *context);
   // Restore(CContext context);
@@ -79,8 +74,6 @@ public:
 private:
   CTextLcd();
   virtual ~CTextLcd();
-
-  static const string BLANK_LINE;
 
   void Init();
   void DefineChars();
