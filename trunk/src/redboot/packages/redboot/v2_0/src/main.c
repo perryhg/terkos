@@ -63,6 +63,7 @@
 
 #include <cyg/hal/hal_tables.h>
 
+#undef CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS // terk
 #ifdef CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS
 #ifdef CYGBLD_HAL_PLATFORM_STUB_H
 #include CYGBLD_HAL_PLATFORM_STUB_H
