@@ -1,0 +1,27 @@
+#!/bin/bash
+
+USB_SERIAL_DEVS0=`ls /dev/ttyUSB*`
+
+while true
+do 
+   USB_SERIAL_DEVS1=`ls /dev/ttyUSB*`
+   for i in $USB_SERIAL_DEVS1;
+   do
+      FOUND=0
+      for j in $USB_SERIAL_DEVS0;
+      do
+         if [ "$i" = "$j" ];
+         then
+            FOUND=1
+         fi
+      done
+      if [ $FOUND -eq 0 ];
+      then
+         echo $i
+	 gnome-terminal -e "cat $i" 
+      fi
+   done
+      
+   USB_SERIAL_DEVS0=$USB_SERIAL_DEVS1
+   sleep .1
+done
