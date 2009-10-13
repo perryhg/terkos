@@ -1,0 +1,28 @@
+#!/bin/bash
+# this script belongs outside the factory directory
+# download checksum
+# compare-- and download new version if necessary
+if ncftp ftp.cmu.edu factory.tar.bz2.md5;
+then 
+   if md5sum -c factory.tar.bz2.md5;
+   then
+      scripts/launcher
+   else
+      echo "New version of firmware available, downloading..."
+      if ncftp ftp.cmu.edu factory.tar.bz2;
+      then
+         if md5sum -c factory.tar.bz2.md5;
+         then
+            echo "Extracting..."
+	    rm -rf factory
+            tar xvfj factory.tar.bz2.md5
+            scripts/launcher
+         else
+	    echo "Download error, try running start again."
+         fi
+      else
+         echo "Download error, try running start again."
+      fi
+   fi
+else
+   echo "Check network connection."
