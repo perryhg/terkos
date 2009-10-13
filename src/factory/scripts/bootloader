@@ -1,0 +1,15 @@
+#!/bin/bash
+echo "VEXPro bootloader programming script"
+echo
+echo "Place jumper on J5.
+echo "Plug in USB, power, and WiFi adapter."
+echo "Then turn on."
+if ../bin/download -t 9302 -p1 ../firmware/redboot.bin;
+then
+   echo
+   echo "Power down."
+   echo "Remove jumper from J5."
+   exit 0
+else
+   exit -1
+fi

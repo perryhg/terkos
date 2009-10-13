@@ -1,0 +1,8 @@
+#!/bin/bash
+export IPADDR=`ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}'`
+if [ $1 ];
+then 
+   ../bin/reimage ../firmware/test.dat -d $1;
+else
+   ../bin/reimage ../firmware/test.dat;
+fi     
