@@ -1,7 +1,6 @@
 set echo on
 set comecho on
 set senddelay 0.01
-open com "/dev/ttyUSB0"
 set com 460800n81
 #
 print "Waiting for VEXPro to power on..."
@@ -76,4 +75,4 @@ print "done^m^j"
 #
 send "reset^m"
 print "Firmware update successful!^m^j"
-print "Unit will power off now.^m^j"
+print "Unit will reboot now.^m^j"

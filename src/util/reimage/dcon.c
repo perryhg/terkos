@@ -34,6 +34,7 @@
 #include <sys/stat.h>
 #include "ymodem.h"
 
+#define DEFAULT_DEVICE "/dev/ttyUSB0"
 #define MAXLABELS 3000  /* Maximum number of labels */
 #define MAXGOSUBS 128  /* Max depth */
 #define STRINGL 1024   /* String lengths.  Also, max script line length */
@@ -83,6 +84,8 @@ BOOL lastcharnl=1; /* Indicate that last char printed from getonebyte
 unsigned char *datafile;
 int datafilesize = 0;
 BOOL ymodem = 0;
+
+int com_opened = 0;
 
 /* Prototypes. */
 long htime(void);
@@ -265,15 +268,16 @@ void skipline(void) {
 
 void printwhere(void) {
   int a,b,c;
-  sprintf(msg,"@%04d ",pc);
+  char buf[0x100];
+  sprintf(buf,"@%04d ",pc);
   a=pc;
   skipline();
   b=pc-1;
   pc=a;
-  c=strlen(msg);
-  for(;a<b;a++) msg[c++]=script[a];
-  msg[c]=0;
-  vmsg(msg);
+  c=strlen(buf);
+  for(;a<b;a++) buf[c++]=script[a];
+  buf[c]=0;
+  vmsg(buf);
 }
 
 /* Write a null-terminated string to communication device */
@@ -421,6 +425,7 @@ void serror(char *text, int exitcode) {
     }
   }
   sprintf(lmsg,"Error @%d, line %d, %s. (%d)\n",pc,line,text,exitcode);
+  fputs(lmsg, stderr);
   vmsg(lmsg);
   ext(exitcode);
 }
@@ -1017,6 +1022,10 @@ BOOL getonoroff(void) {
 }
 
 void setcom(void) {
+  if (!com_opened) {
+    strcpy(device, DEFAULT_DEVICE);
+    opendevice();
+  }
   stbuf.c_cflag &= ~(CBAUD | CSIZE | CSTOPB | CLOCAL | PARENB | ICANON | CRTSCTS);
   stbuf.c_cflag |= (speed | bits | CREAD | clocal | parity | stopbits );
   if (ioctl(comfd, TCSETA, &stbuf) < 0) {
@@ -1342,13 +1351,14 @@ void doclose(void) {
 void opendevice(void) {
   if(strcmp(device,"-")!=0) {
     if ((comfd = open(device, O_RDWR|O_EXCL|O_NDELAY)) <0) {
-      sprintf(msg,"Can't open device %s.\n",device);
+      sprintf(msg,"Can't open device %s.",device);
       serror(msg,1);
     }
   }
   else comfd=0;
+  com_opened = 1;
   if (ioctl (comfd, TCGETA, &svbuf) < 0) {
-    sprintf(msg,"Can't ioctl get device %s.\n",device);
+    sprintf(msg,"Can't ioctl get device %s.",device);
     serror(msg,1);
   }
   ioctl(comfd, TCGETA, &stbuf);
@@ -1409,7 +1419,6 @@ int doscript(void) {
   unsigned char *file;
   char line[STRINGL];
 
-  fileout = fopen(FILEOUTNAME, "w");
   pc=0;
   while(script[pc]) {
     if(script[pc]=='\n') pc++;
@@ -1591,6 +1600,8 @@ int main(int argc,char **argv) {
   unsigned char terminator='\n';
 
   printf("\nreimage -- firmware utility for VEXPro\n\n");
+
+  fileout = fopen(FILEOUTNAME, "w");
 
   hstart=time(0);
   hset=htime();
