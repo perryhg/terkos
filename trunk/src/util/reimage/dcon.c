@@ -424,7 +424,7 @@ void serror(char *text, int exitcode) {
       if(a<pc) line++;
     }
   }
-  sprintf(lmsg,"Error @%d, line %d, %s. (%d)\n",pc,line,text,exitcode);
+  sprintf(lmsg,"\nError @%d, line %d, %s. (%d)\n",pc,line,text,exitcode);
   fputs(lmsg, stderr);
   vmsg(lmsg);
   ext(exitcode);
@@ -707,7 +707,7 @@ void getstring(void) {
         char toto[STRINGL];
         strcpy(toto,string);
         getstring();
-        if((fp=popen(string,"r"))==NULL) serror("Could not popen!",4);
+        if((fp=popen(string,"r"))==NULL) serror("Could not popen",4);
         fgets(string,STRINGL-1,fp);
         string[strlen(string)-1]=0;
         pclose(fp);
@@ -861,7 +861,7 @@ void getstring(void) {
       match=script[pc++];
       while(script[pc]!=match) {
         ch=script[pc++];
-        if(ch==0) serror("Umatched quote.",5);
+        if(ch==0) serror("Umatched quote",5);
         if(ch=='\\') {
           if(script[pc]<='7' && script[pc]>='0' &&
 	     script[pc+1]<='7' && script[pc+1]>='0' ) {
@@ -1005,6 +1005,7 @@ int dowaitfor(void) {
       }
     }
   }
+  serror("timeout exceeded", 1);
   return(-1);
 }
 
@@ -1017,7 +1018,7 @@ BOOL getonoroff(void) {
   if(strcmp(token,"off")==0) return(0);
   pc=b;
   a=getvalue();
-  if(a!=0 && a!=1) serror("Bad value (should be on or off, 1 or 0.)",5);
+  if(a!=0 && a!=1) serror("Bad value (should be on or off, 1 or 0)",5);
   return(a);
 }
 
@@ -1041,7 +1042,7 @@ void doset(void) {
     a=0;
     if(getonoroff()) a=ECHO|ECHOE;
     if(ioctl(0, TCGETA, &console)<0) {
-      serror("Can't ioctl FD zero!\n",2);
+      serror("Can't ioctl FD zero",2);
     }
     console.c_lflag &= ~(ECHO | ECHOE);
     console.c_lflag |= a;
@@ -1329,7 +1330,7 @@ void doclose(void) {
     if(comfd== -1) serror("Com device not open",1);
     vmsg("Closing device");
     if (ioctl(comfd, TCSETA, &svbuf) < 0) {
-      sprintf(msg,"Can't ioctl set device %s.\n",device);
+      sprintf(msg,"Can't ioctl set device %s",device);
       serror(msg,1);
     }
     close(comfd);
@@ -1351,14 +1352,14 @@ void doclose(void) {
 void opendevice(void) {
   if(strcmp(device,"-")!=0) {
     if ((comfd = open(device, O_RDWR|O_EXCL|O_NDELAY)) <0) {
-      sprintf(msg,"Can't open device %s.",device);
+      sprintf(msg,"Can't open device %s",device);
       serror(msg,1);
     }
   }
   else comfd=0;
   com_opened = 1;
   if (ioctl (comfd, TCGETA, &svbuf) < 0) {
-    sprintf(msg,"Can't ioctl get device %s.",device);
+    sprintf(msg,"Can't ioctl get device %s",device);
     serror(msg,1);
   }
   ioctl(comfd, TCGETA, &stbuf);
@@ -1669,7 +1670,7 @@ int main(int argc,char **argv) {
   script = find_file("script", NULL);
   if (script==NULL)
     {
-      sprintf(msg,"Could not find script file\n");
+      sprintf(msg,"Could not find script file");
       serror(msg,1);
     }
 
