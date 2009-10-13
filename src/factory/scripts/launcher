@@ -1,7 +1,7 @@
 #!/bin/bash
 
 USB_SERIAL_DEVS0=`ls /dev/ttyUSB*`
-
+cat ../version
 while true
 do 
    USB_SERIAL_DEVS1=`ls /dev/ttyUSB*`
@@ -18,7 +18,7 @@ do
       if [ $FOUND -eq 0 ];
       then
          echo $i
-	 gnome-terminal -e "cat $i" 
+	 gnome-terminal -e "./all $i" 
       fi
    done
       
