@@ -1,7 +1,7 @@
 DESCRIPTION = "Miscellaneous files for the base system."
 SECTION = "base"
 PRIORITY = "required"
-PR = "r86"
+PR = "r87"
 LICENSE = "GPL"
 
 SRC_URI = " \
@@ -17,6 +17,7 @@ SRC_URI = " \
            file://httpd.conf \
            file://httpd.conf.default \
            file://ld.so.conf \
+           file://asound.conf \
            file://usbd \
            file://share/dot.bashrc \
            file://share/dot.profile \
@@ -151,6 +152,7 @@ do_install_append_netbook-pro () {
 do_install_append_terkos () {
         install -m 644 ${WORKDIR}/httpd.conf*  ${D}${sysconfdir}  
         install -m 644 ${WORKDIR}/ld.so.conf  ${D}${sysconfdir}  
+        install -m 644 ${WORKDIR}/asound.conf  ${D}${sysconfdir}  
 }
 
 PACKAGES = "${PN}-dbg ${PN}-doc ${PN}"
