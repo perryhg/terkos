@@ -1,6 +1,6 @@
 diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/Makefile linux-2.6.29.6/arch/arm/mach-ep93xx/Makefile
 --- linux-2.6.29.6.orig/arch/arm/mach-ep93xx/Makefile	2009-07-02 19:41:20.000000000 -0400
-+++ linux-2.6.29.6/arch/arm/mach-ep93xx/Makefile	2009-09-30 16:57:10.000000000 -0400
++++ linux-2.6.29.6/arch/arm/mach-ep93xx/Makefile	2009-10-01 01:42:46.000000000 -0400
 @@ -1,7 +1,7 @@
  #
  # Makefile for the linux kernel.
@@ -12,7 +12,7 @@ diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/Makefile linux-2.6.29.6/arch/
  obj-			:=
 diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/dma_ep93xx.c linux-2.6.29.6/arch/arm/mach-ep93xx/dma_ep93xx.c
 --- linux-2.6.29.6.orig/arch/arm/mach-ep93xx/dma_ep93xx.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.29.6/arch/arm/mach-ep93xx/dma_ep93xx.c	2009-09-30 16:57:10.000000000 -0400
++++ linux-2.6.29.6/arch/arm/mach-ep93xx/dma_ep93xx.c	2009-10-01 01:42:46.000000000 -0400
 @@ -0,0 +1,2933 @@
 +/******************************************************************************
 + * arch/arm/mach-ep9312/dma_ep93xx.c
@@ -2949,7 +2949,7 @@ diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/dma_ep93xx.c linux-2.6.29.6/a
 +EXPORT_SYMBOL(ep93xx_dma_config);
 diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/dma_ep93xx.h linux-2.6.29.6/arch/arm/mach-ep93xx/dma_ep93xx.h
 --- linux-2.6.29.6.orig/arch/arm/mach-ep93xx/dma_ep93xx.h	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.29.6/arch/arm/mach-ep93xx/dma_ep93xx.h	2009-09-30 16:57:10.000000000 -0400
++++ linux-2.6.29.6/arch/arm/mach-ep93xx/dma_ep93xx.h	2009-10-01 01:42:46.000000000 -0400
 @@ -0,0 +1,199 @@
 +/*****************************************************************************
 + *
@@ -3152,7 +3152,7 @@ diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/dma_ep93xx.h linux-2.6.29.6/a
 +#endif // _DMADRV_H_
 diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/dma.h linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/dma.h
 --- linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/dma.h	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/dma.h	2009-09-30 16:57:10.000000000 -0400
++++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/dma.h	2009-10-01 01:42:46.000000000 -0400
 @@ -0,0 +1,246 @@
 +/*****************************************************************************
 + * linux/arch/arm/mach-ep93xx/include/mach/dma.h
@@ -3402,7 +3402,7 @@ diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/dma.h linux-2.6.
 +
 diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/ep93xx-regs.h linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/ep93xx-regs.h
 --- linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/ep93xx-regs.h	2009-07-02 19:41:20.000000000 -0400
-+++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/ep93xx-regs.h	2009-09-30 16:57:10.000000000 -0400
++++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/ep93xx-regs.h	2009-10-01 01:42:46.000000000 -0400
 @@ -49,17 +49,898 @@
   */
  
@@ -4509,7 +4509,7 @@ diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/ep93xx-regs.h li
  #define EP93XX_WATCHDOG_BASE		(EP93XX_APB_VIRT_BASE + 0x00140000)
 diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/hardware.h linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/hardware.h
 --- linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/hardware.h	2009-07-02 19:41:20.000000000 -0400
-+++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/hardware.h	2009-09-30 22:25:12.000000000 -0400
++++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/hardware.h	2009-10-01 01:42:46.000000000 -0400
 @@ -5,6 +5,12 @@
  #define __ASM_ARCH_HARDWARE_H
  
@@ -4557,7 +4557,7 @@ diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/hardware.h linux
  #endif
 diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/regs_dma.h linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/regs_dma.h
 --- linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/regs_dma.h	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/regs_dma.h	2009-09-30 16:57:10.000000000 -0400
++++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/regs_dma.h	2009-10-01 01:42:46.000000000 -0400
 @@ -0,0 +1,276 @@
 +/*****************************************************************************
 + *  
@@ -4837,7 +4837,7 @@ diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/regs_dma.h linux
 +#endif /* _REGS_DMA_H_ */
 diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/regs_i2s.h linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/regs_i2s.h
 --- linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/regs_i2s.h	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/regs_i2s.h	2009-09-30 16:57:10.000000000 -0400
++++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/regs_i2s.h	2009-10-01 01:42:46.000000000 -0400
 @@ -0,0 +1,97 @@
 +/*=============================================================================
 + *
@@ -4938,7 +4938,7 @@ diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/regs_i2s.h linux
 +#endif // _REG_I2S_H_
 diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/regs_smc.h linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/regs_smc.h
 --- linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/regs_smc.h	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/regs_smc.h	2009-09-30 16:57:10.000000000 -0400
++++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/regs_smc.h	2009-10-01 01:42:46.000000000 -0400
 @@ -0,0 +1,57 @@
 +/*=======================================================================
 + *
@@ -4999,7 +4999,7 @@ diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/regs_smc.h linux
 +#endif /* _REGS_SMC_H_ */
 diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/regs_spi.h linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/regs_spi.h
 --- linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/regs_spi.h	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/regs_spi.h	2009-09-30 16:57:10.000000000 -0400
++++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/regs_spi.h	2009-10-01 01:42:46.000000000 -0400
 @@ -0,0 +1,87 @@
 +/*=======================================================================
 + *
@@ -5090,7 +5090,7 @@ diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/regs_spi.h linux
 +#endif /* _REGS_SSP_H_ */
 diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/regs_syscon.h linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/regs_syscon.h
 --- linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/regs_syscon.h	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/regs_syscon.h	2009-09-30 16:57:10.000000000 -0400
++++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/regs_syscon.h	2009-10-01 01:42:46.000000000 -0400
 @@ -0,0 +1,286 @@
 +/*=============================================================================
 + *
@@ -5380,7 +5380,7 @@ diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/regs_syscon.h li
 +#endif // _REGS_SYSCON_H_
 diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/ssp.h linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/ssp.h
 --- linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/ssp.h	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/ssp.h	2009-09-30 16:57:10.000000000 -0400
++++ linux-2.6.29.6/arch/arm/mach-ep93xx/include/mach/ssp.h	2009-10-01 01:42:46.000000000 -0400
 @@ -0,0 +1,32 @@
 +/*
 + * 
@@ -5416,7 +5416,7 @@ diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/include/mach/ssp.h linux-2.6.
 +#endif /* _SSP_DRV_H_ */
 diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/ssp.c linux-2.6.29.6/arch/arm/mach-ep93xx/ssp.c
 --- linux-2.6.29.6.orig/arch/arm/mach-ep93xx/ssp.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.29.6/arch/arm/mach-ep93xx/ssp.c	2009-09-30 17:02:31.000000000 -0400
++++ linux-2.6.29.6/arch/arm/mach-ep93xx/ssp.c	2009-10-01 01:42:46.000000000 -0400
 @@ -0,0 +1,977 @@
 +/*
 + *  FILE:			ssp.c
@@ -6397,7 +6397,7 @@ diff -urN linux-2.6.29.6.orig/arch/arm/mach-ep93xx/ssp.c linux-2.6.29.6/arch/arm
 +}
 diff -urN linux-2.6.29.6.orig/sound/arm/Kconfig linux-2.6.29.6/sound/arm/Kconfig
 --- linux-2.6.29.6.orig/sound/arm/Kconfig	2009-07-02 19:41:20.000000000 -0400
-+++ linux-2.6.29.6/sound/arm/Kconfig	2009-09-30 21:41:22.000000000 -0400
++++ linux-2.6.29.6/sound/arm/Kconfig	2009-10-01 01:42:46.000000000 -0400
 @@ -22,6 +22,30 @@
  	  To compile this driver as a module, choose M here: the module
  	  will be called snd-sa11xx-uda1341.
@@ -6431,7 +6431,7 @@ diff -urN linux-2.6.29.6.orig/sound/arm/Kconfig linux-2.6.29.6/sound/arm/Kconfig
  	depends on ARM_AMBA
 diff -urN linux-2.6.29.6.orig/sound/arm/Makefile linux-2.6.29.6/sound/arm/Makefile
 --- linux-2.6.29.6.orig/sound/arm/Makefile	2009-07-02 19:41:20.000000000 -0400
-+++ linux-2.6.29.6/sound/arm/Makefile	2009-10-01 01:35:49.000000000 -0400
++++ linux-2.6.29.6/sound/arm/Makefile	2009-10-01 01:42:46.000000000 -0400
 @@ -17,3 +17,6 @@
  
  obj-$(CONFIG_SND_PXA2XX_AC97)	+= snd-pxa2xx-ac97.o
@@ -6441,7 +6441,7 @@ diff -urN linux-2.6.29.6.orig/sound/arm/Makefile linux-2.6.29.6/sound/arm/Makefi
 +snd-ep93xx-i2s-objs 		:= ep93xx-i2s.o
 diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep93xx-i2s.c
 --- linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.29.6/sound/arm/ep93xx-i2s.c	2009-10-01 01:29:53.000000000 -0400
++++ linux-2.6.29.6/sound/arm/ep93xx-i2s.c	2009-10-14 01:39:37.000000000 -0400
 @@ -0,0 +1,3013 @@
 +/*
 + * linux/sound/arm/ep93xx-i2s.c -- ALSA PCM interface for the edb93xx i2s audio
@@ -6531,10 +6531,10 @@ diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep
 +#endif
 +					
 +    .period_bytes_min	= 1 * 1024,
-+    .period_bytes_max	= 32 * 1024,
++    .period_bytes_max	= 4 * 1024,
 +    .periods_min	= 1,
-+    .periods_max	= 32,
-+    .buffer_bytes_max	= /*32*/128 * 1024,
++    .periods_max	= 8,
++    .buffer_bytes_max	= 32 * 1024,
 +    .fifo_size		= 0,
 +};
 +
@@ -8297,6 +8297,7 @@ diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep
 +
 +static int snd_ep93xx_allocate_buffers(struct snd_pcm_substream *substream, audio_stream_t *stream)
 +{
++    struct snd_pcm_runtime *runtime = substream->runtime;
 +    audio_channel_t *channel;
 +    unsigned int size,tmpsize,bufsize,bufextsize;
 +    int i,j;
@@ -8898,7 +8899,7 @@ diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep
 +    DPRINTK("snd_ep93xx_pcm_copy_capture - exit\n");
 +    return 0;
 +}
-+																					     
++
 +static struct snd_pcm_ops snd_ep93xx_pcm_playback_ops = {
 +	.open		= snd_ep93xx_pcm_open,
 +	.close		= snd_ep93xx_pcm_close,
@@ -8909,7 +8910,6 @@ diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep
 +	.trigger	= snd_ep93xx_pcm_trigger,
 +	.pointer	= snd_ep93xx_pcm_pointer_playback,
 +	.copy		= snd_ep93xx_pcm_copy_playback,
-+	
 +};
 +
 +static struct snd_pcm_ops snd_ep93xx_pcm_capture_ops = {
@@ -9458,7 +9458,7 @@ diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.c linux-2.6.29.6/sound/arm/ep
 +MODULE_LICENSE("GPL");
 diff -urN linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.h linux-2.6.29.6/sound/arm/ep93xx-i2s.h
 --- linux-2.6.29.6.orig/sound/arm/ep93xx-i2s.h	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.29.6/sound/arm/ep93xx-i2s.h	2009-10-01 00:56:30.000000000 -0400
++++ linux-2.6.29.6/sound/arm/ep93xx-i2s.h	2009-10-01 01:42:46.000000000 -0400
 @@ -0,0 +1,86 @@
 +/*
 + * linux/sound/arm/ep93xx-i2s.c -- ALSA PCM interface for the edb93xx i2s audio
