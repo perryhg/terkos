@@ -13,7 +13,7 @@ CFLAGS += " -lasound "
 
 inherit autotools
 
-PACKAGES += "${PN}-minimal lib${PN} lib${PN}-vox8 lib${PN}-vox16"
+PACKAGES += "${PN}-time lib${PN} lib${PN}-vox8 lib${PN}-vox16"
 
 FILES_${PN} = "${bindir}/flite"
 
