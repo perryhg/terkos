@@ -13,9 +13,11 @@ CFLAGS += " -lasound "
 
 inherit autotools
 
-PACKAGES += "lib${PN} lib${PN}-vox8 lib${PN}-vox16"
+PACKAGES += "${PN}-minimal lib${PN} lib${PN}-vox8 lib${PN}-vox16"
 
-FILES_${PN} = "${bindir}"
+FILES_${PN} = "${bindir}/flite"
+
+FILES_${PN}-time = "${bindir}/flite_time"
 
 FILES_lib${PN} ="${libdir}/libflite.so.* \
                  ${libdir}/libflite_cmu_time_awb.so.* \
