@@ -20,7 +20,7 @@ kernel.dat:
 fw:	
 	make terkos.dat -C firmware -f $(CURDIR)/Makefile
 
-kernel:	
+kernelcopy:	
 	cp ../../../oe/tmp/deploy/images/qwerk/zImage-qwerk.bin kernel_upgrade/zImage
 	make kernel.dat -C kernel_upgrade -f $(CURDIR)/Makefile
 
@@ -31,6 +31,9 @@ fwcopy:
 
 upload: fwcopy $(PROG)
 	./$(PROG) terkos.dat
+
+kupload: kernelcopy $(PROG)
+	./$(PROG) kernel.dat
 
 clean:
 	$(RM) $(PROG)
