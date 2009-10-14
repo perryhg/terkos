@@ -14,6 +14,7 @@ DEPENDS = " \
 	perl \
 	openssh \
 	gdbserver \
+	flite-alsa \
 	   "
 
 IMAGE_INSTALL = " \
@@ -51,6 +52,7 @@ IMAGE_INSTALL = " \
 	lrzsz \
 	vexutils \
 	vexpro-modules \
+	flite-alsa \
 	   "
 
 export IMAGE_BASENAME = "vexpro-image"
