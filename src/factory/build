@@ -1,0 +1,10 @@
+#!/bin/bash
+rm -rf factory/bin/*
+rm -rf factory/firmware/*
+cp test/test factory/bin
+cp test/logic/vexpro.bit factory/bin
+cp ../util/download/download factory/bin
+cp ../util/reimage/reimage factory/bin
+cp ../../redboot/redboot.bin factory/bin
+cp ../util/reimage/terkos.dat factory/bin
+tar cvf factor/bin/test.dat script
