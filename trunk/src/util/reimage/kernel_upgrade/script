@@ -1,0 +1,27 @@
+set echo on
+set comecho on
+set senddelay 0.01
+open com "/dev/ttyUSB0"
+set com 460800n81
+#
+print "Waiting for VEXPro to power on..."
+waitfor 100 "VEXPro 0x0069"
+print "done^m^j"
+send "^c^c^c"
+#
+print "Uploading kernel..."
+send "load -m ymodem -r -b 0x80000^m"
+ymodem "zImage"
+waitfor 60 "Redboot>"
+print "done^m^j"
+#
+print "Copying kernel to flash..."
+send "fis create -l 0x180000 zImage^m"
+waitfor 5 "?"
+send "y^m"
+waitfor 200 "Redboot>"
+print "done^m^j"
+#
+send "reset^m"
+print "Firmware update successful!^m^j"
+print "Unit will power off now.^m^j"
