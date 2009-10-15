@@ -70,7 +70,7 @@ int speed=B0; /* Set to B110, B150, B300,..., B38400 */
 char device[MAXPATH]; /* Comm device.  May be "-" */
 char token[MAXTOKEN];   /* For gettoken() returns */
 char scriptfile[MAXPATH]; /* Script file name */
-BOOL verbose=0; /* Log actions */
+BOOL verbose=1; /* Log actions */
 struct termio cons, stbuf, svbuf;  /* termios: svbuf=before, stbuf=while */
 int comfd=0; /* Communication file descriptor.  Defaults to stdin. */
 char msg[STRINGL]; /* Massage messages here */
@@ -1023,10 +1023,6 @@ BOOL getonoroff(void) {
 }
 
 void setcom(void) {
-  if (!com_opened) {
-    strcpy(device, DEFAULT_DEVICE);
-    opendevice();
-  }
   stbuf.c_cflag &= ~(CBAUD | CSIZE | CSTOPB | CLOCAL | PARENB | ICANON | CRTSCTS);
   stbuf.c_cflag |= (speed | bits | CREAD | clocal | parity | stopbits );
   if (ioctl(comfd, TCSETA, &stbuf) < 0) {
@@ -1069,6 +1065,10 @@ void doset(void) {
     ignorecase=getonoroff();
   }
   else if(strcmp(token,"com")==0) {
+    if (!com_opened) {
+      strcpy(device, DEFAULT_DEVICE);
+      opendevice();
+    }
     skipspaces();
     if(script[pc]=='$' || script[pc]=='\'' || script[pc]=='"') {
       getstring();
@@ -1357,6 +1357,8 @@ void opendevice(void) {
     }
   }
   else comfd=0;
+  sprintf(msg,"Using device %s",device);
+  vmsg(msg);
   com_opened = 1;
   if (ioctl (comfd, TCGETA, &svbuf) < 0) {
     sprintf(msg,"Can't ioctl get device %s",device);
@@ -1549,7 +1551,7 @@ int doscript(void) {
       if (file==NULL)
 	{
 	  sprintf(msg, "Can't find file %s", string);
-	  vmsg(msg);
+	  serror(msg,5);
 	}
       else
 	{
