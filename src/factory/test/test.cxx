@@ -701,7 +701,11 @@ int testPowerDown()
   while(1)
     {
       if (g_kp->GetKey(false)==KP_KEY_OK)
-	g_power->PowerOff();
+	{
+	  printf("Powering off...\n");
+	  usleep(100);
+	  g_power->PowerOff();
+	}
       if (g_kp->GetKey(false))
 	return 0;
      }
