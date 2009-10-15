@@ -1,17 +1,21 @@
 #!/bin/bash
 # program bootloader
-if bootloader;
+if ./bootloader $1;
 then
    echo "Press enter to continue, q to quit."
    read INPUT
+   if [ !$INPUT ];
+   then
+      INPUT=c
+   fi
    if [ $INPUT = "q" ];
    then
       exit 1
    fi
 
-   if program $1;
+   if ./program $1;
    then
-       test $1	   
+      ./test $1	   
    fi
 fi
      

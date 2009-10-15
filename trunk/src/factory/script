@@ -1,0 +1,30 @@
+set echo on
+set comecho on
+set senddelay 0.01
+set com 460800n81
+#
+print "Waiting for VEXPro to finish booting..."
+waitfor 100 "ogin:"
+send "root^m"
+waitfor 5 "word:"
+send "qwerk^m"
+waitfor 5 "#"
+send "mount -t nfs -o nolock "
+send $env("IPADDR")
+send ":"
+send $env("FACTORY_DIR")
+send " /mnt^m"
+waitfor 15 "#"
+send "rmmod qemotor^m"
+waitfor 5 "#"
+send "rmmod qeinterrupt^m"
+waitfor 5 "#"
+send "fpgac /mnt/firmware/vexqwerk.bit^m"
+waitfor 5 "#"
+send "modprobe qeinterrupt^m"
+waitfor 5 "#"
+send "modprobe qemotor^m"
+waitfor 5 "#"
+send "/mnt/bin/test^m"
+waitfor 3600 "off"
+printf "Test complete^m"

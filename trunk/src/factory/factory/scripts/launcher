@@ -1,10 +1,12 @@
 #!/bin/bash
 
-USB_SERIAL_DEVS0=`ls /dev/ttyUSB*`
-cat ../version
+echo "VEXPro firmware programming and functional test -- launcher utility"
+echo "Firmware" `cat ../version`
+
+USB_SERIAL_DEVS0=`ls /dev/ttyUSB* 2>/dev/null`
 while true
 do 
-   USB_SERIAL_DEVS1=`ls /dev/ttyUSB*`
+   USB_SERIAL_DEVS1=`ls /dev/ttyUSB* 2>/dev/null`
    for i in $USB_SERIAL_DEVS1;
    do
       FOUND=0
@@ -17,7 +19,7 @@ do
       done
       if [ $FOUND -eq 0 ];
       then
-         echo $i
+         echo "Launching" $i
 	 gnome-terminal -e "./all $i" 
       fi
    done

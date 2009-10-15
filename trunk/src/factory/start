@@ -6,7 +6,8 @@ if ncftp ftp.cmu.edu factory.tar.bz2.md5;
 then 
    if md5sum -c factory.tar.bz2.md5;
    then
-      scripts/launcher
+      cd factory/scripts
+      ./launcher
    else
       echo "New version of firmware available, downloading..."
       if ncftp ftp.cmu.edu factory.tar.bz2;
@@ -16,7 +17,8 @@ then
             echo "Extracting..."
 	    rm -rf factory
             tar xvfj factory.tar.bz2.md5
-            scripts/launcher
+	    cd factory/scripts
+            ./launcher
          else
 	    echo "Download error, try running start again."
          fi

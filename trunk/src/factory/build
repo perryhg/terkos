@@ -2,9 +2,9 @@
 rm -rf factory/bin/*
 rm -rf factory/firmware/*
 cp test/test factory/bin
-cp test/logic/vexpro.bit factory/bin
+cp test/logic/vexpro.bit factory/firmware
 cp ../util/download/download factory/bin
 cp ../util/reimage/reimage factory/bin
-cp ../../redboot/redboot.bin factory/bin
-cp ../util/reimage/terkos.dat factory/bin
-tar cvf factor/bin/test.dat script
+cp ../redboot/redboot.bin factory/firmware
+cp ../util/reimage/terkos.dat factory/firmware
+tar cvf factory/firmware/test.dat script
