@@ -35,50 +35,12 @@ const string FirmwareVersionManager::getMinorVersion() const
 
 const string FirmwareVersionManager::getRevision() const
    {
-   string str = getStringValue(REVISION_PROPERTY);
-
-   // The revision number is inserted by SVN by keyword replacement, so we need to parse
-   // a string that looks like this:
-   //
-   //    "$LastChangedRevision: 866 $"
-   //
-   // to pick out just the revision number.
-   size_t pos = str.find_first_of(" ");
-   if (pos != string::npos && pos + 1 != string::npos)
-      {
-      str = str.substr(pos + 1);
-      pos = str.find_first_of(" ");
-      if (pos != string::npos && pos + 1 != string::npos)
-         {
-         return str.substr(0, pos);
-         }
-      }
-
-   return str;
+   return getStringValue(REVISION_PROPERTY);
    }
 
 const string FirmwareVersionManager::getTimestamp() const
    {
-   string str = getStringValue(TIMESTAMP_PROPERTY);
-
-   // The timestamp is inserted by SVN by keyword replacement, so we need to parse
-   // a string that looks like this:
-   //
-   //    "$LastChangedDate: 2009-08-12 12:25:36 -0400 (Wed, 12 Aug 2009) $"
-   //
-   // to pick out just the revision number.
-   size_t pos = str.find_first_of(" ");
-   if (pos != string::npos && pos + 1 != string::npos)
-      {
-      str = str.substr(pos + 1);
-      pos = str.find_last_of(" ");
-      if (pos != string::npos && pos + 1 != string::npos)
-         {
-         return str.substr(0, pos);
-         }
-      }
-
-   return str;
+   return getStringValue(TIMESTAMP_PROPERTY);
    }
 
 Json::Value FirmwareVersionManager::getJSON()
