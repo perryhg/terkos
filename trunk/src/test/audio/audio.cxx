@@ -4,9 +4,11 @@
 #include "memmap.h"
 #include "9302hw.h"
 #include "qwerkhw.h"
+#include "qeaudio.h"
 
 int main(int argc, char **argv)
 {
+#if 0
   int i, res;
   unsigned short s, read;
 
@@ -35,6 +37,16 @@ int main(int argc, char **argv)
     usleep(200000);
   
   *hw.m_p9302hw->m_fpga.Ushort(QHW_AUDIO_VOLUME) = 0;
+#endif
+#if 1
+  CQEAudioController &audio = CQEAudioController::GetRef();
+
+  audio.SetVolume(40);
+  //audio.PlayClip("drums.wav");
+  audio.Talk("hello there this is your friendly computer");
+  //audio.PlayTone(100, 200);
+
+#endif
 }
 
   
