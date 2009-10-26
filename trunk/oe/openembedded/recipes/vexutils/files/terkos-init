@@ -10,13 +10,13 @@ set -e
 
 case "$1" in
     start)
+	echo -n "initializing FPGA... "
+	/opt/bin/fpgac /opt/lib/vexpro.bit
+        echo "done."
 	echo -n "loading kernel modules... "
 	modprobe qeinterrupt
 	modprobe qemotor
 	echo "done."
-	echo -n "initializing FPGA... "
-	/opt/bin/fpgac /opt/lib/vexpro.bit
-        echo "done."
         echo -n "starting $DESC: $NAME... "
         start-stop-daemon -S -b -n $NAME -a $DAEMON -- $ARGS
         echo "done."
