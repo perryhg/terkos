@@ -8,6 +8,8 @@ CQEServo::CQEServo()
   long addr = QES_DEFAULT_ADDR;
 
   m_p9302hw = C9302Hardware::GetPtr();
+  if (m_p9302hw->GetBitstreamMajorVersion()!=0xa0)
+    throw std::runtime_error("wrong FPGA bitstream version");
 
   m_num = QES_DEFAULT_SERVOS;
   m_divider = m_p9302hw->m_fpga.Ushort(addr);

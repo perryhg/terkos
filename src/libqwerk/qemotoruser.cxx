@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
+#include "9302hw.h"
 #include "qemotoruser.h"
 
 CQEMotorUser::CQEMotorUser(int axis0, int axis1, int axis2, int axis3)
@@ -11,6 +12,11 @@ CQEMotorUser::CQEMotorUser(int axis0, int axis1, int axis2, int axis3)
   char dev[0x10];
   int len;
   unsigned int axis;
+
+  C9302Hardware *phw = C9302Hardware::GetPtr();
+  if (phw->GetBitstreamMajorVersion()!=0xa0)
+    throw std::runtime_error("wrong FPGA bitstream version");
+  phw->Release();
 
   // open motor device
   strcpy(dev, QEM_DEVICE);
