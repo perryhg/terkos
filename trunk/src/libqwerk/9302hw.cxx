@@ -66,3 +66,20 @@ unsigned short C9302Hardware::GetAD(unsigned int channel)
 
   return val;
 }
+
+unsigned short C9302Hardware::GetBitstreamVersion()
+{
+  return *m_fpga.Ushort(0xfd0);
+}
+
+unsigned char C9302Hardware::GetBitstreamMinorVersion()
+{
+  unsigned short ver = GetBitstreamVersion();
+  return (ver&0xff);
+}
+
+unsigned char C9302Hardware::GetBitstreamMajorVersion()
+{
+  unsigned short ver = GetBitstreamVersion();
+  return ((ver>>8)&0xff);
+}

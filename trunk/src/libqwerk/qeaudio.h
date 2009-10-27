@@ -31,28 +31,7 @@ public:
   void SetVolume(unsigned char vol);
 
   int PlayTone(unsigned short frequency, int duration);
-  /**
-   * @brief Immediately play a sound clip
-   * @param clip Clip to play
-   * @param length Length of clip (bytes)
-   * @return QEAUDIO_RETURN_* code
-   * May be called if items in queue
-   * Will wait at least for currently executing command or play request
-   * If there are any items in queue, will likely (but not assuredly)
-   *   be played after currently executing command and before next item
-   *   in queue
-   */
   int PlayClip(const char clip[], int length);
-  /**
-   * @brief Immediately play a sound clip
-   * @param filename Filename of clip to play
-   * @return QEAUDIO_RETURN_* code
-   * May be called if items in queue
-   * Will wait at least for currently executing command or play request
-   * If there are any items in queue, will likely (but not assuredly)
-   *   be played after currently executing command and before next item
-   *   in queue
-   */
   int PlayClip(const char *filename);         
   int Talk(const char *string);
 

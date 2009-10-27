@@ -78,6 +78,10 @@ public:
     return m_gpio.Uint(0x44);
   }
 
+  unsigned short GetBitstreamVersion();
+  unsigned char GetBitstreamMinorVersion();
+  unsigned char GetBitstreamMajorVersion();
+
   // you can access these directly
   CMemMap m_scr;
   CMemMap m_gpio;
