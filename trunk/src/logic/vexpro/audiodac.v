@@ -73,7 +73,7 @@ module AudioDAC(Async, Asdo, Arstn, Asdi, AbitClk, Out, Reset, Clk,
    begin
       if (Reset)
          begin
-			VolumeData <= 8'h60;
+			VolumeData <= 8'h20;
 			Mode <= 2'b10;
 			FreqData <= 16'h0000;
 		   end
