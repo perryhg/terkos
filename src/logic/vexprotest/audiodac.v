@@ -31,15 +31,16 @@ module AudioDAC(Async, Asdo, Arstn, Asdi, AbitClk, Out, Reset, Clk,
 	reg WaveOut;
 	reg Out;
 	reg [15:0] MixedAudioData;
+	reg [15:0] AmpAudioData;
 	reg [11:0] MixedCompare;
-	reg [11:0] MixedComparePrev;
+	reg [15:0] MixedPrev;
+	reg [1:0] Mode;
 	reg Oldsign;
 	
    reg AbitClkSync;
 	reg AsyncSync;
 	reg AsdoSync;
 	reg AbitClkEdgeDetect;
-	reg [7:0] Volume;
 	reg [3:0] BitCount;
 	
 	// Debugging IO
@@ -72,33 +73,38 @@ module AudioDAC(Async, Asdo, Arstn, Asdi, AbitClk, Out, Reset, Clk,
    always @(posedge Clk)
    begin
       if (Reset)
-      begin
-			VolumeData <= 8'h00;
+         begin
+			VolumeData <= 8'h20;
+			Mode <= 2'b10;
 			FreqData <= 16'h0000;
-		end
+		   end
 		else if (En & Wr)
-		begin
-			if (Addr == 0)
-				VolumeData <= DataWr;
+	   	begin
+			if (Addr == 0)  
+			   Mode <= DataWr[1:0];
 			else if (Addr == 1)
+				VolumeData <= DataWr;
+			else if (Addr == 2)
 				FreqData <= DataWr;
 		end
 	end
 	
    always @(posedge Clk)
-   begin
+   begin 
        AbitClkSync <= AbitClk;
        AsyncSync <= Async;
        AsdoSync <= Asdo;
    end
 	
-	always @(Addr or VolumeData or FreqData)
+	always @(Addr or VolumeData or FreqData or Mode)
    begin
 		if (Addr == 0)
-			DataRd = {8'h00, VolumeData};
+			DataRd = {14'h0000, Mode};
 		else if (Addr == 1)
+			DataRd = {8'h00, VolumeData};
+		else if (Addr == 2)
 			DataRd = FreqData;
-		else
+		else 
 			DataRd = 16'hxxxx;
 	 end
 	//End debugging stuff
@@ -140,7 +146,7 @@ module AudioDAC(Async, Asdo, Arstn, Asdi, AbitClk, Out, Reset, Clk,
 			DivCount <= 0;
 			WaveOut <= 0;
 			MixedAudioData = 0;
-			Volume <= 100;
+			AmpAudioData = 0;
 			Out <= 0;
 			TimeoutCount <= 0;
 		   end
@@ -150,38 +156,43 @@ module AudioDAC(Async, Asdo, Arstn, Asdi, AbitClk, Out, Reset, Clk,
 			
 			if (DivCount == 0)
 			   begin
-				MixedComparePrev <= MixedCompare;
-				if (MixedComparePrev != MixedCompare)
+				MixedPrev <= MixedAudioData;
+				if (MixedPrev != MixedAudioData)
 					TimeoutCount <= 0;
-				else if (TimeoutCount != 12'b111111111111)
+				else if (TimeoutCount != 12'hfff)
 					TimeoutCount <= TimeoutCount + 1;
 					
 				WaveOut <= 1'b1;
 				MixedAudioData = {LeftAudioData[11],  LeftAudioData[11], LeftAudioData[11], LeftAudioData[11], LeftAudioData[11], LeftAudioData[11:1]} +
 					{RightAudioData[11],  RightAudioData[11], RightAudioData[11], RightAudioData[11], RightAudioData[11], RightAudioData[11:1]};
 				Oldsign = MixedAudioData[11];
-				MixedAudioData = MixedAudioData * Volume;
+				AmpAudioData = MixedAudioData * VolumeData;
 			   end
-			else if (DivCount >= MixedCompare) // && {MixedAudioData[17], MixedAudioData[16]} == 2'b00)
+			else if (DivCount >= MixedCompare)
 				WaveOut <= 1'b0; 
 		   end
 			
-		if (VolumeData != 0) 
+		if (Mode == 2'b01) 
 			Out <= VolumeOut & FreqOut;
-		else if (TimeoutCount != 12'b111111111111)
-			Out <= WaveOut;
+		else if (Mode == 2'b10)
+		   begin 
+			if (TimeoutCount != 12'hfff)
+			   Out <= WaveOut;
+			else
+				Out <= 1'b0;
+			end
 		else
 			Out <= 1'b0;
-	   end
+	end	
    
-	always @(Oldsign or MixedAudioData)
+	always @(Oldsign or AmpAudioData)
 	   begin
- 		if ({Oldsign, MixedAudioData[15]} == 2'b01)
+ 		if ({Oldsign, AmpAudioData[15]} == 2'b01)
 			MixedCompare = 12'hfff;
-		else if ({Oldsign, MixedAudioData[15]} == 2'b10)
+		else if ({Oldsign, AmpAudioData[15]} == 2'b10)
 			MixedCompare = 12'h000;
 		else
-		   MixedCompare = MixedAudioData[15:4] + 12'h800;
+		   MixedCompare = AmpAudioData[15:4] + 12'h800;
 		end
 		
 	always @(posedge Clk)
