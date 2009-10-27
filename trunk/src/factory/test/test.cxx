@@ -422,14 +422,15 @@ int testAudio()
   g_lcd->Clear();
   g_lcd->printf("Audio test");
 
+  g_audio->SetVolume(50);
   while(1)
     {
-      g_audio->playTone(700, 64, 150);
+      g_audio->PlayTone(700, 150);
 
       if (g_kp->GetKey(false))
 	return 0;
 
-      g_audio->playTone(350, 64, 150);
+      g_audio->PlayTone(350, 150);
 
       if (g_kp->GetKey(false))
 	return 0;
@@ -733,11 +734,17 @@ int main(int argc, char **argv)
     }
 #endif
 
+  g_9302 = C9302Hardware::GetPtr();
+  if (g_9302->GetBitstreamVersion()!=0xa0ff)
+    {
+      printf("wrong FPGA bitstrem version -- need test bitstream\n");
+      exit(1);
+    }
   g_kp = CKeypad::GetPtr();
   g_lcd = CTextLcd::GetPtr();
   g_led = CQELEDController::GetPtr();
-  g_9302 = C9302Hardware::GetPtr();
   g_audio = CQEAudioController::GetPtr();
+  printf("success\n");
   g_analog = CQEAnalog::GetPtr();
   g_power = CQEPower::GetPtr();
 
