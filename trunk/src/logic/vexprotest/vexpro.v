@@ -160,10 +160,11 @@ module Vexpro(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
 	// RC Servo
 	wire RcsEn;
 	wire [15:0] RcsDataRd;
+	wire [3:0] GpioDummy;
    assign RcsEn = Cs & Addr[11:6]==6'b010000;
 
-	RCServo12 InstRCServo(.Addr(Addr[5:1]), .DataRd(RcsDataRd), .DataWr(Data), .En(RcsEn), .Rd(Rd), .Wr(Wr), 
-	   .P({P[27], P[26], P[25], P[24], P[23], P[22], P[21], P[20], 
+	GpioInt InstGpioInt2(.Addr(Addr[3:1]), .DataRd(RcsDataRd), .DataWr(Data), .En(RcsEn), .Rd(Rd), .Wr(Wr), 
+		.Port({GpioDummy, P[27], P[26], P[25], P[24], P[23], P[22], P[21], P[20], 
 		    P[19], P[18], P[17], P[16]}), 
 		.Reset(Reset), .Clk(Clk));
 
