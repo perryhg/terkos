@@ -4,15 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include <algorithm>
-#include <string>
-#include <iostream>
 #include <unistd.h>
 #include "singleton.h"
 #include "property.h"
 #include "9302hw.h"
-
-using namespace std;
 
 // Properties
 #define TL_OBJECT           1
