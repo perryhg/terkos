@@ -1,5 +1,6 @@
 #include "qeaudio.h"
 
+SINGLETON_REGISTER(CQEAudioController);
 
 CQEAudioController::CQEAudioController()
 {

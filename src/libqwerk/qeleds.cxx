@@ -20,6 +20,9 @@ CQELEDController::CQELEDController()
 {
   m_p9302hw = C9302Hardware::GetPtr();
 
+  if (m_p9302hw->GetBitstreamMajorVersion()!=0xa0)
+    throw std::runtime_error("wrong FPGA bitstream version");
+
   m_ledreg = m_p9302hw->m_fpga.Ushort(QEL_DEFAULT_ADDR);
  
 #if 0
