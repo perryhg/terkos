@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 #if 1
   CQEAudioController &audio = CQEAudioController::GetRef();
 
-  audio.SetVolume(40);
+  audio.SetVolume(atoi(argv[1]));
   //audio.PlayClip("drums.wav");
   audio.Talk("hello there this is your friendly computer");
   //audio.PlayTone(100, 200);

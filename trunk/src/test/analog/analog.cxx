@@ -13,6 +13,9 @@ int main(int argc, char **argv)
   long val;
   pp->GetProperty(QP_PROP_BREAKER_STATE, &val);
   printf("breaker %x\n", val);
+  pp->GetProperty(QP_PROP_MAIN_BATT_VOLTAGE, &val);
+  printf("breaker %d\n", val);
+  exit(0);
 #endif
 #if 0
   while(1)
@@ -32,15 +35,15 @@ int main(int argc, char **argv)
 #if 1
   while(1)
     {
-#if 0
-    printf("%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n",
+#if 1
+    printf("%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",
 	   phw->GetADVoltage(0), phw->GetADVoltage(1), phw->GetADVoltage(2), phw->GetADVoltage(3),
 	   phw->GetADVoltage(4), phw->GetADVoltage(5), phw->GetADVoltage(6), phw->GetADVoltage(7),
 	   phw->GetADVoltage(8), phw->GetADVoltage(9), phw->GetADVoltage(10), phw->GetADVoltage(11),
 	   phw->GetADVoltage(12), phw->GetADVoltage(13), phw->GetADVoltage(14), phw->GetADVoltage(15));
 #endif
 #if 1
-    printf("%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n",
+    printf("# %d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n",
 	   phw->GetADVoltage(16), phw->GetADVoltage(17), phw->GetADVoltage(18), phw->GetADVoltage(19),
 	   phw->GetADVoltage(20), phw->GetADVoltage(21), phw->GetADVoltage(22), phw->GetADVoltage(23), phw->GetADVoltage(24));
 #endif
