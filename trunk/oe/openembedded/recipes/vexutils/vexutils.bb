@@ -4,7 +4,7 @@ PV = "0.0+svn${SRCREV}"
 PR = "r0"
 DEPENDS = ""
 
-SRC_URI = "svn://terkos.googlecode.com/svn/trunk;module=src;proto=http \
+SRC_URI = "svn://terkos.googlecode.com/svn/trunk;module=src;rev=head;proto=http \
 	file://terkos-init \
 	file://terkos-lcd-menu \
 	file://terkos-user-program-launcher \
