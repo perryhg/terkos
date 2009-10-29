@@ -7,7 +7,7 @@ DEPENDS = "virtual/kernel"
 
 PR = "r1"
 
-SRC_URI = "svn://terkos.googlecode.com/svn/trunk;module=src;proto=http \
+SRC_URI = "svn://terkos.googlecode.com/svn/trunk;module=src;rev=head;proto=http \
  "
 
 S = "${WORKDIR}/src/module"
