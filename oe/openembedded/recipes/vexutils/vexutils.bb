@@ -12,7 +12,9 @@ SRC_URI = "svn://terkos.googlecode.com/svn/trunk;module=src;rev=head;proto=http 
 	"
 S = "${WORKDIR}/src"
 
-PACKAGES = "vexutils"
+# Make sure the .debug directories are not installed
+FILES_${PN} = "/opt /srv /etc"
+FILES_${PN}-dbg = "/opt/bin/.debug /opt/lib/.debug"
 
 do_install() {
 	   rsync --exclude=.debug -av dist/ "${D}/"
@@ -46,5 +48,3 @@ else
 	update-rc.d -f terkos-user-program-launcher remove
 fi
 }
-
-FILES_${PN} = /opt /srv /etc
