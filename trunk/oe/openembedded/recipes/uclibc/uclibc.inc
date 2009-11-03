@@ -208,6 +208,9 @@ do_install() {
 		rmdir ${D}/usr/bin
 	fi
 
+	# hack! for reasons unknown this link is missing...
+	ln -s ../../lib/libc.so.0 ${D}${prefix}/lib/libc.so
+
         oe_runmake "SSP_ALL_CFLAGS=${TARGET_LINK_HASH_STYLE}" utils
         oe_runmake STRIPTOOL=true PREFIX=${D} DEVEL_PREFIX=${prefix}/ RUNTIME_PREFIX=/ \
                 install_utils
