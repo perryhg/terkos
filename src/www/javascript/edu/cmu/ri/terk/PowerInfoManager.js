@@ -182,7 +182,7 @@ if (!window['$'])
 
       this.getMainBatteryVoltage = function()
          {
-         return getJSONProperty(json, 'power-info.main-battery.voltage');
+         return getJSONProperty(json, 'power-info.main-battery.voltage') / 1000;
          };
 
       this.getMainBatteryState = function()
@@ -192,7 +192,7 @@ if (!window['$'])
 
       this.getBackupBatteryVoltage = function()
          {
-         return getJSONProperty(json, 'power-info.backup-battery.voltage');
+         return getJSONProperty(json, 'power-info.backup-battery.voltage') / 1000;
          };
 
       this.getBackupBatteryState = function()
@@ -202,7 +202,7 @@ if (!window['$'])
 
       this.getIO5VVoltage = function()
          {
-         return getJSONProperty(json, 'power-info.IO-5V.voltage');
+         return getJSONProperty(json, 'power-info.IO-5V.voltage') / 1000;
          };
 
       this.getIO5VState = function()
@@ -212,7 +212,7 @@ if (!window['$'])
 
       this.getMain5VVoltage = function()
          {
-         return getJSONProperty(json, 'power-info.main-5V.voltage');
+         return getJSONProperty(json, 'power-info.main-5V.voltage') / 1000;
          };
 
       this.getBreakersState = function()
