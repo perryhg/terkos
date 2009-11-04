@@ -206,7 +206,7 @@ static int __init qe_motor_init(void)
     {
       volatile unsigned long *syscon = ioremap(0x80930000, 0xc4);
       syscon[0x30] = 0xaa;
-      syscon[0x20] |= 0x08000800;
+      syscon[0x20] |= 0x08120800;
       iounmap((void *)syscon);
       release_mem_region(0x80930000, 0xc4);
     }
