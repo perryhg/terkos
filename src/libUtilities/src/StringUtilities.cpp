@@ -20,6 +20,22 @@ const string StringUtilities::convertIntToString(const int val, const unsigned i
    return s;
    }
 
+const string StringUtilities::convertFloatToString(const float val, const unsigned int desiredPaddedLength, const char paddingChar)
+   {
+   std::stringstream out;
+   out << val;
+   string s = out.str();
+
+   if (desiredPaddedLength > s.length())
+      {
+      const unsigned int numPaddedChars = desiredPaddedLength - s.length();
+      string padding(numPaddedChars, paddingChar);
+      return padding.append(s);
+      }
+
+   return s;
+   }
+
 const void StringUtilities::tokenizeString(const string& str, vector<string>& tokens, const string& delimiters)
    {
    // Skip delimiters at beginning.
