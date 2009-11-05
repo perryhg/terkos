@@ -4,22 +4,55 @@
 
 #include "AudioConfigManager.h"
 
-const unsigned int AudioConfigManager::MIN_VOLUME = 0;
-const unsigned int AudioConfigManager::MAX_VOLUME = 10;
+const unsigned char AudioConfigManager::MIN_VOLUME = 0;
+const unsigned char AudioConfigManager::MAX_VOLUME = 10;
 const string AudioConfigManager::CONFIG_FILENAME = "audio_config.json";
 const string AudioConfigManager::DEFAULT_CONFIG_FILENAME = "audio_config.default.json";
 const string AudioConfigManager::VOLUME_PROPERTY = "audio.volume.level";
 const string AudioConfigManager::ARE_ALERTS_ENABLED_PROPERTY = "audio.alerts.enabled";
+const string AudioConfigManager::SAMPLE_AUDIO_FILE = "/opt/media/audio/pop.wav";
 
-const unsigned int AudioConfigManager::getVolumeLevel() const
+const unsigned char AudioConfigManager::getVolumeLevel() const
    {
-   return getUnsignedIntValue(VOLUME_PROPERTY);
+   return (char)getUnsignedIntValue(VOLUME_PROPERTY);
    }
 
-bool AudioConfigManager::setVolumeLevel(unsigned int volume)
+bool AudioConfigManager::setVolumeLevel(unsigned char volume)
    {
-   // TODO: also set the volume in libqwerk or somesuch
-   return setUnsignedIntValue(VOLUME_PROPERTY, std::min(volume, MAX_VOLUME));
+   const unsigned char boundedVolume =  std::min(volume, MAX_VOLUME);
+
+   try
+      {
+      CQEAudioController &audio = CQEAudioController::GetRef();
+      audio.SetVolume(convertVolume(boundedVolume));
+      CQEAudioController::Release();
+      }
+   catch (...)
+      {
+      // TODO: add logging
+      cerr << "AudioConfigManager::setVolumeLevel(): failed to get CQEAudioController reference required to set volume." << endl;
+      }
+
+   return setUnsignedIntValue(VOLUME_PROPERTY, boundedVolume);
+   }
+
+const void AudioConfigManager::playSampleSound(unsigned char volume)
+   {
+   const unsigned char currentVolume = getVolumeLevel();
+
+   try
+      {
+      CQEAudioController &audio = CQEAudioController::GetRef();
+      audio.SetVolume(convertVolume(volume));
+      audio.PlayClip(SAMPLE_AUDIO_FILE.c_str());
+      audio.SetVolume(convertVolume(currentVolume));
+      CQEAudioController::Release();
+      }
+   catch (...)
+      {
+      // TODO: add logging
+      cerr << "AudioConfigManager::playSampleSound(): failed to get CQEAudioController reference required to play the sample sound." << endl;
+      }
    }
 
 const bool AudioConfigManager::areAlertsEnabled() const
@@ -29,7 +62,7 @@ const bool AudioConfigManager::areAlertsEnabled() const
 
 bool AudioConfigManager::setAlertsEnabled(const bool isEnabled)
    {
-   // TODO: also set the volume in libqwerk or somesuch (?)
+   // TODO: toggle audio alerts in the (currently nonexistent) alerts service
    return setBooleanValue(ARE_ALERTS_ENABLED_PROPERTY, isEnabled);
    }
 
@@ -58,7 +91,7 @@ const bool AudioConfigManager::setJson(Json::Value& config)
          revertToDefault();
 
          // set the VOLUME_PROPERTY
-         setVolumeLevel(volumeProperty->asUInt());
+         setVolumeLevel((char)volumeProperty->asUInt());
 
          // set the ARE_ALERTS_ENABLED_PROPERTY
          setAlertsEnabled(areAlertsEnabledProperty->asBool());
@@ -77,4 +110,10 @@ void AudioConfigManager::applyConfiguration()
 
    // call setJson which ensures that the config prefs are applied to the system
    setJson(config);
+   }
+
+const unsigned char AudioConfigManager::convertVolume(unsigned char volume)
+   {
+   // map the volume from 0-10 to 0-127
+   return (char)(std::min(volume, MAX_VOLUME) * 12.7);
    }

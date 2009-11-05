@@ -111,6 +111,11 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
             {
             jQuery("#volume").text(ui.value);
             audioConfigManager.setVolume(ui.value);
+            },
+         stop: function(event, ui)
+            {
+               //alert(event.or)
+            audioConfigManager.playSampleSound(ui.value);
             }
       });
 

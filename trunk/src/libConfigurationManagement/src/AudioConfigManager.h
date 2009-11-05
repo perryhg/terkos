@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include "ConfigFile.h"
+#include "qeaudio.h"
 
 using namespace std;
 
@@ -14,8 +15,8 @@ class AudioConfigManager : public ConfigFile
    {
    public:
 
-      static const unsigned int MIN_VOLUME;
-      static const unsigned int MAX_VOLUME;
+      static const unsigned char MIN_VOLUME;
+      static const unsigned char MAX_VOLUME;
 
       AudioConfigManager(const string& configFileDirectory = ConfigFile::DEFAULT_CONFIG_FILE_DIRECTORY) :
          ConfigFile(CONFIG_FILENAME, DEFAULT_CONFIG_FILENAME, configFileDirectory)
@@ -28,9 +29,11 @@ class AudioConfigManager : public ConfigFile
          // nothing to do
          }
 
-      const unsigned int getVolumeLevel() const;
+      const unsigned char getVolumeLevel() const;
 
-      bool setVolumeLevel(unsigned int volume);
+      bool setVolumeLevel(unsigned char volume);
+
+      const void playSampleSound(unsigned char volume);
 
       const bool areAlertsEnabled() const;
 
@@ -48,6 +51,9 @@ class AudioConfigManager : public ConfigFile
       static const string DEFAULT_CONFIG_FILENAME;
       static const string VOLUME_PROPERTY;
       static const string ARE_ALERTS_ENABLED_PROPERTY;
+      static const string SAMPLE_AUDIO_FILE;
+
+      const unsigned char convertVolume(unsigned char volume);
 
    };
 

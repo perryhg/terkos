@@ -11,11 +11,16 @@
  * To apply the configuration to the system, call the program with a "--apply-config"
  * argument.
  *
+ * To play a sample sound (e.g. to test the volume level), call the program
+ * with a "--play-sample" argument followed by a integer in the range [0,10]
+ * which specifies the volume.
+ *
  * Chris Bartley (bartley@cmu.edu)
  */
 
 #include <json/json.h>
 #include <AudioConfigManager.h>
+#include <cstdlib>
 
 using namespace std;
 
@@ -34,6 +39,14 @@ int main(int argc, char** argv)
          AudioConfigManager configManager;
 
          configManager.applyConfiguration();
+         }
+      else if (argc > 2 && strcmp(argv[1], "--play-sample") == 0)
+         {
+         int volume = atoi(argv[2]);
+
+         AudioConfigManager configManager;
+         
+         configManager.playSampleSound((unsigned char)volume);
          }
       }
    else
