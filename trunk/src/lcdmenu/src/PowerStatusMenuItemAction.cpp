@@ -10,7 +10,7 @@ const unsigned int PowerStatusMenuItemAction::NUM_NONBREAKER_COMPONENTS = 7;
 const unsigned int PowerStatusMenuItemAction::NUM_COMPONENTS = NUM_NONBREAKER_COMPONENTS + PowerInfoManager::NUM_BREAKERS;
 
 const string PowerStatusMenuItemAction::VOLTAGE_PROPERTY        = "voltage.label";
-const string PowerStatusMenuItemAction::STATE_PROPERTY         = "state.label";
+const string PowerStatusMenuItemAction::STATE_PROPERTY          = "state.label";
 const string PowerStatusMenuItemAction::MAIN_BATTERY_PROPERTY   = "main-battery.label";
 const string PowerStatusMenuItemAction::BACKUP_BATTERY_PROPERTY = "backup-battery.label";
 const string PowerStatusMenuItemAction::IO_5_VOLT_PROPERTY      = "io-5-volt.label";
@@ -98,7 +98,7 @@ void PowerStatusMenuItemAction::displayComponentDetails()
             displayComponentDetailsWorkhorse(
                getProperty(MAIN_BATTERY_PROPERTY, MAIN_BATTERY_DEFAULT_LABEL),
                getProperty(VOLTAGE_PROPERTY, VOLTAGE_DEFAULT_LABEL),
-               StringUtilities::convertIntToString(powerInfoManager.getMainBatteryVoltage())
+               StringUtilities::convertFloatToString(powerInfoManager.getMainBatteryVoltage()/1000.0)
             );
             break;
          case 1:
@@ -112,7 +112,7 @@ void PowerStatusMenuItemAction::displayComponentDetails()
             displayComponentDetailsWorkhorse(
                getProperty(BACKUP_BATTERY_PROPERTY, BACKUP_BATTERY_DEFAULT_LABEL),
                getProperty(VOLTAGE_PROPERTY, VOLTAGE_DEFAULT_LABEL),
-               StringUtilities::convertIntToString(powerInfoManager.getBackupBatteryVoltage())
+               StringUtilities::convertFloatToString(powerInfoManager.getBackupBatteryVoltage()/1000.0)
             );
             break;
          case 3:
@@ -126,7 +126,7 @@ void PowerStatusMenuItemAction::displayComponentDetails()
             displayComponentDetailsWorkhorse(
                getProperty(IO_5_VOLT_PROPERTY, IO_5_VOLT_DEFAULT_LABEL),
                getProperty(VOLTAGE_PROPERTY, VOLTAGE_DEFAULT_LABEL),
-               StringUtilities::convertIntToString(powerInfoManager.getIO5VVoltage())
+               StringUtilities::convertFloatToString(powerInfoManager.getIO5VVoltage()/1000.0)
             );
             break;
          case 5:
@@ -140,7 +140,7 @@ void PowerStatusMenuItemAction::displayComponentDetails()
             displayComponentDetailsWorkhorse(
                getProperty(MAIN_5_VOLT_PROPERTY, MAIN_5_VOLT_DEFAULT_LABEL),
                getProperty(VOLTAGE_PROPERTY, VOLTAGE_DEFAULT_LABEL),
-               StringUtilities::convertIntToString(powerInfoManager.getMain5VVoltage())
+               StringUtilities::convertFloatToString(powerInfoManager.getMain5VVoltage()/1000.0)
             );
             break;
          default:

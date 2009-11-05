@@ -25,6 +25,13 @@ class StringUtilities
       static const string convertIntToString(const int val, const unsigned int desiredPaddedLength=0, const char paddingChar=' ');
 
       /**
+       * Converts the given float value to a string, optionally left-padding the created string to the given
+       * desiredPaddedLength with the given paddingChar.  Padding is only performed if the desiredPaddedLength
+       * is greater than the length of the string representation of the float.
+       */
+      static const string convertFloatToString(const float val, const unsigned int desiredPaddedLength=0, const char paddingChar=' ');
+
+      /**
        * Converts the given string to a number, returning a boolean which is true if the conversion succeeded, false
        * otherwise.
        */
