@@ -16,6 +16,7 @@ WWW_DIR=www
 DIST_SRV_DIR=$(DIST_DIR)/srv
 DIST_CGI_DIR=$(DIST_SRV_DIR)/www/cgi-bin
 DIST_BIN_DIR=$(DIST_DIR)/opt/bin
+DIST_AUDIO_DIR=$(DIST_DIR)/opt/media/audio
 DIST_CONFIG_DIR=$(DIST_DIR)/opt/config
 DIST_LIB_DIR=$(DIST_DIR)/opt/lib
 DIST_SCRIPTS_DIR=$(DIST_DIR)/opt/scripts
@@ -37,6 +38,9 @@ $(DIST_CGI_DIR):
 $(DIST_BIN_DIR):
 	mkdir -p $@
 
+$(DIST_AUDIO_DIR):
+	mkdir -p $@
+
 $(DIST_CONFIG_DIR):
 	mkdir -p $@
 
@@ -54,6 +58,7 @@ $(DIST_USR_BIN_DIR):
 
 dist: $(DIST_CGI_DIR) \
       $(DIST_BIN_DIR) \
+      $(DIST_AUDIO_DIR) \
       $(DIST_CONFIG_DIR) \
       $(DIST_LIB_DIR) \
       $(DIST_SCRIPTS_DIR) \
@@ -80,6 +85,9 @@ dist: $(DIST_CGI_DIR) \
 	@echo 'Copying libraries...'
 	cp $(LCD_MENU_DIR)/dist/*.so $(DIST_LIB_DIR)
 
+	@echo 'Copying media...'
+	cp $(LIB_CONFIGURATION_MANAGEMENT_DIR)/dist/*.wav $(DIST_AUDIO_DIR)/
+	
 	@echo 'Copying scripts...'
 	cp $(SCRIPTS_DIR)/*.pl $(DIST_SCRIPTS_DIR)
 
@@ -98,6 +106,7 @@ dist: $(DIST_CGI_DIR) \
 	ln -s /opt/scripts/getWirelessNetworkingConfigAsJSON.pl   $(DIST_CGI_DIR)/getWirelessNetworkingConfigAsJSON.pl
 	ln -s /opt/scripts/getWirelessNetworkingStatusAsJSON.pl   $(DIST_CGI_DIR)/getWirelessNetworkingStatusAsJSON.pl
 	ln -s /opt/scripts/getWirelessNetworksAsJSON.pl           $(DIST_CGI_DIR)/getWirelessNetworksAsJSON.pl
+	ln -s /opt/scripts/playSampleSound.pl                     $(DIST_CGI_DIR)/playSampleSound.pl
 	ln -s /opt/scripts/resetPreferences.pl                    $(DIST_CGI_DIR)/resetPreferences.pl
 	ln -s /opt/scripts/saveAudioConfig.pl                     $(DIST_CGI_DIR)/saveAudioConfig.pl
 	ln -s /opt/scripts/saveLCDConfig.pl                       $(DIST_CGI_DIR)/saveLCDConfig.pl

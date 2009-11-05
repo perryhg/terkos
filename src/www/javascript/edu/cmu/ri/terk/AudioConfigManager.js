@@ -189,6 +189,17 @@ if (!JSON)
             }
          };
 
+      this.playSampleSound = function(volume)
+         {
+         // send the JSON to the backend
+         jQuery.ajax(
+         {
+            url: host + '/cgi-bin/playSampleSound.pl',
+            type: 'POST',
+            data: "volume=" + volume
+         });
+         };
+
       var getIsModified = function()
          {
          return (JSON.stringify(json) != stringifiedOriginalJSON);

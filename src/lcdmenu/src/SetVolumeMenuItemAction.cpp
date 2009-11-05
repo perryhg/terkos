@@ -59,6 +59,7 @@ void SetVolumeMenuItemAction::rightEvent()
       {
       volume = MAX_VOLUME;
       }
+   configManager.playSampleSound(volume);
    getCharacterDisplay()->setLine(0, generateVolumeLine());
    getCharacterDisplay()->setLine(1, generateVolumeGraphLine());
    }
@@ -70,6 +71,7 @@ void SetVolumeMenuItemAction::leftEvent()
       {
       volume = MIN_VOLUME;
       }
+   configManager.playSampleSound(volume);
    getCharacterDisplay()->setLine(0, generateVolumeLine());
    getCharacterDisplay()->setLine(1, generateVolumeGraphLine());
    }
