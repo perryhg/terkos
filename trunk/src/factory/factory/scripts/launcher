@@ -20,7 +20,10 @@ do
       if [ $FOUND -eq 0 ];
       then
          echo "Launching" $i
-	 gnome-terminal -e "./all $i" 
+	 PORT=`echo $i | sed -e 's/^.*\(.\)$/\1/'`
+	 X=$(((PORT%3)*338))
+	 Y=$(((PORT/3)*275))
+	 gnome-terminal -e "./all $i" -t "$i" --geometry=39x13+$X+$Y 
       fi
    done
       

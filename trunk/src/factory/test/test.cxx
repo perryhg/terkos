@@ -694,6 +694,8 @@ int testServo()
 
 int testPowerDown()
 {
+  int key;
+
   g_lcd->Clear();
   g_lcd->printf("Power down test");
   g_lcd->MoveCursor(1, 0);      
@@ -701,13 +703,14 @@ int testPowerDown()
 
   while(1)
     {
-      if (g_kp->GetKey(false)==KP_KEY_OK)
+      key = g_kp->GetKey(false);
+      if (key==KP_KEY_OK)
 	{
 	  printf("Powering off...\n");
-	  usleep(100);
+	  sleep(1);
 	  g_power->PowerOff();
 	}
-      if (g_kp->GetKey(false))
+      else if (key)
 	return 0;
      }
 }
