@@ -4,12 +4,14 @@ set senddelay 0.01
 set com 460800n81
 #
 print "Waiting for VEXPro to finish booting..."
-waitfor 100 "ogin:"
+waitfor 200 "ogin:"
 send "root^m"
 waitfor 5 "word:"
 send "qwerk^m"
 waitfor 5 "#"
-send "mount -t nfs -o nolock "
+send "killall LCDMenu^m"
+waitfor 5 "#"
+send "mount -t nfs -o nolock -r "
 send $env("IPADDR")
 send ":"
 send $env("FACTORY_DIR")
@@ -19,7 +21,7 @@ send "rmmod qemotor^m"
 waitfor 5 "#"
 send "rmmod qeinterrupt^m"
 waitfor 5 "#"
-send "fpgac /mnt/firmware/vexqwerk.bit^m"
+send "/opt/bin/fpgac /mnt/firmware/vexpro.bit^m"
 waitfor 5 "#"
 send "modprobe qeinterrupt^m"
 waitfor 5 "#"

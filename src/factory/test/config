@@ -1,7 +1,6 @@
 # !/bin/bash
-../../../bin/fpgac logic/vexpro.bit
-#
 rmmod qemotor
 rmmod qeinterrupt
+../../../bin/fpgac logic/vexpro.bit
 insmod ../../module/qeinterrupt/qeinterrupt.ko
 insmod ../../module/qemotor/qemotor.ko

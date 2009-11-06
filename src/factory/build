@@ -8,3 +8,4 @@ cp ../util/reimage/reimage factory/bin
 cp ../redboot/redboot.bin factory/firmware
 cp ../util/reimage/terkos.dat factory/firmware
 tar cvf factory/firmware/test.dat script
+tar cvfj factory.tar.bz2 `find factory -type f | grep -v .svn`
