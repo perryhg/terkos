@@ -1137,7 +1137,7 @@ main(int argc, char *argv[])
     // Wait until the output buffer is empty.
     //
     WaitTillEmpty();
-    usleep(1000);
+    usleep(100000);
 
     //
     // Switch our baud rate to the desired rate.
@@ -1157,7 +1157,7 @@ main(int argc, char *argv[])
         //
         // Read the character.
         //
-        cChar = ReceiveChar(10);
+        cChar = ReceiveChar(200);
 
         //
         // Quit waiting if this is a '?'.
@@ -1167,6 +1167,7 @@ main(int argc, char *argv[])
             break;
         }
     }
+
 
     //
     // Empty out the input queue.
