@@ -2,7 +2,7 @@ TARGET=test
 CXX=arm-oe-linux-uclibcgnueabi-g++
 CFLAGS=-g -I../../libqwerk -Os
 
-LDFLAGS=-Os -shared -L../../libqwerk/dist -lpthread -lqwerk
+LDFLAGS=-Os -L../../libqwerk/dist -lpthread -lqwerk
 #LDFLAGS=-L../../../lib -lpthread -lqwerk
 SRCS=$(wildcard *.cxx)
 OBJECTS=$(SRCS:.cxx=.o)

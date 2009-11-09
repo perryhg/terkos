@@ -86,6 +86,7 @@ dist: $(DIST_CGI_DIR) \
 
 	@echo 'Copying FPGA logic...'
 	cp $(LOGIC_DIR)/vexpro.bit $(DIST_LIB_DIR)
+	cp $(LOGIC_DIR)/../vexprotest/vexpro.bit $(DIST_LIB_DIR)/vexprotest.bit
 
 	@echo 'Copying libraries...'
 	cp $(LCD_MENU_DIR)/dist/*.so $(DIST_LIB_DIR)

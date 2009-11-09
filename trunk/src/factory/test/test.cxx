@@ -736,7 +736,6 @@ int main(int argc, char **argv)
       usleep(100000);     
     }
 #endif
-
   g_9302 = C9302Hardware::GetPtr();
   if (g_9302->GetBitstreamVersion()!=0xa0ff)
     {
