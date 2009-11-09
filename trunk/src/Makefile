@@ -77,6 +77,7 @@ dist: $(DIST_CGI_DIR) \
 	@echo 'Copying binaries...'
 	cp $(LCD_MENU_DIR)/dist/LCDMenu $(DIST_BIN_DIR)
 	cp $(FPGAC_DIR)/fpgac $(DIST_BIN_DIR)
+	cp $(TEST_DIR)/test $(DIST_BIN_DIR)
 	cp $(LIB_CONFIGURATION_MANAGEMENT_DIR)/dist/*Tool $(DIST_BIN_DIR)
 
 	@echo 'Copying configs...'
