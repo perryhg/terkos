@@ -395,7 +395,7 @@ int numDevs()
 
 int testUSB()
 {
-  int n, nPrev = numDevs();
+  int n, m=0, nPrev = numDevs();
 
   g_lcd->Clear();
   g_lcd->printf("USB test");
@@ -407,7 +407,13 @@ int testUSB()
       if (n-nPrev>0)
 	g_lcd->printf("Insert");
       else if (n-nPrev<0)
-	g_lcd->printf("Pass  ");
+	{
+	  if (m>=1)
+	    g_lcd->printf("Pass  ");
+	  else
+	    g_lcd->printf("Remove");
+	  m++;
+	}
       nPrev = n;
 
       if (g_kp->GetKey(false))
@@ -746,7 +752,6 @@ int main(int argc, char **argv)
   g_lcd = CTextLcd::GetPtr();
   g_led = CQELEDController::GetPtr();
   g_audio = CQEAudioController::GetPtr();
-  printf("success\n");
   g_analog = CQEAnalog::GetPtr();
   g_power = CQEPower::GetPtr();
 

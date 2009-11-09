@@ -1,0 +1,13 @@
+#!/bin/bash
+TARFILE=`ls *.bz2 | tail -1`
+if [ -e "$TARFILE" ]
+then
+  echo "Installing new package..."
+  rm -rf factory
+  tar xvfj "$TARFILE"
+  rm "$TARFILE"
+  echo "Done."
+fi
+cd ~/factory
+./start
+
