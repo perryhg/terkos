@@ -9,6 +9,7 @@ LIB_UTILITIES_DIR=libUtilities
 LCD_MENU_DIR=lcdmenu
 LIBMMAP_DIR=libmmap
 FPGAC_DIR=util/fpgac
+TEST_DIR=factory/test
 LOGIC_DIR=logic/vexpro
 SCRIPTS_DIR=scripts
 WWW_DIR=www
@@ -69,6 +70,9 @@ dist: $(DIST_CGI_DIR) \
 	@echo 'Making fpgac...'
 	$(MAKE) -C $(LIBMMAP_DIR) all
 	$(MAKE) -C $(FPGAC_DIR) all
+
+	@echo 'Making test...'
+	$(MAKE) -C $(TEST_DIR) all
 
 	@echo 'Copying binaries...'
 	cp $(LCD_MENU_DIR)/dist/LCDMenu $(DIST_BIN_DIR)
