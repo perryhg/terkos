@@ -183,21 +183,21 @@ int testLEDs()
 	  break;
 
 	case 1:
-	  g_led->SetLED(LED_ROBOT, LED_COLOR_RED);
-	  g_led->SetLED(LED_VEXNET, LED_COLOR_RED);
+	  g_led->SetLED(LED_ROBOT, LED_COLOR_OFF);
+	  g_led->SetLED(LED_VEXNET, LED_COLOR_OFF);
 	  g_led->SetLED(LED_GAME, LED_COLOR_OFF);
 	  break;	  
 
 	case 2:
-	  g_led->SetLED(LED_ROBOT, LED_COLOR_RED);
+	  g_led->SetLED(LED_ROBOT, LED_COLOR_OFF);
 	  g_led->SetLED(LED_VEXNET, LED_COLOR_RED);
-	  g_led->SetLED(LED_GAME, LED_COLOR_RED);
+	  g_led->SetLED(LED_GAME, LED_COLOR_OFF);
 	  break;
 
 	case 3:
 	  g_led->SetLED(LED_ROBOT, LED_COLOR_OFF);
-	  g_led->SetLED(LED_VEXNET, LED_COLOR_RED);
-	  g_led->SetLED(LED_GAME, LED_COLOR_RED);
+	  g_led->SetLED(LED_VEXNET, LED_COLOR_OFF);
+	  g_led->SetLED(LED_GAME, LED_COLOR_OFF);
 	  break;	  
 
 	case 4:
@@ -220,21 +220,21 @@ int testLEDs()
 	  break;
 
 	case 7:
-	  g_led->SetLED(LED_ROBOT, LED_COLOR_GREEN);
-	  g_led->SetLED(LED_VEXNET, LED_COLOR_GREEN);
+	  g_led->SetLED(LED_ROBOT, LED_COLOR_OFF);
+	  g_led->SetLED(LED_VEXNET, LED_COLOR_OFF);
 	  g_led->SetLED(LED_GAME, LED_COLOR_OFF);
 	  break;	  
 
 	case 8:
-	  g_led->SetLED(LED_ROBOT, LED_COLOR_GREEN);
+	  g_led->SetLED(LED_ROBOT, LED_COLOR_OFF);
 	  g_led->SetLED(LED_VEXNET, LED_COLOR_GREEN);
-	  g_led->SetLED(LED_GAME, LED_COLOR_GREEN);
+	  g_led->SetLED(LED_GAME, LED_COLOR_OFF);
 	  break;
 
 	case 9:
 	  g_led->SetLED(LED_ROBOT, LED_COLOR_OFF);
-	  g_led->SetLED(LED_VEXNET, LED_COLOR_GREEN);
-	  g_led->SetLED(LED_GAME, LED_COLOR_GREEN);
+	  g_led->SetLED(LED_VEXNET, LED_COLOR_OFF);
+	  g_led->SetLED(LED_GAME, LED_COLOR_OFF);
 	  break;	  
 
 	case 10:
@@ -249,45 +249,8 @@ int testLEDs()
 	  g_led->SetLED(LED_GAME, LED_COLOR_OFF);
 	  break;	  
 
-	  // YELLOW
-	case 12:
-	  g_led->SetLED(LED_ROBOT, LED_COLOR_YELLOW);
-	  g_led->SetLED(LED_VEXNET, LED_COLOR_OFF);
-	  g_led->SetLED(LED_GAME, LED_COLOR_OFF);
-	  break;
-
-	case 13:
-	  g_led->SetLED(LED_ROBOT, LED_COLOR_YELLOW);
-	  g_led->SetLED(LED_VEXNET, LED_COLOR_YELLOW);
-	  g_led->SetLED(LED_GAME, LED_COLOR_OFF);
-	  break;	  
-
-	case 14:
-	  g_led->SetLED(LED_ROBOT, LED_COLOR_YELLOW);
-	  g_led->SetLED(LED_VEXNET, LED_COLOR_YELLOW);
-	  g_led->SetLED(LED_GAME, LED_COLOR_YELLOW);
-	  break;
-
-	case 15:
-	  g_led->SetLED(LED_ROBOT, LED_COLOR_OFF);
-	  g_led->SetLED(LED_VEXNET, LED_COLOR_YELLOW);
-	  g_led->SetLED(LED_GAME, LED_COLOR_YELLOW);
-	  break;	  
-
-	case 16:
-	  g_led->SetLED(LED_ROBOT, LED_COLOR_OFF);
-	  g_led->SetLED(LED_VEXNET, LED_COLOR_OFF);
-	  g_led->SetLED(LED_GAME, LED_COLOR_YELLOW);
-	  break;	  
-
-	case 17:
-	  g_led->SetLED(LED_ROBOT, LED_COLOR_OFF);
-	  g_led->SetLED(LED_VEXNET, LED_COLOR_OFF);
-	  g_led->SetLED(LED_GAME, LED_COLOR_OFF);
-	  break;	  
-
 	}
-      for (i=0; i<15; i++)
+      for (i=0; i<30; i++)
 	{
 	  usleep(100);
 	  if (g_kp->GetKey(false))
@@ -299,7 +262,7 @@ int testLEDs()
 	    }
 	}
       state++;
-      if (state==18)
+      if (state==12)
 	state = 0;
     }
 }
@@ -330,10 +293,10 @@ int testMotors()
 
   while(1)
     {
-      g_motor->Move(0, 20000, 10000, 4000);
-      g_motor->Move(1, 20000, 10000, 4000);
-      g_motor->Move(2, 20000, 10000, 4000);
-      g_motor->Move(3, 20000, 10000, 4000);
+      g_motor->Move(0, 5000, 10000, 100000);
+      g_motor->Move(1, 5000, 10000, 100000);
+      g_motor->Move(2, 5000, 10000, 100000);
+      g_motor->Move(3, 5000, 10000, 100000);
       
       while(!g_motor->Done(0) || !g_motor->Done(1) || 
 	    !g_motor->Done(2) || !g_motor->Done(3))
@@ -349,10 +312,10 @@ int testMotors()
 	    }
 	}
 
-      g_motor->Move(0, -20000, 10000, 4000);
-      g_motor->Move(1, -20000, 10000, 4000);
-      g_motor->Move(2, -20000, 10000, 4000);
-      g_motor->Move(3, -20000, 10000, 4000);
+      g_motor->Move(0, -5000, 10000, 100000);
+      g_motor->Move(1, -5000, 10000, 100000);
+      g_motor->Move(2, -5000, 10000, 100000);
+      g_motor->Move(3, -5000, 10000, 100000);
       
       while(!g_motor->Done(0) || !g_motor->Done(1) || 
 	    !g_motor->Done(2) || !g_motor->Done(3))
