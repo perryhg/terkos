@@ -22,8 +22,16 @@ C9302Hardware *g_9302;
 CQEAudioController *g_audio;
 CQEAnalog *g_analog;
 CQEPower *g_power;
-
 int g_serial;
+
+bool g_preI2C;
+bool g_preSerial;
+unsigned short g_preAnalog;
+
+bool helpI2C();
+bool helpSerial();
+unsigned short  helpAnalog();
+
 int serialInit()
 {
   struct termios newtio;
@@ -47,20 +55,29 @@ int serialInit()
   tcsetattr(g_serial, TCSANOW,&newtio);
 }
 
-int testSerial()
+bool helpSerial()
 {
   char c;
+  bool result;
+
+  while(read(g_serial, &c, 1));	
+  c = 'A';
+  write(g_serial, &c, 1);
+  usleep(1);
+  result = read(g_serial, &c, 1)==1;
+  return result;
+}
+
+int testSerial()
+{
 
   g_lcd->Clear();
   g_lcd->printf("Serial test");
 
   while(1)
     {
-      c = 'A';
-      write(g_serial, &c, 1);
-
       g_lcd->MoveCursor(1, 0);
-      if (read(g_serial, &c, 1)==1)
+      if (!g_preSerial && helpSerial())
 	g_lcd->printf("PASS");
       else
 	g_lcd->printf("FAIL");
@@ -287,6 +304,25 @@ int testLEDs()
     }
 }
 
+int addHeaders()
+{
+  g_preI2C = helpI2C();
+  g_preSerial = helpSerial();
+  g_preAnalog = helpAnalog();
+
+  g_lcd->Clear();
+  g_lcd->printf("Add all test"); 
+  g_lcd->MoveCursor(1, 0);
+  g_lcd->printf("headers, motors");
+
+  while(1)
+    {
+      if (g_kp->GetKey(false))
+	return 0;
+      usleep(100);
+    }
+}
+
 int testMotors()
 {
   g_lcd->Clear();
@@ -335,6 +371,29 @@ int testMotors()
     }
 }
 
+bool helpI2C()
+{
+  // set data in, clk low, loopback should produce 0, test data in, clk out
+  *g_9302->m_fpga.Ushort(0x480) = 0x0000;
+  usleep(100);
+  if (*g_9302->m_fpga.Ushort(0x480)!=0)
+    return false;
+  
+  // set data out and low, clk high, loopback should produce 4, test clk in
+  *g_9302->m_fpga.Ushort(0x480) = 0x0006;
+  usleep(100);
+  if (*g_9302->m_fpga.Ushort(0x480)!=4)
+    return false;
+  
+  // set data in, clk high, loopback should produce 3
+  *g_9302->m_fpga.Ushort(0x480) = 0x0002;
+  usleep(100);
+  if (*g_9302->m_fpga.Ushort(0x480)!=3)
+    return false;
+
+  return true;
+}
+
 int testI2C()
 {
   g_lcd->Clear();
@@ -347,34 +406,11 @@ int testI2C()
 
       g_lcd->MoveCursor(1, 0);
 
-      // set data in, clk low, loopback should produce 0, test data in, clk out
-      *g_9302->m_fpga.Ushort(0x480) = 0x0000;
-      usleep(100);
-      if (*g_9302->m_fpga.Ushort(0x480)!=0)
-	{
-	  g_lcd->printf("FAIL");
-	  continue;
-	}
+      if (!g_preI2C && helpI2C())
+	g_lcd->printf("PASS");
+      else
+	g_lcd->printf("FAIL");
 
-      // set data out and low, clk high, loopback should produce 4, test clk in
-      *g_9302->m_fpga.Ushort(0x480) = 0x0006;
-      usleep(100);
-      if (*g_9302->m_fpga.Ushort(0x480)!=4)
-	{
-	  g_lcd->printf("FAIL");
-	  continue;
-	}
-
-      // set data in, clk high, loopback should produce 3
-      *g_9302->m_fpga.Ushort(0x480) = 0x0002;
-      usleep(100);
-      if (*g_9302->m_fpga.Ushort(0x480)!=3)
-	{
-	  g_lcd->printf("FAIL");
-	  continue;
-	}
-
-      g_lcd->printf("PASS");
     }
 }
  
@@ -405,13 +441,13 @@ int testUSB()
       g_lcd->MoveCursor(1, 0);      
       n = numDevs();
       if (n-nPrev>0)
-	g_lcd->printf("Insert");
+	g_lcd->printf("Inserted");
       else if (n-nPrev<0)
 	{
 	  if (m>=1)
-	    g_lcd->printf("Pass  ");
+	    g_lcd->printf("Pass    ");
 	  else
-	    g_lcd->printf("Remove");
+	    g_lcd->printf("Removed ");
 	  m++;
 	}
       nPrev = n;
@@ -526,9 +562,24 @@ int testPower()
     }
 }
 
+unsigned short helpAnalog()
+{
+  int i, v;
+  unsigned short val = 0;
+
+  for (i=15; i>=0; i--)
+    {
+      val <<= 1;
+      v = g_analog->GetADVoltage(i);
+      if (WITHIN_TOL(v, 5000))
+	val |= 0x0001;
+     }
+  return val;
+}
+
 int testAnalog()
 {
-  int i, v, error;
+  int i, val, error;
 
   g_lcd->Clear();
   g_lcd->printf("Analog test");
@@ -536,12 +587,12 @@ int testAnalog()
   while(1)
     {
       error = 0;
+      val = helpAnalog();
       g_lcd->MoveCursor(1, 0);      
 
       for (i=15; i>=0; i--)
 	{
-	  v = g_analog->GetADVoltage(i);
-	  if (WITHIN_TOL(v, 5000))
+	  if ((~g_preAnalog)&val&(1<<i))
 	    g_lcd->printf("\xfc");
 	  else 
 	    {
@@ -790,48 +841,52 @@ int main(int argc, char **argv)
 	  break;
 
 	case 3:
-	  testMotors();
+	  addHeaders();
 	  break;
 
 	case 4:
-	  testAudio();
+	  testMotors();
 	  break;
 
 	case 5:
+	  testAudio();
+	  break;
+
+	case 6:
 	  testDigital();
 	  break;
 	  
-	case 6:
-	  testServo();
-	  break;
-
 	case 7:
-	  testAnalog();
-	  break;
-
-	case 8:
 	  testI2C();
 	  break;
 
-	case 9:
+	case 8:
 	  testSerial();
 	  break;
 
+	case 9:
+	  testServo();
+	  break;
+
 	case 10:
-	  testUSB();
+	  testAnalog();
 	  break;
 
 	case 11:
+	  testUSB();
+	  break;
+
+	case 12:
 	  testBackup();
 	  break;
 
-	case 12: 
+	case 13: 
 	  testPowerDown();
 	  break;
 	}
       
       key = g_kp->GetKey();
-      if (key==KP_KEY_DOWN && i<12)
+      if (key==KP_KEY_DOWN && i<13)
 	i++;
       else if (key==KP_KEY_UP && i>0)
 	i--;
