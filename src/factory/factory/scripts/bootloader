@@ -4,7 +4,7 @@ PORT=$((PORT+1))
 echo "VEXPro bootloader programming script"
 echo
 echo "Place jumper on J5."
-echo "Plug in USB terminal and power into VEXPro."
+echo "Plug USB terminal and power into VEXPro."
 echo "Then turn on."
 if ../bin/download -t 9302 -p$PORT ../firmware/redboot.bin;
 then
