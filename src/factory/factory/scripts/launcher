@@ -21,8 +21,8 @@ do
       then
          echo "Launching" $i
 	 PORT=`echo $i | sed -e 's/^.*\(.\)$/\1/'`
-	 X=$(((PORT%3)*338))
-	 Y=$(((PORT/3)*275))
+	 X=$(((PORT%3)*170))
+	 Y=$(((PORT/3)*140))
 	 gnome-terminal -e "./all $i" -t "$i" --geometry=39x13+$X+$Y 
       fi
    done
