@@ -154,7 +154,7 @@ module AudioDAC(Async, Asdo, Arstn, Asdi, AbitClk, Out, Reset, Clk,
 		   begin
 			DivCount <= DivCount + 1;
 			
-			if (DivCount == 0)
+			if (DivCount==0 && VolumeData!=0)
 			   begin
 				MixedPrev <= MixedAudioData;
 				if (MixedPrev != MixedAudioData)
