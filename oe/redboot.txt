@@ -12,3 +12,5 @@ The proper command to boot is now:
 
 fis load zImage
 exec -c "root=/dev/mtdblock2 rootfstype=jffs2"
+
+load -r -v -b 0x80000 -m http -h lima-2.speech.cs.cmu.edu /~dhuggins/qwerk/testkernel.bin
