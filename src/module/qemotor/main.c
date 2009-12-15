@@ -42,7 +42,7 @@
 
 MODULE_LICENSE("Dual BSD/GPL");
 
-#if 1 // debug
+#if 0 // debug
 #define DPK(format, ...) printk(KERN_NOTICE "qe_motor: " format, ## __VA_ARGS__)
 #else
 #define DPK(format, ...)
