@@ -44,7 +44,7 @@ MODULE_LICENSE("Dual BSD/GPL");
 
 #define QEINT_INT_MASK     io_base
 #define QEINT_INT_STATUS   (io_base+4)
-#if 1 // debug
+#if 0 // debug
 #define DPK(format, ...) printk(KERN_NOTICE "qe_interrupt: " format, ## __VA_ARGS__)
 #else
 #define DPK(format, ...)
