@@ -26,7 +26,7 @@
 #include "motor.h"
 #include "../qeinterrupt/qeinterrupt.h"
 
-#if 1 // debug
+#if 0 // debug
 #define DPK(format, ...) printk(KERN_NOTICE "qe_motor(motor): " format, ## __VA_ARGS__)
 #else
 #define DPK(format, ...)
