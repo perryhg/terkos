@@ -26,9 +26,28 @@
 #define KP_KEY_UP      0x0020
 #define KP_KEY_DOWN    0x0040
 
+/** 
+ * CKeypad allows your program to gather user input from the 
+ * up, down, left, right, OK, and cancel buttons.
+ * To instantiate this class: 
+ * \code
+ * // by pointer
+ * CKeypad *pkp = CKeypad::GetPtr(); 
+ * // or by reference
+ * CKeypad &kp = CKeypad::GetRef();
+ * \endcode
+ * And when done with this class, call Release(), for each call to 
+ * GetPtr() or GetRef():
+ * \code
+ * CKeypad::Release();
+ * \endcode
+ */
 class CKeypad
 {
 public:
+  /**
+   * This internal macro handles instantiation of this class. 
+   */ 
   SINGLETON(CKeypad);
 
   static const unsigned int KEY_OK;
@@ -37,34 +56,68 @@ public:
   static const unsigned int KEY_LEFT;
   static const unsigned int KEY_UP;
   static const unsigned int KEY_DOWN;
-     
-  // returns 0 if no key is being pressed
-  // or waits until key is pressed and returns key value
+   
+  /**
+   * Get key input.
+   * @param wait true=wait for key to be pressed before returning, 
+   * false=do not wait, return immediately with key value, even if no 
+   * key is being pressed. This method handles switch debouncing.  
+   * @return Bitmap of keys being pressed, or 0 if no keys are being pressed. 
+   * Bitmap values consist of bit values KP_KEY_OK, KP_KEY_CANCEL, KP_KEY_UP, 
+   * KP_KEY_DOWN, KP_KEY_LEFT, KP_KEY_RIGHT. 
+   */
   const unsigned int GetKey(bool wait = true);
 
-  // wait for key to be released-- can be used with methods below
+
+  /**
+   * Wait for key to be released.  Returns immediately
+   * if no key is being pressed. 
+   */
   void KeyRelease();
 
+  /**
+   * Return state of OK key. 
+   */
   inline bool KeyOk()
   {
     return GetKey(false) & KEY_OK;
   }
+
+  /**
+   * Return state of Cancel key. 
+   */
   inline bool KeyCancel()
   {
     return GetKey(false) & KEY_CANCEL;
   }
+
+  /**
+   * Return state of Up key. 
+   */
   inline bool KeyUp()
   {
     return GetKey(false) & KEY_UP;
   }
+
+  /**
+   * Return state of Down key. 
+   */
   inline bool KeyDown()
   {
     return GetKey(false) & KEY_DOWN;
   }
+
+  /**
+   * Return state of Left key. 
+   */
   inline bool KeyLeft()
   {
     return GetKey(false) & KEY_LEFT;
   }
+
+  /**
+   * Return state of Right key. 
+   */
   inline bool KeyRight()
   {
     return GetKey(false) & KEY_RIGHT;

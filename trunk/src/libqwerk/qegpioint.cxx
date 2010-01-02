@@ -40,14 +40,29 @@ int CQEGpioInt::GetProperty(int property, long *value)
 
   switch(property)
     {
+      /**
+       * - QEG_PROP_WIDTH=number of digital I/O signals 
+       */
     case QEG_PROP_WIDTH:
       *value = QEG_NUM_IO;
       break;
 
+      /**
+       * - QEG_PROP_DATA_REG=returns the state of 
+       * the external digital I/O signals as a bitmap with bit 0 (LSB)
+       * corresponding to digital signal 1 and bit 15 corresponding 
+       * to digital signal 16 -- typically used to read signals
+       * configured as inputs, although the state of output signals is also
+       * returned.
+       */
     case QEG_PROP_DATA_REG:
       *value = *m_data;
       break;
 
+      /**
+       * - QEG_PROP_DATA_DIR_REG=returns the contents of the data
+       * direction register -- only the least significant 16 bits are used.
+       */
     case QEG_PROP_DATA_DIR_REG:
       *value = *m_dataDir;
       break;
@@ -63,10 +78,23 @@ int CQEGpioInt::SetProperty(int property, long value)
 {
   switch (property)
     {
+      /**
+       * - QEG_PROP_DATA_REG=changes the state of 
+       * the external digital I/O signals as a bitmap with bit 0 (LSB)
+       * corresponding to digital signal 1 and bit 15 corresponding 
+       * to digital signal 16 -- typically used to write signals
+       * configured as outputs.
+       */
     case QEG_PROP_DATA_REG:
       *m_data = value;
       break;
 
+      /**
+       * - QEG_PROP_DATA_DIR_REG=sets the data direction of the corresponding
+       * data signal.  A 0 (zero) configures the corresponding data signal 
+       * to be input.  A 1 (one) configures the corresponding data signal 
+       * to be an output.
+       */
     case QEG_PROP_DATA_DIR_REG:
       *m_dataDir = value;
       break;
