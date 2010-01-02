@@ -16,24 +16,56 @@
 #ifndef _MEMMAP_H
 #define _MEMMAP_H
 
+/**
+ * CMemMap maps a region in the processor's physical memory space so a
+ * process can access it (read/write) directly.  For example, this class 
+ * allows direct and efficient interaction with the hardware peripherals.  
+ * It is not typically used except at the lowest levels of this library.
+ */  
 class CMemMap
 {
 public:
+  /** 
+   * Constructor.
+   * @param base physical address of the beginning of physical memory region
+   * @param size size of memory region in bytes
+   */
   CMemMap(unsigned int base, unsigned int size);
   ~CMemMap();
 	
+  /**
+   * Get base address.
+   */
   unsigned long GetMap()
   {
     return (unsigned long)m_map;
   }
+
+  /**
+   * Get/set unsigned int.
+   * @param offset offset into physical memory in bytes
+   * @return mapped address of physical memory at this location
+   */
   inline volatile unsigned int *Uint(unsigned int offset=0) 
   {
     return (volatile unsigned int *)(m_map + offset);
   }
+
+  /**
+   * Get/set unsigned short.
+   * @param offset offset into physical memory in bytes
+   * @return address of physical memory at this location
+   */
   inline volatile unsigned short *Ushort(unsigned int offset=0) 
   {
     return (volatile unsigned short *)(m_map + offset);
   }
+
+  /**
+   * Get/set unsigned char.
+   * @param offset offset into physical memory in bytes
+   * @return address of physical memory at this location
+   */
   inline volatile unsigned char *Uchar(unsigned int offset=0) 
   {
     return (volatile unsigned char *)(m_map + offset);

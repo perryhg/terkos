@@ -24,15 +24,36 @@
  */
 #define HW_AD_CHANNELS             5
 
+/**
+ * C9302Hardware interacts directly with the Cirrus EP9302 hardware 
+ * perhiperals.  This class is normally only used by other 
+ * I/O classes.  You shouldn't need to use this class if you
+ * wish to interact with sensors, actuators, lcd and/or keypad.      
+ * To instantiate this class: 
+ * \code
+ * // by pointer
+ * C9302Hardware *phw = C9302Hardware::GetPtr(); 
+ * // or by reference
+ * C9302Hardware &hw = C9302Hardware::GetRef();
+ * \endcode
+ * And when done with this class, call Release(), for each call to 
+ * GetPtr() or GetRef():
+ * \code
+ * C9302Hardware::Release();
+ * \endcode
+ */
 class C9302Hardware
 {
 public:
+  /**
+   * This internal macro handles instantiation of this class. 
+   */ 
   SINGLETON(C9302Hardware);
 
   /** 
-   * Get the A/D value in millivolts given the channel.
-   * @param channel value between 0 and 24
-   * @return analog value of channel in millivolts.
+   * Get the raw A/D value given the channel.
+   * @param channel value between 0 and 4
+   * @return raw analog value of channel
    */
   unsigned short GetAD(unsigned int channel);
 
@@ -46,7 +67,7 @@ public:
   }
 
   /** 
-   * Set the state of the green LED on the CPU board.
+   * Set the state of the red LED on the CPU board.
    * @param state true=on, false=off
    */
   inline void SetRedLED(bool state)
@@ -55,7 +76,7 @@ public:
   }
 
   /** 
-   * Set/get Port A data register.
+   * Set/get Port A data register on EP9302.
    * @return Address of port A data register
    */
   inline volatile unsigned int *PortAData()
@@ -64,8 +85,8 @@ public:
   }
 
   /** 
-   * Set/get Port A data register.
-   * @return Address of port A data register
+   * Set/get Port A data direction register on EP9302.
+   * @return Address of port A data direction register
    */
   inline volatile unsigned int *PortADataDR()
   {
@@ -73,8 +94,8 @@ public:
   }
 
   /** 
-   * Set/get Port A data register.
-   * @return Address of port A data register
+   * Set/get Port B data register on EP9302.
+   * @return Address of port B data register
    */
   inline volatile unsigned int *PortBData()
   {
@@ -82,8 +103,8 @@ public:
   }
 
   /** 
-   * Set/get Port A data register.
-   * @return Address of port A data register
+   * Set/get Port B data direction register on EP9302.
+   * @return Address of port B data direction register
    */
   inline volatile unsigned int *PortBDataDR()
   {
@@ -91,8 +112,8 @@ public:
   }
 
   /** 
-   * Set/get Port A data register.
-   * @return Address of port A data register
+   * Set/get Port C data register on EP9302.
+   * @return Address of port C data register
    */
   inline volatile unsigned int *PortCData()
   {
@@ -100,8 +121,8 @@ public:
   }
 
   /** 
-   * Set/get Port A data register.
-   * @return Address of port A data register
+   * Set/get Port C data direction register on EP9302.
+   * @return Address of port C data direction register
    */
   inline volatile unsigned int *PortCDataDR()
   {
@@ -109,8 +130,8 @@ public:
   }
 
   /** 
-   * Set/get Port A data register.
-   * @return Address of port A data register
+   * Set/get Port E data register on EP9302.
+   * @return Address of port E data register
    */
   inline volatile unsigned int *PortEData()
   {
@@ -118,8 +139,8 @@ public:
   }
 
   /** 
-   * Set/get Port A data register.
-   * @return Address of port A data register
+   * Set/get Port E data direction register on EP9302.
+   * @return Address of port E data direction register
    */
   inline volatile unsigned int *PortEDataDR()
   {
@@ -127,8 +148,8 @@ public:
   }
 
   /** 
-   * Set/get Port A data register.
-   * @return Address of port A data register
+   * Set/get Port F data register on EP9302.
+   * @return Address of port F data register
    */
   inline volatile unsigned int *PortFData()
   {
@@ -136,8 +157,8 @@ public:
   }
 
   /** 
-   * Set/get Port A data register.
-   * @return Address of port A data register
+   * Set/get Port F data direction register on EP9302.
+   * @return Address of port F data direction register
    */
   inline volatile unsigned int *PortFDataDR()
   {
@@ -145,8 +166,8 @@ public:
   }
 
   /** 
-   * Set/get Port A data register.
-   * @return Address of port A data register
+   * Set/get Port G data register on EP9302.
+   * @return Address of port G data register
    */
   inline volatile unsigned int *PortGData()
   {
@@ -154,8 +175,8 @@ public:
   }
 
   /** 
-   * Set/get Port A data register.
-   * @return Address of port A data register
+   * Set/get Port G data direction register on EP9302.
+   * @return Address of port G data direction register
    */
   inline volatile unsigned int *PortGDataDR()
   {
@@ -163,8 +184,8 @@ public:
   }
 
   /** 
-   * Set/get Port A data register.
-   * @return Address of port A data register
+   * Set/get Port H data register on EP9302.
+   * @return Address of port H data register
    */
   inline volatile unsigned int *PortHData()
   {
@@ -182,20 +203,56 @@ public:
 
   /** 
    * Get the FPGA bitstream version.
-   * @return Address of port A data register
+   * @return FPGA bitstream version, msb=major version, lsb=minor version 
    */
   unsigned short GetBitstreamVersion();
 
+  /** 
+   * Get the FPGA bitstream minor version.
+   * @return FPGA bitstream minor version 
+   */
   unsigned char GetBitstreamMinorVersion();
+
+  /** 
+   * Get the FPGA bitstream major version.
+   * @return FPGA bitstream major version 
+   */
   unsigned char GetBitstreamMajorVersion();
 
-  // you can access these directly
+  /**
+   * memory mapped region of memory controller on EP9302
+   */
   CMemMap m_scr;
+
+
+  /**
+   * memory mapped region of general purpose I/O controller on EP9302
+   */
   CMemMap m_gpio;
+
+  /**
+   * memory mapped region of system controller on EP9302
+   */
   CMemMap m_syscon;
+
+  /**
+   * memory mapped region of FPGA on EP9302
+   */
   CMemMap m_fpga;
+
+  /**
+   * memory mapped region of analog-to-digital controller on EP9302
+   */
   CMemMap m_adc;
+
+  /**
+   * memory mapped region of UART1 (serial controller) on EP9302
+   */
   CMemMap m_uart1;
+
+  /**
+   * memory mapped region UART2 (serial controller) on EP9302
+   */
   CMemMap m_uart2;
 
 private:

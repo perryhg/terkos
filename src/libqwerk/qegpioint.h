@@ -38,13 +38,38 @@
 // set/read ddr (set/getprop)
 // set/read data (set/getprop)
 
+/**
+ * CQEGpioInt is used to interact with the external digital ports, 
+ * such as reading, writing and triggering on interruptible input 
+ * events. (Note, interruptible events are not supported as of this writing.) 
+ * To instantiate this class: 
+ * \code
+ * // by pointer
+ * CQEGpioInt *pio = CQEGpioInt::GetPtr(); 
+ * // or by reference
+ * CQEGpioInt &io = CQEGpioInt::GetRef();
+ * \endcode
+ * And when done with this class, call Release(), for each call to 
+ * GetPtr() or GetRef():
+ * \code
+ * CQEGpioInt::Release();
+ * \endcode
+ */
 class CQEGpioInt : public IProperty
 {
 public:
   SINGLETON(CQEGpioInt);
 
- // IProperty
+  /**
+   * See the definition of IProperty::GetProperty for more information 
+   * on this method.  The following properties are supported:
+   */
   virtual int GetProperty(int property, long *value);
+
+  /**
+   * See the definition of IProperty::SetProperty for more information 
+   * on this method.  The following properties re supported:
+   */
   virtual int SetProperty(int property, long value);
 
 private:
