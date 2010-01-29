@@ -43,7 +43,7 @@
  * \code
  * CQEAnalog::Release();
  * \endcode
- */ */
+ */ 
 class CQEAnalog : public IProperty
   
 {

@@ -58,6 +58,9 @@
 class CQEGpioInt : public IProperty
 {
 public:
+  /**
+   * This internal macro handles instantiation of this class. 
+   */ 
   SINGLETON(CQEGpioInt);
 
   /**

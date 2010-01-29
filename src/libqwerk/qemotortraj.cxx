@@ -18,6 +18,8 @@
 #include <unistd.h>
 #include "qemotortraj.h"
 
+SINGLETON_REGISTER(CQEMotorTraj);
+
 void *CQEMotorTraj::TrajThread(void *arg)
 {
   CQEMotorTraj *motor = (CQEMotorTraj *)arg;
@@ -64,8 +66,8 @@ void *CQEMotorTraj::TrajThread(void *arg)
   return NULL;
 }
 
-CQEMotorTraj::CQEMotorTraj(int axis0, int axis1, int axis2, int axis3) : 
-  CQEMotorUser(axis0, axis1, axis2, axis3),
+CQEMotorTraj::CQEMotorTraj() :
+  CQEMotorUser(),
   CQEMotorRec()	 
 {
   pthread_mutexattr_t mattr;

@@ -32,16 +32,46 @@
 #define QP_PROP_IO_5V_VOLTAGE        PROP_ID(QP_OBJECT, 7)
 #define QP_PROP_IO_5V_STATE          PROP_ID(QP_OBJECT, 8)
 
-class CQEPower : public IProperty
-  
+/**
+ * CQEPower is used to get power information such as battery
+ * voltage, battery status, and to initiate a system power-down.  
+ * To instantiate this class: 
+ * \code
+ * // by pointer
+ * CQEPower *ppwr = CQEPower::GetPtr(); 
+ * // or by reference
+ * CQEPower &pwr = CQEPower::GetRef();
+ * \endcode
+ * And when done with this class, call Release(), for each call to 
+ * GetPtr() or GetRef():
+ * \code
+ * CQEPower::Release();
+ * \endcode
+ */
+class CQEPower : public IProperty  
 {
 public:
+  /**
+   * This internal macro handles instantiation of this class. 
+   */ 
   SINGLETON(CQEPower);
-  
+
+  /**
+   * Initiates a system power down.  It does a sync of the flash disk before
+   * shutting down, so no information is lost. 
+   */  
   void  PowerOff();
 
-  // IProperty
+  /**
+   * See the definition of IProperty::GetProperty for more information 
+   * on this method.  The following properties are supported:
+   */
   virtual int GetProperty(int property, long *value);
+
+  /**
+   * See the definition of IProperty::SetProperty for more information 
+   * on this method.  The following properties re supported:
+   */
   virtual int SetProperty(int property, long value);
 
 private:

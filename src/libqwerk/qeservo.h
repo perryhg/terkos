@@ -28,16 +28,63 @@
 
 #define QES_DEFAULT_ADDR         0x400
 
+/** 
+ * CQEServo allows control of motor ports 1 through 12.  These motor ports
+ * have 3 wires instead of just 2.
+ * To instantiate this class: 
+ * \code
+ * // by pointer
+ * CQEServo *pservo = CQEServo::GetPtr(); 
+ * // or by reference
+ * CQEServo &servo = CQEServo::GetRef();
+ * \endcode
+ * And when done with this class, call Release(), for each call to 
+ * GetPtr() or GetRef():
+ * \code
+ * CQEServo::Release();
+ * \endcode
+ */
 class CQEServo
 {
 public:
+  /**
+   * This internal macro handles instantiation of this class. 
+   */
   SINGLETON(CQEServo);
 
+  /**
+   * Turn off servo/motor.
+   * @param index the motor in question, 0 through 11 corresponding to 
+   * motor ports 1 through 12.  
+   */
   void Disable(unsigned int index);
-  unsigned short GetPosition(unsigned int index);
-  void SetPosition(unsigned int index, unsigned short pos);
+
+  /**
+   * Set the command of the given servo/motor.  
+   * The command is the position of a servo or the speed of a motor, 
+   * depending on what is attached to the port, either a servo module
+   * or a motor module.  
+   * @param index the motor in question, 0 through 11 corresponding to 
+   * motor ports 1 through 12.  
+   * @param val The value of the command can be between 0 and 250. 
+   */
+  void SetCommand(unsigned int index, unsigned short val);
+
+  /** 
+   * Get the command of the given servo/motor.
+   * The command is the position of a servo or the speed of a motor, 
+   * depending on what is attached to the port, either a servo module
+   * or a motor module.  
+   * @param index the motor in question, 0 through 11 corresponding to 
+   * motor ports 1 through 12.  
+   */    
+  unsigned short GetCommand(unsigned int index);
   
-  // shouldn't be necessary to call SetTiming
+  /** 
+   * Set the timing of the servo/motor controller, namely the minimum and 
+   * maximum of command.  This method shouldn't 
+   * need to be called except in special applications.
+   */
   void SetTiming(unsigned short min, unsigned short max);
 
 private:

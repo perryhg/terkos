@@ -28,7 +28,10 @@ enum ERBState
     STATE_PLAY
   };
 
-class MotorControllerI;
+/**
+ * CQEMotorRec records motor movement of regular motors in ports 13, 
+ * 14, 15 and 16 for later recall and playback. 
+ */
 class CQEMotorRec 
 {
 public:
@@ -36,15 +39,40 @@ public:
   virtual ~CQEMotorRec();
 
   void Init(unsigned long size, unsigned char axes, pthread_mutex_t *pMutex);
+
+  /**
+   * Begin recording and storing positions of axes for later playback. 
+   * This method is useful if the axes can be easily back-driven, in 
+   * which case the axes can be "taught" by hand and later the 
+   * movements can be recalled with Play().
+   */
   virtual void Record();
+
+  /** 
+   * Begin playback of recorded movements.  See Record().  This method
+   * does not block.
+   */
   virtual void Play();
+
+  /**
+   * Stop recording or playback if they are currently running.
+   */
   void RStop();
+
+  /**
+   * Get play status.
+   * @return true if playing, false otherwise.
+   */
   bool Playing();
+
+  /**
+   * Get record status.
+   * @return true if recording, false otherwise.
+   */
   bool Recording();
-  bool UpdatePosition(); // returns true if RecordUpdate needs updated position
 
 protected:
-  friend class MotorControllerI;
+  bool UpdatePosition(); // returns true if RecordUpdate needs updated position
 
   short *m_pdata;
   unsigned long m_readIndex;

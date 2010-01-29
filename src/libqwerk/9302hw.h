@@ -26,7 +26,7 @@
 
 /**
  * C9302Hardware interacts directly with the Cirrus EP9302 hardware 
- * perhiperals.  This class is normally only used by other 
+ * peripherals.  This class is normally only used by other 
  * I/O classes.  You shouldn't need to use this class if you
  * wish to interact with sensors, actuators, lcd and/or keypad.      
  * To instantiate this class: 

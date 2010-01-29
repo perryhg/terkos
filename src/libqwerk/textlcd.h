@@ -61,24 +61,68 @@
 #define TL_DELAY()          Delay(20)
 #define TL_DELAYL()         Delay(2000)
 
-class CTextLcd : public IProperty
+/** 
+ * CTextLcd allows control of the 16x2 text LCD on the VEXPro. 
+ * To instantiate this class: 
+ * \code
+ * // by pointer
+ * CTextLcd *plcd = CTextLcd::GetPtr(); 
+ * // or by reference
+ * CTextLcd &lcd = CTextLcd::GetRef();
+ * \endcode
+ * And when done with this class, call Release(), for each call to 
+ * GetPtr() or GetRef():
+ * \code
+ * CTextLcd::Release();
+ * \endcode
+ */class CTextLcd : public IProperty
 {
 public:
+  /**
+   * This internal macro handles instantiation of this class. 
+   */
   SINGLETON(CTextLcd);
 
   static const unsigned int NUM_ROWS;
   static const unsigned int NUM_COLUMNS;
-          
+
+  /** 
+   * Clear the LCD of all characters.
+   */          
   void Clear();
+
+  /**
+   * Move the cursor to the specifed row, column location
+   * @param row desired row, either 0, or 1 since it is a 2 row text LCD.
+   * @param col desired column, 0 thru 15, since it is a 16 column text LCD.
+   */
   void MoveCursor(const unsigned int row, const unsigned int col);
+
+  /**
+   * print to LCD, printf style.
+   * @param format the format string, same as printf in stdio.h.  
+   * @return the number of characters printed
+   */
   int printf(const char *format, ...);
+  /**
+   * output a single character.
+   * @param character character to print.
+   */
   void SetCharacter(const char character);
 
   // Save(CContext *context);
   // Restore(CContext context);
 
-  // IProperty
+  /**
+   * See the definition of IProperty::GetProperty for more information 
+   * on this method.  The following properties are supported:
+   */
   virtual int GetProperty(int property, long *value);
+
+  /**
+   * See the definition of IProperty::SetProperty for more information 
+   * on this method.  The following properties re supported:
+   */
   virtual int SetProperty(int property, long value);
 
 private:
