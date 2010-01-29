@@ -31,6 +31,9 @@
 #define QEL_YELLOW        0xff40
 #define QEL_ORANGE        0xffff
 
+/**
+ * The three LED's on the VEXPro.
+ */
 typedef enum
   {
     LED_ROBOT = 0,
@@ -39,6 +42,9 @@ typedef enum
   }
 ELEDIndex;
 
+/**
+ * The possible colors of each of the 3 LEDs on the VEXPro.
+ */
 typedef enum 
   {
     LED_COLOR_OFF = 0,
@@ -49,6 +55,10 @@ typedef enum
   } 
 ELEDColor;
 
+/** 
+ * The possible blinking modes of the 3 LEDs on the VEXPro.  These modes
+ * are not supported as of this writing.
+ */
 typedef enum
   {
     LED_SOLID,
@@ -59,11 +69,34 @@ typedef enum
   } 
 ELEDMode;
 
+/**
+ * CQELEDController controls the 3 tri-color LEDs on the VEXPro.
+ * To instantiate this class: 
+ * \code
+ * // by pointer
+ * CQELEDController *pled = CQELEDController::GetPtr(); 
+ * // or by reference
+ * CQELEDController &led = CQELEDController::GetRef();
+ * \endcode
+ * And when done with this class, call Release(), for each call to 
+ * GetPtr() or GetRef():
+ * \code
+ * CQELEDController::Release();
+ * \endcode
+ */
 class CQELEDController
 {
 public:
+  /** 
+   * This internal macro handles the instantiation of this class.
+   */
   SINGLETON(CQELEDController);
   
+  /**
+   * Set the color of the LED.
+   * @param led the LED you wish to set.
+   * @param color the color you wish to set it to.
+   */
   void SetLED(ELEDIndex led, ELEDColor color);
 
 private:

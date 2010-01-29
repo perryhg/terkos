@@ -54,7 +54,7 @@ void CQEServo::Disable(unsigned int index)
   m_up[index] = 0;
 }
 
-unsigned short CQEServo::GetPosition(unsigned int index)
+unsigned short CQEServo::GetCommand(unsigned int index)
 {
   if (index>=m_num)
     return 0;
@@ -62,7 +62,7 @@ unsigned short CQEServo::GetPosition(unsigned int index)
   return m_up[index] - m_min;
 }
 
-void CQEServo::SetPosition(unsigned int index, unsigned short pos)
+void CQEServo::SetCommand(unsigned int index, unsigned short pos)
 {
   unsigned short val;
 

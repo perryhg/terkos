@@ -264,14 +264,24 @@ int CTextLcd::GetProperty(int property, long *value)
 
   switch(property)
     {
+      /**
+       * - TL_PROP_BACKLIGHT=the state of the backlight on the LCD, where 
+       * 0=off, 1=on.
+       */
     case TL_PROP_BACKLIGHT:
       *value = *m_p9302hw->PortAData() & 0x0008 ? 1 : 0;
       break;
-
+      
+      /**
+       * - TL_PROP_HEIGHT=the height of the LCD in rows (2 for now).
+       */
     case TL_PROP_HEIGHT:
       *value = CTextLcd::NUM_ROWS;
       break;
 
+      /**
+       * - TL_PROP_WIDTH=the width ofthe LCD in columns (16 for now).
+       */
     case TL_PROP_WIDTH:
       *value = CTextLcd::NUM_COLUMNS;
       break;
@@ -287,6 +297,10 @@ int CTextLcd::SetProperty(int property, long value)
 {
   switch (property)
     {
+      /**
+       * - TL_PROP_BACKLIGHT=set the state of the LCD backlight, where
+       * 0=off, 1=on.
+       */
     case TL_PROP_BACKLIGHT:
       if (value)
 	*m_p9302hw->PortAData() |= 0x08;

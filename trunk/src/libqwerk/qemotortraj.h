@@ -23,21 +23,104 @@
 #define QEM_BIT(n)                 (1<<n)
 #define QEM_POS_SCALE              8
 
-class CQwerkHardware;
 
+/**
+ * CQEMotorTraj allows the regular motors in ports 13, 14, 15 and 16 to 
+ * have their position controlled via smooth controlled motion.  
+ * This motion is 
+ * called a "trapezoid" trajectory with a constant 
+ * acceleration at the beginning of the trajectory, 
+ * a constant desired maximum velocity in the middle,
+ * and a constant desired maximum deceleration to the goal position 
+ * at the end of the trajectory.
+ * To instantiate this class: 
+ * \code
+ * // by pointer
+ * CQEMotorTraj *pmt = CQEMotorTraj::GetPtr(); 
+ * // or by reference
+ * CQEMotorTraj &mt = CQEMotorTraj::GetRef();
+ * \endcode
+ * And when done with this class, call Release(), for each call to 
+ * GetPtr() or GetRef():
+ * \code
+ * CQEMotorTraj::Release();
+ * \endcode
+ */
 class CQEMotorTraj : public CQEMotorUser, public CQEMotorRec
 {
 public:
-  CQEMotorTraj(int axis0, int axis1=-1, int axis2=-1, int axis3=-1);
-  ~CQEMotorTraj();
+  /**
+   * This internal macro handles instantiation of this class. 
+   */ 
+  SINGLETON(CQEMotorTraj);
 
+  /**
+   * Checks to see if the given axis is done with the last Move command.
+   * @param axis the axis in question, either 0, 1, 2, or 3, corresponding
+   * to motor ports 13, 14, 15, and 16, respectively.
+   * @return true if move is done, false otherwise.
+   */
   bool Done(unsigned int axis);
+
+  /**
+   * Stop the last move command.
+   * @param axis the axis in question, either 0, 1, 2, or 3, corresponding
+   * to motor ports 13, 14, 15, and 16, respectively.
+   */
   void Stop(unsigned int axis);
+
+  /**
+   * Initiate motor movement with trapezoid trajectory and position endpoint.  
+   * A trapezoid
+   * trajectory starts  with a constant 
+   * acceleration at the beginning of the trajectory, 
+   * a constant desired maximum velocity in the middle,
+   * and a constant desired maximum deceleration to the goal position 
+   * at the end of the trajectory.  The units for these values (position, 
+   * velocity, acceleration) are in ticks, ticks/s and ticks/s/s, where
+   * ticks are an angular unit based on the back-emf constant of the motor.  
+   * In general, if you wish to obtain real units such as meters, millimeters,
+   * degrees, radians, etc., you need to perform a simple calibration 
+   * to determine the correct scaling constant for your system, such as 
+   * ticks/meter, ticks/millimeter, ticks/degree, or ticks/radian depending
+   * on what you need/prefer.
+   * @param axis the axis in question, either 0, 1, 2, or 3, corresponding
+   * to motor ports 13, 14, 15, and 16, respectively.
+   * @param endPosition goal position of axis, can be positive or negative.
+   * @param velocity desired maximum velocity.
+   * @param acceleration desired acceleration/deceleration,
+   * strictly positive value.
+   * @param absolute this value determines if the endPosition value is 
+   * relative to the current position or if the endPosition is relative to 
+   * a fixed origin (zero position)-- if it is true it is relative to a 
+   * fixed origin and
+   * if it is false it is relative to the current position of the motor.
+   */
   virtual void Move(unsigned int axis,
 		    Axis_position endPosition, int velocity, 
 		    unsigned int acceleration, bool absolute=false);
+  /**
+   * Initiate a motor movement with specified velocity.
+   * If the current motor velocity is not equal to the specified 
+   * velocity, the motor will either accelerate or decelerate with 
+   * the specified acceleration  to the
+   * specified velocity. 
+   * @param axis the axis in question, either 0, 1, 2, or 3, corresponding
+   * to motor ports 13, 14, 15, and 16, respectively.
+   * @param velocity the desired velocity, can be positive or negative.
+   * @param acceleration desired acceleration/deceleration,
+   * strictly positive value.
+   */
   virtual void MoveVelocity(unsigned int axis,
 			    int velocity, unsigned int acceleration);
+
+  // CQEMotorRec methods
+  virtual void Record();
+  virtual void Play();
+
+protected:
+  CQEMotorTraj();
+  ~CQEMotorTraj();
 
   // trajectory generating methods
   void TrapezoidTrajectory();
@@ -49,15 +132,10 @@ public:
   // read positions from motors
   void ReadPosition();
 
-  // record methods
-  virtual void Record();
-  virtual void Play();
-
   bool m_threadRun;
   pthread_mutex_t m_mutex;
   pthread_cond_t m_cond;
   
-protected:
   pthread_t m_thread;
   unsigned char  m_operAxes;
   unsigned short m_trajectory;

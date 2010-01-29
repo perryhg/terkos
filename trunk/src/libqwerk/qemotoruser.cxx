@@ -19,10 +19,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
+#include <stdexcept>
 #include "9302hw.h"
 #include "qemotoruser.h"
 
-CQEMotorUser::CQEMotorUser(int axis0, int axis1, int axis2, int axis3)
+SINGLETON_REGISTER(CQEMotorUser);
+
+CQEMotorUser::CQEMotorUser()
 {
   char dev[0x10];
   int len;
@@ -38,35 +41,20 @@ CQEMotorUser::CQEMotorUser(int axis0, int axis1, int axis2, int axis3)
   len = strlen(dev);
   dev[len+1] = '\0';
 
-  dev[len] = axis0+'0';
-  m_handle[0] = open(dev, O_RDWR);
-  // TODO: error checking?
-  m_servoAxes = 1;
-  
-  if (axis1>=0)
-    {
-      dev[len] = axis1+'0';
-      m_handle[1] = open(dev, O_RDWR);
-      m_servoAxes++;
-    }
-  if (axis2>=0)
-    {
-      dev[len] = axis2+'0';
-      m_handle[2] = open(dev, O_RDWR);
-      m_servoAxes++;
-    }
-  if (axis3>=0)
-    {
-      dev[len] = axis3+'0';
-      m_handle[3] = open(dev, O_RDWR);
-      m_servoAxes++;
-    } 
+  m_servoAxes = QEMOT_NUM_MOTORS;
 
-  // set frequency and timing
   for (axis=0; axis<m_servoAxes; axis++)
-    SetTiming(axis, QEM_DELAY);
-  SetFrequency(QEM_PERIOD);
+    {
+      dev[len] = '0' + axis;
+      m_handle[axis] = open(dev, O_RDWR);
+      if (m_handle[axis]<0)
+	throw std::runtime_error("cannot open qemot device");
 
+      // set timing
+      SetTiming(axis, QEM_DELAY);
+    }
+
+  SetFrequency(QEM_PERIOD);
   HandleOffset();
   SetWriteQueueSize(QEM_WRITE_QUEUE_SIZE);
 }
@@ -252,19 +240,6 @@ int CQEMotorUser::GetPWM(unsigned int axis)
 void CQEMotorUser::SetPosition(unsigned int axis, Axis_position pos)
 {
  ConstructCall(axis, MOT_SET_POSITION, pos);  
-}
-
-int CQEMotorUser::GetCurrent(unsigned int axis)
-{
-  int current;
-
-  ConstructCall(axis, MOT_GET_MCURRENT, &current);
-
-  return current;
-}
-
-void CQEMotorUser::GetCurrentVector(int current[])
-{
 }
 
 long CQEMotorUser::GetVelocity(unsigned int axis)
