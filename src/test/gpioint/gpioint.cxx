@@ -13,10 +13,17 @@
 #include <unistd.h>
 #include <signal.h>
 #include "qegpioint.h"
+
+int fd, oflags;
      
 void sig_handler(int signum)
 {
-  printf("signal %d\n", signum);
+  struct timeval tv;
+  read(fd, (void *)&tv, sizeof(tv));
+  printf("signal %d %d %d\n", signum, tv.tv_sec, tv.tv_usec);
+  gettimeofday(&tv, NULL);
+  printf("%d %d\n", tv.tv_sec, tv.tv_usec);
+  
 }
 
 int main()
@@ -59,7 +66,6 @@ int main()
   }
 #endif
 #if 1
-  int fd, oflags;
 
   fd = open("/dev/qeint16", O_RDWR); 
   if (fd<0)
@@ -72,18 +78,18 @@ int main()
   fcntl(fd, F_SETFL, oflags | FASYNC);
 
   printf("0\n");
-  *pgpio->DataDir() = 0x0001;
+  pgpio->SetProperty(QEG_PROP_DATA_DIR_REG, 0x0001);
   printf("1\n");
-  *pgpio->IntEdge() = 0x0001;
+  pgpio->SetProperty(QEG_PROP_INTERRUPT_MODE, 0x0001);
   printf("2\n");
 
   while(1)
     {
       printf("0\n");
-      *pgpio->Data() = 0x0000;
+      pgpio->SetProperty(QEG_PROP_DATA_REG, 0x0000);
       sleep(1);
       printf("1\n");
-      *pgpio->Data() = 0x0001;
+      pgpio->SetProperty(QEG_PROP_DATA_REG, 0x0001);
       sleep(1);
     }
 
