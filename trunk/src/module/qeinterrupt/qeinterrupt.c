@@ -378,8 +378,19 @@ static int qe_interrupt_release(struct inode *inode, struct file *filp)
 
 static ssize_t qe_interrupt_read (struct file *filp, char __user *buf, size_t count, loff_t *pos)
 {
+  struct qe_interrupt_data *data;
+  struct timeval tv;
+  int n;
+
+  data = (struct qe_interrupt_data *)filp->private_data;
+
   DPK("read %d %x\n", iminor(filp->f_dentry->d_inode), (int)buf);
-  return 0; 
+
+  qe_interrupt_time(data->vector, &tv);
+  n = count>sizeof(tv) ? sizeof(tv) : count;
+  copy_to_user(buf, (char *)&tv, n);
+
+  return n;
 }
 
 static ssize_t qe_interrupt_write (struct file *filp, const char __user *buf, size_t count, loff_t *pos)
