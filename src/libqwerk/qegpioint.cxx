@@ -67,6 +67,14 @@ int CQEGpioInt::GetProperty(int property, long *value)
       *value = *m_dataDir;
       break;
 
+      /**
+       * - QEG_PROP_INTERRUPT_MODE=returns the contents of the interrupt
+       * mode register -- only the least significant 16 bits are used.
+       */
+    case QEG_PROP_INTERRUPT_MODE:
+      *value = *m_intMode;
+      break;
+
     default:
       return PROP_ERROR_NOT_SUPPORTED;
     }
@@ -97,6 +105,16 @@ int CQEGpioInt::SetProperty(int property, long value)
        */
     case QEG_PROP_DATA_DIR_REG:
       *m_dataDir = value;
+      break;
+
+      /**
+       * - QEG_PROP_INTERRUPT_MODE=sets the interrupt mode of the corresponding
+       * data signal.  A 0 (zero) configures the corresponding data signal to
+       * be positive edge triggered.  A 1 (one) configures the corresponding
+       * data signal to be negative edge triggered.
+       */ 
+    case QEG_PROP_INTERRUPT_MODE:
+      *m_intMode = value;
       break;
 
     default:
