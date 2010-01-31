@@ -18,12 +18,11 @@ int fd, oflags;
      
 void sig_handler(int signum)
 {
-  struct timeval tv;
+  struct timeval tv, tv2;
+  gettimeofday(&tv2, NULL);
   read(fd, (void *)&tv, sizeof(tv));
-  printf("signal %d %d %d\n", signum, tv.tv_sec, tv.tv_usec);
-  gettimeofday(&tv, NULL);
-  printf("%d %d\n", tv.tv_sec, tv.tv_usec);
-  
+  printf("signal %d %d %d %d %d\n", signum, tv.tv_sec, tv.tv_usec,
+	 tv2.tv_sec, tv2.tv_usec);  
 }
 
 int main()
