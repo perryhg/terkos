@@ -34,6 +34,7 @@
 #include <linux/poll.h>
 #include <linux/wait.h>
 #include <linux/cdev.h>
+#include <asm/uaccess.h>
 #include <asm/io.h>
 #include <linux/time.h>
 
@@ -72,7 +73,7 @@ struct qe_interrupt_data
 
 
 static void *io_base = 0;
-
+static unsigned int signal_status = 0;
 
 static int qe_interrupt_open(struct inode *inode, struct file *filp);
 static int qe_interrupt_release(struct inode *inode, struct file *filp);
@@ -105,7 +106,7 @@ int qe_interrupt_enable(unsigned char vector)
     return -EACCES;
 
   //DPK("enable %d\n", vector);
-  writel(1<<vector | readl(QEINT_INT_MASK), QEINT_INT_MASK);	      
+  writel((1<<vector) | readl(QEINT_INT_MASK), QEINT_INT_MASK);	      
   return 0;
 }
 
@@ -118,7 +119,7 @@ int qe_interrupt_disable(unsigned char vector)
     return -EINVAL;
 
   //DPK("disable %d\n", vector);
-  writel(1<<vector & ~readl(QEINT_INT_MASK), QEINT_INT_MASK);	      
+  writel(~(1<<vector) & readl(QEINT_INT_MASK), QEINT_INT_MASK);	      
   return 0;
 }
 
@@ -168,10 +169,12 @@ qe_interrupt_callback(int irq, void *desc)
   unsigned char i = 0;
   unsigned long mask;
   unsigned long status;
+  struct timeval tv;
+  do_gettimeofday(&tv);
 
   while((status=readl(QEINT_INT_STATUS)))
     {
-      for (i=0; i<QEINT_NUM_INTERRUPTS; i++)
+     for (i=0; i<QEINT_NUM_INTERRUPTS; i++)
 	{
 	  mask = 1<<i;
 	  if (status&mask)
@@ -179,8 +182,9 @@ qe_interrupt_callback(int irq, void *desc)
 	      if (qe_interrupts[i].mode!=QEINT_MODE_UNUSED)
 		{
 		  // timestamp interrupt
-		  do_gettimeofday(&qe_interrupts[i].tv);
+		  qe_interrupts[i].tv = tv;
 		  // signal processes that need signalling
+		  signal_status |= mask;
 		  if (qe_interrupts[i].async_queue)
 		    kill_fasync(&qe_interrupts[i].async_queue, SIGIO, POLL_IN);
 		  // callback modules that need callbacking
@@ -347,6 +351,10 @@ static int qe_interrupt_open(struct inode *inode, struct file *filp)
   // check to see if interrupt is already being used
   if (data->used)
     return -EBUSY;
+
+  // reset signal status
+  signal_status &= ~(1<<data->vector);
+		  
   data->used = TRUE; // if not, set to true
   data->mode = QEINT_MODE_FAST;
   qe_interrupt_enable(data->vector);
@@ -402,8 +410,52 @@ static ssize_t qe_interrupt_write (struct file *filp, const char __user *buf, si
 static int qe_interrupt_ioctl(struct inode *inode, struct file *filp,
                  unsigned int cmd, unsigned long arg)
 {
-  DPK("ioctl %d %d\n", cmd, (int)arg);
-  return 0;
+  struct qe_interrupt_data *data;
+  int err = 0, ret = 0;
+  unsigned char status;
+
+  DPK("ioctl %x %x\n", cmd, (int)arg);
+
+  data = (struct qe_interrupt_data *)filp->private_data;
+
+  /* don't even decode wrong cmds: better returning  ENOTTY than EFAULT */
+  if (_IOC_TYPE(cmd) != QEINT_IOC_MAGIC) 
+    return -ENOTTY;
+  if (_IOC_NR(cmd) > QEINT_IOC_MAXNR) 
+    return -ENOTTY;
+
+  /*
+   * the type is a bitmask, and VERIFY_WRITE catches R/W
+   * transfers. Note that the type is user-oriented, while
+   * verify_area is kernel-oriented, so the concept of "read" and
+   * "write" is reversed
+   */
+  if (_IOC_DIR(cmd) & _IOC_READ)
+    err = !access_ok(VERIFY_WRITE, (void __user *)arg, _IOC_SIZE(cmd));
+  else if (_IOC_DIR(cmd) & _IOC_WRITE)
+    err =  !access_ok(VERIFY_READ, (void __user *)arg, _IOC_SIZE(cmd));
+
+  if (err)
+    return -EFAULT;
+
+  switch(cmd) 
+    {
+    case QEINT_IOC_READ_STATUS:
+      DPK("read status %d\n", data->vector);
+      status = signal_status & (1<<data->vector) ? 1 : 0;
+      ret = __put_user(status, (char __user *) arg);
+      break;
+
+    case QEINT_IOC_RESET_STATUS:
+      DPK("reset status %d\n", data->vector);
+      signal_status &= ~(1<<data->vector);
+      break;
+
+    default:  /* redundant, as cmd was checked against MAXNR */
+      return -ENOTTY;
+    }
+  
+  return ret;
 }
 
 static int qe_interrupt_fasync(int fd, struct file *filp, int mode)
