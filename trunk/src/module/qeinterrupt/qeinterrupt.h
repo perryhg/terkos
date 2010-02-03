@@ -16,6 +16,8 @@
 #ifndef _QEINTERRUPT_H
 #define _QEINTERRUPT_H
 
+#include <linux/ioctl.h>
+
 #ifndef TRUE
 #define TRUE                 1
 #endif
@@ -34,6 +36,13 @@
 #define QEINT_MODE_UNUSED      0
 #define QEINT_MODE_FAST        1
 #define QEINT_MODE_DEFERRED    2
+
+#define QEINT_IOC_MAGIC        0xe1
+
+#define QEINT_IOC_READ_STATUS  _IOR(QEINT_IOC_MAGIC, 1, char)
+#define QEINT_IOC_RESET_STATUS _IO(QEINT_IOC_MAGIC, 2)
+
+#define QEINT_IOC_MAXNR        2
 
 int qe_interrupt_enable(unsigned char vector);
 int qe_interrupt_disable(unsigned char vector);
