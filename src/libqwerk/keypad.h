@@ -46,7 +46,10 @@ class CKeypad
 {
 public:
   /**
-   * This internal macro handles instantiation of this class. 
+   * This internal macro handles instantiation of this class.
+   * Note, since this device is input-only (read-only), multiple processes
+   * are allowed to use it.  In this case, the SINGLETON macro is used
+   * to prevent multiple instances within the same process.  
    */ 
   SINGLETON(CKeypad);
 

@@ -41,7 +41,7 @@
 /**
  * CQEGpioInt is used to interact with the external digital ports, 
  * such as reading, writing and triggering on interruptible input 
- * events. (Note, interruptible events are not supported as of this writing.) 
+ * events. 
  * To instantiate this class: 
  * \code
  * // by pointer
@@ -75,10 +75,32 @@ public:
    */
   virtual int SetProperty(int property, long value);
 
+  /**
+   * Register an interrupt callback -- ie a function that gets called
+   * when an interrupt event occurs on the specified I/O signal.
+   * @param io the I/O signal in question, 0 through 15 corresponding 
+   * digital connectors 1 through 16, respectively.
+   * @param callback the callback function which has arguments for the  
+   * @return 0 if success -1 if error.
+   */
+  int RegisterCallback(unsigned int io, void (*callback)(unsigned int, struct timeval *));
+
+ /**
+   * Remove (unregister) an interrupt callback.
+   * @param io the I/O signal in question, 0 through 15 corresponding 
+   * digital connectors 1 through 16, respectively.
+   * @return 0 if success -1 if error.
+   */
+   int UnregisterCallback(unsigned int io);
+
 private:
   CQEGpioInt();
   ~CQEGpioInt();
 
+  static void SigHandler(int signum);
+
+  static int m_fd[QEG_NUM_IO];
+  static void (*m_callback[QEG_NUM_IO])(unsigned int, struct timeval *);
   C9302Hardware *m_p9302hw;
   volatile unsigned short *m_data;
   volatile unsigned short *m_dataDir;

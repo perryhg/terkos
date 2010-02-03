@@ -16,8 +16,6 @@
 #include <unistd.h>
 #include "keypad.h"
 
-SINGLETON_REGISTER(CKeypad);
-
 const unsigned int CKeypad::KEY_OK = KP_KEY_OK;
 const unsigned int CKeypad::KEY_CANCEL = KP_KEY_CANCEL;
 const unsigned int CKeypad::KEY_RIGHT = KP_KEY_RIGHT;
