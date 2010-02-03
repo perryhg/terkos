@@ -123,11 +123,10 @@ int main()
   pgpio->RegisterCallback(13, callback);
   pgpio->RegisterCallback(14, callback);
   pgpio->RegisterCallback(15, callback);
-  pgpio->RegisterCallback(16, callback);
   printf("0\n");
   pgpio->SetProperty(QEG_PROP_DATA_DIR_REG, 0xffff);
   printf("1\n");
-  pgpio->SetProperty(QEG_PROP_INTERRUPT_MODE, 0xffff);
+  pgpio->SetProperty(QEG_PROP_INTERRUPT_MODE, 0x00ff);
   printf("2\n");
 
   while(1)
