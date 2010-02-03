@@ -15,7 +15,12 @@
 #include "qegpioint.h"
 
 int fd, oflags;
-     
+
+void callback(unsigned int io, struct timeval *ptv)
+{
+  printf("callback %d %d %d\n", io, ptv->tv_sec, ptv->tv_usec);
+}
+ 
 void sig_handler(int signum)
 {
   struct timeval tv, tv2;
@@ -64,7 +69,7 @@ int main()
 
   }
 #endif
-#if 1
+#if 0
 
   fd = open("/dev/qeint16", O_RDWR); 
   if (fd<0)
@@ -73,7 +78,7 @@ int main()
     printf("error signal\n");
   if (fcntl(fd, F_SETOWN, getpid())<0)
     printf("error fcntl\n");
-  fcntl(fd, F_GETFL);
+  oflags = fcntl(fd, F_GETFL);
   fcntl(fd, F_SETFL, oflags | FASYNC);
 
   printf("0\n");
@@ -100,5 +105,39 @@ int main()
 
   while(1)
     printf("%x\n", *pgpio->Data());
+#endif
+#if 1
+  pgpio->RegisterCallback(0, callback);
+  pgpio->RegisterCallback(1, callback);
+  pgpio->RegisterCallback(2, callback);
+  pgpio->RegisterCallback(3, callback);
+  pgpio->RegisterCallback(4, callback);
+  pgpio->RegisterCallback(5, callback);
+  pgpio->RegisterCallback(6, callback);
+  pgpio->RegisterCallback(7, callback);
+  pgpio->RegisterCallback(8, callback);
+  pgpio->RegisterCallback(9, callback);
+  pgpio->RegisterCallback(10, callback);
+  pgpio->RegisterCallback(11, callback);
+  pgpio->RegisterCallback(12, callback);
+  pgpio->RegisterCallback(13, callback);
+  pgpio->RegisterCallback(14, callback);
+  pgpio->RegisterCallback(15, callback);
+  pgpio->RegisterCallback(16, callback);
+  printf("0\n");
+  pgpio->SetProperty(QEG_PROP_DATA_DIR_REG, 0xffff);
+  printf("1\n");
+  pgpio->SetProperty(QEG_PROP_INTERRUPT_MODE, 0xffff);
+  printf("2\n");
+
+  while(1)
+    {
+      printf("0\n");
+      pgpio->SetProperty(QEG_PROP_DATA_REG, 0x0000);
+      sleep(1);
+      printf("1\n");
+      pgpio->SetProperty(QEG_PROP_DATA_REG, 0xffff);
+      sleep(1);
+    }
 #endif
 }
