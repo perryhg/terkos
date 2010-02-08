@@ -107,6 +107,10 @@ int main()
     printf("%x\n", *pgpio->Data());
 #endif
 #if 1
+  printf("0\n");
+  pgpio->SetData(0x0000);
+  pgpio->SetDataDirection(0xffff);
+  printf("1\n");
   pgpio->RegisterCallback(0, callback);
   pgpio->RegisterCallback(1, callback);
   pgpio->RegisterCallback(2, callback);
@@ -123,19 +127,34 @@ int main()
   pgpio->RegisterCallback(13, callback);
   pgpio->RegisterCallback(14, callback);
   pgpio->RegisterCallback(15, callback);
-  printf("0\n");
-  pgpio->SetProperty(QEG_PROP_DATA_DIR_REG, 0xffff);
-  printf("1\n");
-  pgpio->SetProperty(QEG_PROP_INTERRUPT_MODE, 0x00ff);
+  pgpio->SetInterruptMode(0, QEG_INTERRUPT_POSEDGE); 
+  pgpio->SetInterruptMode(1, QEG_INTERRUPT_POSEDGE); 
+  pgpio->SetInterruptMode(2, QEG_INTERRUPT_POSEDGE); 
+  pgpio->SetInterruptMode(3, QEG_INTERRUPT_POSEDGE); 
+  pgpio->SetInterruptMode(4, QEG_INTERRUPT_POSEDGE); 
+  pgpio->SetInterruptMode(5, QEG_INTERRUPT_POSEDGE); 
+  pgpio->SetInterruptMode(6, QEG_INTERRUPT_POSEDGE); 
+  pgpio->SetInterruptMode(7, QEG_INTERRUPT_POSEDGE); 
+  pgpio->SetInterruptMode(8, QEG_INTERRUPT_NEGEDGE); 
+  pgpio->SetInterruptMode(9, QEG_INTERRUPT_NEGEDGE); 
+  pgpio->SetInterruptMode(10, QEG_INTERRUPT_NEGEDGE); 
+  pgpio->SetInterruptMode(11, QEG_INTERRUPT_NEGEDGE); 
+  pgpio->SetInterruptMode(12, QEG_INTERRUPT_NEGEDGE); 
+  pgpio->SetInterruptMode(13, QEG_INTERRUPT_NEGEDGE); 
+  pgpio->SetInterruptMode(14, QEG_INTERRUPT_NEGEDGE); 
+  pgpio->SetInterruptMode(15, QEG_INTERRUPT_NEGEDGE); 
   printf("2\n");
+
+  printf("int %d\n", pgpio->SetInterrupt(0, false));
+  printf("int %d\n", pgpio->SetInterrupt(8, false));
 
   while(1)
     {
       printf("0\n");
-      pgpio->SetProperty(QEG_PROP_DATA_REG, 0x0000);
+      pgpio->SetData(0x0000);
       sleep(1);
       printf("1\n");
-      pgpio->SetProperty(QEG_PROP_DATA_REG, 0xffff);
+      pgpio->SetData(0xffff);
       sleep(1);
     }
 #endif
