@@ -14,6 +14,9 @@
 #include <signal.h>
 #include "qegpioint.h"
 
+#define USPI 150
+#define BIAS 300
+
 unsigned long diff(struct timeval *ptv0, struct timeval *ptv1)
 {
   long val;
@@ -37,7 +40,7 @@ void callback(unsigned int io, struct timeval *ptv)
 
   if (io==1 && flag)
     {
-      printf("%d\n", diff(&tv0, ptv));
+      printf("%d\n", (diff(&tv0, ptv)+USPI/2-BIAS)/USPI);
     }
 }
 
