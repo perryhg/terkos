@@ -158,9 +158,16 @@ int qe_interrupt_unregister(int vector)
 
 void qe_interrupt_time(int vector, struct timeval *ptv)
 {
+  unsigned long save;
+
+  // save interrupt mask and disable
+  save = readl(QEINT_INT_MASK);
   qe_interrupt_disable(vector);
+
   *ptv = qe_interrupts[vector].tv; 
-  qe_interrupt_enable(vector);
+
+  // restore interrupt mask
+  writel(save, QEINT_INT_MASK);  
 }
 
 static irqreturn_t
@@ -223,11 +230,11 @@ static int __init qe_interrupt_init(void)
   qeint_class = class_create(THIS_MODULE, "qeint");
   if (IS_ERR(qeint_class))
     {
-      PK("unable to create qeint class");
+      DPK("unable to create qeint class");
       qeint_class = NULL;
       goto fail_mem;
     }
-  PK("created qeint class\n");
+  DPK("created qeint class\n");
 
   // set chip select timing for FPGA
   retval = (int)request_mem_region(0x80080000, 0xc, "scr ports");
@@ -384,7 +391,7 @@ static int qe_interrupt_release(struct inode *inode, struct file *filp)
   return 0;
 }
 
-static ssize_t qe_interrupt_read (struct file *filp, char __user *buf, size_t count, loff_t *pos)
+static ssize_t qe_interrupt_read(struct file *filp, char __user *buf, size_t count, loff_t *pos)
 {
   struct qe_interrupt_data *data;
   struct timeval tv;
@@ -450,6 +457,14 @@ static int qe_interrupt_ioctl(struct inode *inode, struct file *filp,
       DPK("reset status %d\n", data->vector);
       signal_status &= ~(1<<data->vector);
       break;
+
+    case QEINT_IOC_DISABLE:
+      DPK("disable %d\n", data->vector);
+      return qe_interrupt_disable(data->vector);
+
+    case QEINT_IOC_ENABLE:
+      DPK("enable %d\n", data->vector);
+      return qe_interrupt_enable(data->vector);
 
     default:  /* redundant, as cmd was checked against MAXNR */
       return -ENOTTY;
