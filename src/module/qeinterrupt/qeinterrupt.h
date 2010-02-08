@@ -41,8 +41,10 @@
 
 #define QEINT_IOC_READ_STATUS  _IOR(QEINT_IOC_MAGIC, 1, char)
 #define QEINT_IOC_RESET_STATUS _IO(QEINT_IOC_MAGIC, 2)
+#define QEINT_IOC_DISABLE      _IO(QEINT_IOC_MAGIC, 3)
+#define QEINT_IOC_ENABLE       _IO(QEINT_IOC_MAGIC, 4)
 
-#define QEINT_IOC_MAXNR        2
+#define QEINT_IOC_MAXNR        4
 
 int qe_interrupt_enable(unsigned char vector);
 int qe_interrupt_disable(unsigned char vector);
