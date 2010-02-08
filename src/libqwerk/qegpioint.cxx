@@ -49,7 +49,12 @@ CQEGpioInt::CQEGpioInt()
   
 CQEGpioInt::~CQEGpioInt()
 {
+  int i;
+
   C9302Hardware::Release();
+
+  for(i=0; i<QEG_NUM_IO; i++)
+    CloseDevice(i);
 }
 
 int CQEGpioInt::GetProperty(int property, long *value)
@@ -66,34 +71,6 @@ int CQEGpioInt::GetProperty(int property, long *value)
       *value = QEG_NUM_IO;
       break;
 
-      /**
-       * - QEG_PROP_DATA_REG=returns the state of 
-       * the external digital I/O signals as a bitmap with bit 0 (LSB)
-       * corresponding to digital signal 1 and bit 15 corresponding 
-       * to digital signal 16 -- typically used to read signals
-       * configured as inputs, although the state of output signals is also
-       * returned.
-       */
-    case QEG_PROP_DATA_REG:
-      *value = *m_data;
-      break;
-
-      /**
-       * - QEG_PROP_DATA_DIR_REG=returns the contents of the data
-       * direction register -- only the least significant 16 bits are used.
-       */
-    case QEG_PROP_DATA_DIR_REG:
-      *value = *m_dataDir;
-      break;
-
-      /**
-       * - QEG_PROP_INTERRUPT_MODE=returns the contents of the interrupt
-       * mode register -- only the least significant 16 bits are used.
-       */
-    case QEG_PROP_INTERRUPT_MODE:
-      *value = *m_intMode;
-      break;
-
     default:
       return PROP_ERROR_NOT_SUPPORTED;
     }
@@ -105,37 +82,6 @@ int CQEGpioInt::SetProperty(int property, long value)
 {
   switch (property)
     {
-      /**
-       * - QEG_PROP_DATA_REG=changes the state of 
-       * the external digital I/O signals as a bitmap with bit 0 (LSB)
-       * corresponding to digital signal 1 and bit 15 corresponding 
-       * to digital signal 16 -- typically used to write signals
-       * configured as outputs.
-       */
-    case QEG_PROP_DATA_REG:
-      *m_data = value;
-      break;
-
-      /**
-       * - QEG_PROP_DATA_DIR_REG=sets the data direction of the corresponding
-       * data signal.  A 0 (zero) configures the corresponding data signal 
-       * to be input.  A 1 (one) configures the corresponding data signal 
-       * to be an output.
-       */
-    case QEG_PROP_DATA_DIR_REG:
-      *m_dataDir = value;
-      break;
-
-      /**
-       * - QEG_PROP_INTERRUPT_MODE=sets the interrupt mode of the corresponding
-       * data signal.  A 0 (zero) configures the corresponding data signal to
-       * be positive edge triggered.  A 1 (one) configures the corresponding
-       * data signal to be negative edge triggered.
-       */ 
-    case QEG_PROP_INTERRUPT_MODE:
-      *m_intMode = value;
-      break;
-
     default:
       return PROP_ERROR_NOT_SUPPORTED;
     }
@@ -143,20 +89,69 @@ int CQEGpioInt::SetProperty(int property, long value)
   return PROP_OK;
 }
 
+void CQEGpioInt::SetData(unsigned int data)
+{
+  *m_data = data;
+}
+  
+void CQEGpioInt::SetDataDirection(unsigned int direction)
+{
+  *m_dataDir = direction;
+}
+
+unsigned int CQEGpioInt::GetData()
+{
+  return (unsigned int)*m_data;
+}
+
+unsigned int CQEGpioInt::GetDataDirection()
+{
+  return (unsigned int)*m_dataDir;
+}
+
+int CQEGpioInt::SetInterruptMode(unsigned int io, unsigned int mode)
+{
+  if (io>=QEG_NUM_IO)
+    return -1;
+
+  switch(mode)
+    {
+    case QEG_INTERRUPT_POSEDGE:
+      *m_intMode |= (1<<io);
+      break;
+
+    case QEG_INTERRUPT_NEGEDGE:
+      *m_intMode &= ~(1<<io);
+      break;
+
+    default:
+      return -1;
+    }
+
+  return 0;
+}
+
+int CQEGpioInt::SetInterrupt(unsigned int io, bool enable)
+{
+  if (io>=QEG_NUM_IO)
+    return -1;
+  
+  OpenDevice(io);
+  if (enable)
+    return ioctl(m_fd[io], QEINT_IOC_ENABLE); 
+  else
+    return ioctl(m_fd[io], QEINT_IOC_DISABLE); 
+}
+  
 int CQEGpioInt::RegisterCallback(unsigned int io, void (*callback)(unsigned int, struct timeval *))
 {
   int oflags;
-  char devbuf[32];
-  const char *dev = "/dev/qeint";
 
   if (io>=QEG_NUM_IO)
     return -1;
 
   // open interrupt device
-  sprintf(devbuf, "%s%d", dev, io+16);
-  m_fd[io] = open(devbuf, O_RDWR); 
-  if (m_fd[io]<0)
-    return -1;
+  OpenDevice(io);
 
   if (fcntl(m_fd[io], F_SETOWN, getpid())<0)
     return -1;
@@ -179,11 +174,34 @@ int CQEGpioInt::UnregisterCallback(unsigned int io)
 
   // assuming the following assignment is atomic...
   m_callback[io] = NULL;
-  // close device
-  close(m_fd[io]);
-  m_fd[io] = -1;
+  
+  CloseDevice(io);
 
   return 0;
+}
+
+int CQEGpioInt::OpenDevice(unsigned int io)
+{
+  char devbuf[32];
+  const char *dev = "/dev/qeint";
+
+  if (m_fd[io]==-1)
+    {
+      sprintf(devbuf, "%s%d", dev, io+16);
+      m_fd[io] = open(devbuf, O_RDWR); 
+      if (m_fd[io]<0)
+	return -1;
+    }
+  return 0;
+}
+
+void CQEGpioInt::CloseDevice(unsigned int io)
+{
+  if (m_fd[io]!=-1)
+    {
+      close(m_fd[io]);
+      m_fd[io] = -1;
+    }
 }
 
 void CQEGpioInt::SigHandler(int signum)

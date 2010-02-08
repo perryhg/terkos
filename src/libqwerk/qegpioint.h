@@ -23,11 +23,10 @@
 // Properties
 #define QEG_OBJECT                           3
 #define QEG_PROP_WIDTH                       PROP_ID(QEG_OBJECT, 0)
-#define QEG_PROP_DATA_REG                    PROP_ID(QEG_OBJECT, 1)
-#define QEG_PROP_DATA_DIR_REG                PROP_ID(QEG_OBJECT, 2)
-#define QEG_PROP_INTERRUPT_MODE              PROP_ID(QEG_OBJECT, 3)
-#define QEG_PROP_INTERRUPT_STATUS            PROP_ID(QEG_OBJECT, 4)
-#define QEG_PROP_INTERRUPT_CALLBACK          PROP_ID(QEG_OBJECT, 5)
+
+// interrupt modes, can possibly be used as bitmap
+#define QEG_INTERRUPT_POSEDGE                0x0001
+#define QEG_INTERRUPT_NEGEDGE                0x0002
 
 #define QEG_DEFAULT_BASE                     0x440
 #define QEG_NUM_IO                           16
@@ -76,6 +75,68 @@ public:
   virtual int SetProperty(int property, long value);
 
   /**
+   * Changes the state of 
+   * the external digital I/O signals.
+   * @param data a bitmap with bit 0 (LSB)
+   * corresponding to digital signal 1 and bit 15 corresponding 
+   * to digital signal 16 -- used to change the state of signals
+   * configured as outputs.  A 0 (zero) bit value set the 
+   * corresponding I/O signal 
+   * to be logic low.  A 1 (one) bit value set the corresponding 
+   * I/O signal to be logic high.
+   */
+  void SetData(unsigned int data);
+
+  /**
+   * Sets the data direction of the I/O signals.  
+   * @param direction a bitmap with bit 0 (LSB)
+   * corresponding to digital signal 1 and bit 15 corresponding 
+   * to digital signal 16.  A 0 (zero) bit value configures the 
+   * corresponding I/O signal 
+   * to be input.  A 1 (one) bit value configures the corresponding I/O signal 
+   * to be an output.
+   */
+  void SetDataDirection(unsigned int direction);
+
+  /**
+   * Returns the state of 
+   * the external digital I/O signals as a bitmap with bit 0 (LSB)
+   * corresponding to digital signal 1 and bit 15 corresponding 
+   * to digital signal 16 -- typically used to read signals
+   * configured as inputs, although the state of output signals are also
+   * returned. 
+   */
+  unsigned int GetData();
+
+  /**
+   * Returns the contents of the data
+   * direction register -- only the least significant 16 bits are used.
+   */
+  unsigned int GetDataDirection();
+
+  /**
+   * Sets the interrupt mode of the specified I/O.  
+   * @param io the I/O signal in question, 0 through 15 corresponding 
+   * digital connectors 1 through 16, respectively.
+   * @param mode the following modes are supported
+   * - QEG_INTERRUPT_POSEDGE=interrupt on transition from 
+   * logic low to logic high.
+   * QEB_INTERRUPT_NEGEDGE=interrupt on transition from 
+   * logic high to logic low.
+   * @return 0 if success -1 if error.
+   */ 
+  int SetInterruptMode(unsigned int io, unsigned int mode);
+
+  /** 
+   * Enable or disable the interrupt for the specified I/O.  
+   * @param the I/O signal in question, 0 through 15 corresponding 
+   * digital connectors 1 through 16, respectively.
+   * @param enable false=disable interrupt, true=enable interrupt
+   * @return 0 if success -1 if error.
+   */
+  int SetInterrupt(unsigned int io, bool enable);
+  
+  /**
    * Register an interrupt callback -- ie a function that gets called
    * when an interrupt event occurs on the specified I/O signal.
    * @param io the I/O signal in question, 0 through 15 corresponding 
@@ -97,6 +158,9 @@ private:
   CQEGpioInt();
   ~CQEGpioInt();
 
+  int OpenDevice(unsigned int io);
+  void CloseDevice(unsigned int io);
+    
   static void SigHandler(int signum);
 
   static int m_fd[QEG_NUM_IO];
@@ -105,7 +169,6 @@ private:
   volatile unsigned short *m_data;
   volatile unsigned short *m_dataDir;
   volatile unsigned short *m_intMode;
-
 };
 
 #endif
