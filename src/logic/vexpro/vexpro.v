@@ -201,18 +201,28 @@ module Vexpro(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
 	LedCont InstLedCont(.Addr(Addr[3:1]), .DataRd(LedDataRd), .DataWr(Data), .En(LedEn), .Rd(Rd), .Wr(Wr), 
 			.LedGreen({P[47], P[45], P[43]}), .LedRed({P[48], P[46], P[44]}), .Reset(Reset), .Clk(Clk));
 
+   // Quadrature
+	wire QuadEn;
+	wire [15:0] QuadDataRd;
+   assign QuadEn = Cs & Addr[11:6]==6'b010100;
+   Quadrature4 InstQuadrature(.Addr(Addr[3:1]), .DataRd(QuadDataRd), .DataWr(Data), .En(QuadEn), .Rd(Rd), 
+	   .Wr(Wr), .A({P[6], P[4], P[2], P[0]}), 
+		.B({P[7], P[5], P[3], P[1]}), .Clk(Clk));
+
 	always @(BemfDataRd or BemfEn or
 	         RcsDataRd or RcsEn or
 				GpioDataRd or GpioEn or
 				I2cDataRd or I2cEn or
-				LedDataRd or LedEn)
+				LedDataRd or LedEn or
+				QuadDataRd or QuadEn)
 	   begin
-		case ({BemfEn, RcsEn, GpioEn, I2cEn, LedEn})
-		   5'b10000: DataRd = BemfDataRd;
-			5'b01000: DataRd = RcsDataRd;
-			5'b00100: DataRd = GpioDataRd;
-			5'b00010: DataRd = I2cDataRd;
-			5'b00011: DataRd = LedDataRd;
+		case ({BemfEn, RcsEn, GpioEn, I2cEn, LedEn, QuadEn})
+		   6'b100000: DataRd = BemfDataRd;
+			6'b010000: DataRd = RcsDataRd;
+			6'b001000: DataRd = GpioDataRd;
+			6'b000100: DataRd = I2cDataRd;
+			6'b000010: DataRd = LedDataRd;
+			6'b000001: DataRd = QuadDataRd;
 		   default: DataRd = 16'hxxxx;
 		endcase
 		end
