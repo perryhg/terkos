@@ -7,13 +7,14 @@ int main(int argc, char **argv)
   int i, res;
   CMemMap gpio(0x80840000, 0xcc);
   CMemMap ssp(0x808a0000, 0x18);
+  CMemMap fpga(0x20000000, 0x1000);
   unsigned char bs[0x20000];
   unsigned long len = 0x20000;
   SBitstreamInfo info;
 	
   if (argc<2)
     {
-      printf("Usage: config <file.bit>\n");
+      printf("Usage: fpgac <file.bit>\n");
       return -1;
     }
 		
@@ -74,7 +75,8 @@ int main(int argc, char **argv)
 
   usleep(100000);
   if (*gpio.Uint(0x00)&0x04)
-    printf("Configuration successful\n");
+    printf("Configuration successful (bitstream version 0x%x)\n", 
+	   *fpga.Ushort(0xfd0));
   else
     {
       printf("Configuration failed\n");
