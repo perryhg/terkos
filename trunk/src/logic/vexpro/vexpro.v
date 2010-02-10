@@ -111,7 +111,7 @@ module Vexpro(Addr, Data, RdN, WrN, Dq, CsN, Wait, Int, Clk,
 	Primary InstPrimary(.Addr(Addr), .Data(Data), .RdN(RdN), .WrN(WrN), .Dq(Dq), 
 	   .CsN(CsN), .Wait(Wait), .Int(Int), .Clk(Clk), 
       .Async(Async), .Asdo(Asdo), .Arstn(Arstn), .Asdi(Asdi), .AbitClk(AbitClk), .AudioOut(Audio),
-		.Rd(Rd), .Wr(Wr), .Cs(Cs), .DataRd(DataRd), .Identifier(16'ha003), .Reset(Reset),
+		.Rd(Rd), .Wr(Wr), .Cs(Cs), .DataRd(DataRd), .Identifier(16'ha004), .Reset(Reset),
 		.IntStatus({GpioIntStatus, 15'h0000, BemfIntStatus}), 
 		.IntReset({GpioIntReset, IntDummy, BemfIntReset}));
 
