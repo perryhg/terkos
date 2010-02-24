@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <sys/ioctl.h>
-#include "../module/qeinterrupt/qeinterrupt.h"
+#include "qeinterrupt.h"
 #include "qegpioint.h"
 
 
