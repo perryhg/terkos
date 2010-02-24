@@ -28,7 +28,6 @@ all: $(TARGET).a $(TARGET).so
 html: 
 	$(RM) doc
 	doxygen Doxyfile
-	./docupload
 
 $(LIB_INSTALL_DIR):
 	$(MKDIR) $@
