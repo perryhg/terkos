@@ -72,16 +72,27 @@ int main(int argc, char **argv)
     }
 #endif
 #if 1
-  CQEMotorTraj motor(atoi(argv[1]));
-  motor.SetPIDVGains(0, 100, 0, 500, 0);
+  int axis;
+  if (argc<2)
+    {
+      printf("specify axis\n");
+      exit(1);
+    }
+  axis = atoi(argv[1]);
+
+  printf("axis %d\n", axis);
+
+  CQEMotorTraj &motor = CQEMotorTraj::GetRef();
+
+  motor.SetPIDVGains(axis, 100, 0, 500, 0);
   printf("running\n");
 
   while(1)
     {
-      motor.Move(0, 40000, 20000, 8000);
-      while(!motor.Done(0)); 
-      motor.Move(0, -40000, 20000, 8000);
-      while(!motor.Done(0)); 
+      motor.Move(axis, 40000, 20000, 8000);
+      while(!motor.Done(axis)); 
+      motor.Move(axis, -40000, 20000, 8000);
+      while(!motor.Done(axis)); 
     }
 #endif
 }
