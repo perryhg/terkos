@@ -21,9 +21,9 @@ do
       then
          echo "Launching" $i
 	 PORT=`echo $i | sed -e 's/^.*\(.\)$/\1/'`
-	 X=$(((PORT%3)*180))
-	 Y=$(((PORT/3)*150))
-	 gnome-terminal -e "./all $i" -t "$i" --geometry=20x6+$X+$Y 
+	 X=$(((PORT%3)*280))
+	 Y=$(((PORT/3)*140))
+	 gnome-terminal --hide-menubar -e "./all $i" -t "$i" --geometry=39x6+$X+$Y 
       fi
    done
       

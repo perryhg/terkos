@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include "qegpioint.h"
+#include "qeanalog.h"
 
 #define USPI 150
 #define BIAS 300
@@ -44,8 +45,11 @@ void callback(unsigned int io, struct timeval *ptv)
     }
 }
 
+// note: connector labeled "INPUT" goes to digital 1 (0), 
+// connector labeled "OUTPUT" goes to digital 2 (1).
 int main()
 {
+#if 0
   CQEGpioInt *pgpio = CQEGpioInt::GetPtr();
   volatile unsigned int d;
 
@@ -64,4 +68,36 @@ int main()
       pgpio->SetData(0x0000);
       for (d=0; d<120000; d++);
     }
+#endif
+#if 0 // line sensor
+  CQEAnalog *pa = CQEAnalog::GetPtr();
+  unsigned short val;
+
+  while(1)
+    {
+      val = pa->GetADVoltage(0);
+      if (val>1000)
+	printf("line\n");
+      else
+	printf("no line\n");
+    } 
+#endif
+#if 0 // light sensor
+  CQEAnalog *pa = CQEAnalog::GetPtr();
+  unsigned short val;
+  // 1200-1300 dark, 600-60 light
+  while(1)
+    {
+      val = pa->GetADVoltage(0);
+      printf("%d\n", val);
+    }
+#endif
+#if 1 // bumper
+  CQEGpioInt *pgpio = CQEGpioInt::GetPtr();
+  pgpio->SetDataDirection(0x0000);
+  while(1)
+    {
+      printf("%x\n", pgpio->GetData()&0x0001^0x0001);
+    }
+#endif
 }
