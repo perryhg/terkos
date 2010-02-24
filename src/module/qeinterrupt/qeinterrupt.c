@@ -38,7 +38,7 @@
 #include <asm/io.h>
 #include <linux/time.h>
 
-#include "qeinterrupt.h"
+#include "../../../src/libqwerk/qeinterrupt.h"
 
 
 MODULE_LICENSE("Dual BSD/GPL");
