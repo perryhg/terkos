@@ -26,7 +26,8 @@ DIST_LIB_DIR=$(DIST_DIR)/opt/lib
 DIST_SCRIPTS_DIR=$(DIST_DIR)/opt/scripts
 DIST_USR_BIN_DIR=$(DIST_DIR)/opt/usr/bin
 
-DIST_VEXPRO_USER_CODE=$(DIST_DIR)/vexpro_user_code
+VEXPRO_USER_CODE=vexpro_user_code
+DIST_VEXPRO_USER_CODE=$(DIST_DIR)/$(VEXPRO_USER_CODE)
 
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -136,7 +137,6 @@ dist: $(DIST_CGI_DIR) \
 
 
 usercode: $(DIST_VEXPRO_USER_CODE)	
-	svn co $(TERKOS_REPOSITORY)/install.sh $(DIST_VEXPRO_USER_CODE)/install.sh
 	svn co $(TERKOS_REPOSITORY)/libqwerk $(DIST_VEXPRO_USER_CODE)/libqwerk
 	$(MAKE) -C $(DIST_VEXPRO_USER_CODE)/libqwerk html
 	svn co $(TERKOS_REPOSITORY)/examples $(DIST_VEXPRO_USER_CODE)/examples
@@ -147,11 +147,12 @@ usercodeclean:
 
 usercodewindows: usercodeclean usercode
 	cp install.bat $(DIST_VEXPRO_USER_CODE)
-	gzip 
+	(cd $(DIST_DIR); zip -r $(VEXPRO_USER_CODE) $(VEXPRO_USER_CODE))
+	mv $(DIST_DIR)/$(VEXPRO_USER_CODE).zip .
 
 usercodelinux: usercodeclean usercode
 	cp install.sh $(DIST_VEXPRO_USER_CODE)
-	tar cvfj vexpro_user_code.tar.bz2 -C $(DIST_DIR) vexpro_user_code
+	tar cvfj $(VEXPRO_USER_CODE).tar.bz2 -C $(DIST_DIR) $(VEXPRO_USER_CODE)
 
 #-----------------------------------------------------------------------------------------------------------------------
 

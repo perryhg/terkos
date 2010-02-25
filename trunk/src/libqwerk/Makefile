@@ -35,8 +35,9 @@ $(LIB_INSTALL_DIR):
 $(HEADER_INSTALL_DIR):
 	$(MKDIR) $@
 
+# for now, only install the static library...
 install: all $(LIB_INSTALL_DIR) $(HEADER_INSTALL_DIR)
-	$(CP) $(TARGET).* $(LIB_INSTALL_DIR)
+	$(CP) $(TARGET).a $(LIB_INSTALL_DIR)
 	$(CP) *.h $(HEADER_INSTALL_DIR)
 
 $(TARGET).a: $(OBJECTS)
