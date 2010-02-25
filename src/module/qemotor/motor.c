@@ -197,7 +197,7 @@ static void mot_handle_write(void)
 	  mot_axes[axis].trajectory = TRUE;
 	}
       else if (mot_axes[axis].trajectory &&
-	       mot_axes[axis].timer++==MOT_TRAJ_TIMER)
+	       mot_axes[axis].timer++>=MOT_TRAJ_TIMER)
 	{
 	  mot_axes[axis].trajectory = FALSE;
 	  mot_axes[axis].timer = 0;
