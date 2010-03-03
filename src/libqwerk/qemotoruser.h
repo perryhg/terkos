@@ -67,7 +67,7 @@ public:
    * Set control frequency for all axes (motor 13, 14, 15 and 16).  It is
    * highly recommended that you not call this method unless you have a 
    * a good understanding of how it affects axis control.  
-   * @param desired control frequency expressed in updates per second.
+   * @param freq  desired control frequency expressed in updates per second.
    * @return 0 if success, nonzero otherwise. 
    */
   int          SetFrequency(unsigned int freq);
@@ -83,7 +83,7 @@ public:
 
   /** 
    * Get position of all axes as a vector.
-   * @param array of Axis_position where the axis positions will be written.
+   * @param position array of Axis_position where the axis positions will be written.
    */
   virtual void GetPositionVector(Axis_position position[]);  
 
