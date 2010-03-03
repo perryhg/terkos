@@ -129,7 +129,7 @@ public:
 
   /** 
    * Enable or disable the interrupt for the specified I/O.  
-   * @param the I/O signal in question, 0 through 15 corresponding 
+   * @param io the I/O signal in question, 0 through 15 corresponding 
    * digital connectors 1 through 16, respectively.
    * @param enable false=disable interrupt, true=enable interrupt
    * @return 0 if success -1 if error.
@@ -141,7 +141,8 @@ public:
    * when an interrupt event occurs on the specified I/O signal.
    * @param io the I/O signal in question, 0 through 15 corresponding 
    * digital connectors 1 through 16, respectively.
-   * @param callback the callback function which has arguments for the  
+   * @param callback the callback function that gets called when the 
+   * corresponding I/O signal received an interruptible condition.
    * @return 0 if success -1 if error.
    */
   int RegisterCallback(unsigned int io, void (*callback)(unsigned int, struct timeval *));
