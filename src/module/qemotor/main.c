@@ -173,7 +173,7 @@ static int __init qe_motor_init(void)
       qemot_class = NULL;
       goto fail_mem;
     }
-  PK("created qemot class");
+  DPK("created qemot class");
 
   retval = (int)request_mem_region(QEMOT_BASE_ADDR, QEMOT_WIDTH, "qemot_ports");
   if (retval)
