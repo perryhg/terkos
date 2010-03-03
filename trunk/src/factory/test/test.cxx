@@ -779,7 +779,7 @@ int main(int argc, char **argv)
   g_lcd->Clear();
   g_lcd->printf("Initializing...");
 
-  CQEMotorTraj motor(0, 1, 2, 3);
+  CQEMotorTraj &motor = CQEMotorTraj::GetRef();
 
   g_motor = &motor;
   g_motor->SetPIDVGains(0, 100, 0, 500, 0);
