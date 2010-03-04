@@ -24,7 +24,7 @@
 
 #include "../../../src/libqwerk/qemotor.h"
 #include "motor.h"
-#include "../qeinterrupt/qeinterrupt.h"
+#include "../../../src/libqwerk/qeinterrupt.h"
 
 #if 0 // debug
 #define DPK(format, ...) printk(KERN_NOTICE "qe_motor(motor): " format, ## __VA_ARGS__)

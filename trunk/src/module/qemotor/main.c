@@ -36,7 +36,7 @@
 #include <linux/kfifo.h>
 #include <asm/io.h>
 #include <linux/time.h>
-#include "../qeinterrupt/qeinterrupt.h"
+#include "../../../src/libqwerk/qeinterrupt.h"
 #include "../../../src/libqwerk/qemotor.h"
 #include "motor.h"
 
