@@ -2,6 +2,8 @@ TARGET=libqwerk
 CFLAGS=-g -fPIC -Wall
 SRCS=$(wildcard *.cxx)
 OBJECTS=$(SRCS:.cxx=.o)
+DIST_DIR=dist
+VPATH=$(DIST_DIR)
 
 ifdef WINDOWS_MACHINE
 CXX=/OpenEmbedded/bin/arm-oe-linux-uclibcgnueabi-g++
@@ -29,6 +31,9 @@ html:
 	$(RM) doc
 	doxygen Doxyfile
 
+$(DIST_DIR):
+	$(MKDIR) $@
+
 $(LIB_INSTALL_DIR):
 	$(MKDIR) $@
 
@@ -43,10 +48,11 @@ install: all $(LIB_INSTALL_DIR) $(HEADER_INSTALL_DIR)
 $(TARGET).a: $(OBJECTS)
 	$(AR) rvs $(TARGET).a $(OBJECTS)
 
-$(TARGET).so: $(OBJECTS)
-	$(CXX) -shared -Wl,-soname,$(TARGET).so -o $(TARGET).so $(OBJECTS)
+$(TARGET).so: $(DIST_DIR) $(OBJECTS)
+	$(CXX) -shared -Wl,-soname,$(TARGET).so -o $(DIST_DIR)/$(TARGET).so $(OBJECTS)
 
 clean:
+	$(RM) $(DIST_DIR)
 	$(RM) *~
 	$(RM) *#
 	$(RM) *.o
