@@ -147,11 +147,17 @@ usercodeclean:
 
 usercodewindows: usercodeclean usercode
 	cp install.bat $(DIST_VEXPRO_USER_CODE)
+	mv $(DIST_VEXPRO_USER_CODE)/examples  $(DIST_VEXPRO_USER_CODE)/temp
+	mv  $(DIST_VEXPRO_USER_CODE)/temp/windows  $(DIST_VEXPRO_USER_CODE)/examples
+	rm -r  $(DIST_VEXPRO_USER_CODE)/temp 
 	(cd $(DIST_DIR); zip -r $(VEXPRO_USER_CODE) $(VEXPRO_USER_CODE))
 	mv $(DIST_DIR)/$(VEXPRO_USER_CODE).zip .
 
 usercodelinux: usercodeclean usercode
 	cp install.sh $(DIST_VEXPRO_USER_CODE)
+	mv $(DIST_VEXPRO_USER_CODE)/examples  $(DIST_VEXPRO_USER_CODE)/temp
+	mv  $(DIST_VEXPRO_USER_CODE)/temp/linux  $(DIST_VEXPRO_USER_CODE)/examples
+	rm -r  $(DIST_VEXPRO_USER_CODE)/temp 
 	tar cvfj $(VEXPRO_USER_CODE).tar.bz2 -C $(DIST_DIR) $(VEXPRO_USER_CODE)
 
 #-----------------------------------------------------------------------------------------------------------------------
