@@ -1,1 +1,1 @@
-Go to the [http://www.terk.ri.cmu.edu:8090/ TerkOS Issue Tracker].
+Go to the [http://www.terk.ri.cmu.edu:8090/browse/TERKOS TerkOS Issue Tracker].
