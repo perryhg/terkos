@@ -1,4 +1,5 @@
 #summary 5. Web Site
+#labels SortOrder-0005
 
 ----
-[LCDMenu previous] | [UserGuide up] | next
+[LCDMenu previous] | next
