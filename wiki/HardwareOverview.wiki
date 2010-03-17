@@ -1,4 +1,5 @@
 #summary 2. Hardware Overview
+#labels SortOrder-0002
 
 ----
 [UserGuide previous] | [UserGuide up] | [WirelessNetworking next]
