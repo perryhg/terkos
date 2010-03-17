@@ -1,6 +1,6 @@
 #summary 1. Welcome and Introduction
-#labels SortOrder-0001
+#labels SortOrder-0010,Featured
 #sidebar TableOfContents
 =Welcome and Introduction=
 ----
-previous | next
+previous | [HardwareOverview next]
