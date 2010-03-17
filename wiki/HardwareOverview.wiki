@@ -1,5 +1,5 @@
-#summary 2. Hardware Overview
 #labels SortOrder-0002
-
+#sidebar TableOfContents
+= Hardware Overview =
 ----
-[UserGuide previous] | [UserGuide up] | [WirelessNetworking next]
+[WelcomeAndIntroduction previous] | [WirelessNetworking next]
