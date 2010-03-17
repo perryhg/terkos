@@ -1,5 +1,4 @@
-#summary 1. VEXPro User Guide Table of Contents
-#labels Featured
+#summary VEXPro User Guide Table of Contents
 
 === Table of Contents ===
   # [WelcomeAndIntroduction Welcome and Introduction]
