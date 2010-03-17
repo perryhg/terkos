@@ -1,4 +1,5 @@
 #summary 1. VEXPro User Guide Table of Contents
+#labels Featured
 
 === Table of Contents ===
   # [HardwareOverview Hardware Overview]
