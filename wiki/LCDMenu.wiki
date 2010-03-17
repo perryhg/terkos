@@ -1,5 +1,5 @@
-#summary 4. LCD Menu
-#labels SortOrder-0004
-
+#labels SortOrder-0040
+#sidebar TableOfContents
+= LCD Menu =
 ----
 [WirelessNetworking previous] | [WebSite next]
