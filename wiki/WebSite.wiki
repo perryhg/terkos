@@ -1,5 +1,5 @@
-#summary 5. Web Site
 #labels SortOrder-0005
-
+#sidebar TableOfContents
+= Web Site =
 ----
 [LCDMenu previous] | next
