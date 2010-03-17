@@ -1,4 +1,5 @@
 #summary 3. Wireless Networking
+#labels SortOrder-0003
 
 ----
-[HardwareOverview previous] | [UserGuide up] | [LCDMenu next]
+[HardwareOverview previous] | [LCDMenu next]
