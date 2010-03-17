@@ -1,4 +1,5 @@
 #summary 4. LCD Menu
+#labels SortOrder-0004
 
 ----
-[WirelessNetworking previous] | [UserGuide up] | [WebSite next]
+[WirelessNetworking previous] | [WebSite next]
