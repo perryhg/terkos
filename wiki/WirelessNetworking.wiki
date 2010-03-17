@@ -1,5 +1,5 @@
-#summary 3. Wireless Networking
 #labels SortOrder-0003
-
+#sidebar TableOfContents
+= Wireless Networking =
 ----
 [HardwareOverview previous] | [LCDMenu next]
