@@ -1,4 +1,5 @@
 #summary 0 Welcome and Introduction
+#labels Featured
 
 ----
 previous | [HardwareOverview next]
