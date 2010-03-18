@@ -1,5 +1,30 @@
 #labels SortOrder-0040
 #sidebar TableOfContents
 = LCD Menu =
+
+The VEXPro's LCD Menu provides quick and easy access to both diagnostics and configuration.  Following is an outline of the various menu items, with descriptions where appropriate/necessary:
+
+  * *System Info*
+    * *Power Status*
+    * *Memory Usage*
+    * *Version Info*
+  * *Audio*
+    * *Set Volume*
+    * *Toggle Audio Alerts*
+    * *Reset Audio*
+  * *Wireless Networking*
+    * *Wireless Status*
+    * *List Wireless Networks*
+    * *Start Wireless Upon Boot*
+    * *Reset Wireless Settings*
+  * *Factory Reset*
+    * *Reset Audio*
+    * *Reset Wireless*
+    * *Reset User Programs*
+    * *Reset Root User Password*
+    * *Reset Web Ctrl Panel Password*
+    * *Reset All*
+
+Advanced users may appreciate knowing that the LCD Menu provides a plugin architecture for easy expansion and customization of the options.  Also, the menu hierarchy is defined in XML, so it is easy to reorganize.  Finally, all text labels in the menu can be overridden to allow for internationalization.  We will provide more information on the LCD Menu plugin architecture and customization options in the future.
 ----
 [WirelessNetworking previous] | [WebSite next]
