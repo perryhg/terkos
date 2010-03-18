@@ -10,11 +10,22 @@ The VEXPro features an on-board control panel web site.  Access the site with yo
   * *[WebSite#Passwords Passwords]*
   * *[WebSite#System_Settings System Settings]*
 
+Screenshots of each section are shown below.
+----
+
 ===System Info===
+http://lh3.ggpht.com/_AaoS_28Sdhw/S6KkDyVNUcI/AAAAAAAAADM/Lbc0MDRsWKw/1_SystemInfo.png
 ===Audio===
+http://lh6.ggpht.com/_AaoS_28Sdhw/S6KkEFvDa2I/AAAAAAAAADQ/66ZgU1stj-o/2_Audio.png
 ===Wireless Networking===
+http://lh4.ggpht.com/_AaoS_28Sdhw/S6KkESeQlqI/AAAAAAAAADU/SwLi8Uz3CGk/3_WirelessNetworking1.png
+http://lh5.ggpht.com/_AaoS_28Sdhw/S6KkEWq9TnI/AAAAAAAAADY/PuuJhNX-Yj4/3_WirelessNetworking2.png
+http://lh3.ggpht.com/_AaoS_28Sdhw/S6KkEo9i2qI/AAAAAAAAADc/Ezdd10fuVyI/3_WirelessNetworking3.png
 ===User Programs===
+http://lh3.ggpht.com/_AaoS_28Sdhw/S6KkJWTzarI/AAAAAAAAADg/EoHPeJhAIXE/4_UserPrograms.png
 ===Passwords===
+http://lh4.ggpht.com/_AaoS_28Sdhw/S6KkJ0KyyfI/AAAAAAAAADk/s2KTktXPygE/5_Passwords.png
 ===System Settings===
+http://lh4.ggpht.com/_AaoS_28Sdhw/S6KkJ7Lu9LI/AAAAAAAAADo/7jP3R95EEGc/6_SystemSettings.png
 ----
 [LCDMenu previous] | next
