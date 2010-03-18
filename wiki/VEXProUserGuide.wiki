@@ -1,0 +1,7 @@
+#labels SortOrder-0010,Featured
+#sidebar TableOfContents
+= VEXPro User Guide: Welcome and Introduction=
+
+Welcome to VEXPro and TerkOS!  This user guide explains the basics of using the VEXPro hardware and the TerkOS.
+----
+previous | [HardwareOverview next]
