@@ -2,6 +2,6 @@
 #sidebar TableOfContents
 =Welcome and Introduction=
 
-This user guide explains the basics of using the VEXPro hardware and the TerkOS.
+Welcome to TerkOS!  This user guide explains the basics of using the VEXPro hardware and the TerkOS.
 ----
 previous | [HardwareOverview next]
