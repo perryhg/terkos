@@ -5,26 +5,26 @@
 The VEXPro's LCD Menu provides quick and easy access to both diagnostics and configuration.  Following is an outline of the various menu items, with descriptions where appropriate/necessary:
 
   * *System Info*
-    * *Power Status*
-    * *Memory Usage*
-    * *Version Info*
+    * *Power Status* - main battery voltage/state, backup battery voltage/state, breaker states, etc.
+    * *Memory Usage* - total, used, and free memory
+    * *Version Info* - Linux, firmware, and hardware versions
   * *Audio*
-    * *Set Volume*
-    * *Toggle Audio Alerts*
-    * *Reset Audio*
+    * *Set Volume* - set the speaker volume
+    * *Toggle Audio Alerts* - set whether audio alerts should be played for various warning/error conditions
+    * *Reset Audio* - reset the volume and audio alert settings to the factory defaults
   * *Wireless Networking*
-    * *Wireless Status*
-    * *List Wireless Networks*
-    * *Start Wireless Upon Boot*
-    * *Reset Wireless Settings*
+    * *Wireless Status* - provides ability to turn wireless on/off and--if wireless is currently enabled--display the wireless network name (SSID) and IP address
+    * *List Wireless Networks* - list all visible wireless networks.  Press the OK button to join the currently selected network.
+    * *Start Wireless Upon Boot* - specify whether wireless networking should be started upon system boot
+    * *Reset Wireless Settings* - reset the wireless networking settings to the factory defaults
   * *Factory Reset*
-    * *Reset Audio*
-    * *Reset Wireless*
-    * *Reset User Programs*
-    * *Reset Root User Password*
-    * *Reset Web Ctrl Panel Password*
-    * *Reset All*
+    * *Reset Audio* - reset the volume and audio alert settings to the factory defaults
+    * *Reset Wireless* - reset the wireless networking settings to the factory defaults
+    * *Reset User Programs* - configures the VEXPro to not run any user program upon boot
+    * *Reset Root User Password* - resets the root user password (defaults to *qwerk*)
+    * *Reset Web Ctrl Panel Password* - resets the web control panel password (username is *admin*, default password is *password*)
+    * *Reset All* - resets all of the above
 
-Advanced users may appreciate knowing that the LCD Menu provides a plugin architecture for easy expansion and customization of the options.  Also, the menu hierarchy is defined in XML, so it is easy to reorganize.  Finally, all text labels in the menu can be overridden to allow for internationalization.  We will provide more information on the LCD Menu plugin architecture and customization options in the future.
+Advanced users may appreciate knowing that the LCD Menu is based on a plugin architecture for easy expansion and customization of the options.  Also, the menu hierarchy is defined in XML, so it is easy to reorganize.  Finally, all text labels in the menu can be overridden to allow for internationalization.  We will provide more information on the LCD Menu plugin architecture and customization options in the future.
 ----
 [WirelessNetworking previous] | [WebSite next]
