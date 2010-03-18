@@ -1,6 +1,6 @@
 #labels SortOrder-1000
 === Table of Contents ===
-  # [VEXProUserGuide Welcome and Introduction]
+  # [VEXProTerkOSUserGuide Welcome and Introduction]
   # [HardwareOverview Hardware Overview]
   # [WirelessNetworking Wireless Networking]
   # [LCDMenu LCD Menu]
