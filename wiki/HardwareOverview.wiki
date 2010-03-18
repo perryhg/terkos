@@ -1,6 +1,19 @@
 #labels SortOrder-0020
 #sidebar TableOfContents
 = Hardware Overview =
+The VEXPro features the following:
+  * 16 x 2 LCD screen
+  * Six buttons: a 4-way direction pad plus buttons for OK and Cancel.  The OK button also doubles as the Power button.
+  * Two USB ports: one on the top (into which the black USB wireless adapter is plugged) and another on the left side
+  * Mini USB port for accessing the Linux console
+  * Power and battery backup ports
+  * 16 digital I/O ports
+  * 16 analog I/O ports
+  * 4 motor ports
+  * 12 servo motor ports
+  * UART port
+  * I2C port
+  * internal speaker
 http://lh4.ggpht.com/_AaoS_28Sdhw/S6Jt-e3Q6UI/AAAAAAAAAC0/fT-G8Mr6_8Q/VEXPro.png
 ----
 [WelcomeAndIntroduction previous] | [WirelessNetworking next]
