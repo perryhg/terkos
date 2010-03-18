@@ -1,5 +1,20 @@
 #labels SortOrder-0050
 #sidebar TableOfContents
 = Web Site =
+
+The VEXPro features an on-board control panel web site.  Access the site with your favorite web browser by entering the VEXPro's IP address (which you can obtain via the LCD Menu's *Wireless Networking* -> *Wireless Status* -> *Info* menu option).  The web site contains the following six sections:
+  * *[WebSite#System_Info System Info]*
+  * *[WebSite#Audio Audio]*
+  * *[WebSite#Wireless_Networking Wireless Networking]*
+  * *[WebSite#User_Programs User Programs]*
+  * *[WebSite#Passwords Passwords]*
+  * *[WebSite#System_Settings System Settings]*
+
+===System Info===
+===Audio===
+===Wireless Networking===
+===User Programs===
+===Passwords===
+===System Settings===
 ----
 [LCDMenu previous] | next
