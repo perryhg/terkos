@@ -23,7 +23,6 @@ SINGLETON_REGISTER(CQEMotorTraj);
 void *CQEMotorTraj::TrajThread(void *arg)
 {
   CQEMotorTraj *motor = (CQEMotorTraj *)arg;
-
   while(motor->m_threadRun)
     {
       // wait for next trajectory to start 
@@ -185,7 +184,7 @@ void CQEMotorTraj::Move(unsigned int axis,
   if (!absolute)
     endPosition += pos;
 
-  m_trajectoryEndPosition[axis] = endPosition << QEM_POS_SCALE;
+  m_trajectoryEndPosition[axis] = (long long)endPosition << QEM_POS_SCALE;
   if (m_trajectoryEndPosition[axis]>m_generatedTrajectoryPosition[axis])
     m_trajectoryVelocity[axis] = velocity << QEM_POS_SCALE;
   else
@@ -284,13 +283,13 @@ void CQEMotorTraj::TrapezoidTrajectory()
 	    {
 	      if (m_generatedTrajectoryVelocity[axis]>=(int)(m_trajectoryAcceleration[axis]<<1))
 		m_generatedTrajectoryVelocity[axis] -= m_trajectoryAcceleration[axis];
-	      finish = m_generatedTrajectoryPosition[axis]>=(int)m_trajectoryEndPosition[axis]; 
+	      finish = m_generatedTrajectoryPosition[axis]>=m_trajectoryEndPosition[axis]; 
 	    }
 	  else 
 	    {
 	      if (m_generatedTrajectoryVelocity[axis]<=-(int)(m_trajectoryAcceleration[axis]<<1))
 		m_generatedTrajectoryVelocity[axis] += m_trajectoryAcceleration[axis];
-	      finish = m_generatedTrajectoryPosition[axis]<=(int)m_trajectoryEndPosition[axis];
+	      finish = m_generatedTrajectoryPosition[axis]<=m_trajectoryEndPosition[axis];
 	    }
 	  
 	  m_generatedTrajectoryVelocityUs[axis] = m_generatedTrajectoryVelocity[axis] >> QEM_POS_SCALE;
