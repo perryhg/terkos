@@ -142,7 +142,7 @@ protected:
   unsigned short m_velocityTrajectory;
 
   static void *TrajThread(void *arg);
-  Axis_position m_trajectoryEndPosition[QEMOT_NUM_MOTORS]; // enc << posScale
+  long long m_trajectoryEndPosition[QEMOT_NUM_MOTORS]; // enc << posScale
   int m_trajectoryVelocity[QEMOT_NUM_MOTORS]; // enc/period << posScale
   unsigned int m_trajectoryAcceleration[QEMOT_NUM_MOTORS]; // enc/period/period
  
