@@ -5,3 +5,4 @@
   # [WirelessNetworking Wireless Networking]
   # [LCDMenu LCD Menu]
   # [WebSite Web Site]
+  # [SerialConsole USB Serial Console] 
