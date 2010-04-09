@@ -1,8 +1,8 @@
-#summary How to use the USB serial console on the VEXPro
+#summary Guide on how to use the USB serial console on the VEXPro
 
 ==VEXPro USB Serial Console Setup==
 
-The VEXPro has a USB mini-B port on the side labeled Console.  This port allows access to the VEXPro's main Linux console, which is sometimes useful for configuring the VEXPro's Linux settings, etc.
+The VEXPro has a USB mini-B port on the side labeled "Console".  This port allows access to the VEXPro's main Linux console, which is sometimes useful for configuring the VEXPro's Linux settings, etc.
 
 Before using the VEXPro USB serial console, you must have the correct drivers.  The drivers are required to communicate with the USB serial controller on the VEXPro (FTDI FT232R).
 
@@ -19,10 +19,10 @@ Now bring up a terminal program (such as minicom) and set the communication para
 You should see the Linux login prompt when pressing return, assuming the VEXPro has finished booting.
 
 ===If you are running Windows===
-Obtain the device driver [http://www.ftdichip.com/Drivers/VCP.htm here].  Unzip the driver into a convenient location on your hard drive.  Then plug in the mini-B USB cable (provided with the VEXPro) into your VEXPro and your PC's USB port.  The Hardware Update Wizard should ask you if Windows can "connect to Windows Update to search for the software".  Select "No", and click on next. Then when asked, select "Install from a list or specific location (Advanced)." and click on next.  When asked where to search, select “Include the location in the search” and browse to the directory where you unzipped the driver.  After clicking Next, the driver will automatically install on your system.
+Obtain the device driver [http://www.ftdichip.com/Drivers/VCP.htm here].  Unzip the driver into a convenient location on your hard drive.  Then plug in the mini-B USB cable (provided with the VEXPro) into your VEXPro and your PC's USB port.  The Hardware Update Wizard should ask you if Windows can "connect to Windows Update to search for the software".  Select "No", and click on next. Then when asked, select "Install from a list or specific location (Advanced)." and click on next.  When asked where to search, select “Include the location in the search” and browse to the directory where you unzipped the driver.  After clicking Next, the driver will automatically install on your system.  You can verify that the driver is up and running by looking in the Device Manager under "Ports (COM & LPT).  You should see something like "USB Serial Port (COM4)."
 
 Now bring up a terminal program (such as hyperterminal or [http://realterm.sourceforge.net/ Realterm]) and set the communication parameters to:
-  * device = com2, com3, ..., or com9 depending on your system.  Choose the highest.
+  * device = COM2, com3, ..., or com9 depending on your system.  Choose the highest.
   * baudrate = 460800
   * stop bits = 1
   * parity = none
