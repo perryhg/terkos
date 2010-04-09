@@ -6,7 +6,7 @@ The VEXPro has a USB mini-B port on the side labeled "Console".  This port allow
 
 Before using the VEXPro USB serial console, you must have the correct drivers.  The drivers are required to communicate with the USB serial controller on the VEXPro (FTDI FT232R).
 
-====If you are running Linux====
+===If you are running Linux===
 It is likely that your kernel has the driver built in.  You can verify this by plugging in the mini-B USB cable (provided with the VEXPro) into your VEXPro and your PC's USB port.  Then look for the device in the /dev directory -- it should be ttyUSB0.  Note, you can try this with the VEXPro powered on or off.  If the ttyUSB0 device fails to show up, you can obtain the kernel module or upgrade the kernel.  Related information can be found [http://elinux.org/Hammer_How_to_USB_FTDI here].
 
 Now bring up a terminal program (such as minicom) and set the communication parameters to:
