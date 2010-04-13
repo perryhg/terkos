@@ -1,6 +1,6 @@
 #labels SortOrder-0060
 #sidebar TableOfContents
-= VEXPro User Code =
+=VEXPro User Code Package=
 
 The VEXPro User Code can be downloaded [http://code.google.com/p/terkos/downloads/list here].  It is recommended that you download and install this package after downloading and installing the [http://code.google.com/p/terk-ide/wiki/QuickstartGuide TerkIDE].  Inside this package are the VEXPro sensor, motor and hardware interface library (libqwerk) and various example programs.  
 
