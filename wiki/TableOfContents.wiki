@@ -5,4 +5,5 @@
   # [WirelessNetworking Wireless Networking]
   # [LCDMenu LCD Menu]
   # [WebSite Web Site]
+  # [TerkUserCode Terk User Code package]
   # [SerialConsole USB Serial Console] 
