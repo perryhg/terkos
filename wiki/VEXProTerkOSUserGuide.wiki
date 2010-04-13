@@ -9,7 +9,7 @@ This project contains TerkOS, which includes
   * LCD daemon (LCDMenu) for checking battery status, network connection info, setting audio volume, testing motors, sensors, launching applications, etc.
   * Webserver for configuring network settings, robot name, password, etc.
   * Drivers for PID motor control, digital interrupts, sensor input, audio, voice synthesis, webcam/camera, etc. 
-  * Terk User Code package, includes sensor/motor interface library (libqwerk) and examples.
+  * VEXPro User Code package, includes sensor/motor interface library (libqwerk) and examples.
  
 ----
 previous | [HardwareOverview next]
