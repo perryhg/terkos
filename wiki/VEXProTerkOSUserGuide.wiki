@@ -5,7 +5,7 @@
 Welcome to VEXPro and TerkOS!  This user guide explains the basics of using the VEXPro hardware and the TerkOS.
 
 This project contains TerkOS, which includes
-  * Linux kernel and disk image, based on OpenEmbedded distro
+  * Linux kernel and disk image, based on !OpenEmbedded distro
   * LCD daemon (LCDMenu) for checking battery status, network connection info, setting audio volume, testing motors, sensors, launching applications, etc.
   * Webserver for configuring network settings, robot name, password, etc.
   * Drivers for PID motor control, digital interrupts, sensor input, audio, voice synthesis, webcam/camera, etc. 
