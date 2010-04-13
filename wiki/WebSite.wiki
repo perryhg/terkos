@@ -42,4 +42,4 @@ The System Settings tab provides controls to backup/restore the VEXPro's configu
 
 http://lh4.ggpht.com/_AaoS_28Sdhw/S6KkJ7Lu9LI/AAAAAAAAADo/7jP3R95EEGc/6_SystemSettings.png
 ----
-[LCDMenu previous] | next
+[LCDMenu previous] | [VEXProUserCode next]
