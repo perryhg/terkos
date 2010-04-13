@@ -1,6 +1,7 @@
 #summary Guide on how to use the USB serial console on the VEXPro
-
-==VEXPro USB Serial Console Setup==
+#labels SortOrder-0070
+#sidebar TableOfContents
+= VEXPro USB Serial Console Setup =
 
 The VEXPro has a USB mini-B port on the side labeled "Console".  This port allows access to the VEXPro's main Linux console, which is sometimes useful for configuring the VEXPro's Linux settings, etc.
 
@@ -29,5 +30,6 @@ Now bring up a terminal program (such as hyperterminal or [http://realterm.sourc
   * flow-control = off
 
 ===Logging in===
- 
 When seeing the Linux login prompt "qwerk login:" type in "root".  The default password is "qwerk".  You should then see the command prompt "root@qwerk:~#", assuming your VEXPro's name is "qwerk".  You can now interact with the VEXPro's Linux OS.  
+----
+[VEXProUserCode previous] | next
