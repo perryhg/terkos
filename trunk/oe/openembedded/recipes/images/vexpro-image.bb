@@ -19,6 +19,7 @@ DEPENDS = " \
 
 IMAGE_INSTALL = " \
 	task-boot \
+	avahi-daemon \
 	kernel-module-sd-mod \
 	kernel-module-scsi-mod \
 	kernel-module-usb-storage \
