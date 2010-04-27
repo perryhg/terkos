@@ -134,7 +134,7 @@ if (!window['$'])
                   {
                   if (wirelessInterface['is-enabled'])
                      {
-                     displayStatus("Connected", "The wireless adapter is connected to " + wirelessInterface['access-point']['ssid'] + " and has the IP address " + wirelessInterface['access-point']['ip-address']);
+                     displayStatus("Connected", "The wireless adapter is connected to " + wirelessInterface['access-point']['ssid'] + " and has the IP address " + wirelessInterface['access-point']['ip-address'] + "<br>The wireless adapter's MAC address is " + wirelessInterface['mac-address']);
                      }
                   else
                      {
