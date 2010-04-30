@@ -82,6 +82,7 @@ LCD_MENU_ITEM_ACTIONS_OBJECTS := $(addprefix $(OBJ_DIR)/,$(LCD_MENU_ITEM_ACTIONS
 
 NETWORK_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/WirelessStatusCheckingMenuItemAction.cpp \
                                $(SRC_DIR)/WirelessStatusMenuItemAction.cpp \
+                               $(SRC_DIR)/ViewWirelessAdapterMACAddressMenuItemAction.cpp \
                                $(SRC_DIR)/ViewWirelessNetworksMenuItemAction.cpp \
                                $(SRC_DIR)/ToggleWirelessStartupUponBootMenuItemAction.cpp
 NETWORK_MENU_ITEM_ACTIONS_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(NETWORK_MENU_ITEM_ACTIONS_SRCS)))

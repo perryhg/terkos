@@ -110,6 +110,15 @@
             </implementation-class>
          </item>
       </item>
+      <item text="Wifi Adapter  MAC Address">
+         <item text="">
+            <implementation-class name="ViewWirelessAdapterMACAddressMenuItemAction" library="libNetworkMenuItemActions.so">
+               <property key="status.failure">Failed to probe wifi adapter.</property>
+               <property key="status.unplugged">Wireless adapteris unplugged.</property>
+               <property key="wifi-mac-address.label">Wifi MAC Address</property>
+            </implementation-class>
+         </item>
+      </item>
       <item text="Start WirelessUpon Boot">
          <item text="">
             <implementation-class name="ToggleWirelessStartupUponBootMenuItemAction" library="libNetworkMenuItemActions.so">
