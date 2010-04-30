@@ -28,11 +28,14 @@ if (!edu)
    {
    edu = {};
    }
-else if (typeof edu != "object")
+else
    {
-   var eduExistsMessage = "Error: failed to create edu namespace: edu already exists and is not an object";
-   alert(eduExistsMessage);
-   throw new Error(eduExistsMessage);
+   if (typeof edu != "object")
+      {
+      var eduExistsMessage = "Error: failed to create edu namespace: edu already exists and is not an object";
+      alert(eduExistsMessage);
+      throw new Error(eduExistsMessage);
+      }
    }
 
 // Repeat the creation and type-checking for the next level
@@ -40,11 +43,14 @@ if (!edu.cmu)
    {
    edu.cmu = {};
    }
-else if (typeof edu.cmu != "object")
+else
    {
-   var eduCmuExistsMessage = "Error: failed to create edu.cmu namespace: edu.cmu already exists and is not an object";
-   alert(eduCmuExistsMessage);
-   throw new Error(eduCmuExistsMessage);
+   if (typeof edu.cmu != "object")
+      {
+      var eduCmuExistsMessage = "Error: failed to create edu.cmu namespace: edu.cmu already exists and is not an object";
+      alert(eduCmuExistsMessage);
+      throw new Error(eduCmuExistsMessage);
+      }
    }
 
 // Repeat the creation and type-checking for the next level
@@ -52,11 +58,14 @@ if (!edu.cmu.ri)
    {
    edu.cmu.ri = {};
    }
-else if (typeof edu.cmu.ri != "object")
+else
    {
-   var eduCmuRiExistsMessage = "Error: failed to create edu.cmu.ri namespace: edu.cmu.ri already exists and is not an object";
-   alert(eduCmuRiExistsMessage);
-   throw new Error(eduCmuRiExistsMessage);
+   if (typeof edu.cmu.ri != "object")
+      {
+      var eduCmuRiExistsMessage = "Error: failed to create edu.cmu.ri namespace: edu.cmu.ri already exists and is not an object";
+      alert(eduCmuRiExistsMessage);
+      throw new Error(eduCmuRiExistsMessage);
+      }
    }
 
 // Repeat the creation and type-checking for the next level
@@ -64,11 +73,14 @@ if (!edu.cmu.ri.terk)
    {
    edu.cmu.ri.terk = {};
    }
-else if (typeof edu.cmu.ri.terk != "object")
+else
    {
-   var eduCmuRiTerkExistsMessage = "Error: failed to create edu.cmu.ri.terk namespace: edu.cmu.ri.terk already exists and is not an object";
-   alert(eduCmuRiTerkExistsMessage);
-   throw new Error(eduCmuRiTerkExistsMessage);
+   if (typeof edu.cmu.ri.terk != "object")
+      {
+      var eduCmuRiTerkExistsMessage = "Error: failed to create edu.cmu.ri.terk namespace: edu.cmu.ri.terk already exists and is not an object";
+      alert(eduCmuRiTerkExistsMessage);
+      throw new Error(eduCmuRiTerkExistsMessage);
+      }
    }
 //======================================================================================================================
 
@@ -104,16 +116,43 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
    {
    // ==================================================================================================================
    var jQuery = window['$'];
+   var GUI_ALWAYS_ON_VALUE = 35;
+   var JSON_ALWAYS_ON_VALUE = -1;
 
    edu.cmu.ri.terk.LCDTab = function(lcdConfigManager)
       {
-      // configure the checkbox
-      jQuery('#isLCDBacklightEnabled')['change'](
-            function()
+      jQuery("#timeoutSlider")['slider']({
+         animate: true,
+         range: "min",
+         value: 5,
+         min: 0,
+         max: GUI_ALWAYS_ON_VALUE,
+         step: 5,
+         slide: function(event, ui)
+            {
+            setTextDescriptionOfValue(ui.value);
+            lcdConfigManager.setBacklightTimeout(ui.value == GUI_ALWAYS_ON_VALUE ? -1 : ui.value);
+            }
+      });
+
+      var setTextDescriptionOfValue = function(backlightTimeout)
+         {
+         if (backlightTimeout == 0)
+            {
+            jQuery("#backlightTimeout").text("Always Off");
+            }
+         else
+            {
+            if (backlightTimeout == GUI_ALWAYS_ON_VALUE || backlightTimeout == JSON_ALWAYS_ON_VALUE)
                {
-               lcdConfigManager.setBacklightEnabled(jQuery(this).attr("checked"));
+               jQuery("#backlightTimeout").text("Always On");
                }
-            );
+            else
+               {
+               jQuery("#backlightTimeout").text(backlightTimeout);
+               }
+            }
+         };
 
       // add mouse event handlers to the Save button
       jQuery('#saveLCDConfigButton').mousecapture({
@@ -155,6 +194,10 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
             "Saving Preferences",
             "Please wait while your changes to the LCD configuration are being saved.");
 
+      var crap = function()
+         {
+         }
+
       // register the event listener
       lcdConfigManager.addEventListener({
          onBeforeLoad : function()
@@ -164,8 +207,13 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
             },
          onLoadSuccess : function()
             {
-            var isBacklightEnabled = lcdConfigManager.isBacklightEnabled();
-            jQuery('#isLCDBacklightEnabled').attr('checked', isBacklightEnabled);
+            var backlightTimeout = lcdConfigManager.getBacklightTimeout();
+            if (backlightTimeout == JSON_ALWAYS_ON_VALUE)
+               {
+               backlightTimeout = GUI_ALWAYS_ON_VALUE;
+               }
+            jQuery("#timeoutSlider")['slider']('value', backlightTimeout);
+            setTextDescriptionOfValue(backlightTimeout);
             jQuery("#lcdConfigurationMessageArea").empty();
             jQuery("#lcdConfigurationArea").show();
             },
@@ -179,6 +227,14 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
             jQuery("#saveLCDConfigButton").toggleClass("ui-state-default", isModified);
             jQuery("#saveLCDConfigButton").toggleClass("ui-state-active", !isModified);
             jQuery("#saveLCDConfigButton").toggleClass("ui-state-disabled", !isModified);
+            if (isModified)
+               {
+               jQuery("#lcdNoteAboutConfigChanges").show();
+               }
+            else
+               {
+               jQuery("#lcdNoteAboutConfigChanges").hide();
+               }
             },
          onBeforeSave: function()
             {

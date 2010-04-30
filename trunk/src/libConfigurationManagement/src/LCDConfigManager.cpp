@@ -15,30 +15,20 @@
 
 #include "LCDConfigManager.h"
 
+const int LCDConfigManager::BACKLIGHT_TIMEOUT_VALUE_ALWAYS_ON = -1;
+const int LCDConfigManager::BACKLIGHT_TIMEOUT_VALUE_ALWAYS_OFF = 0;
 const string LCDConfigManager::CONFIG_FILENAME = "lcd_config.json";
 const string LCDConfigManager::DEFAULT_CONFIG_FILENAME = "lcd_config.default.json";
-const string LCDConfigManager::IS_BACKLIGHT_ENABLED = "lcd.backlight.enabled";
+const string LCDConfigManager::BACKLIGHT_TIMEOUT_SECONDS = "lcd.backlight.timeout-seconds";
 
-const bool LCDConfigManager::isBacklightEnabled() const
+const int LCDConfigManager::getBacklightTimeout() const
    {
-   return getBooleanValue(IS_BACKLIGHT_ENABLED);
+   return getIntValue(BACKLIGHT_TIMEOUT_SECONDS);
    }
 
-bool LCDConfigManager::setBacklightEnabled(const bool isEnabled)
+bool LCDConfigManager::setBacklightTimeout(const int timeoutInSeconds)
    {
-   try
-      {
-      CTextLcd &lcd = CTextLcd::GetRef();
-      lcd.SetProperty(TL_PROP_BACKLIGHT, isEnabled);
-      CTextLcd::Release();
-      }
-   catch (...)
-      {
-      // TODO: add logging
-      cerr << "LCDConfigManager::setBacklightEnabled(): failed to get CTextLcd reference required to set backlight state." << endl;
-      }
-
-   return setBooleanValue(IS_BACKLIGHT_ENABLED, isEnabled);
+   return setIntValue(BACKLIGHT_TIMEOUT_SECONDS, timeoutInSeconds);
    }
 
 Json::Value LCDConfigManager::getJSON()
@@ -58,25 +48,15 @@ const bool LCDConfigManager::setJson(Json::Value& config)
    if (config != Json::Value::null)
       {
       // now do some simple tests to verify it
-      Json::Value* isBacklightEnabledProperty = ConfigFile::findProperty(config, IS_BACKLIGHT_ENABLED);
-      if (isBacklightEnabledProperty != NULL)
+      Json::Value* setBacklightTimeoutSecondsProperty = ConfigFile::findProperty(config, BACKLIGHT_TIMEOUT_SECONDS);
+      if (setBacklightTimeoutSecondsProperty != NULL)
          {
          // revert to default
          revertToDefault();
 
-         // set the IS_BACKLIGHT_ENABLED
-         return setBacklightEnabled(isBacklightEnabledProperty->asBool());
+         // set the BACKLIGHT_TIMEOUT_SECONDS
+         return setBacklightTimeout(setBacklightTimeoutSecondsProperty->asInt());
          }
       }
    return false;
-   }
-
-void LCDConfigManager::applyConfiguration()
-   {
-   // load the configuration from disk
-   Json::Value config;
-   load(config);
-
-   // call setJson which ensures that the config prefs are applied to the system
-   setJson(config);
    }

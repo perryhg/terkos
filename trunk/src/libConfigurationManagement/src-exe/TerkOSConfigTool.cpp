@@ -173,7 +173,7 @@ int main(int argc, char** argv)
                   cerr << "TerkOSConfigTool:  failed to parse firmware revision of given JSON [" << newRevisionStr << "]" << endl;
                   }
 
-               // make sure the current revision greater than or equal to the revision in the given JSON
+               // make sure the current revision is greater than or equal to the revision in the given JSON
                if (currentRevision >= newRevision)
                   {
                   AudioConfigManager audioConfigManager;
@@ -182,8 +182,12 @@ int main(int argc, char** argv)
                      updatedComponenets.push_back("audio");
                      }
 
-                  // TODO: add support for updating LCD
-                  
+                  LCDConfigManager lcdConfigManager;
+                  if (lcdConfigManager.setJson(*terkOsConfig))
+                     {
+                     updatedComponenets.push_back("lcd");
+                     }
+
                   UserProgramsConfigManager userProgramsConfigManager;
                   if (userProgramsConfigManager.setJson(*terkOsConfig))
                      {

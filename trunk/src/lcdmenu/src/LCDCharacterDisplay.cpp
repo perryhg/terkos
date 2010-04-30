@@ -134,3 +134,7 @@ void LCDCharacterDisplay::clearLine(const unsigned int lineNumber)
       }
    }
 
+void LCDCharacterDisplay::setBacklight(const bool isOn)
+   {
+   lcd.SetProperty(TL_PROP_BACKLIGHT, isOn);
+   }

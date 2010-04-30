@@ -18,13 +18,15 @@
 
 #include <algorithm>
 #include "ConfigFile.h"
-#include "textlcd.h"
 
 using namespace std;
 
 class LCDConfigManager : public ConfigFile
    {
    public:
+
+      static const int BACKLIGHT_TIMEOUT_VALUE_ALWAYS_ON;
+      static const int BACKLIGHT_TIMEOUT_VALUE_ALWAYS_OFF;
 
       LCDConfigManager(const string& configFileDirectory = ConfigFile::DEFAULT_CONFIG_FILE_DIRECTORY) :
          ConfigFile(CONFIG_FILENAME, DEFAULT_CONFIG_FILENAME, configFileDirectory)
@@ -37,21 +39,19 @@ class LCDConfigManager : public ConfigFile
          // nothing to do
          }
 
-      const bool isBacklightEnabled() const;
+      const int getBacklightTimeout() const;
 
-      bool setBacklightEnabled(const bool isEnabled);
+      bool setBacklightTimeout(const int timeoutInSeconds);
 
       Json::Value getJSON();
 
       const bool setJson(Json::Value& config);
 
-      virtual void applyConfiguration();
-
    private:
 
       static const string CONFIG_FILENAME;
       static const string DEFAULT_CONFIG_FILENAME;
-      static const string IS_BACKLIGHT_ENABLED;
+      static const string BACKLIGHT_TIMEOUT_SECONDS;
 
    };
 

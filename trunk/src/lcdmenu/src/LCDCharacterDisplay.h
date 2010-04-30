@@ -67,6 +67,7 @@ class LCDCharacterDisplay : public CharacterDisplay
       void setCharacter(const unsigned int row, const unsigned int col, const char character);
       void clear();
       void clearLine(const unsigned int lineNumber);
+      void setBacklight(const bool isOn);
 
    private:
 

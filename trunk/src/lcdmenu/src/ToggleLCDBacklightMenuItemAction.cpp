@@ -19,7 +19,7 @@ const string ToggleLCDBacklightMenuItemAction::CLASS_NAME = "ToggleLCDBacklightM
 
 bool ToggleLCDBacklightMenuItemAction::shouldOption1BeSelectedUponActivation() const
    {
-   return configManager.isBacklightEnabled();
+   return false;  // return configManager.isBacklightEnabled();
    }
 
 void ToggleLCDBacklightMenuItemAction::executeOption1Action()
@@ -34,7 +34,7 @@ void ToggleLCDBacklightMenuItemAction::executeOption2Action()
 
 void ToggleLCDBacklightMenuItemAction::setBacklightEnabled(const bool isEnabled)
    {
-   configManager.setBacklightEnabled(isEnabled);
+   //configManager.setBacklightEnabled(isEnabled);
    }
 
 // required definitions for dynamic loading
