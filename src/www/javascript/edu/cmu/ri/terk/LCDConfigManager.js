@@ -269,15 +269,15 @@ if (!JSON)
          return null;
          };
 
-      this.setBacklightEnabled = function(isEnabled)
+      this.setBacklightTimeout = function(timeoutInSeconds)
          {
-         json['lcd']['backlight']['enabled'] = isEnabled;
+         json['lcd']['backlight']['timeout-seconds'] = timeoutInSeconds;
          notifyChangeListeners();
          };
 
-      this.isBacklightEnabled = function()
+      this.getBacklightTimeout = function()
          {
-         return getJSONProperty(json, "lcd.backlight.enabled");
+         return getJSONProperty(json, "lcd.backlight.timeout-seconds");
          };
 
       // ---------------------------------------------------------------------------------------------------------------

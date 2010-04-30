@@ -15,10 +15,12 @@
 
 #include <iostream>
 #include <string>
+#include <time.h>
 #include <unistd.h>
 
 #include <CharacterDisplay.h>
 #include <CharacterDisplayMenu.h>
+#include <LCDConfigManager.h>
 #include <MenuStatusManager.h>
 #include <DefaultMenuStatusManager.h>
 #include <Menu.h>
@@ -40,7 +42,7 @@ int main(int argc, char** argv)
    std::cout << "XML filename = [" << xmlFilename << "]" << std::endl;
 
    std::cout << "Creating CharacterDisplay" << std::endl;
-   CharacterDisplay* lcdPanel = new LCDCharacterDisplay(2, 16);
+   LCDCharacterDisplay* lcdPanel = new LCDCharacterDisplay(2, 16);
 
    std::cout << "Creating DefaultMenuStatusManager" << std::endl;
    DefaultMenuStatusManager* menuStatusManager = new DefaultMenuStatusManager();
@@ -68,21 +70,79 @@ int main(int argc, char** argv)
    eventHandlers[CKeypad::KEY_LEFT] = &DefaultMenuStatusManager::handleLeftEvent;
    eventHandlers[CKeypad::KEY_RIGHT] = &DefaultMenuStatusManager::handleRightEvent;
 
+   // Get the backlight timeout in seconds, and then make sure the backlight is set to the proper state
+   LCDConfigManager lcdConfigManager;
+   int backlightTimeoutInSeconds = lcdConfigManager.getBacklightTimeout();
+   if (backlightTimeoutInSeconds == LCDConfigManager::BACKLIGHT_TIMEOUT_VALUE_ALWAYS_ON)
+      {
+      lcdPanel->setBacklight(true);
+      }
+   else
+      {
+      lcdPanel->setBacklight(false);
+      }
+
    // loop forever getting the current key press and passing to the appropriate event handler
    try
       {
+      time_t timeOfLastKeypress, currentTime;
+
+      // initialize the time of the last keypress to the current time
+      time(&timeOfLastKeypress);
+
+      // get a reference to the keypad
       CKeypad &keypad = CKeypad::GetRef();
+
+      // we need to keep track of the previous key so that when the user holds a button down
+      // it's not treated as more than 1 keypress
+      unsigned int previousKey = 0;
+
       while (true)
          {
-         const unsigned int key = keypad.GetKey();
-         if (eventHandlers[key])
+         // get current key, if any
+         const unsigned int key = keypad.GetKey(false);
+
+         // don't do anything unless the key is different
+         if (key != previousKey)
             {
-            (menuStatusManager->*eventHandlers[key])();
+            // react to key press
+            if (key == 0)
+               {
+               // do nothing since no key was pressed
+               }
+            else if (eventHandlers[key])
+               {
+               // record the current time as the time of the last keypress
+               time(&timeOfLastKeypress);
+
+               // if backlight timeout is enabled, then turn on the backlight
+               if (backlightTimeoutInSeconds != 0)
+                  {
+                  lcdPanel->setBacklight(true);
+                  }
+
+               (menuStatusManager->*eventHandlers[key])();
+               }
+            else
+               {
+               std::cerr << "Unexpected key [" << key << "]" << std::endl;
+               }
             }
-         else
+
+         // see if we need to turn off the backlight
+         if (backlightTimeoutInSeconds > 0)
             {
-            std::cerr << "Unexpected key [" << key << "]" << std::endl;
+            // get the current time
+            time(&currentTime);
+
+            // if the timeout has expired, then turn off the backlight
+            if (difftime(currentTime, timeOfLastKeypress) > backlightTimeoutInSeconds)
+               {
+               lcdPanel->setBacklight(false);
+               }
             }
+
+         previousKey = key;
          usleep(33333);   // roughly 30 Hz
          }
          
