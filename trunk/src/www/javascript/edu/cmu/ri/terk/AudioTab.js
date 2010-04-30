@@ -121,7 +121,6 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
             },
          stop: function(event, ui)
             {
-               //alert(event.or)
             audioConfigManager.playSampleSound(ui.value);
             }
       });
