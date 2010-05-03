@@ -15,8 +15,10 @@
 
 #include "LCDConfigManager.h"
 
-const int LCDConfigManager::BACKLIGHT_TIMEOUT_VALUE_ALWAYS_ON = -1;
-const int LCDConfigManager::BACKLIGHT_TIMEOUT_VALUE_ALWAYS_OFF = 0;
+const int LCDConfigManager::BACKLIGHT_TIMEOUT_ALWAYS_OFF_VALUE = 0;
+const int LCDConfigManager::BACKLIGHT_TIMEOUT_ALWAYS_ON_VALUE = -1;
+const int LCDConfigManager::BACKLIGHT_TIMEOUT_MIN_VALUE = 0;
+const int LCDConfigManager::BACKLIGHT_TIMEOUT_MAX_VALUE = 30;
 const string LCDConfigManager::CONFIG_FILENAME = "lcd_config.json";
 const string LCDConfigManager::DEFAULT_CONFIG_FILENAME = "lcd_config.default.json";
 const string LCDConfigManager::BACKLIGHT_TIMEOUT_SECONDS = "lcd.backlight.timeout-seconds";
@@ -28,7 +30,17 @@ const int LCDConfigManager::getBacklightTimeout() const
 
 bool LCDConfigManager::setBacklightTimeout(const int timeoutInSeconds)
    {
-   return setIntValue(BACKLIGHT_TIMEOUT_SECONDS, timeoutInSeconds);
+   int cleanedTimeoutInSeconds = timeoutInSeconds;
+   if (timeoutInSeconds < BACKLIGHT_TIMEOUT_MIN_VALUE)
+      {
+      cleanedTimeoutInSeconds = BACKLIGHT_TIMEOUT_ALWAYS_ON_VALUE;
+      }
+   else if (timeoutInSeconds > BACKLIGHT_TIMEOUT_MAX_VALUE)
+      {
+      cleanedTimeoutInSeconds = BACKLIGHT_TIMEOUT_MAX_VALUE;
+      }
+      
+   return setIntValue(BACKLIGHT_TIMEOUT_SECONDS, cleanedTimeoutInSeconds);
    }
 
 Json::Value LCDConfigManager::getJSON()

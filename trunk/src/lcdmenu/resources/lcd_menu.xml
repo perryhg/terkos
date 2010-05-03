@@ -40,7 +40,15 @@
    <item text="Audio">
       <item text="Set Volume">
          <item text="">
-            <implementation-class name="SetVolumeMenuItemAction" library="libAudioMenuItemActions.so"/>
+            <implementation-class name="SetVolumeMenuItemAction" library="libAudioMenuItemActions.so">
+               <property key="label.volume">Volume</property>
+               <property key="label.high">Hi</property>
+               <property key="label.low">Lo</property>
+               <property key="label.off">Off</property>
+               <property key="graph.character">*</property>
+               <property key="action.performed">Volume set to </property>
+               <property key="action.cancelled">Cancelled -- No settings changed</property>
+            </implementation-class>
          </item>
       </item>
       <item text="Toggle Audio  Alerts">
@@ -62,6 +70,25 @@
                <property key="choice.option2">Cancel</property>
                <property key="action.option1">Audio reset to  factory default.</property>
                <property key="action.option2">Cancelled -- No settings changed</property>
+            </implementation-class>
+         </item>
+      </item>
+   </item>
+   <item text="LCD">
+      <item text="Set Backlight   Timeout">
+         <item text="">
+            <implementation-class name="SetLCDBacklightTimeoutMenuItemAction" library="libLCDMenuItemActions.so">
+               <property key="label.backlight">Backlight</property>
+               <property key="label.off">Off</property>
+               <property key="label.on">On</property>
+               <property key="label.seconds">seconds</property>
+               <property key="label.seconds-abbreviation">s</property>
+               <property key="label.always-off">Backlight set toalways off</property>
+               <property key="label.always-on">Backlight set toalways on</property>
+               <property key="graph.character">*</property>
+               <property key="action.performed">Timeout set to  </property>
+               <property key="action.cancelled">Cancelled -- No settings changed</property>
+               <property key="label.change-takes-effect-at-reboot">Change takes    effect at reboot</property>
             </implementation-class>
          </item>
       </item>
