@@ -73,7 +73,7 @@ int main(int argc, char** argv)
    // Get the backlight timeout in seconds, and then make sure the backlight is set to the proper state
    LCDConfigManager lcdConfigManager;
    int backlightTimeoutInSeconds = lcdConfigManager.getBacklightTimeout();
-   if (backlightTimeoutInSeconds == LCDConfigManager::BACKLIGHT_TIMEOUT_VALUE_ALWAYS_ON)
+   if (backlightTimeoutInSeconds == LCDConfigManager::BACKLIGHT_TIMEOUT_ALWAYS_ON_VALUE)
       {
       lcdPanel->setBacklight(true);
       }

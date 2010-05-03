@@ -25,8 +25,10 @@ class LCDConfigManager : public ConfigFile
    {
    public:
 
-      static const int BACKLIGHT_TIMEOUT_VALUE_ALWAYS_ON;
-      static const int BACKLIGHT_TIMEOUT_VALUE_ALWAYS_OFF;
+      static const int BACKLIGHT_TIMEOUT_ALWAYS_OFF_VALUE;
+      static const int BACKLIGHT_TIMEOUT_ALWAYS_ON_VALUE;
+      static const int BACKLIGHT_TIMEOUT_MIN_VALUE;
+      static const int BACKLIGHT_TIMEOUT_MAX_VALUE;
 
       LCDConfigManager(const string& configFileDirectory = ConfigFile::DEFAULT_CONFIG_FILE_DIRECTORY) :
          ConfigFile(CONFIG_FILENAME, DEFAULT_CONFIG_FILENAME, configFileDirectory)
@@ -39,8 +41,14 @@ class LCDConfigManager : public ConfigFile
          // nothing to do
          }
 
+      /** Returns the backlight timeout in seconds. */
       const int getBacklightTimeout() const;
 
+      /**
+       * Sets the backlight timeout to the given value.  If the given value is negative, the timeout is set so that the
+       * backlight will always be on.  If the given value is greater than the BACKLIGHT_TIMEOUT_MAX_VALUE, then
+       * the timeout is adjusted to be BACKLIGHT_TIMEOUT_MAX_VALUE.
+       */
       bool setBacklightTimeout(const int timeoutInSeconds);
 
       Json::Value getJSON();
