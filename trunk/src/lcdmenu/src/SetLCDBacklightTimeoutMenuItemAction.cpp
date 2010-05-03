@@ -127,13 +127,7 @@ const string SetLCDBacklightTimeoutMenuItemAction::getActionPerformedText1()
           " " +
           getProperty(PROPERTY_LABEL_SECONDS, DEFAULT_LABEL_SECONDS);
    }
-/*
-0123456789012345
-Backlight: On
-Backlight: Off
-Backlight: 3 s
-always on
-*/
+
 const string SetLCDBacklightTimeoutMenuItemAction::getActionPerformedText2()
    {
    return getProperty(PROPERTY_LABEL_CHANGE_TAKES_EFFECT_AT_REBOOT, DEFAULT_LABEL_CHANGE_TAKES_EFFECT_AT_REBOOT);
