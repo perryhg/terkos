@@ -75,7 +75,7 @@
       </item>
    </item>
    <item text="LCD">
-      <item text="Set Backlight   Timeout">
+      <item text="Set Backlight Timeout">
          <item text="">
             <implementation-class name="SetLCDBacklightTimeoutMenuItemAction" library="libLCDMenuItemActions.so">
                <property key="label.backlight">Backlight</property>
@@ -89,6 +89,17 @@
                <property key="action.performed">Timeout set to  </property>
                <property key="action.cancelled">Cancelled -- No settings changed</property>
                <property key="label.change-takes-effect-at-reboot">Change takes    effect at reboot</property>
+            </implementation-class>
+         </item>
+      </item>
+      <item text="Reset LCD">
+         <item text="">
+            <implementation-class name="ResetLCDMenuItemAction" library="libResetMenuItemActions.so">
+               <property key="action.prompt">Reset LCD?</property>
+               <property key="choice.option1">OK  </property>
+               <property key="choice.option2">Cancel</property>
+               <property key="action.option1">LCD reset to    factory default.</property>
+               <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
       </item>
@@ -177,6 +188,17 @@
                <property key="choice.option1">OK  </property>
                <property key="choice.option2">Cancel</property>
                <property key="action.option1">Audio reset to  factory default.</property>
+               <property key="action.option2">Cancelled -- No settings changed</property>
+            </implementation-class>
+         </item>
+      </item>
+      <item text="Reset LCD">
+         <item text="">
+            <implementation-class name="ResetLCDMenuItemAction" library="libResetMenuItemActions.so">
+               <property key="action.prompt">Reset LCD?</property>
+               <property key="choice.option1">OK  </property>
+               <property key="choice.option2">Cancel</property>
+               <property key="action.option1">LCD reset to    factory default.</property>
                <property key="action.option2">Cancelled -- No settings changed</property>
             </implementation-class>
          </item>
