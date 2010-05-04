@@ -68,7 +68,7 @@ if ($#lines >= 1)
       $json .= '            "use-percentage" : "' . $filesystems[$j]->{'use-percentage'} . '",' . "\n";
       $json .= '            "mounted-on" : "'     . $filesystems[$j]->{'mounted-on'}     . '"' . "\n";
       $json .= "         }";
-      if ($networkCount < $#filesystems)
+      if ($j < $#filesystems)
          {
          $json .= ",";
          }
