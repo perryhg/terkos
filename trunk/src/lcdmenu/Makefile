@@ -88,6 +88,10 @@ NETWORK_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/WirelessStatusCheckingMenuItemAction.c
 NETWORK_MENU_ITEM_ACTIONS_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(NETWORK_MENU_ITEM_ACTIONS_SRCS)))
 NETWORK_MENU_ITEM_ACTIONS_OBJECTS := $(addprefix $(OBJ_DIR)/,$(NETWORK_MENU_ITEM_ACTIONS_OBJECTS))
 
+USER_PROGRAMS_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/SetUserProgramToRunOnBootMenuItemAction.cpp
+USER_PROGRAMS_MENU_ITEM_ACTIONS_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(USER_PROGRAMS_MENU_ITEM_ACTIONS_SRCS)))
+USER_PROGRAMS_MENU_ITEM_ACTIONS_OBJECTS := $(addprefix $(OBJ_DIR)/,$(USER_PROGRAMS_MENU_ITEM_ACTIONS_OBJECTS))
+
 RESET_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/ResetAudioMenuItemAction.cpp \
                              $(SRC_DIR)/ResetAllMenuItemAction.cpp \
                              $(SRC_DIR)/ResetLCDMenuItemAction.cpp \
@@ -151,7 +155,7 @@ libAudioMenuItemActions.so: $(OBJ_DIR) $(LIB_DIR) $(AUDIO_MENU_ITEM_ACTIONS_OBJE
 libLCDMenuItemActions.so: $(OBJ_DIR) $(LIB_DIR) $(LCD_MENU_ITEM_ACTIONS_OBJECTS)
 	@echo 'Building target: $@'
 	$(CXX) -shared -Wl,-soname,libLCDMenuItemActions.so -o $(LIB_DIR)/libLCDMenuItemActions.so \
-	                                                         $(LCD_MENU_ITEM_ACTIONS_OBJECTS)
+	                                                        $(LCD_MENU_ITEM_ACTIONS_OBJECTS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -161,6 +165,15 @@ libNetworkMenuItemActions.so: $(OBJ_DIR) $(LIB_DIR) $(NETWORK_MENU_ITEM_ACTIONS_
 	@echo 'Building target: $@'
 	$(CXX) -shared -Wl,-soname,libNetworkMenuItemActions.so -o $(LIB_DIR)/libNetworkMenuItemActions.so \
 	                                                           $(NETWORK_MENU_ITEM_ACTIONS_OBJECTS)
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+libUserProgramsMenuItemActions.so: $(OBJ_DIR) $(LIB_DIR) $(USER_PROGRAMS_MENU_ITEM_ACTIONS_OBJECTS)
+	@echo 'Building target: $@'
+	$(CXX) -shared -Wl,-soname,libUserProgramsMenuItemActions.so -o $(LIB_DIR)/libUserProgramsMenuItemActions.so \
+	                                                                $(USER_PROGRAMS_MENU_ITEM_ACTIONS_OBJECTS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -201,6 +214,7 @@ LCDMenu: $(EXE_DIR) \
          libAudioMenuItemActions.so \
          libLCDMenuItemActions.so \
          libNetworkMenuItemActions.so \
+         libUserProgramsMenuItemActions.so \
          libResetMenuItemActions.so \
          libServoMenuItemActions.so \
          $(LCD_MENU_OBJECTS)

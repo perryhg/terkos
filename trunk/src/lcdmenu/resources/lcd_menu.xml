@@ -180,6 +180,31 @@
          </item>
       </item>
    </item>
+   <item text="User Programs">
+      <item text="Set Program toRun On Boot">
+         <item text="">
+            <implementation-class name="SetUserProgramToRunOnBootMenuItemAction" library="libUserProgramsMenuItemActions.so">
+               <property key="label.program">Program</property>
+               <property key="label.no-program">&lt; NONE &gt;</property>
+               <property key="label.no-program-will-run-on-boot">No user program will run on boot</property>
+               <property key="action.performed">will run on boot</property>
+               <property key="action.cancelled">Cancelled -- No settings changed</property>
+               <property key="action.failed">Failed -- No    settings changed</property>
+            </implementation-class>
+         </item>
+      </item>
+      <item text="Reset User    Programs">
+         <item text="">
+            <implementation-class name="ResetUserProgramsMenuItemAction" library="libResetMenuItemActions.so">
+               <property key="action.prompt">Reset Programs?</property>
+               <property key="choice.option1">OK  </property>
+               <property key="choice.option2">Cancel</property>
+               <property key="action.option1">Programs set to factory default.</property>
+               <property key="action.option2">Cancelled -- No settings changed</property>
+            </implementation-class>
+         </item>
+      </item>
+   </item>
    <item text="Factory Reset">
       <item text="Reset Audio">
          <item text="">
