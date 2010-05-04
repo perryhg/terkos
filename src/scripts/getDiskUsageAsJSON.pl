@@ -14,7 +14,7 @@
 require "/opt/scripts/httpUtils.pl";
 require "/opt/scripts/jsonUtils.pl";
 
-# Call free to get the disk usage
+# Call df to get the disk usage
 open(DISK_USAGE,"/bin/df |") or die "Failed to call /bin/df $!\n";
 
 # read the output into an array
