@@ -27,7 +27,7 @@ close(JSON_OUTPUT);
 
 if (&isHttpRequest())
    {
-   &printContentDispositionHeader('terkos_config.json');
+   &printContentDispositionHeader('terkos.cfg');
    }
 
 # write out the JSON

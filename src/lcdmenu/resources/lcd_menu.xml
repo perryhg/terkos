@@ -205,82 +205,98 @@
          </item>
       </item>
    </item>
-   <item text="Factory Reset">
-      <item text="Reset Audio">
+   <item text="System        Settings">
+      <item text="Save Prefs to USB Drive">
          <item text="">
-            <implementation-class name="ResetAudioMenuItemAction" library="libResetMenuItemActions.so">
-               <property key="action.prompt">Reset Audio?</property>
-               <property key="choice.option1">OK  </property>
-               <property key="choice.option2">Cancel</property>
-               <property key="action.option1">Audio reset to  factory default.</property>
-               <property key="action.option2">Cancelled -- No settings changed</property>
+            <implementation-class name="SaveSystemSettingsToUSBDriveMenuItemAction" library="libSystemSettingsMenuItemActions.so">
+               <property key="status.writing-to-usb-drive">Writing to driveDO NOT REMOVE!</property>
+               <property key="status.prefs-file-written-successfully">Done writing.   Unmounting...</property>
+               <property key="status.could-not-write-file">Write failed.   Unmounting...</property>
+               <property key="status.usb-unmount-success">You may remove  the USB drive.</property>
+               <property key="status.usb-unmount-failure">Failed to un-   mount USB drive.</property>
+               <property key="status.failure">USB drive is notinstalled.</property>
+               <property key="config.file-base-name">terkos</property>
+               <property key="config.file-extension">.cfg</property>
             </implementation-class>
          </item>
       </item>
-      <item text="Reset LCD">
-         <item text="">
-            <implementation-class name="ResetLCDMenuItemAction" library="libResetMenuItemActions.so">
-               <property key="action.prompt">Reset LCD?</property>
-               <property key="choice.option1">OK  </property>
-               <property key="choice.option2">Cancel</property>
-               <property key="action.option1">LCD reset to    factory default.</property>
-               <property key="action.option2">Cancelled -- No settings changed</property>
-            </implementation-class>
+      <item text="Reset System  Preferences">
+         <item text="Reset Audio">
+            <item text="">
+               <implementation-class name="ResetAudioMenuItemAction" library="libResetMenuItemActions.so">
+                  <property key="action.prompt">Reset Audio?</property>
+                  <property key="choice.option1">OK  </property>
+                  <property key="choice.option2">Cancel</property>
+                  <property key="action.option1">Audio reset to  factory default.</property>
+                  <property key="action.option2">Cancelled -- No settings changed</property>
+               </implementation-class>
+            </item>
          </item>
-      </item>
-      <item text="Reset Wireless">
-         <item text="">
-            <implementation-class name="ResetWirelessNetworkingMenuItemAction" library="libResetMenuItemActions.so">
-               <property key="action.prompt">Reset Wireless?</property>
-               <property key="choice.option1">OK  </property>
-               <property key="choice.option2">Cancel</property>
-               <property key="action.option1">Wireless set to factory default.</property>
-               <property key="action.option2">Cancelled -- No settings changed</property>
-            </implementation-class>
+         <item text="Reset LCD">
+            <item text="">
+               <implementation-class name="ResetLCDMenuItemAction" library="libResetMenuItemActions.so">
+                  <property key="action.prompt">Reset LCD?</property>
+                  <property key="choice.option1">OK  </property>
+                  <property key="choice.option2">Cancel</property>
+                  <property key="action.option1">LCD reset to    factory default.</property>
+                  <property key="action.option2">Cancelled -- No settings changed</property>
+               </implementation-class>
+            </item>
          </item>
-      </item>
-      <item text="Reset User    Programs">
-         <item text="">
-            <implementation-class name="ResetUserProgramsMenuItemAction" library="libResetMenuItemActions.so">
-               <property key="action.prompt">Reset Programs?</property>
-               <property key="choice.option1">OK  </property>
-               <property key="choice.option2">Cancel</property>
-               <property key="action.option1">Programs set to factory default.</property>
-               <property key="action.option2">Cancelled -- No settings changed</property>
-            </implementation-class>
+         <item text="Reset Wireless">
+            <item text="">
+               <implementation-class name="ResetWirelessNetworkingMenuItemAction" library="libResetMenuItemActions.so">
+                  <property key="action.prompt">Reset Wireless?</property>
+                  <property key="choice.option1">OK  </property>
+                  <property key="choice.option2">Cancel</property>
+                  <property key="action.option1">Wireless set to factory default.</property>
+                  <property key="action.option2">Cancelled -- No settings changed</property>
+               </implementation-class>
+            </item>
          </item>
-      </item>
-      <item text="Reset Root    User Password">
-         <item text="">
-            <implementation-class name="ResetRootUserControlPanelPasswordMenuItemAction" library="libResetMenuItemActions.so">
-               <property key="action.prompt">Reset Password?</property>
-               <property key="choice.option1">OK  </property>
-               <property key="choice.option2">Cancel</property>
-               <property key="action.option1">Password set to factory default.</property>
-               <property key="action.option2">Cancelled -- No settings changed</property>
-            </implementation-class>
+         <item text="Reset User    Programs">
+            <item text="">
+               <implementation-class name="ResetUserProgramsMenuItemAction" library="libResetMenuItemActions.so">
+                  <property key="action.prompt">Reset Programs?</property>
+                  <property key="choice.option1">OK  </property>
+                  <property key="choice.option2">Cancel</property>
+                  <property key="action.option1">Programs set to factory default.</property>
+                  <property key="action.option2">Cancelled -- No settings changed</property>
+               </implementation-class>
+            </item>
          </item>
-      </item>
-      <item text="Reset Web CtrlPanel Password">
-         <item text="">
-            <implementation-class name="ResetWebControlPanelPasswordMenuItemAction" library="libResetMenuItemActions.so">
-               <property key="action.prompt">Reset Password?</property>
-               <property key="choice.option1">OK  </property>
-               <property key="choice.option2">Cancel</property>
-               <property key="action.option1">Password set to factory default.</property>
-               <property key="action.option2">Cancelled -- No settings changed</property>
-            </implementation-class>
+         <item text="Reset Root    User Password">
+            <item text="">
+               <implementation-class name="ResetRootUserControlPanelPasswordMenuItemAction" library="libResetMenuItemActions.so">
+                  <property key="action.prompt">Reset Password?</property>
+                  <property key="choice.option1">OK  </property>
+                  <property key="choice.option2">Cancel</property>
+                  <property key="action.option1">Password set to factory default.</property>
+                  <property key="action.option2">Cancelled -- No settings changed</property>
+               </implementation-class>
+            </item>
          </item>
-      </item>
-      <item text="Reset All">
-         <item text="">
-            <implementation-class name="ResetAllMenuItemAction" library="libResetMenuItemActions.so">
-               <property key="action.prompt">Reset All?</property>
-               <property key="choice.option1">OK  </property>
-               <property key="choice.option2">Cancel</property>
-               <property key="action.option1">Reset to factorydefaults.</property>
-               <property key="action.option2">Cancelled -- No settings changed</property>
-            </implementation-class>
+         <item text="Reset Web CtrlPanel Password">
+            <item text="">
+               <implementation-class name="ResetWebControlPanelPasswordMenuItemAction" library="libResetMenuItemActions.so">
+                  <property key="action.prompt">Reset Password?</property>
+                  <property key="choice.option1">OK  </property>
+                  <property key="choice.option2">Cancel</property>
+                  <property key="action.option1">Password set to factory default.</property>
+                  <property key="action.option2">Cancelled -- No settings changed</property>
+               </implementation-class>
+            </item>
+         </item>
+         <item text="Reset All">
+            <item text="">
+               <implementation-class name="ResetAllMenuItemAction" library="libResetMenuItemActions.so">
+                  <property key="action.prompt">Reset All?</property>
+                  <property key="choice.option1">OK  </property>
+                  <property key="choice.option2">Cancel</property>
+                  <property key="action.option1">Reset to factorydefaults.</property>
+                  <property key="action.option2">Cancelled -- No settings changed</property>
+               </implementation-class>
+            </item>
          </item>
       </item>
    </item>

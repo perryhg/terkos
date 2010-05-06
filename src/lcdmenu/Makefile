@@ -112,6 +112,11 @@ SYSTEM_INFO_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/VersionInfoMenuItemAction.cpp \
 SYSTEM_INFO_MENU_ITEM_ACTIONS_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(SYSTEM_INFO_MENU_ITEM_ACTIONS_SRCS)))
 SYSTEM_INFO_MENU_ITEM_ACTIONS_OBJECTS := $(addprefix $(OBJ_DIR)/,$(SYSTEM_INFO_MENU_ITEM_ACTIONS_OBJECTS))
 
+SYSTEM_SETTINGS_MENU_ITEM_ACTIONS_SRCS=$(SRC_DIR)/SaveSystemSettingsToUSBDriveMenuItemAction.cpp
+SYSTEM_SETTINGS_MENU_ITEM_ACTIONS_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(SYSTEM_SETTINGS_MENU_ITEM_ACTIONS_SRCS)))
+SYSTEM_SETTINGS_MENU_ITEM_ACTIONS_OBJECTS := $(addprefix $(OBJ_DIR)/,$(SYSTEM_SETTINGS_MENU_ITEM_ACTIONS_OBJECTS))
+
+
 LCD_MENU_SRCS=$(SRC_DIR)/LCDCharacterDisplay.cpp \
               $(SRC_DIR)/LCDMenu.cpp
 LCD_MENU_OBJECTS=$(patsubst %.cpp,%.o,$(notdir $(LCD_MENU_SRCS)))
@@ -206,6 +211,15 @@ libSystemInfoMenuItemActions.so: $(OBJ_DIR) $(LIB_DIR) $(SYSTEM_INFO_MENU_ITEM_A
 
 #-----------------------------------------------------------------------------------------------------------------------
 
+libSystemSettingsMenuItemActions.so: $(OBJ_DIR) $(LIB_DIR) $(SYSTEM_SETTINGS_MENU_ITEM_ACTIONS_OBJECTS)
+	@echo 'Building target: $@'
+	$(CXX) -shared -Wl,-soname,libSystemSettingsMenuItemActions.so -o $(LIB_DIR)/libSystemSettingsMenuItemActions.so \
+	                                                                  $(SYSTEM_SETTINGS_MENU_ITEM_ACTIONS_OBJECTS)
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+#-----------------------------------------------------------------------------------------------------------------------
+
 LCDMenu: $(EXE_DIR) \
          libConfigurationManagement.so \
          libCharacterDisplayMenu.so \
@@ -217,6 +231,7 @@ LCDMenu: $(EXE_DIR) \
          libUserProgramsMenuItemActions.so \
          libResetMenuItemActions.so \
          libServoMenuItemActions.so \
+         libSystemSettingsMenuItemActions.so \
          $(LCD_MENU_OBJECTS)
 	@echo 'Building target: $@'
 	$(CXX) -o $(EXE_DIR)/LCDMenu $(LCD_MENU_OBJECTS) $(LDFLAGS)
