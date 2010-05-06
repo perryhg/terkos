@@ -46,15 +46,8 @@
  * Chris Bartley (bartley@cmu.edu)
  */
 
-#include <vector>
 #include <json/json.h>
-#include <AudioConfigManager.h>
-#include <UserProgramsConfigManager.h>
-#include <FirmwareVersionManager.h>
-#include <LCDConfigManager.h>
-#include <VersionInfoManager.h>
-#include <WirelessNetworkingConfigManager.h>
-#include <StringUtilities.h>
+#include <TerkOSConfigManager.h>
 
 using namespace std;
 
@@ -64,80 +57,13 @@ int main(int argc, char** argv)
       {
       if (strcmp(argv[1], "--json") == 0)
          {
-         // create the JSON response
-         Json::Value terkOsElement;
+         TerkOSConfigManager configManager;
 
-         AudioConfigManager audioConfigManager;
-         Json::Value audioJson = audioConfigManager.getJSON();
-         if (audioJson != Json::Value::null)
-            {
-            Json::Value* audioElement = ConfigFile::findProperty(audioJson, "audio");
-            if (audioElement != NULL)
-               {
-               terkOsElement["audio"] = *audioElement;
-               }
-            }
-
-         WirelessNetworkingConfigManager wirelessNetworkingConfigManager;
-         Json::Value wirelessJson = wirelessNetworkingConfigManager.getJSON();
-         if (wirelessJson != Json::Value::null)
-            {
-            Json::Value* wirelessElement = ConfigFile::findProperty(wirelessJson, "wireless-networking");
-            if (wirelessElement != NULL)
-               {
-               terkOsElement["wireless-networking"] = *wirelessElement;
-               }
-            }
-
-         UserProgramsConfigManager userProgramsConfigManager;
-         Json::Value userProgramsJson = userProgramsConfigManager.getJSON();
-         if (userProgramsJson != Json::Value::null)
-            {
-            Json::Value* userProgramsElement = ConfigFile::findProperty(userProgramsJson, "user-programs");
-            if (userProgramsElement != NULL)
-               {
-               terkOsElement["user-programs"] = *userProgramsElement;
-               }
-            }
-
-         LCDConfigManager lcdConfigManager;
-         Json::Value lcdJson = lcdConfigManager.getJSON();
-         if (lcdJson != Json::Value::null)
-            {
-            Json::Value* lcdElement = ConfigFile::findProperty(lcdJson, "lcd");
-            if (lcdElement != NULL)
-               {
-               terkOsElement["lcd"] = *lcdElement;
-               }
-            }
-
-         VersionInfoManager versionInfoManager;
-         Json::Value versionInfoJson = versionInfoManager.getJSON();
-         if (versionInfoJson != Json::Value::null)
-            {
-            Json::Value* versionInfoElement = ConfigFile::findProperty(versionInfoJson, "version-info");
-            if (versionInfoElement != NULL)
-               {
-               terkOsElement["version-info"] = *versionInfoElement;
-               }
-            }
-
-         Json::Value outputRootElement;
-         outputRootElement["terk-os"] = terkOsElement;
-         cout << outputRootElement << endl;
+         cout << configManager.getJSON() << endl;
          }
       }
    else
       {
-      // create the root element of the response
-      Json::Value outputRootElement;
-
-      // create the vector containing the names of the updated components
-      vector<string> updatedComponenets;
-
-      // build the updatedComponenetsElement
-      Json::Value updatedComponenetsElement(Json::arrayValue);
-
       // parse the JSON from stdin
       Json::Value config;
       Json::Reader reader;
@@ -146,96 +72,30 @@ int main(int argc, char** argv)
       // if parsing succeeded, then call the config manager and give it the JSON
       if (parsingSuccessful)
          {
-         Json::Value* terkOsConfig = ConfigFile::findProperty(config, "terk-os");
-         if (terkOsConfig != NULL)
+         TerkOSConfigManager configManager;
+
+         Json::Value output = configManager.setJSON(config);
+         cout << output << endl;
+
+         if (output != Json::Value::null)
             {
-            Json::Value* revisionNumberElement = ConfigFile::findProperty(config, "terk-os.version-info.firmware.version.revision");
-            if (revisionNumberElement != NULL)
-               {
-               // get current revision
-               FirmwareVersionManager firmwareVersionManager;
-               string currentRevisionStr = firmwareVersionManager.getRevision();
-
-               int currentRevision = INT_MAX;
-               if (!StringUtilities::convertStringToNum<int>(currentRevisionStr, currentRevision))
-                  {
-                  // TODO: replace with real logging
-                  cerr << "TerkOSConfigTool:  failed to parse current firmware revision [" << currentRevisionStr << "]" << endl;
-                  }
-
-               // get the revision from the given JSON
-               string newRevisionStr = revisionNumberElement->asString();
-
-               int newRevision = INT_MAX;
-               if (!StringUtilities::convertStringToNum<int>(newRevisionStr, newRevision))
-                  {
-                  // TODO: replace with real logging
-                  cerr << "TerkOSConfigTool:  failed to parse firmware revision of given JSON [" << newRevisionStr << "]" << endl;
-                  }
-
-               // make sure the current revision is greater than or equal to the revision in the given JSON
-               if (currentRevision >= newRevision)
-                  {
-                  AudioConfigManager audioConfigManager;
-                  if (audioConfigManager.setJson(*terkOsConfig))
-                     {
-                     updatedComponenets.push_back("audio");
-                     }
-
-                  LCDConfigManager lcdConfigManager;
-                  if (lcdConfigManager.setJson(*terkOsConfig))
-                     {
-                     updatedComponenets.push_back("lcd");
-                     }
-
-                  UserProgramsConfigManager userProgramsConfigManager;
-                  if (userProgramsConfigManager.setJson(*terkOsConfig))
-                     {
-                     updatedComponenets.push_back("user-programs");
-                     }
-
-                  WirelessNetworkingConfigManager wirelessNetworkingConfigManager;
-                  if (wirelessNetworkingConfigManager.setJson(*terkOsConfig))
-                     {
-                     updatedComponenets.push_back("wireless-networking");
-                     }
-
-                  // add the updated components to the JSON element
-                  for (unsigned int i = 0; i < updatedComponenets.size(); i++)
-                     {
-                     updatedComponenetsElement[i] = updatedComponenets[i];
-                     }
-
-                  outputRootElement["ok"] = true;
-                  outputRootElement["message"] = "configuration updated";
-                  }
-               else
-                  {
-                  outputRootElement["ok"] = false;
-                  outputRootElement["message"] = "unknown firmware revision";
-                  }
-               }
-            else
-               {
-               outputRootElement["ok"] = false;
-               outputRootElement["message"] = "required JSON element missing (terk-os.version-info.firmware.version.revision)";
-               }
-            }
-         else
-            {
-            outputRootElement["ok"] = false;
-            outputRootElement["message"] = "required JSON element missing (terk-os)";
+            return 1;
             }
          }
       else
          {
+         // create the root element of the response
+         Json::Value outputRootElement;
+
+         // build the updatedComponenetsElement
+         Json::Value updatedComponenetsElement(Json::arrayValue);
+
          outputRootElement["ok"] = false;
          outputRootElement["message"] = "invalid JSON";
+         outputRootElement["updated-components"] = updatedComponenetsElement;
+
+         cout << outputRootElement << endl;
          }
-
-      outputRootElement["updated-components"] = updatedComponenetsElement;
-
-      cout << outputRootElement << endl;
       }
 
    return 0;
