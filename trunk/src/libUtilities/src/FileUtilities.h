@@ -21,6 +21,7 @@
 #include <vector>
 #include <dirent.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <iostream>
 #include <fstream>
 
@@ -53,6 +54,11 @@ class FileUtilities
        * Returns true if the file represented by the given file path is readable, false otherwise.
        */
       static const bool isReadable(const string& filename);
+
+      /**
+       * Returns true if the file represented by the given file path exists, false otherwise.
+       */
+      static const bool fileExists(const string& filename);
 
    private:
 

@@ -45,3 +45,13 @@ const bool FileUtilities::isReadable(const string& filename)
    ifstream ifile(filename.c_str());
    return ifile;
    }
+
+const bool FileUtilities::fileExists(const string& filename)
+   {
+   // code taken from http://www.techbytes.ca/techbyte103.html
+   struct stat fileInfo;
+
+   // stat returns 0 on success.  It's possible that the file's directory just isn't readable, but
+   // I don't feel like checking for that...
+   return stat(filename.c_str(),&fileInfo) == 0;
+   }
