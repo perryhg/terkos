@@ -17,8 +17,11 @@
 
 const string SaveSystemSettingsToUSBDriveMenuItemAction::CLASS_NAME = "SaveSystemSettingsToUSBDriveMenuItemAction";
 
-const string SaveSystemSettingsToUSBDriveMenuItemAction::STATUS_WRITING_TO_USB_DRIVE_PROPERTY = "status.writing-to-usb-drive";
-const string SaveSystemSettingsToUSBDriveMenuItemAction::STATUS_WRITING_TO_USB_DRIVE_DEFAULT_VALUE = "Writing to driveDO NOT REMOVE!";
+const string SaveSystemSettingsToUSBDriveMenuItemAction::STATUS_MOUNTING_USB_DRIVE_PROPERTY = "status.mounting-usb-drive";
+const string SaveSystemSettingsToUSBDriveMenuItemAction::STATUS_MOUNTING_USB_DRIVE_DEFAULT_VALUE = "Mounting the USBdrive...";
+
+const string SaveSystemSettingsToUSBDriveMenuItemAction::STATUS_WRITING_TO_FILE_PROPERTY = "status.writing-to-file";
+const string SaveSystemSettingsToUSBDriveMenuItemAction::STATUS_WRITING_TO_FILE_DEFAULT_VALUE = "Writing to file:";
 
 const string SaveSystemSettingsToUSBDriveMenuItemAction::STATUS_SUCCESSFULLY_WROTE_PREFS_PROPERTY = "status.prefs-file-written-successfully";
 const string SaveSystemSettingsToUSBDriveMenuItemAction::STATUS_SUCCESSFULLY_WROTE_PREFS_DEFAULT_VALUE = "Done writing.   Unmounting...";
@@ -40,17 +43,20 @@ const string SaveSystemSettingsToUSBDriveMenuItemAction::CONFIG_FILE_BASE_NAME_D
 const string SaveSystemSettingsToUSBDriveMenuItemAction::CONFIG_FILE_EXTENSION_PROPERTY = "config.file-extension";
 const string SaveSystemSettingsToUSBDriveMenuItemAction::CONFIG_FILE_EXTENSION_DEFAULT_VALUE = ".cfg";
 
-const int SaveSystemSettingsToUSBDriveMenuItemAction::SLEEP_TIME_MICROSECONDS = 1500000;
+const int SaveSystemSettingsToUSBDriveMenuItemAction::SLEEP_TIME_MICROSECONDS = 3000000;
 
 void SaveSystemSettingsToUSBDriveMenuItemAction::activate()
    {
+   getCharacterDisplay()->setText(getProperty(STATUS_MOUNTING_USB_DRIVE_PROPERTY, STATUS_MOUNTING_USB_DRIVE_DEFAULT_VALUE));
+
+   // sleep to give the user time to read the status message
+   usleep(1500000);
+
    FilesystemManager filesystemManager;
    bool isMounted = filesystemManager.mountFilesystem(FilesystemManager::USB_DRIVE_FILESYSTEM_NAME, FilesystemManager::USB_DRIVE_MOUNT_POINT_NAME);
 
    if (isMounted)
       {
-      getCharacterDisplay()->setText(getProperty(STATUS_WRITING_TO_USB_DRIVE_PROPERTY, STATUS_WRITING_TO_USB_DRIVE_DEFAULT_VALUE));
-
       // get the prefs
       TerkOSConfigManager configManager;
       Json::Value config = configManager.getJSON();
@@ -58,12 +64,14 @@ void SaveSystemSettingsToUSBDriveMenuItemAction::activate()
       // try to find a unique filename
       bool foundUniqueFilename = false;
       string configFilename = configBaseFilename + configFilenameExtension;
-      if (FileUtilities::fileExists(configFilename))
+      string configAbsPath = configDirectory + configFilename;
+      if (FileUtilities::fileExists(configAbsPath))
          {
          for (unsigned int i = 0; i < 1000; i++)
             {
             configFilename = configBaseFilename + StringUtilities::convertIntToString(i, 2, '0') + configFilenameExtension;
-            if (!FileUtilities::fileExists(configFilename))
+            configAbsPath = configDirectory + configFilename;
+            if (!FileUtilities::fileExists(configAbsPath))
                {
                foundUniqueFilename = true;
                break;
@@ -77,15 +85,18 @@ void SaveSystemSettingsToUSBDriveMenuItemAction::activate()
 
       if (foundUniqueFilename)
          {
+         getCharacterDisplay()->setLine(0, getProperty(STATUS_WRITING_TO_FILE_PROPERTY, STATUS_WRITING_TO_FILE_DEFAULT_VALUE));
+         getCharacterDisplay()->setLine(1, configFilename);
+         
          // write the config
-         const bool wasWrittenSuccessfully = writeConfig(config, configFilename);
+         const bool wasWrittenSuccessfully = writeConfig(config, configAbsPath);
 
          // sleep to give the user time to read the status message
          usleep(SLEEP_TIME_MICROSECONDS);
 
          if (wasWrittenSuccessfully)
             {
-            cout << "SaveSystemSettingsToUSBDriveMenuItemAction::writeConfig(): Done writing to config file [" << configFilename << "]" << endl;
+            cout << "SaveSystemSettingsToUSBDriveMenuItemAction::writeConfig(): Done writing to config file [" << configAbsPath << "]" << endl;
             getCharacterDisplay()->setText(getProperty(STATUS_SUCCESSFULLY_WROTE_PREFS_PROPERTY, STATUS_SUCCESSFULLY_WROTE_PREFS_DEFAULT_VALUE));
             }
          else
@@ -98,7 +109,25 @@ void SaveSystemSettingsToUSBDriveMenuItemAction::activate()
          usleep(SLEEP_TIME_MICROSECONDS);
 
          // unmount the USB drive
-         if (filesystemManager.unmountFilesystem(FilesystemManager::USB_DRIVE_MOUNT_POINT_NAME))
+         const bool unmountStatus = filesystemManager.unmountFilesystem(FilesystemManager::USB_DRIVE_MOUNT_POINT_NAME);
+
+         // repeatedly check the mount point to see if it's still in use, checking once every 500 ms, for up to 10 seconds.
+         for (unsigned int i = 0; i < 20; i++)
+            {
+            if (filesystemManager.isMountPointInUse(FilesystemManager::USB_DRIVE_MOUNT_POINT_NAME))
+               {
+               usleep(500000);
+               }
+            else
+               {
+               break;
+               }
+            }
+            
+         // sleep for an extra second, just for safety
+         usleep(1000000);
+
+         if (unmountStatus)
             {
             cout << "SaveSystemSettingsToUSBDriveMenuItemAction::activate(): successfully unmounted USB drive" << endl;
             getCharacterDisplay()->setText(getProperty(STATUS_USB_UNMOUNT_SUCCESS_PROPERTY, STATUS_USB_UNMOUNT_SUCCESS_DEFAULT_VALUE));
@@ -124,10 +153,10 @@ void SaveSystemSettingsToUSBDriveMenuItemAction::activate()
    sleepThenPopUpToParentMenuItem();
    }
 
-const bool SaveSystemSettingsToUSBDriveMenuItemAction::writeConfig(Json::Value config, const string configFilename)
+const bool SaveSystemSettingsToUSBDriveMenuItemAction::writeConfig(Json::Value config, const string configAbsPath)
    {
-   cout << "SaveSystemSettingsToUSBDriveMenuItemAction::writeConfig(): Trying to write config file [" << configFilename << "]" << endl;
-   ofstream configFile(configFilename.c_str());
+   cout << "SaveSystemSettingsToUSBDriveMenuItemAction::writeConfig(): Trying to write config file [" << configAbsPath << "]" << endl;
+   ofstream configFile(configAbsPath.c_str());
 
    if (configFile.is_open())
       {
