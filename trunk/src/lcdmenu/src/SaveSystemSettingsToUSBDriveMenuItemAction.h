@@ -37,8 +37,11 @@ class SaveSystemSettingsToUSBDriveMenuItemAction : public NoOpMenuItemAction
 
       static const string CLASS_NAME;
 
-      static const string STATUS_WRITING_TO_USB_DRIVE_PROPERTY;
-      static const string STATUS_WRITING_TO_USB_DRIVE_DEFAULT_VALUE;
+      static const string STATUS_MOUNTING_USB_DRIVE_PROPERTY;
+      static const string STATUS_MOUNTING_USB_DRIVE_DEFAULT_VALUE;
+
+      static const string STATUS_WRITING_TO_FILE_PROPERTY;
+      static const string STATUS_WRITING_TO_FILE_DEFAULT_VALUE;
 
       static const string STATUS_SUCCESSFULLY_WROTE_PREFS_PROPERTY;
       static const string STATUS_SUCCESSFULLY_WROTE_PREFS_DEFAULT_VALUE;
@@ -64,7 +67,8 @@ class SaveSystemSettingsToUSBDriveMenuItemAction : public NoOpMenuItemAction
                                    CharacterDisplay* characterDisplay, map<string, string>& properties) :
          NoOpMenuItemAction("", delObj, menuItem, menuStatusManager, characterDisplay, properties)
          {
-         configBaseFilename = FilesystemManager::USB_DRIVE_MOUNT_POINT_NAME + "/" + getProperty(CONFIG_FILE_BASE_NAME_PROPERTY, CONFIG_FILE_BASE_NAME_DEFAULT_VALUE);
+         configDirectory = FilesystemManager::USB_DRIVE_MOUNT_POINT_NAME + "/";
+         configBaseFilename = getProperty(CONFIG_FILE_BASE_NAME_PROPERTY, CONFIG_FILE_BASE_NAME_DEFAULT_VALUE);
          configFilenameExtension = getProperty(CONFIG_FILE_EXTENSION_PROPERTY, CONFIG_FILE_EXTENSION_DEFAULT_VALUE);
          }
 
@@ -79,6 +83,7 @@ class SaveSystemSettingsToUSBDriveMenuItemAction : public NoOpMenuItemAction
 
       static const int SLEEP_TIME_MICROSECONDS;
 
+      string configDirectory;
       string configBaseFilename;
       string configFilenameExtension;
       const bool writeConfig(Json::Value config, const string configFilename);
