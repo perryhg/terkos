@@ -209,7 +209,8 @@
       <item text="Save Prefs to USB Drive">
          <item text="">
             <implementation-class name="SaveSystemSettingsToUSBDriveMenuItemAction" library="libSystemSettingsMenuItemActions.so">
-               <property key="status.writing-to-usb-drive">Writing to driveDO NOT REMOVE!</property>
+               <property key="status.mounting-usb-drive">Mounting the USBdrive...</property>
+               <property key="status.writing-to-file">Writing to file:</property>
                <property key="status.prefs-file-written-successfully">Done writing.   Unmounting...</property>
                <property key="status.could-not-write-file">Write failed.   Unmounting...</property>
                <property key="status.usb-unmount-success">You may remove  the USB drive.</property>
@@ -217,6 +218,21 @@
                <property key="status.failure">USB drive is notinstalled.</property>
                <property key="config.file-base-name">terkos</property>
                <property key="config.file-extension">.cfg</property>
+            </implementation-class>
+         </item>
+      </item>
+      <item text="Load Prefs    from USB Drive">
+         <item text="">
+            <implementation-class name="LoadSystemSettingsFromUSBDriveMenuItemAction" library="libSystemSettingsMenuItemActions.so">
+               <property key="status.mounting-usb-drive">Mounting the USBdrive...</property>
+               <property key="status.unmounting-usb-drive">Unmounting driveplease wait...</property>
+               <property key="status.usb-unmount-success">You may remove  the USB drive.</property>
+               <property key="status.usb-unmount-failure">Failed to un-   mount USB drive.</property>
+               <property key="status.load-completed">Prefs loaded    successfully.</property>
+               <property key="status.load-failed">Failed to load  preferences.</property>
+               <property key="status.load-cancelled">Cancelled -- No settings changed</property>
+               <property key="status.failure">USB drive is notinstalled.</property>
+               <property key="label.file">File</property>
             </implementation-class>
          </item>
       </item>
