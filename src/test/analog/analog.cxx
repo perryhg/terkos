@@ -12,14 +12,13 @@
 #include <unistd.h>
 #include <stdio.h>
 #include "9302hw.h"
-#include "qwerkhw.h"
 #include "qeanalog.h"
 #include "qepower.h"
 
 int main(int argc, char **argv) 
 {
   CQEAnalog *phw = CQEAnalog::GetPtr();
-  CQEPower *pp = CQEPower::GetPtr();
+  //CQEPower *pp = CQEPower::GetPtr();
 #if 0
   long val;
   pp->GetProperty(QP_PROP_BREAKER_STATE, &val);
@@ -57,6 +56,18 @@ int main(int argc, char **argv)
     printf("# %d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n",
 	   phw->GetADVoltage(16), phw->GetADVoltage(17), phw->GetADVoltage(18), phw->GetADVoltage(19),
 	   phw->GetADVoltage(20), phw->GetADVoltage(21), phw->GetADVoltage(22), phw->GetADVoltage(23), phw->GetADVoltage(24));
+    if (phw->Requested())
+      {
+	printf("releasing\n");
+	phw->Release();
+	while(1)
+	  {
+	    phw = CQEAnalog::GetPtr(true);
+	    if (phw)
+	      break;
+	    printf("waiting\n");
+	  }
+      }
 #endif
     }
 #endif

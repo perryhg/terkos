@@ -1,7 +1,7 @@
 TARGET=analog
 CXX=arm-oe-linux-uclibcgnueabi-g++
-CFLAGS=-g -I../../../include
-LDFLAGS=-L../../../lib -lqwerk 
+CFLAGS=-g -I/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/include/terk
+LDFLAGS=-L/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/lib/terk -lqwerk 
 SRCS=$(wildcard *.cxx)
 OBJECTS=$(SRCS:.cxx=.o)
 
