@@ -18,7 +18,9 @@
 
 #include <sys/types.h>
 #include <sys/fcntl.h>
-#include <sys/file.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
@@ -26,24 +28,30 @@
 #include <stdexcept>
 #include "singleton.h"
 
+#define SINGLETON_TIMEOUT 1000000000
+
 // put this in your class declaration
-#define SINGLETON(T)\
-  friend class TSingleton<T>;\
-  static TSingleton<T> m_singleton;\
-  static T *GetPtr()\
-  {\
-    return m_singleton.GetPtr();\
-  }\
-  static T &GetRef()\
-  {\
-    return m_singleton.GetRef();\
-  }\
-  static void Release()\
-  {\
-    m_singleton.Release();\
+#define SINGLETON(T)				\
+  friend class TSingleton<T>;			\
+  static TSingleton<T> m_singleton;		\
+  static T *GetPtr(bool suppressError=false)    \
+  {						\
+    return m_singleton.GetPtr(suppressError);	\
+  }						\
+  static T &GetRef()				\
+  {						\
+    return m_singleton.GetRef();		\
+  }						\
+  static void Release()				\
+  {						\
+    m_singleton.Release();			\
+  }                                             \
+  static bool Requested()                       \
+  {                                             \
+    return m_singleton.Requested();             \
   }
 
-#define SINGLETON_REGISTER(T)\
+#define SINGLETON_REGISTER(T)			\
   TSingleton<T> T::m_singleton( #T )
 
   
@@ -51,8 +59,9 @@ template <class T>
 class TSingleton
 {
 public:
-  static T *GetPtr();
+  static T *GetPtr(bool suppressError=false);
   static T &GetRef();
+  static bool Requested();
   static void Release();
 
   TSingleton();
@@ -61,42 +70,78 @@ public:
  
 private:
   static void Cleanup();
+  static unsigned int Hash(const char *str);
 
   static int m_refCount;
   static T *m_pInstance;  
   static const char *m_identifier;
-  static int m_fd;
+  static int m_id;
+  static unsigned int m_hash;
 };
 
 template <class T> int TSingleton<T>::m_refCount = 0;
 template <class T> T *TSingleton<T>::m_pInstance = NULL;
 template <class T> const char *TSingleton<T>::m_identifier = NULL;
-template <class T> int TSingleton<T>::m_fd = -1;
+template <class T> int TSingleton<T>::m_id = -1;
+template <class T> unsigned int TSingleton<T>::m_hash = 0;
 
-template <class T> T *TSingleton<T>::GetPtr()
+template <class T> T *TSingleton<T>::GetPtr(bool suppressError)
 {
   if (m_pInstance==NULL)
     {
       if (m_identifier!=NULL)
 	{
-	  char fn[64];
-	  strcpy(fn, "/tmp/");
-	  strcat(fn, m_identifier);
-	  m_fd = open(fn, O_RDWR | O_CREAT);
-	  if (m_fd<0)
-	    {
-	      fprintf(stderr, "ERROR: cannot create lockfile %s.\n", fn);
-	      return NULL;
+	  int ret;
+	  struct sembuf ops;
+	  struct timespec ts;
+	  union semun 
+	  {
+	    int              val;    
+	    struct semid_ds *buf;    
+	    unsigned short  *array;  
+	    struct seminfo  *__buf;  
+	  } sn;
+
+	  // hash it
+	  m_hash = Hash(m_identifier);
+	  
+	  // does it exist already?
+	  m_id = semget(m_hash, 1, 0666);
+	  if (m_id<0)
+	    { // create it...
+	      m_id = semget(m_hash, 1, IPC_CREAT | 0666);
+	      if (m_id<0)
+		{
+		  if (!suppressError)
+		    fprintf(stderr, "ERROR: cannot create semaphore.\n");
+		  return NULL;
+		}
+
+	      // ...and initialize it...
+	      sn.val = 1;
+	      semctl(m_id, 0, SETVAL, sn);   
 	    }
-	  if (flock(m_fd, LOCK_EX | LOCK_NB)<0)
+	  
+	  // grab it, wait if necessary
+	  ops.sem_num = 0;
+	  ops.sem_op = -1;
+	  ops.sem_flg = SEM_UNDO;
+	  
+	  ts.tv_sec = SINGLETON_TIMEOUT/1000000000;
+	  ts.tv_nsec = SINGLETON_TIMEOUT%1000000000; 
+	  ret = semtimedop(m_id, &ops, 1, &ts);
+	  
+	  if (ret<0)
 	    {
 	      fprintf(stderr, "ERROR: %s object already exists in another process.\n", m_identifier);
+	      m_id = -1;
 	      return NULL;
 	    }
 	}
       m_pInstance = new T();
     }
   m_refCount++;  
+  
   return m_pInstance;
 }
 
@@ -110,6 +155,26 @@ template <class T> T &TSingleton<T>::GetRef()
     throw std::runtime_error("cannot create object");
   else 
     return *p;
+}
+
+template <class T> unsigned int TSingleton<T>::Hash(const char *str)
+{
+  unsigned int hash = 5381;
+  int c;
+
+  while ((c=*str++))
+    hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+
+  return hash;
+}
+
+template <class T> bool TSingleton<T>::Requested()
+{
+  // get number of processes waiting
+  if (semctl(m_id, 0, GETNCNT)>0)
+    return true;
+  else
+    return false;
 }
 
 template <class T> void TSingleton<T>::Release()
@@ -127,11 +192,16 @@ template <class T> TSingleton<T>::TSingleton()
 
 template <class T> void TSingleton<T>::Cleanup()
 {
-  if (m_fd>=0)
+  if (m_id>=0)
     {
-      flock(m_fd, LOCK_UN | LOCK_NB);
-      close(m_fd);
-      m_fd = -1;
+      struct sembuf ops;
+      // release (increment) semaphore
+      ops.sem_num = 0;
+      ops.sem_op = 1;
+      ops.sem_flg = SEM_UNDO;
+      
+      semop(m_id, &ops, 1);
+      m_id = -1;
     }
   if (m_pInstance)
     {
