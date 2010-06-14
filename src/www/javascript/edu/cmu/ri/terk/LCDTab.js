@@ -194,10 +194,6 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
             "Saving Preferences",
             "Please wait while your changes to the LCD configuration are being saved.");
 
-      var crap = function()
-         {
-         }
-
       // register the event listener
       lcdConfigManager.addEventListener({
          onBeforeLoad : function()
