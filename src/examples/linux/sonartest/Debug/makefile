@@ -43,7 +43,7 @@ all: sonartest
 sonartest: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: TerkOS C++ Linker'
-	/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/g++ -L/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/lib -L/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/usr/lib -o"sonartest" $(OBJS) $(USER_OBJS) $(LIBS)
+	/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/g++ -L/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/lib -L/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/usr/lib -L/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/lib/terk -o"sonartest" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
