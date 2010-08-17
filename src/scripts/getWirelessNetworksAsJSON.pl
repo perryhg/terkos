@@ -103,6 +103,23 @@ while ($lineNumber < $#lines)
       $accessPoints[$i]->{isEncrypted} = ($isEncrypted) ? 1 : 0;
       $accessPoints[$i]->{isEncryptedStr} = ($isEncrypted) ? "true" : "false";
       }
+   elsif ($line =~ /^IE: WPA .*/)
+      {
+      $accessPoints[$i]->{isWPAEncryption} = 1;
+      }
+
+   # set the encryption type, if any
+   if ($i >= 0)
+      {
+      if ($accessPoints[$i]->{isEncrypted})
+         {
+         $accessPoints[$i]->{encryptionType} = ($accessPoints[$i]->{isWPAEncryption}) ? "wpa" : "wep";
+         }
+      else
+         {
+         $accessPoints[$i]->{encryptionType} = "none";
+         }
+      }
 
    $lineNumber++;
    }
@@ -117,6 +134,7 @@ for $j (0 .. $#accessPoints)
       my $ssid = $accessPoints[$j]{ssid};
       my $mac = $accessPoints[$j]{mac};
       $wirelessNetworks{$ssid}{isEncrypted} = $accessPoints[$j]{isEncryptedStr};
+      $wirelessNetworks{$ssid}{encryptionType} = $accessPoints[$j]{encryptionType};
       $wirelessNetworks{$ssid}{access-points}{$mac}{channel} = $accessPoints[$j]{channel};
       $wirelessNetworks{$ssid}{access-points}{$mac}{frequency} = $accessPoints[$j]{frequency};
       $wirelessNetworks{$ssid}{access-points}{$mac}{quality} = $accessPoints[$j]{quality};
@@ -134,6 +152,7 @@ for $networkCount (0 .. $#ssids)
    $json .= "   {\n";
    $json .= '      "ssid" : "'        . $ssid        . '"' . ",\n";
    $json .= '      "is-encrypted" : '  . $wirelessNetworks{$ssid}{isEncrypted} . ",\n";
+   $json .= '      "encryption-type" : "'  . $wirelessNetworks{$ssid}{encryptionType} . '"' . ",\n";
    $json .= '      "access-points" : ['  .  "\n";
    my @macs = sort keys %{$wirelessNetworks{$ssid}{access-points}};
    for $macCount (0 .. $#macs)

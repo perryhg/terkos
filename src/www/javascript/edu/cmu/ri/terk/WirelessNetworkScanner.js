@@ -117,6 +117,9 @@ if (!Math.uuid)
          // clear the list
          jQuery("#" + wirelessNetworksListId).empty();
 
+         // clear the profiles map
+         profilesMap = new Array();
+
          // reset the selected network
          selectedWirelessNetwork = null;
 
@@ -133,7 +136,7 @@ if (!Math.uuid)
          jQuery.ajax(
          {
             url: host + '/cgi-bin/getWirelessNetworksAsJSON.pl',
-            data: "include-encrypted=false",
+            data: "include-encrypted=true",
             success: function(wirelessNetworksJSON)
                {
                displayAvailableWirelessNetworks(wirelessNetworksJSON);
@@ -166,7 +169,16 @@ if (!Math.uuid)
             listItem.id = uuid;
 
             jQuery("#" + wirelessNetworksListId).append(listItem);
-            jQuery("#" + listItem.id).text(networkProfile['ssid']).disableSelection().addClass("list-item");
+            var networkSSID = networkProfile['ssid'];
+
+            // display the lock icon for encrypted networks
+            if (networkProfile['is-encrypted'])
+               {
+               networkSSID += '<img src="' + host +'/images/lock.png" width="9" height="11" style="float:right;">';
+               }
+               
+            jQuery("#" + listItem.id).html(networkSSID).disableSelection().addClass("list-item");
+
 
             // add a mousedown event handler to the list item so we can keep
             // track of which one is selected (and also do some selection highlighting)

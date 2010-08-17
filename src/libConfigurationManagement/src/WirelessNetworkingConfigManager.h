@@ -24,6 +24,7 @@
 #include "ConfigFile.h"
 #include "WpaSupplicantConf.h"
 #include "EtcNetworkInterfacesConf.h"
+#include "WirelessEncryptionType.h"
 
 using namespace std;
 using namespace redi;
@@ -71,9 +72,15 @@ class WirelessNetworkingConfigManager : public ConfigFile
       static const string WILL_START_ON_BOOTUP_PROPERTY;
       static const string PROFILES_PROPERTY;
       static const string SSID_PROPERTY;
-      static const string IS_ENCRYPTED_PROPERTY;
+      static const string ENCRYPTION_TYPE_PROPERTY;
+      static const string PASSWORD_PROPERTY;
+      static const string IS_HEX_PASSWORD_PROPERTY;
 
       const bool addNetworkProfile(const string& ssid);
+      const bool addEncryptedNetworkProfile(const string& ssid,
+                                            const WirelessEncryptionType& encryptionType,
+                                            const string& password,
+                                            const bool isHexPassword);
 
    };
 

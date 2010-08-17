@@ -20,6 +20,7 @@
 #include <fstream>
 #include <vector>
 #include <FileUtilities.h>
+#include "WirelessEncryptionType.h"
 
 using namespace std;
 
@@ -47,7 +48,17 @@ class WpaSupplicantConf
 
       void addNetwork(const string& ssid, const unsigned int priority=0)
          {
-         Network network(ssid, priority);
+         Network network(ssid, priority, WirelessEncryptionType::NONE);
+         networks.push_back(network);
+         }
+
+      void addEncryptedNetwork(const string& ssid,
+                               const WirelessEncryptionType& encryptionType,
+                               const string& password,
+                               const bool isHexPassword,
+                               const unsigned int priority=0 )
+         {
+         Network network(ssid, priority, encryptionType, password, isHexPassword);
          networks.push_back(network);
          }
 
@@ -69,7 +80,16 @@ class WpaSupplicantConf
          {
          public:
 
-            Network(const string& ssid, const unsigned int priority=0) : ssid(ssid), priority(priority)
+            Network(const string& ssid,
+                    const unsigned int priority,
+                    const WirelessEncryptionType& encryptionType,
+                    const string& password="",
+                    const bool isHexPassword=false) :
+                   ssid(ssid),
+                   priority(priority),
+                   encryptionType(encryptionType),
+                   password(password),
+                   isHexPassword(isHexPassword)
                {
                // nothing to do
                }
@@ -89,11 +109,33 @@ class WpaSupplicantConf
                return priority;
                }
 
+            const bool isUsingEncryption()
+               {
+               return encryptionType == WirelessEncryptionType::NONE;
+               }
+
+            const WirelessEncryptionType getEncryptionType()
+               {
+               return encryptionType;
+               }
+
+            const string getPassword()
+               {
+               return password;
+               }
+
+            const bool isUsingHexPassword()
+               {
+               return isHexPassword;
+               }
+
          private:
 
             string ssid;
             unsigned int priority;
-            
+            WirelessEncryptionType encryptionType;
+            string password;
+            bool isHexPassword;
          };
 
       bool willIncludeCatchAllNetwork;
