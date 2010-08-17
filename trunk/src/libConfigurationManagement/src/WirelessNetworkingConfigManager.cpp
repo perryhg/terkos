@@ -21,7 +21,9 @@ const string WirelessNetworkingConfigManager::DEFAULT_CONFIG_FILENAME = "wireles
 const string WirelessNetworkingConfigManager::WILL_START_ON_BOOTUP_PROPERTY = "wireless-networking.will-start-on-bootup";
 const string WirelessNetworkingConfigManager::PROFILES_PROPERTY = "wireless-networking.profiles";
 const string WirelessNetworkingConfigManager::SSID_PROPERTY = "ssid";
-const string WirelessNetworkingConfigManager::IS_ENCRYPTED_PROPERTY = "is-encrypted";
+const string WirelessNetworkingConfigManager::ENCRYPTION_TYPE_PROPERTY = "encryption-type";
+const string WirelessNetworkingConfigManager::PASSWORD_PROPERTY = "password";
+const string WirelessNetworkingConfigManager::IS_HEX_PASSWORD_PROPERTY = "is-hex-password";
 
 Json::Value WirelessNetworkingConfigManager::parseWirelessNetworkingStatusJSONStream(redi::ipstream& is)
    {
@@ -144,17 +146,48 @@ const bool WirelessNetworkingConfigManager::setJson(Json::Value& config)
             Json::Value profileProperty = (*profilesProperty)[i];
             if (profileProperty != Json::Value::null)
                {
-               // TODO: this (and the addNetworkProfile() method) will evolve over time as we add
-               // support for encryption and such, but for now it's nothing more than specifying
-               // the SSID
+               // get the SSID
                Json::Value* ssidProperty = ConfigFile::findProperty(profileProperty, SSID_PROPERTY);
-               if (ssidProperty != NULL && *ssidProperty != Json::Value::null)
+
+               // get the encryption type
+               Json::Value* encryptionTypeProperty = ConfigFile::findProperty(profileProperty, ENCRYPTION_TYPE_PROPERTY);
+
+               if (ssidProperty != NULL && *ssidProperty != Json::Value::null &&
+                   encryptionTypeProperty != NULL && *encryptionTypeProperty != Json::Value::null)
                   {
                   string ssid = ssidProperty->asString();
-                  bool success = addNetworkProfile(ssid);
-                  if (success)
+                  WirelessEncryptionType encryptionType = WirelessEncryptionType::findByName(encryptionTypeProperty->asString());
+                  if (encryptionType == WirelessEncryptionType::NONE)
                      {
-                     wpaSupplicantConf.addNetwork(ssid, priority);
+                     bool success = addNetworkProfile(ssid);
+                     if (success)
+                        {
+                        wpaSupplicantConf.addNetwork(ssid, priority);
+                        }
+                     }
+                  else if (encryptionType != WirelessEncryptionType::UNKNOWN) // if the encryption type is not NONE or UNKNOWN
+                     {
+                     // get the password
+                     Json::Value* passwordProperty = ConfigFile::findProperty(profileProperty, PASSWORD_PROPERTY);
+
+                     // get whether the password is hex
+                     Json::Value* isHexPasswordProperty = ConfigFile::findProperty(profileProperty, IS_HEX_PASSWORD_PROPERTY);
+
+                     if (passwordProperty != NULL && *passwordProperty != Json::Value::null &&
+                         isHexPasswordProperty != NULL && *isHexPasswordProperty != Json::Value::null)
+                        {
+                        string password = passwordProperty->asString();
+                        bool isHexPassword = isHexPasswordProperty->asBool();
+                        bool success = addEncryptedNetworkProfile(ssid, encryptionType, password, isHexPassword);
+                        if (success)
+                           {
+                           wpaSupplicantConf.addEncryptedNetwork(ssid,
+                                                                 encryptionType,
+                                                                 password,
+                                                                 isHexPassword,
+                                                                 priority);
+                           }
+                        }
                      }
                   }
                }
@@ -185,6 +218,19 @@ const bool WirelessNetworkingConfigManager::addNetworkProfile(const string& ssid
    {
    Json::Value networkProfile;
    networkProfile[SSID_PROPERTY] = ssid;
-   networkProfile[IS_ENCRYPTED_PROPERTY] = false;
+   networkProfile[ENCRYPTION_TYPE_PROPERTY] = WirelessEncryptionType::NONE.getName();
+   return appendObjectToArray(PROFILES_PROPERTY, networkProfile);
+   }
+
+const bool WirelessNetworkingConfigManager::addEncryptedNetworkProfile(const string& ssid,
+                                                                       const WirelessEncryptionType& encryptionType,
+                                                                       const string& password,
+                                                                       const bool isHexPassword)
+   {
+   Json::Value networkProfile;
+   networkProfile[SSID_PROPERTY] = ssid;
+   networkProfile[ENCRYPTION_TYPE_PROPERTY] = encryptionType.getName();
+   networkProfile[PASSWORD_PROPERTY] = password;
+   networkProfile[IS_HEX_PASSWORD_PROPERTY] = isHexPassword;
    return appendObjectToArray(PROFILES_PROPERTY, networkProfile);
    }

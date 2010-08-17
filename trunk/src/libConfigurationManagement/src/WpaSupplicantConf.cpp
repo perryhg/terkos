@@ -33,7 +33,33 @@ void WpaSupplicantConf::save()
       wpa_supplicant_conf << endl;
       wpa_supplicant_conf << "network={" << endl;
       wpa_supplicant_conf << "        ssid=\"" << networks[i].getSsid() << "\"" << endl;
-      wpa_supplicant_conf << "        key_mgmt=NONE" << endl;
+
+      if (networks[i].getEncryptionType() == WirelessEncryptionType::WEP)
+         {
+         wpa_supplicant_conf << "        key_mgmt=NONE" << endl;
+         wpa_supplicant_conf << "        wep_tx_keyidx=0" << endl;
+         wpa_supplicant_conf << "        wep_key0=" << networks[i].getPassword() << endl;
+         }
+      else if (networks[i].getEncryptionType() == WirelessEncryptionType::WPA)
+         {
+         if (networks[i].isUsingHexPassword())
+            {
+            wpa_supplicant_conf << "        psk=" << networks[i].getPassword() << endl;
+            }
+         else
+            {
+            wpa_supplicant_conf << "        psk=\"" << networks[i].getPassword() << "\"" << endl;
+            }
+         wpa_supplicant_conf << "        key_mgmt=WPA-PSK WPA-EAP" << endl;
+         wpa_supplicant_conf << "        proto=WPA RSN" << endl;
+         wpa_supplicant_conf << "        pairwise=CCMP TKIP" << endl;
+         wpa_supplicant_conf << "        group=CCMP TKIP WEP104 WEP40" << endl;
+         }
+      else
+         {
+         wpa_supplicant_conf << "        key_mgmt=NONE" << endl;
+         }
+
       wpa_supplicant_conf << "        priority=" << networks[i].getPriority() << endl;
       wpa_supplicant_conf << "}" << endl;
       }
