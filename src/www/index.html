@@ -567,12 +567,72 @@
          </div>
          <div id="editPreferredWirelessNetworkDialog" title="Edit a Preferred Wireless Network">
             <form id="formToEdiPreferredWirelessNetworkInfo" method="post">
+               <input type="hidden" id="wirelessNetworkUUID_edit"/>
                <p>
                   Edit the wireless network's name.
                </p>
-               <label for="wirelessNetworkName_edit">Network Name:</label>
-               <input type="text" name="wirelessNetworkName_edit" id="wirelessNetworkName_edit" class="text ui-widget-content ui-corner-all"/>
-               <input type="hidden" id="wirelessNetworkUUID_edit"/>
+               <table border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                     <td><label for="wirelessNetworkName_edit">Network Name:</label></td>
+                     <td>&nbsp;</td>
+                     <td><input type="text" name="wirelessNetworkName_edit" id="wirelessNetworkName_edit" class="text ui-widget-content ui-corner-all"/></td>
+                  </tr>
+                  <tr>
+                     <td><label for="wirelessNetworkEncryptionType_edit">Security:</label></td>
+                     <td>&nbsp;</td>
+                     <td>
+                        <select name="wirelessNetworkEncryptionType_edit" id="wirelessNetworkEncryptionType_edit">
+                           <option value="none">None</option>
+                           <option value="wep">WEP</option>
+                           <option value="wpa">WPA</option>
+                        </select>
+                     </td>
+                  </tr>
+
+                  <tr class="preferredWirelessNetworkWEPSubForm_edit" style="display:none">
+                     <td><label for="preferredWEPNetworkPasswordLength_edit">Encryption Strength:</label></td>
+                     <td>&nbsp;</td>
+                     <td>
+                        <select name="preferredWEPNetworkPasswordLength_edit" id="preferredWEPNetworkPasswordLength_edit">
+                           <option value=""></option>
+                           <option value="10">40/64-bit</option>
+                           <option value="26">128-bit</option>
+                        </select>
+                     </td>
+                  </tr>
+                  <tr class="preferredWirelessNetworkWEPSubForm_edit" style="display:none">
+                     <td><label for="preferredWEPNetworkPassword_edit">Password:</label></td>
+                     <td>&nbsp;</td>
+                     <td><input type="text" name="preferredWEPNetworkPassword_edit" id="preferredWEPNetworkPassword_edit" class="text ui-widget-content ui-corner-all"/></td>
+                  </tr>
+                  <tr class="preferredWirelessNetworkWEPSubForm_edit" style="display:none">
+                     <td colspan="2">&nbsp;</td>
+                     <td><div id="preferredWEPNetworkPasswordHint_edit" class="tooltip-text">Please select the encryption strength</div></td>
+                  </tr>
+
+                  <tr class="preferredWirelessNetworkWPASubForm_edit" style="display:none">
+                     <td><label for="preferredWPANetworkPasswordType_edit">Password Type:</label></td>
+                     <td>&nbsp;</td>
+                     <td>
+                        <select name="preferredWPANetworkPasswordType_edit" id="preferredWPANetworkPasswordType_edit">
+                           <option value=""></option>
+                           <option value="text">Plain text</option>
+                           <option value="hex">Hex</option>
+                        </select>
+                     </td>
+                  </tr>
+                  <tr class="preferredWirelessNetworkWPASubForm_edit" style="display:none">
+                     <td><label for="preferredWPANetworkPassword_edit">Password:</label></td>
+                     <td>&nbsp;</td>
+                     <td><input type="text" name="preferredWPANetworkPassword_edit" id="preferredWPANetworkPassword_edit" class="text ui-widget-content ui-corner-all"/></td>
+                  </tr>
+                  <tr class="preferredWirelessNetworkWPASubForm_edit" style="display:none">
+                     <td colspan="2">&nbsp;</td>
+                     <td><div id="preferredWPANetworkPasswordHint_edit" class="tooltip-text">Please select the password type</div></td>
+                  </tr>
+
+               </table>
+
                <div class="ui-widget-content divider" style="margin-top: 50px"></div>
                <div id="editPreferredWirelessNetworkDialogButtonsContainer">
                   <button type="button" style="float:right" id="saveManuallyEnteredWirelessNetworkDialogButton" class="ui-state-disabled ui-state-active ui-corner-all button text-button">OK</button>
