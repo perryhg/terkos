@@ -152,22 +152,32 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
             var selectedItemJSON = wirelessNetworkingConfigManager.getSelectedItemJSON();
             jQuery("#wirelessNetworkName_edit").val(selectedItemJSON['ssid']);
             jQuery("#wirelessNetworkUUID_edit").val(wirelessNetworkingConfigManager.getSelectedItemUUID());
+            jQuery("#wirelessNetworkEncryptionType_edit").val(selectedItemJSON['encryption-type']);
+
+            handlePreferredWirelessNetworkEncryptionTypeChange(".preferredWirelessNetworkWEPSubForm_edit",
+                                                               ".preferredWirelessNetworkWPASubForm_edit",
+                                                               "#wirelessNetworkEncryptionType_edit");
+
+            if (selectedItemJSON['encryption-type'] == "wep")
+               {
+               jQuery("#preferredWEPNetworkPassword_edit").val(selectedItemJSON['password']);
+               jQuery("#preferredWEPNetworkPasswordLength_edit").val(selectedItemJSON['password'].length);
+               handleWEPPasswordLengthChange("#preferredWEPNetworkPasswordLength_edit",
+                                             "#preferredWEPNetworkPasswordHint_edit");
+               }
+            else
+               {
+               if (selectedItemJSON['encryption-type'] == "wpa")
+                  {
+                  jQuery("#preferredWPANetworkPassword_edit").val(selectedItemJSON['password']);
+                  jQuery("#preferredWPANetworkPasswordType_edit").val(selectedItemJSON['is-hex-password'] ? "hex" : "text");
+                  handleWPAPasswordTypeChange("#preferredWPANetworkPasswordType_edit",
+                                              "#preferredWPANetworkPasswordHint_edit");
+                  }
+               }
+
             jQuery("#wirelessNetworkName_edit").keyup();
             jQuery('#editPreferredWirelessNetworkDialog').dialog('open');
-
-            // TODO
-               
-            /*
-            "#wirelessNetworkEncryptionType_edit"
-            ".preferredWirelessNetworkWEPSubForm_edit"
-            "#preferredWEPNetworkPassword_edit"
-            "#preferredWEPNetworkPasswordLength_edit"
-            "#preferredWEPNetworkPasswordHint_edit"
-            ".preferredWirelessNetworkWPASubForm_edit"
-            "#preferredWPANetworkPassword_edit"
-            "#preferredWPANetworkPasswordType_edit"
-            "#preferredWPANetworkPasswordHint_edit"
-            */
             }
          };
 
@@ -381,17 +391,15 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
             ).disableSelection();
 
       // ---------------------------------------------------------------------------------------------------------------
-      // Functions for adding/editing a preferred wireless network
+      // Functions for adding/editing a wireless network
       // ---------------------------------------------------------------------------------------------------------------
-      var isPreferredWirelessNetworkFormValid = function(encryptionTypeElementId,
-                                                         wepPasswordLengthElementId,
-                                                         wepPasswordElementId,
-                                                         wpaPasswordTypeElementId,
-                                                         wpaPasswordElementId,
-                                                         networkSSIDElementId)
+      var isWirelessNetworkFormValid = function(encryptionType,
+                                                wepPasswordLengthElementId,
+                                                wepPasswordElementId,
+                                                wpaPasswordTypeElementId,
+                                                wpaPasswordElementId)
          {
          var isValid = false;
-         var encryptionType = jQuery(encryptionTypeElementId).val();
          if (encryptionType == "wep")
             {
             var requiredPasswordLength = jQuery(wepPasswordLengthElementId).val();
@@ -424,7 +432,7 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
                }
             }
 
-         return isValid && isFormFieldNonEmpty(networkSSIDElementId);
+         return isValid;
          };
 
       var resetPreferredWirelessNetworkForm = function(networkSSIDElementId,
@@ -562,12 +570,12 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
 
       var isAddPreferredWirelessNetworkFormValid = function()
          {
-         return isPreferredWirelessNetworkFormValid("#wirelessNetworkEncryptionType_add",
-                                                    "#preferredWEPNetworkPasswordLength_add",
-                                                    "#preferredWEPNetworkPassword_add",
-                                                    "#preferredWPANetworkPasswordType_add",
-                                                    "#preferredWPANetworkPassword_add",
-                                                    "#wirelessNetworkName_add");
+         return isWirelessNetworkFormValid(jQuery("#wirelessNetworkEncryptionType_add").val(),
+                                           "#preferredWEPNetworkPasswordLength_add",
+                                           "#preferredWEPNetworkPassword_add",
+                                           "#preferredWPANetworkPasswordType_add",
+                                           "#preferredWPANetworkPassword_add")
+               && isFormFieldNonEmpty("#wirelessNetworkName_add");
          };
 
       var validateAddPreferredWirelessNetworkForm = function()
@@ -715,24 +723,11 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
                   {
                   var json = wirelessNetworkScanner.getSelectedItemJSON();
 
-                  // build a copy of network profile object, containing only the bits we care about.
-                  var network = new Object();
-                  network['ssid'] = json['ssid'];
-                  network['is-encrypted'] = json['is-encrypted'];
-                  network['encryption-type'] = json['encryption-type'];
-                  if (json['encryption-type'] == "wep")
-                     {
-                     network['password'] = jQuery("#availableWEPNetworkPassword").val();
-                     network['is-hex-password'] = true;
-                     }
-                  else
-                     {
-                     if (json['encryption-type'] == "wpa")
-                        {
-                        network['password'] = jQuery("#availableWPANetworkPassword").val();
-                        network['is-hex-password'] = jQuery("#availableWPANetworkPasswordType").val() == "hex";
-                        }
-                     }
+                  var network = buildNetworkJSONAndAddToWirelessNetworkingConfigManager(json['ssid'],
+                                                                                        json['encryption-type'],
+                                                                                        jQuery("#availableWEPNetworkPassword").val(),
+                                                                                        jQuery("#availableWPANetworkPassword").val(),
+                                                                                        jQuery("#availableWPANetworkPasswordType").val());
 
                   // add the network
                   wirelessNetworkingConfigManager.addNetwork(network);
@@ -747,43 +742,11 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
          {
          var json = wirelessNetworkScanner.getSelectedItemJSON();
 
-         var isValid = false;
-         if (json && json['is-encrypted'])
-            {
-            if (json['encryption-type'] == "wep")
-               {
-               var requiredPasswordLength = jQuery("#availableWEPNetworkPasswordLength").val();
-               isValid = requiredPasswordLength > 0 && isHexTextFieldValue("#availableWEPNetworkPassword", requiredPasswordLength);
-               }
-            else
-               {
-               if (json['encryption-type'] == "wpa")
-                  {
-                  // get the password type
-                  var passwordType = jQuery("#availableWPANetworkPasswordType").val();
-
-                  if (passwordType == "text")
-                     {
-                     // password must be between 8 and 64 characters, inclusive
-                     isValid = isFormFieldLengthBetween("#availableWPANetworkPassword", 8, 63);
-                     }
-                  else
-                     {
-                     if (passwordType == "hex")
-                        {
-                        // password must be 64 hex characters
-                        isValid = isHexTextFieldValue("#availableWPANetworkPassword", 64);
-                        }
-                     }
-                  }
-               }
-            }
-         else
-            {
-            isValid = true;
-            }
-
-         return isValid;
+         return isWirelessNetworkFormValid(json['encryption-type'],
+                                           "#availableWEPNetworkPasswordLength",
+                                           "#availableWEPNetworkPassword",
+                                           "#availableWPANetworkPasswordType",
+                                           "#availableWPANetworkPassword");
          };
 
       var validateAvailableNetworkForm = function()
@@ -808,13 +771,8 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
       jQuery("#availableWEPNetworkPasswordLength").change(
             function()
                {
-               var requiredPasswordLength = jQuery("#availableWEPNetworkPasswordLength").val();
-               var hint = "Please select the encryption strength";
-               if (requiredPasswordLength > 0)
-                  {
-                  hint = "Password must be " + requiredPasswordLength + " hex digits";
-                  }
-               jQuery("#availableWEPNetworkPasswordHint").text(hint);
+               handleWEPPasswordLengthChange("#availableWEPNetworkPasswordLength",
+                                             "#availableWEPNetworkPasswordHint");
                validateAvailableNetworkForm();
                }
             );
@@ -822,20 +780,8 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
       jQuery("#availableWPANetworkPasswordType").change(
             function()
                {
-               var passwordType = jQuery("#availableWPANetworkPasswordType").val();
-               var hint = "Please select the password type";
-               if (passwordType == "text")
-                  {
-                  hint = "Password must be 8 - 63 characters";
-                  }
-               else
-                  {
-                  if (passwordType == "hex")
-                     {
-                     hint = "Password must be 64 hex digits";
-                     }
-                  }
-               jQuery("#availableWPANetworkPasswordHint").text(hint);
+               handleWPAPasswordTypeChange("#availableWPANetworkPasswordType",
+                                           "#availableWPANetworkPasswordHint");
                validateAvailableNetworkForm();
                }
             );
@@ -869,12 +815,12 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
 
       var isEditPreferredWirelessNetworkFormValid = function()
          {
-         return isPreferredWirelessNetworkFormValid("#wirelessNetworkEncryptionType_edit",
-                                                    "#preferredWEPNetworkPasswordLength_edit",
-                                                    "#preferredWEPNetworkPassword_edit",
-                                                    "#preferredWPANetworkPasswordType_edit",
-                                                    "#preferredWPANetworkPassword_edit",
-                                                    "#wirelessNetworkName_edit");
+         return isWirelessNetworkFormValid(jQuery("#wirelessNetworkEncryptionType_edit").val(),
+                                           "#preferredWEPNetworkPasswordLength_edit",
+                                           "#preferredWEPNetworkPassword_edit",
+                                           "#preferredWPANetworkPasswordType_edit",
+                                           "#preferredWPANetworkPassword_edit")
+               && isFormFieldNonEmpty("#wirelessNetworkName_edit");
          };
 
       var validateEditPreferredWirelessNetworkForm = function()
@@ -963,10 +909,10 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
                if (isEditPreferredWirelessNetworkFormValid())
                   {
                   var network = buildNetworkJSONAndAddToWirelessNetworkingConfigManager(jQuery("#wirelessNetworkName_edit").val(),
-                                                                          jQuery("#wirelessNetworkEncryptionType_edit").val(),
-                                                                          jQuery("#preferredWEPNetworkPassword_edit").val(),
-                                                                          jQuery("#preferredWPANetworkPassword_edit").val(),
-                                                                          jQuery("#preferredWPANetworkPasswordType_edit").val());
+                                                                                        jQuery("#wirelessNetworkEncryptionType_edit").val(),
+                                                                                        jQuery("#preferredWEPNetworkPassword_edit").val(),
+                                                                                        jQuery("#preferredWPANetworkPassword_edit").val(),
+                                                                                        jQuery("#preferredWPANetworkPasswordType_edit").val());
 
                   // update the config
                   wirelessNetworkingConfigManager.editNetwork(jQuery("#wirelessNetworkUUID_edit").val(), network);
@@ -993,7 +939,8 @@ if (!edu.cmu.ri.terk.SingleButtonModalDialog)
       };
 
    // ==================================================================================================================
-   })();
+   })
+      ();
 
 
       
