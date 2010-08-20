@@ -268,7 +268,15 @@ if (!JSON)
             // add the item to the list
             jQuery("#" + wirelessNetworksListId).append(listItem);
             jQuery("#" + listItem.id).append(listItemInfo);
-            jQuery("#" + listItemInfo.id).text(networkProfile['ssid']);
+            var networkSSID = networkProfile['ssid'];
+
+            // display the lock icon for encrypted networks
+            if (networkProfile['encryption-type'] != "none")
+               {
+               networkSSID += '<img src="' + host +'/images/lock.png" width="9" height="11" style="float:right;">';
+               }
+
+            jQuery("#" + listItemInfo.id).html(networkSSID);
 
             // add a mousedown event handler to the list item so we can keep
             // track of which one is selected (and also do some selection highlighting)
