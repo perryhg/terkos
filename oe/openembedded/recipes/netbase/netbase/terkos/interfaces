@@ -10,4 +10,4 @@ auto wlan0
 # END_WLAN0_AUTOSTART
 iface wlan0 inet dhcp
 	wpa-conf /etc/network/wpa_supplicant.conf
-	wpa-driver hostap
+	wpa-driver wext
