@@ -13,6 +13,107 @@
 
 use strict;
 
+#=======================================================================================================================
+sub getNumericInput()
+   {
+   my $choice = <STDIN>;
+   chomp ($choice);
+
+   if ($choice =~ /^[0-9]+$/)
+      {
+      return $choice;
+      }
+   else
+      {
+      print "Invalid option [$choice]\n";
+      }
+   return 0;
+   }
+#=======================================================================================================================
+sub printMainMenu()
+   {
+   print("\n" .
+         "---------\n" .
+         "MAIN MENU\n" .
+         "---------\n" .
+         "1) Configure for WEP network\n" .
+         "2) Configure for WPA/WPA2 network\n" .
+         "3) Quit\n" .
+         "Enter your choice: ");
+   }
+#=======================================================================================================================
+sub handleWEPConfiguration()
+   {
+   my $willLoop = 1;
+   while($willLoop)
+      {
+      print("\n" .
+            "-----------------\n" .
+            "WEP CONFIGURATION\n" .
+            "-----------------\n" .
+            "1) 40/64-bit encryption\n" .
+            "2) 128-bit encryption\n" .
+            "3) Cancel, return to main menu\n" .
+            "Enter your choice: ");
+
+      my $choice = &getNumericInput();
+
+      if ($choice == 1 || $choice == 2)
+         {
+         print "\nNetwork name (SSID): ";
+         my $ssid = <STDIN>;
+         chomp ($ssid);
+
+         my $password = "";
+         my $isValidPasswordLength = 0;
+         while (!$isValidPasswordLength)
+            {
+            print "Password " . (($choice == 1) ? "(10 hex digits)" : "(26 hex digits)") . ": ";
+
+            $password = <STDIN>;
+            chomp ($password);
+
+            $isValidPasswordLength = ($choice == 1 && ($password =~ /^[a-fA-F0-9]{10}$/)) ||  ($choice == 2 && ($password =~ /^[a-fA-F0-9]{26}$/));
+
+            if (!$isValidPasswordLength)
+               {
+               print "\nInvalid password!  Please try again...\n";
+               }
+            }
+
+         print("\nSave this configuration?\n" .
+               "   SSID:     $ssid\n" .
+               "   Password: $password\n" .
+               "Enter your choice (y/N): ");
+
+         my $willSave = <STDIN>;
+         chomp ($willSave);
+         if ($willSave =~ /^y$/)
+            {
+            print "\nSAVED!\n";
+            $willLoop = 0;
+            }
+         else
+            {
+            print "\nCancelled, no configuration changes were made.\n";
+            }
+         }
+      elsif ($choice == "3")
+         {
+         $willLoop = 0;
+         }
+      }
+   }
+#=======================================================================================================================
+sub handleWPAConfiguration()
+   {
+   print("\n" .
+         "-----------------\n" .
+         "WPA CONFIGURATION\n" .
+         "-----------------\n");
+   my $choice = &getNumericInput();
+   }
+#=======================================================================================================================
 print "\n";
 print "==============================================\n";
 print "   VEXPro Wireless Networking Setup Utility\n";
@@ -31,41 +132,23 @@ print "==============================================\n";
 my $willLoop = 1;
 while($willLoop)
    {
-   print("\n" .
-         "---------\n" .
-         "MAIN MENU\n" .
-         "---------\n" .
-         "1) Configure for WEP network\n" .
-         "2) Configure for WPA/WPA2 network\n" .
-         "3) Quit\n" .
-         "Enter your choice: ");
+   &printMainMenu();
 
-   my $choice = <STDIN>;
-   chomp ($choice);
+   my $choice = &getNumericInput();
 
    if ($choice == "1")
       {
-      print("\n" .
-            "-----------------\n" .
-            "WEP CONFIGURATION\n" .
-            "-----------------\n");
-
-      $choice = <STDIN>;
-      chomp ($choice);
+      &handleWEPConfiguration();
       }
    elsif ($choice == "2")
       {
-      print "WPA!\n";
+      &handleWPAConfiguration();
       }
    elsif ($choice == "3")
       {
       $willLoop = 0;
       }
-   else
-      {
-      print "Invalid option [$choice]\n";
-      }
    }
 
 print "\nGoodbye!\n\n"
-#===================================================================================================
+#=======================================================================================================================
