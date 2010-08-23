@@ -45,12 +45,26 @@ void callback(unsigned int io, struct timeval *ptv)
     }
 }
 
+CQEGpioInt *pgpio;
+
+void SigHandler(int signum)
+{
+  static int j = 0;
+
+  if (j&1)
+      pgpio->SetData(0x0000);
+  else 
+      pgpio->SetData(0x0001);
+
+  j++;
+}
+
 // note: connector labeled "INPUT" goes to digital 1 (0), 
 // connector labeled "OUTPUT" goes to digital 2 (1).
 int main()
 {
-#if 0
-  CQEGpioInt *pgpio = CQEGpioInt::GetPtr();
+#if 1
+  pgpio = CQEGpioInt::GetPtr();
   volatile unsigned int d;
 
   pgpio->SetData(0x0000);
@@ -61,12 +75,19 @@ int main()
   pgpio->SetInterruptMode(0, QEG_INTERRUPT_NEGEDGE); 
   pgpio->SetInterruptMode(1, QEG_INTERRUPT_NEGEDGE); 
 
+  signal(SIGALRM, SigHandler);  
+  ualarm(30000, 30000);
+
   while(1)
     {
+#if 1
+      sleep(1);
+#else
       pgpio->SetData(0x0001);
-      for (d=0; d<120000; d++);
+      for (d=0; d<500000; d++);
       pgpio->SetData(0x0000);
-      for (d=0; d<120000; d++);
+      for (d=0; d<500000; d++);
+#endif
     }
 #endif
 #if 0 // line sensor
@@ -92,7 +113,7 @@ int main()
       printf("%d\n", val);
     }
 #endif
-#if 1 // bumper
+#if 0 // bumper
   CQEGpioInt *pgpio = CQEGpioInt::GetPtr();
   pgpio->SetDataDirection(0x0000);
   while(1)
