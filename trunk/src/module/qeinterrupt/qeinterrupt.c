@@ -106,7 +106,7 @@ int qe_interrupt_enable(unsigned char vector)
     return -EACCES;
 
   //DPK("enable %d\n", vector);
-  writel((1<<vector) | readl(QEINT_INT_MASK), QEINT_INT_MASK);	      
+  writel((1<<(unsigned int)vector) | readl(QEINT_INT_MASK), QEINT_INT_MASK);	      
   return 0;
 }
 
@@ -119,7 +119,7 @@ int qe_interrupt_disable(unsigned char vector)
     return -EINVAL;
 
   //DPK("disable %d\n", vector);
-  writel(~(1<<vector) & readl(QEINT_INT_MASK), QEINT_INT_MASK);	      
+  writel(~(1<<(unsigned int)vector) & readl(QEINT_INT_MASK), QEINT_INT_MASK);	      
   return 0;
 }
 
@@ -360,7 +360,7 @@ static int qe_interrupt_open(struct inode *inode, struct file *filp)
     return -EBUSY;
 
   // reset signal status
-  signal_status &= ~(1<<data->vector);
+  signal_status &= ~(1<<(unsigned int)data->vector);
 		  
   data->used = TRUE; // if not, set to true
   data->mode = QEINT_MODE_FAST;
@@ -449,13 +449,13 @@ static int qe_interrupt_ioctl(struct inode *inode, struct file *filp,
     {
     case QEINT_IOC_READ_STATUS:
       DPK("read status %d\n", data->vector);
-      status = signal_status & (1<<data->vector) ? 1 : 0;
+      status = signal_status & (1<<(unsigned int)data->vector) ? 1 : 0;
       ret = __put_user(status, (char __user *) arg);
       break;
 
     case QEINT_IOC_RESET_STATUS:
       DPK("reset status %d\n", data->vector);
-      signal_status &= ~(1<<data->vector);
+      signal_status &= ~(1<<(unsigned int)data->vector);
       break;
 
     case QEINT_IOC_DISABLE:
