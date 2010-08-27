@@ -1,6 +1,6 @@
 TARGET=sonar
 CXX=arm-oe-linux-uclibcgnueabi-g++
-CFLAGS=-g -I/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/include/terk
+CFLAGS=-Wall -g -I/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/include/terk
 LDFLAGS=-L/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/lib/terk -lqwerk
 SRCS=$(wildcard *.cxx)
 OBJECTS=$(SRCS:.cxx=.o)

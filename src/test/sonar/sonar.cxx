@@ -9,6 +9,105 @@
 // all portions of the Terk and TerkOS codebase presented here.
 //
 
+#include "sonar.h"
+
+
+static unsigned long diff(struct timeval *ptv0, struct timeval *ptv1)
+{
+  long val;
+
+  val = ptv1->tv_usec - ptv0->tv_usec;
+  val += (ptv1->tv_sec - ptv0->tv_sec)*1000000;
+
+  return val;
+}
+
+CSonar::CSonar(unsigned int inputPort, unsigned int outputPort)
+{
+  m_triggerPort = inputPort;
+  m_echoPort = outputPort;
+  m_callback = NULL;
+  m_flag = false;
+  m_val = -1;
+  m_valid = false;
+  m_pgpio = CQEGpioInt::GetPtr();
+  m_pgpio->ResetDataBit(m_triggerPort);
+  // set trigger port as output
+  m_pgpio->SetDataDirection((1<<m_triggerPort) | m_pgpio->GetDataDirection());
+  // set trigger port as input
+  m_pgpio->SetDataDirection(~(1<<m_echoPort) & m_pgpio->GetDataDirection());
+
+  // set callbacks and interrupt modes
+  m_pgpio->RegisterCallback(m_triggerPort, (void *)this, Callback);
+  m_pgpio->RegisterCallback(m_echoPort, (void *)this, Callback);
+  m_pgpio->SetInterruptMode(m_triggerPort, QEG_INTERRUPT_NEGEDGE); 
+  m_pgpio->SetInterruptMode(m_echoPort, QEG_INTERRUPT_NEGEDGE); 
+}
+ 
+CSonar::~CSonar()
+{
+  m_pgpio->UnregisterCallback(m_triggerPort);
+  m_pgpio->UnregisterCallback(m_echoPort);
+  m_pgpio->Release();
+}
+
+void CSonar::Callback(unsigned int io, struct timeval *ptv, void *userPointer)
+{
+  CSonar *psonar = (CSonar *)userPointer;
+  if (io==psonar->m_triggerPort)
+    {
+      psonar->m_flag = true;
+      psonar->m_tv0 = *ptv;
+    }
+
+  if (io==psonar->m_echoPort && psonar->m_flag)
+    {
+      psonar->m_val = (diff(&psonar->m_tv0, ptv)+SONAR_USPI/2-SONAR_BIAS)/SONAR_USPI;
+      psonar->m_valid = true;
+      if (psonar->m_callback)
+	(*psonar->m_callback)(psonar->m_echoPort, psonar->m_val);
+    } 
+}
+
+int CSonar::Fire(bool wait)
+{
+  volatile int d;
+
+  // invalidate value
+  m_valid = false;
+
+  m_pgpio->SetDataBit(m_triggerPort);
+  for (d=0; d<100; d++);
+  m_pgpio->ResetDataBit(m_triggerPort);
+
+  if (wait)
+    {
+      while(m_valid==false)
+	  usleep(1);
+      return m_val;
+    }
+  
+  return m_val;
+}
+
+int CSonar::GetVal()
+{
+  return m_val;
+}
+
+int CSonar::RegisterCallback(void (*callback)(unsigned int inputPort, int val))
+{
+  m_callback = callback;
+  return 0;
+}
+
+int CSonar::UnregisterCallback()
+{
+  m_callback = 0;
+  return 0;
+}
+
+
 #include <stdio.h>
 #include <unistd.h>
 #include <signal.h>
@@ -18,15 +117,6 @@
 #define USPI 150
 #define BIAS 300
 
-unsigned long diff(struct timeval *ptv0, struct timeval *ptv1)
-{
-  long val;
-
-  val = ptv1->tv_usec - ptv0->tv_usec;
-  val += (ptv1->tv_sec - ptv0->tv_sec)*1000000;
-
-  return val;
-}
 
 void callback(unsigned int io, struct timeval *ptv)
 {
@@ -49,21 +139,25 @@ CQEGpioInt *pgpio;
 
 void SigHandler(int signum)
 {
-  static int j = 0;
+  volatile int d;
 
-  if (j&1)
-      pgpio->SetData(0x0000);
-  else 
-      pgpio->SetData(0x0001);
+  pgpio->SetData(0x0001);
+  for (d=0; d<100; d++);
+  pgpio->SetData(0x0000);
 
-  j++;
 }
 
-// note: connector labeled "INPUT" goes to digital 1 (0), 
-// connector labeled "OUTPUT" goes to digital 2 (1).
+// note: connector labeled "INPUT" goes to digital 1 (0) trigger, 
+// connector labeled "OUTPUT" goes to digital 2 (1) echo.
+
+void callback2(unsigned int out, int val)
+{
+  printf("callback %d %d\n", out, val);
+}
+
 int main()
 {
-#if 1
+#if 0
   pgpio = CQEGpioInt::GetPtr();
   volatile unsigned int d;
 
@@ -76,7 +170,7 @@ int main()
   pgpio->SetInterruptMode(1, QEG_INTERRUPT_NEGEDGE); 
 
   signal(SIGALRM, SigHandler);  
-  ualarm(30000, 30000);
+  ualarm(60000, 60000);
 
   while(1)
     {
@@ -90,6 +184,14 @@ int main()
 #endif
     }
 #endif
+
+#if 1
+  CSonar s0(2, 3);
+  
+  s0.RegisterCallback(callback2);
+  printf("%d\n", s0.Fire(true));
+#endif
+
 #if 0 // line sensor
   CQEAnalog *pa = CQEAnalog::GetPtr();
   unsigned short val;
