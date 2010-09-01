@@ -88,6 +88,24 @@ public:
   void SetData(unsigned int data);
 
   /**
+   * Sets the specified bit to 1 (logic high) and leaves all other bits 
+   * unaltered.
+   * @param bit value between 0 and 15 that specifies the bit to be 
+   * altered.  A 0 value corresponds to I/O signal 1 and a 15 value 
+   * corresponds to I/O signal 16.   
+   */
+  void SetDataBit(unsigned int bit);
+
+  /**
+   * Sets the specified bit to 0 (logic low) and leaves all other bits 
+   * unaltered.
+   * @param bit value between 0 and 15 that specifies the bit to be 
+   * altered.  A 0 value corresponds to I/O signal 1 and a 15 value 
+   * corresponds to I/O signal 16.   
+   */
+    void ResetDataBit(unsigned int bit);
+
+  /**
    * Sets the data direction of the I/O signals.  
    * @param direction a bitmap with bit 0 (LSB)
    * corresponding to digital signal 1 and bit 15 corresponding 
@@ -139,13 +157,15 @@ public:
   /**
    * Register an interrupt callback -- ie a function that gets called
    * when an interrupt event occurs on the specified I/O signal.
-   * @param io the I/O signal in question, 0 through 15 corresponding 
+   * @param io the I/O signal in question, 0 through 15 corresponding
+   * @param userPointer a pointer or data object that will be passed to 
+   * your callback function.
    * digital connectors 1 through 16, respectively.
    * @param callback the callback function that gets called when the 
    * corresponding I/O signal received an interruptible condition.
    * @return 0 if success -1 if error.
    */
-  int RegisterCallback(unsigned int io, void (*callback)(unsigned int, struct timeval *));
+  int RegisterCallback(unsigned int io, void *userPointer, void (*callback)(unsigned int, struct timeval *, void *));
 
  /**
    * Remove (unregister) an interrupt callback.
@@ -162,10 +182,14 @@ private:
   int OpenDevice(unsigned int io);
   void CloseDevice(unsigned int io);
     
+  void SetSignal(bool set);
+
   static void SigHandler(int signum);
 
   static int m_fd[QEG_NUM_IO];
-  static void (*m_callback[QEG_NUM_IO])(unsigned int, struct timeval *);
+  static void (*m_callback[QEG_NUM_IO])(unsigned int, struct timeval *, void *);
+  static void *m_userPointer[QEG_NUM_IO];
+
   C9302Hardware *m_p9302hw;
   volatile unsigned short *m_data;
   volatile unsigned short *m_dataDir;

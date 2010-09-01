@@ -120,8 +120,11 @@ template <class T> T *TSingleton<T>::GetPtr(bool suppressError)
 	      // ...and initialize it...
 	      sn.val = 1;
 	      semctl(m_id, 0, SETVAL, sn);   
+	      // printf("*** semval initialize %d\n", semctl(m_id, 0, GETVAL));
 	    }
-	  
+	  // else
+	    // printf("*** semval %d\n", semctl(m_id, 0, GETVAL));
+
 	  // grab it, wait if necessary
 	  ops.sem_num = 0;
 	  ops.sem_op = -1;

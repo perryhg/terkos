@@ -23,7 +23,8 @@
 SINGLETON_REGISTER(CQEGpioInt);
 
 int CQEGpioInt::m_fd[QEG_NUM_IO];
-void (*CQEGpioInt::m_callback[QEG_NUM_IO])(unsigned int, struct timeval *);
+void (*CQEGpioInt::m_callback[QEG_NUM_IO])(unsigned int, struct timeval *, void *);
+void *CQEGpioInt::m_userPointer[QEG_NUM_IO];
 
 CQEGpioInt::CQEGpioInt()
 {
@@ -41,20 +42,43 @@ CQEGpioInt::CQEGpioInt()
     {
       m_fd[i] = -1;
       m_callback[i] = NULL;
+      m_userPointer[i] = NULL;
     }
 
   // register callback
-  signal(SIGIO, SigHandler);  
+  SetSignal(true);
 }
   
 CQEGpioInt::~CQEGpioInt()
 {
   int i;
 
+  SetSignal(false);
   C9302Hardware::Release();
 
   for(i=0; i<QEG_NUM_IO; i++)
     CloseDevice(i);
+}
+
+void CQEGpioInt::SetSignal(bool set)
+{
+  struct sigaction sa;
+
+  if (set)
+    {
+      sa.sa_handler = SigHandler;
+      sigemptyset(&sa.sa_mask);
+      sigaddset(&sa.sa_mask, SIGALRM);
+      sa.sa_flags = 0;
+      sigaction(SIGIO, &sa, NULL);
+    }
+  else
+    {
+      sa.sa_handler = SIG_IGN;
+      sigemptyset(&sa.sa_mask);
+      sa.sa_flags = 0;
+      sigaction(SIGIO, &sa, NULL);
+    }
 }
 
 int CQEGpioInt::GetProperty(int property, long *value)
@@ -92,6 +116,16 @@ int CQEGpioInt::SetProperty(int property, long value)
 void CQEGpioInt::SetData(unsigned int data)
 {
   *m_data = data;
+}
+
+void CQEGpioInt::SetDataBit(unsigned int bit)
+{
+  *m_data |= 1<<bit;
+}
+
+void  CQEGpioInt::ResetDataBit(unsigned int bit)
+{
+  *m_data &= ~(1<<bit);
 }
   
 void CQEGpioInt::SetDataDirection(unsigned int direction)
@@ -143,7 +177,7 @@ int CQEGpioInt::SetInterrupt(unsigned int io, bool enable)
     return ioctl(m_fd[io], QEINT_IOC_DISABLE); 
 }
   
-int CQEGpioInt::RegisterCallback(unsigned int io, void (*callback)(unsigned int, struct timeval *))
+int CQEGpioInt::RegisterCallback(unsigned int io, void *userPointer, void (*callback)(unsigned int, struct timeval *, void *))
 {
   int oflags;
 
@@ -163,6 +197,7 @@ int CQEGpioInt::RegisterCallback(unsigned int io, void (*callback)(unsigned int,
 
   // assuming the following assignment is atomic...
   m_callback[io] = callback;
+  m_userPointer[io] = userPointer;
 
   return 0;
 }
@@ -174,7 +209,8 @@ int CQEGpioInt::UnregisterCallback(unsigned int io)
 
   // assuming the following assignment is atomic...
   m_callback[io] = NULL;
-  
+  m_userPointer[io] = NULL;
+
   CloseDevice(io);
 
   return 0;
@@ -223,7 +259,7 @@ void CQEGpioInt::SigHandler(int signum)
 	      // read time
 	      read(m_fd[i], (void *)&tv, sizeof(tv));
 	      // callback 
-	      (*m_callback[i])(i, &tv);
+	      (*m_callback[i])(i, &tv, m_userPointer[i]);
 	    }
 	}
     }
