@@ -13,6 +13,9 @@
 
 use strict;
 
+require "/opt/scripts/fileUtils.pl";
+require "/opt/scripts/pathUtils.pl";
+
 #=======================================================================================================================
 sub getNumericInput()
    {
@@ -36,10 +39,96 @@ sub printMainMenu()
          "---------\n" .
          "MAIN MENU\n" .
          "---------\n" .
-         "1) Configure for WEP network\n" .
-         "2) Configure for WPA/WPA2 network\n" .
-         "3) Quit\n" .
+         "1) Configure for unencrypted network\n" .
+         "2) Configure for WEP network\n" .
+         "3) Configure for WPA/WPA2 network\n" .
+         "4) Quit\n" .
          "Enter your choice: ");
+   }
+#=======================================================================================================================
+sub saveConfiguration()
+   {
+   my ($profileJSON) = @_;
+
+   my $json = '';
+   $json .= "{\n";
+   $json .= '"wireless-networking" : ' . "\n";
+   $json .= "   {\n";
+   $json .= '   "profiles" : [' . "\n";
+   $json .= $profileJSON;
+   $json .= "   ],\n";
+   $json .= '   "will-start-on-bootup" : true' . "\n";
+   $json .= "   }\n";
+   $json .= "}\n";
+
+   #print $json;
+
+   my $pathToJsonConfigFile = &getPath('wireless_networking_config.json');
+   my $wirelessNetworkingConfigTool = &getPath('WirelessNetworkingConfigTool');
+
+   my $jsonBeforeUpdate = &readFileIntoString($pathToJsonConfigFile);
+
+   # call the program and pipe the JSON input to it via its STDIN
+   open(PROGRAM, "| $wirelessNetworkingConfigTool") or die "cannot open $wirelessNetworkingConfigTool: $!";
+   print PROGRAM "$json\n";
+   close(PROGRAM);
+
+   my $jsonAfterUpdate = &readFileIntoString($pathToJsonConfigFile);
+
+   if ($jsonBeforeUpdate eq $jsonAfterUpdate)
+      {
+      print "\n\nERROR: Wireless configuation not saved.  Either an error occurred or no save was necessary.\n\n";
+      }
+   else
+      {
+      print "\n\Wireless configuration saved.\n\n";
+      }
+   }
+#=======================================================================================================================
+sub handleUnencryptedConfiguration()
+   {
+   my $willLoop = 1;
+   while($willLoop)
+      {
+      print("\n" .
+            "---------------------------------\n" .
+            "UNENCRYPTED NETWORK CONFIGURATION\n" .
+            "---------------------------------\n" .
+            "1) Enter network name (SSID)\n" .
+            "2) Cancel, return to main menu\n" .
+            "Enter your choice: ");
+
+      my $choice = &getNumericInput();
+
+      if ($choice == 1)
+         {
+         print "\nNetwork name (SSID): ";
+         my $ssid = <STDIN>;
+         chomp ($ssid);
+
+         print("\nSave this configuration?  This will overwrite your current wireless configuration.\n" .
+               "   Encryption: None\n" .
+               "   SSID:       $ssid\n" .
+               "Enter your choice (y/N): ");
+
+         my $willSave = <STDIN>;
+         chomp ($willSave);
+         if ($willSave =~ /^y$/)
+            {
+            my $profileJSON = '{"encryption-type" : "none", "ssid" : "' . $ssid . '"}';
+            &saveConfiguration($profileJSON);
+            $willLoop = 0;
+            }
+         else
+            {
+            print "\nCancelled, no configuration changes were made.\n";
+            }
+         }
+      else
+         {
+         $willLoop = 0;
+         }
+      }
    }
 #=======================================================================================================================
 sub handleWEPConfiguration()
@@ -48,11 +137,11 @@ sub handleWEPConfiguration()
    while($willLoop)
       {
       print("\n" .
-            "-----------------\n" .
-            "WEP CONFIGURATION\n" .
-            "-----------------\n" .
-            "1) 40/64-bit encryption\n" .
-            "2) 128-bit encryption\n" .
+            "-------------------------\n" .
+            "WEP NETWORK CONFIGURATION\n" .
+            "-------------------------\n" .
+            "1) 40/64-bit encryption (10 hex digits)\n" .
+            "2) 128-bit encryption (26 hex digits)\n" .
             "3) Cancel, return to main menu\n" .
             "Enter your choice: ");
 
@@ -65,32 +154,34 @@ sub handleWEPConfiguration()
          chomp ($ssid);
 
          my $password = "";
-         my $isValidPasswordLength = 0;
-         while (!$isValidPasswordLength)
+         my $isValidPassword = 0;
+         while (!$isValidPassword)
             {
             print "Password " . (($choice == 1) ? "(10 hex digits)" : "(26 hex digits)") . ": ";
 
             $password = <STDIN>;
             chomp ($password);
 
-            $isValidPasswordLength = ($choice == 1 && ($password =~ /^[a-fA-F0-9]{10}$/)) ||  ($choice == 2 && ($password =~ /^[a-fA-F0-9]{26}$/));
+            $isValidPassword = ($choice == 1 && ($password =~ /^[a-fA-F0-9]{10}$/)) ||  ($choice == 2 && ($password =~ /^[a-fA-F0-9]{26}$/));
 
-            if (!$isValidPasswordLength)
+            if (!$isValidPassword)
                {
                print "\nInvalid password!  Please try again...\n";
                }
             }
 
-         print("\nSave this configuration?\n" .
-               "   SSID:     $ssid\n" .
-               "   Password: $password\n" .
+         print("\nSave this configuration?  This will overwrite your current wireless configuration.\n" .
+               "   Encryption: WEP, " . (($choice == 1) ? "40/64-bit" : "128-bit") . "\n" .
+               "   SSID:       $ssid\n" .
+               "   Password:   $password\n" .
                "Enter your choice (y/N): ");
 
          my $willSave = <STDIN>;
          chomp ($willSave);
          if ($willSave =~ /^y$/)
             {
-            print "\nSAVED!\n";
+            my $profileJSON = '{"encryption-type" : "wep", "ssid" : "' . $ssid . '", "is-hex-password" : true, "password" : "' . $password . '"}';
+            &saveConfiguration($profileJSON);
             $willLoop = 0;
             }
          else
@@ -107,11 +198,67 @@ sub handleWEPConfiguration()
 #=======================================================================================================================
 sub handleWPAConfiguration()
    {
-   print("\n" .
-         "-----------------\n" .
-         "WPA CONFIGURATION\n" .
-         "-----------------\n");
-   my $choice = &getNumericInput();
+   my $willLoop = 1;
+   while($willLoop)
+      {
+      print("\n" .
+            "-------------------------\n" .
+            "WPA NETWORK CONFIGURATION\n" .
+            "-------------------------\n" .
+            "1) Plain-text password (8-63 characters)\n" .
+            "2) Hex password (64 hex digits)\n" .
+            "3) Cancel, return to main menu\n" .
+            "Enter your choice: ");
+
+      my $choice = &getNumericInput();
+
+      if ($choice == 1 || $choice == 2)
+         {
+         print "\nNetwork name (SSID): ";
+         my $ssid = <STDIN>;
+         chomp ($ssid);
+
+         my $password = "";
+         my $isValidPassword = 0;
+         while (!$isValidPassword)
+            {
+            print "Password " . (($choice == 1) ? "(8-63 characters)" : "(64 hex digits)") . ": ";
+
+            $password = <STDIN>;
+            chomp ($password);
+
+            $isValidPassword = ($choice == 1 && ($password =~ /^.{8,63}$/)) ||  ($choice == 2 && ($password =~ /^[a-fA-F0-9]{64}$/));
+
+            if (!$isValidPassword)
+               {
+               print "\nInvalid password!  Please try again...\n";
+               }
+            }
+
+         print("\nSave this configuration?  This will overwrite your current wireless configuration.\n" .
+               "   Encryption: WPA, " . (($choice == 1) ? "plain-text password" : "hex password") . "\n" .
+               "   SSID:       $ssid\n" .
+               "   Password:   $password\n" .
+               "Enter your choice (y/N): ");
+
+         my $willSave = <STDIN>;
+         chomp ($willSave);
+         if ($willSave =~ /^y$/)
+            {
+            my $profileJSON = '{"encryption-type" : "wpa", "ssid" : "' . $ssid . '", "is-hex-password" : ' . ($choice == 1 ? "false" : "true") . ', "password" : "' . $password . '"}';
+            &saveConfiguration($profileJSON);
+            $willLoop = 0;
+            }
+         else
+            {
+            print "\nCancelled, no configuration changes were made.\n";
+            }
+         }
+      elsif ($choice == "3")
+         {
+         $willLoop = 0;
+         }
+      }
    }
 #=======================================================================================================================
 print "\n";
@@ -138,13 +285,17 @@ while($willLoop)
 
    if ($choice == "1")
       {
-      &handleWEPConfiguration();
+      &handleUnencryptedConfiguration();
       }
    elsif ($choice == "2")
       {
-      &handleWPAConfiguration();
+      &handleWEPConfiguration();
       }
    elsif ($choice == "3")
+      {
+      &handleWPAConfiguration();
+      }
+   elsif ($choice == "4")
       {
       $willLoop = 0;
       }
