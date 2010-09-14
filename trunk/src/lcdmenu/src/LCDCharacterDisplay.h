@@ -29,7 +29,7 @@ class LCDCharacterDisplay : public CharacterDisplay
    public:
 
       LCDCharacterDisplay(const unsigned int numRows, const unsigned int numColumns) :
-         lcd(CTextLcd::GetRef()),
+         lcd(NULL),
          numRows(numRows),
          numColumns(numColumns),
          totalCharacterCount(numRows * numColumns),
@@ -41,7 +41,11 @@ class LCDCharacterDisplay : public CharacterDisplay
 
       virtual ~LCDCharacterDisplay()
          {
-         CTextLcd::Release();
+         if (lcd)
+            {
+            lcd->Release();
+            lcd = NULL;
+            }
          }
 
       const unsigned int getRows() const
@@ -80,7 +84,7 @@ class LCDCharacterDisplay : public CharacterDisplay
       static const int LCD_WIDTH_OF_SCROLL_ARROW_AND_PADDING;
       static const string LCD_PADDING_FOR_LINES_WITHOUT_ARROWS_WHEN_IN_SCROLLING_MODE;
 
-      CTextLcd &lcd;
+      CTextLcd *lcd;
       const unsigned int numRows;
       const unsigned int numColumns;
       const unsigned int totalCharacterCount;
@@ -101,6 +105,10 @@ class LCDCharacterDisplay : public CharacterDisplay
          {
          return isValidRow(row) && isValidColumn(col);
          }
+
+      void waitForLCDPtr();
+
+      void releaseLCDPtrIfRequested();
 
    };
 
