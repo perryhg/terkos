@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
 #
 # This file is part of Terk and TerkOS.
@@ -12,6 +12,7 @@
 #
 
 require "/opt/scripts/jsonUtils.pl";
+require "/opt/scripts/pathUtils.pl";
 
 #===================================================================================================
 sub enableWirelessNetworking()
@@ -37,6 +38,27 @@ sub disableWirelessNetworking()
    return `/sbin/ifdown $interfaceName`;
    }
 #===================================================================================================
+sub enableAdHocWirelessNetworking()
+   {
+   my ($interfaceName) = @_;
+
+   # make sure the wireless interface is down
+   &disableAdHocWirelessNetworking($interfaceName);
+
+   my $wpaSupplicantAdHocConfFile = &getPath('etc_network_wpa_supplicant_ad_hoc_conf');
+
+   return `/usr/sbin/wpa_supplicant -c$wpaSupplicantAdHocConfFile -i$interfaceName -Dwext -B && /sbin/ifconfig $interfaceName 169.254.54.42 netmask 255.255.255.0`;
+   }
+#===================================================================================================
+sub disableAdHocWirelessNetworking()
+   {
+   my ($interfaceName) = @_;
+
+   `/sbin/ifdown $interfaceName`;
+   `/sbin/ifconfig $interfaceName down`;
+   `/usr/bin/killall wpa_supplicant`;
+   }
+#===================================================================================================
 sub printWirelessNetworkingStatusAsJSON()
    {
    my ($interfaceName) = @_;
@@ -46,7 +68,7 @@ sub printWirelessNetworkingStatusAsJSON()
    my @ifconfigOutput = <IFCONFIG_STATUS>;
    close(IFCONFIG_STATUS);
 
-   my %wirelessInterface = {};
+   my %wirelessInterface = ();
    my $isWirelessInstalled = 1;
 
    # Run through the output from ifconfig and look details about the wireless interface.  Start by
@@ -119,7 +141,7 @@ sub printWirelessNetworkingStatusAsJSON()
                      $wirelessInterface{accessPoint}{macAddress} = $1;
                      }
 
-                  break;
+                  last;
                   }
                $lineNumber++;
                }
@@ -159,6 +181,62 @@ sub printWirelessNetworkingStatusAsJSON()
 
    # write out the JSON
    outputJson($json);
+   }
+#===================================================================================================
+sub getNetworkInterfaceMACAddress()
+   {
+   my ($interfaceName) = @_;
+
+   # call ifconfig to get details about the interface
+   open(IFCONFIG_STATUS, "/sbin/ifconfig $interfaceName |") or die "Failed to call ifconfig $!\n";
+   my @ifconfigOutput = <IFCONFIG_STATUS>;
+   close(IFCONFIG_STATUS);
+
+   # Parse the output from ifconfig and pick out the MAC address.
+   if (scalar(@ifconfigOutput) > 0)
+      {
+      my $line = $ifconfigOutput[0];
+      chomp $line;                  # chop off the newline
+      $line =~ s/^\s+//;            # chop off leading whitespace
+      $line =~ s/\s+$//;            # chop off trailing whitespace
+      if ($line =~ /^$interfaceName.+HWaddr\s+(([A-F0-9]{2}:){5}[A-F0-9]{2})$/)
+         {
+         return $1;
+         }
+      }
+   return '';
+   }
+#===================================================================================================
+sub generateWPASupplicantConfForAdHoc()
+   {
+   # get the path to the conf file
+   my $confFilePath = &getPath('etc_network_wpa_supplicant_ad_hoc_conf');
+
+   # don't overwrite it if it already exists
+   unless (-e $confFilePath)
+      {
+      # The SSID will use the last 4 digits of the eth0 MAC address (we use eth0 instead of wlan0 because
+      # we want to SSID to stay with the device, not the wifi adapter).
+      my $eth0MacAddress = &getNetworkInterfaceMACAddress("eth0");
+      $eth0MacAddress =~ s/://g;
+      my $ssid = "VEXPro" . substr($eth0MacAddress, 8, 4);
+
+      # open the conf file
+      open (CONF_FILE, ">$confFilePath") or die "Failed to open $confFilePath for writing $!\n";
+
+      # write the conf file
+      print CONF_FILE "ap_scan=2\n" .
+                      "network={\n" .
+                      "        ssid=\"" .$ssid. "\"\n" .
+                      "        mode=1\n" .
+                      "        frequency=2412\n" .
+                      "        key_mgmt=NONE\n" .
+                      "        pairwise=NONE\n" .
+                      "}\n";
+
+      # close the conf file
+      close(CONF_FILE);
+      }
    }
 #===================================================================================================
 return 1;

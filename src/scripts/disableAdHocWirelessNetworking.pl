@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 #
 # This file is part of Terk and TerkOS.
@@ -15,4 +15,8 @@ require "/opt/scripts/wirelessNetworkingUtils.pl";
 
 my $interfaceName = "wlan0";
 
+# disable ad hoc
+disableAdHocWirelessNetworking($interfaceName);
+
+# print the status
 printWirelessNetworkingStatusAsJSON($interfaceName);

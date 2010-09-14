@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
 #
 # This file is part of Terk and TerkOS.
@@ -32,3 +32,6 @@ my $wirelessNetworkingConfigTool = &getPath('WirelessNetworkingConfigTool');
 my $userProgramDir = &getPath('user_programs_dir');
 `mkdir -p $userProgramDir`;
 `chmod 777 $userProgramDir`;
+
+# generate the WPA Supplicant Ad Hoc conf file
+&generateWPASupplicantConfForAdHoc();
