@@ -15,4 +15,12 @@ require "/opt/scripts/wirelessNetworkingUtils.pl";
 
 my $interfaceName = "wlan0";
 
+# enable ad hoc
+enableAdHocWirelessNetworking($interfaceName);
+
+# sleep a bit to let it take effect
+sleep 5;
+
+# print the status
 printWirelessNetworkingStatusAsJSON($interfaceName);
+

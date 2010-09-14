@@ -18,6 +18,7 @@ $paths{'busybox-httpd'} = '/etc/init.d/busybox-httpd';
 $paths{'httpd'} = '/usr/sbin/httpd';
 $paths{'httpd.conf'} = '/etc/httpd.conf';
 $paths{'etc_passwd'} = '/etc/passwd';
+$paths{'etc_network_wpa_supplicant_ad_hoc_conf'} = '/etc/network/wpa_supplicant_ad_hoc.conf';
 $paths{'lcd_config.json'} = '/opt/config/lcd_config.json';
 $paths{'LCDConfigTool'} = '/opt/bin/LCDConfigTool';
 $paths{'PowerInfoTool'} = '/opt/bin/PowerInfoTool';
