@@ -33,7 +33,7 @@ void LCDCharacterDisplay::setText(const string& text, const bool willClearFirst)
    {
    if (willClearFirst)
       {
-      lcd.Clear();
+      clear();
       }
 
    if (text.length() > 0)
@@ -105,8 +105,10 @@ void LCDCharacterDisplay::setLine(const unsigned int lineNumber, const string& t
          }
       if (text.length() > 0)
          {
-         lcd.MoveCursor(lineNumber, 0);
-         lcd.printf("%s", text.substr(0, numColumns).c_str());
+         waitForLCDPtr();
+         lcd->MoveCursor(lineNumber, 0);
+         lcd->printf("%s", text.substr(0, numColumns).c_str());
+         releaseLCDPtrIfRequested();
          }
       }
    }
@@ -115,26 +117,63 @@ void LCDCharacterDisplay::setCharacter(const unsigned int row, const unsigned in
    {
    if (isValidPosition(row, col))
       {
-      lcd.MoveCursor(row, col);
-      lcd.SetCharacter(character);
+      waitForLCDPtr();
+      lcd->MoveCursor(row, col);
+      lcd->SetCharacter(character);
+      releaseLCDPtrIfRequested();
       }
    }
 
 void LCDCharacterDisplay::clear()
    {
-   lcd.Clear();
+   waitForLCDPtr();
+   lcd->Clear();
+   releaseLCDPtrIfRequested();
    }
 
 void LCDCharacterDisplay::clearLine(const unsigned int lineNumber)
    {
    if (isValidRow(lineNumber))
       {
-      lcd.MoveCursor(lineNumber, 0);
-      lcd.printf("%s", blankLine.c_str());
+      waitForLCDPtr();
+      lcd->MoveCursor(lineNumber, 0);
+      lcd->printf("%s", blankLine.c_str());
+      releaseLCDPtrIfRequested();
       }
    }
 
 void LCDCharacterDisplay::setBacklight(const bool isOn)
    {
-   lcd.SetProperty(TL_PROP_BACKLIGHT, isOn);
+   waitForLCDPtr();
+   lcd->SetProperty(TL_PROP_BACKLIGHT, isOn);
+   releaseLCDPtrIfRequested();
+   }
+
+// =====================================================================================================================
+
+void LCDCharacterDisplay::waitForLCDPtr()
+   {
+   if (!lcd)
+      {
+      while (1)
+         {
+         // Try to get the pointer, waiting up to 1 second to get it.  If it fails, GetPtr returns null.  The true arg
+         // suppresses errors from being printed
+         lcd = CTextLcd::GetPtr(true);
+
+         if (lcd)
+            {
+            break;
+            }
+         }
+      }
+   }
+
+void LCDCharacterDisplay::releaseLCDPtrIfRequested()
+   {
+   if (lcd && lcd->Requested())
+     {
+     lcd->Release();
+     lcd = NULL;
+     }
    }
