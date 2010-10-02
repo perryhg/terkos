@@ -1,0 +1,190 @@
+Index: trunk/libopkg/pkg_parse.c
+===================================================================
+--- trunk/libopkg/pkg_parse.c	(revision 215)
++++ trunk/libopkg/pkg_parse.c	(working copy)
+@@ -52,7 +52,7 @@
+     int line_count = 0;
+     char buff[2048], * dest;
+ 
+-    while(raw && *raw && !isspace(*raw)) {
++    while(raw && *raw && !isspace((int)*raw)) {
+ 	raw++;
+     }
+ 
+@@ -63,7 +63,7 @@
+     while(raw && *raw){
+ 	depends = (char **)realloc(depends, sizeof(char *) * (line_count + 1));
+ 	
+-	while(isspace(*raw)) raw++;
++	while(isspace((int)*raw)) raw++;
+ 
+ 	dest = buff;
+ 	while((*raw != ',') && *raw)
+@@ -91,11 +91,11 @@
+     while(*raw && (sscanf(raw, "%s%s", file_name, md5sum) == 2)){
+ 	conffile_list_append(&pkg->conffiles, file_name, md5sum);
+ 	/*	fprintf(stderr, "%s %s ", file_name, md5sum);*/
+-	while (*raw && isspace(*raw)) {
++	while (*raw && isspace((int)*raw)) {
+ 	    raw++;
+ 	}
+ 	raw += strlen(file_name);
+-	while (*raw && isspace(*raw)) {
++	while (*raw && isspace((int)*raw)) {
+ 	    raw++;
+ 	}
+ 	raw += strlen(md5sum);
+@@ -116,7 +116,7 @@
+   if (strncmp(raw, "Version:", 8) == 0) {
+       raw += 8;
+   }
+-  while (*raw && isspace(*raw)) {
++  while (*raw && isspace((int)*raw)) {
+       raw++;
+   }
+   
+@@ -179,7 +179,7 @@
+   if (strncmp(raw, "Provides:", 9) == 0) {
+       raw += 9;
+   }
+-  while (*raw && isspace(*raw)) {
++  while (*raw && isspace((int)*raw)) {
+       raw++;
+   }      
+   
+Index: trunk/libopkg/str_util.c
+===================================================================
+--- trunk/libopkg/str_util.c	(revision 215)
++++ trunk/libopkg/str_util.c	(working copy)
+@@ -49,7 +49,7 @@
+ int str_tolower(char *str)
+ {
+     while (*str) {
+-	*str = tolower(*str);
++	*str = tolower((int)*str);
+ 	str++;
+     }
+ 
+@@ -59,7 +59,7 @@
+ int str_toupper(char *str)
+ {
+     while (*str) {
+-	*str = toupper(*str);
++	*str = toupper((int)*str);
+ 	str++;
+     }
+ 
+Index: trunk/libopkg/includes.h
+===================================================================
+--- trunk/libopkg/includes.h	(revision 215)
++++ trunk/libopkg/includes.h	(working copy)
+@@ -22,6 +22,9 @@
+ 
+ #if HAVE_STRING_H
+ # include <string.h>
++# ifdef __CYGWIN__ /* for basename */
++#   include <libgen.h>
++# endif
+ #endif
+ 
+ #if HAVE_STRINGS_H
+Index: trunk/libopkg/opkg_utils.c
+===================================================================
+--- trunk/libopkg/opkg_utils.c	(revision 215)
++++ trunk/libopkg/opkg_utils.c	(working copy)
+@@ -113,12 +113,12 @@
+ 
+      /* remove it from the front */    
+      while(src && 
+-	   isspace(*src) &&
++	   isspace((int)*src) &&
+ 	   *src)
+ 	  src++;
+      /* and now from the back */
+      while((end > src) &&
+-	   isspace(*end))
++	   isspace((int)*end))
+ 	  end--;
+      end++;
+      *end = '\0';
+@@ -140,7 +140,7 @@
+      const char *s;
+ 
+      for (s = line; *s; s++) {
+-	  if (!isspace(*s))
++	  if (!isspace((int)*s))
+ 	       return 0;
+      }
+      return 1;
+Index: trunk/libopkg/pkg_depends.c
+===================================================================
+--- trunk/libopkg/pkg_depends.c	(revision 215)
++++ trunk/libopkg/pkg_depends.c	(working copy)
+@@ -925,7 +925,7 @@
+ 	  /* gobble up just the name first */
+ 	  dest = buffer;
+ 	  while(*src &&
+-		!isspace(*src) &&
++		!isspace((int)*src) &&
+ 		(*src != '(') &&
+ 		(*src != '*') &&
+ 		(*src != '|'))
+@@ -938,8 +938,8 @@
+ 	  /* now look at possible version info */
+ 	
+ 	  /* skip to next chars */
+-	  if(isspace(*src))
+-	       while(*src && isspace(*src)) src++;
++	  if(isspace((int)*src))
++	       while(*src && isspace((int)*src)) src++;
+ 
+ 	  /* extract constraint and version */
+ 	  if(*src == '('){
+@@ -975,7 +975,7 @@
+ 	       }
+ 
+ 	       /* now we have any constraint, pass space to version string */
+-	       while(isspace(*src)) src++;
++	       while(isspace((int)*src)) src++;
+ 
+ 	       /* this would be the version string */
+ 	       dest = buffer;
+@@ -998,7 +998,7 @@
+ 	
+ 	  /* now get past the ) and any possible | chars */
+ 	  while(*src &&
+-		(isspace(*src) ||
++		(isspace((int)*src) ||
+ 		 (*src == ')') ||
+ 		 (*src == '|')))
+ 	       src++;
+Index: trunk/libopkg/pkg.c
+===================================================================
+--- trunk/libopkg/pkg.c	(revision 215)
++++ trunk/libopkg/pkg.c	(working copy)
+@@ -1204,20 +1204,20 @@
+   while (*val || *ref) {
+     int first_diff= 0;
+ 
+-    while ( (*val && !isdigit(*val)) || (*ref && !isdigit(*ref)) ) {
+-      int vc= order(*val), rc= order(*ref);
++    while ( (*val && !isdigit((int)*val)) || (*ref && !isdigit((int)*ref)) ) {
++      int vc= order((int)*val), rc= order((int)*ref);
+       if (vc != rc) return vc - rc;
+       val++; ref++;
+     }
+ 
+     while ( *val == '0' ) val++;
+     while ( *ref == '0' ) ref++;
+-    while (isdigit(*val) && isdigit(*ref)) {
++    while (isdigit((int)*val) && isdigit((int)*ref)) {
+       if (!first_diff) first_diff= *val - *ref;
+       val++; ref++;
+     }
+-    if (isdigit(*val)) return 1;
+-    if (isdigit(*ref)) return -1;
++    if (isdigit((int)*val)) return 1;
++    if (isdigit((int)*ref)) return -1;
+     if (first_diff) return first_diff;
+   }
+   return 0;
