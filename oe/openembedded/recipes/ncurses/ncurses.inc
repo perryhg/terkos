@@ -32,7 +32,9 @@ export EXTRA_OEMAKE = '"BUILD_LDFLAGS=" "BUILD_CCFLAGS=${BUILD_CCFLAGS}"'
 do_stage() {
 	autotools_stage_all
 	ln -sf curses.h ${STAGING_INCDIR}/ncurses.h
-	ln -sf libncurses.so ${STAGING_LIBDIR}/libtermcap.so
+	if [ -f ${STAGING_LIBDIR}/libncurses.so ]; then
+	   ln -sf libncurses.so
+	fi
 	ln -sf libncurses.a ${STAGING_LIBDIR}/libtermcap.a
 }
 
@@ -44,7 +46,9 @@ do_install() {
 	autotools_do_install
 
 	# our ncurses has termcap support
-	ln -sf libncurses.so ${D}${libdir}/libtermcap.so
+	if [ -f ${D}/libncurses.so ]; then
+	   ln -sf libncurses.so ${D}${libdir}/libtermcap.so
+	fi
 	ln -sf libncurses.a ${D}${libdir}/libtermcap.a
 
 	# include some basic terminfo files
