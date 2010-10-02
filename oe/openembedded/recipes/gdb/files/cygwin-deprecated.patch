@@ -1,0 +1,13 @@
+--- gdb-6.7.1/gdb/Makefile.in~	2007-09-04 20:14:02.000000000 -0400
++++ gdb-6.7.1/gdb/Makefile.in	2010-10-02 13:46:57.504913500 -0400
+@@ -1539,6 +1539,10 @@
+ monitor.o: $(srcdir)/monitor.c
+ 	$(CC) -c $(INTERNAL_WARN_CFLAGS) $(srcdir)/monitor.c
+ 
++# remote-fileio.c gets deprecated warnings on Cygwin
++remote-fileio.o: $(srcdir)/remote-fileio.c
++	$(CC) -c $(INTERNAL_WARN_CFLAGS) $(srcdir)/remote-fileio.c
++
+ # Do not try to build "printcmd.c" with -Wformat-nonliteral.  It manually
+ # checks format strings.
+ printcmd.o: $(srcdir)/printcmd.c
