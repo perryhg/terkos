@@ -18,7 +18,7 @@ EXTRA_OECONF += "--enable-shared --enable-static --enable-relocatable --disable-
 do_configure_append () {
 	        # Fix stupid libtool... handling. rpath handling can't be disabled and the Makefile's can't be regenerated..
         # (GNU sed required)
-        sed -i s/^hardcode_libdir_flag_spec/#hardcode_libdir_flag_spec/ ${S}/*-libtool
+        sed -i s/^hardcode_libdir_flag_spec/#hardcode_libdir_flag_spec/ ${S}/*libtool
 }
 
 do_stage () {

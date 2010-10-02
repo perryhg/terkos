@@ -1,6 +1,7 @@
 require fakeroot_${PV}.bb
 
-SRC_URI += "file://fix-prefix.patch;patch=1"
+SRC_URI += "file://fix-prefix.patch;patch=1 \
+	file://cygwin-acl.patch;patch=1"
 S = "${WORKDIR}/fakeroot-${PV}"
 
 inherit native
@@ -14,7 +15,9 @@ python () {
 }
 
 do_stage_append () {
-    oe_libinstall -so libfakeroot ${STAGING_LIBDIR}/libfakeroot/
+    if [ `uname -o` != "Cygwin" ]; then
+        oe_libinstall -so libfakeroot ${STAGING_LIBDIR}/libfakeroot/
+    fi
 }
 
 RDEPENDS = "util-linux-native"

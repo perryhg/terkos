@@ -134,7 +134,7 @@ def base_dep_prepend(d):
 	# the case where host == build == target, for now we don't work in
 	# that case though.
 	#
-	deps = "shasum-native coreutils-native"
+	deps = "shasum-native "#coreutils-native"
 	if bb.data.getVar('PN', d, True) == "shasum-native" or bb.data.getVar('PN', d, True) == "stagemanager-native":
 		deps = ""
 	if bb.data.getVar('PN', d, True) == "coreutils-native":
