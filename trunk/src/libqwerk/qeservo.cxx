@@ -13,6 +13,8 @@
 // end license header
 //
 
+#include <unistd.h>
+#include <signal.h>
 #include <stdio.h>
 #include "qeservo.h"
 
@@ -36,10 +38,14 @@ CQEServo::CQEServo()
 
   m_min = QES_DEFAULT_MIN;
   m_max = QES_DEFAULT_MAX;
+
+  // register callback
+  SetSignal(true);
 }
 
 CQEServo::~CQEServo()
 {
+  SetSignal(false);
   C9302Hardware::Release();
 }
 
@@ -51,6 +57,9 @@ void CQEServo::SetTiming(unsigned short min, unsigned short max)
 
 void CQEServo::Disable(unsigned int index)
 {
+  if (index>=m_num)
+    return;
+
   m_up[index] = 0;
 }
 
@@ -76,5 +85,57 @@ void CQEServo::SetCommand(unsigned int index, unsigned short pos)
 
   m_up[index] = val;
 }
+
+void CQEServo::SigHandler(int signum)
+{
+  int i;
+  CQEServo *pservo = CQEServo::GetPtr();
+
+  // turn off all servos
+  for (i=0; i<pservo->m_num; i++)
+    pservo->Disable(i);
+
+  pservo->SetSignal(false); 
+
+  CQEServo::Release();
+
+  // call default handler
+  kill(getpid(), signum);
+}
+
+void CQEServo::SetSignal(bool set)
+{
+  struct sigaction sa;
+
+  if (set)
+    {
+      sa.sa_handler = SigHandler;
+      sigemptyset(&sa.sa_mask);
+      sa.sa_flags = 0;
+      sigaction(SIGINT, &sa, NULL);
+      sigaction(SIGHUP, &sa, NULL);
+      sigaction(SIGQUIT, &sa, NULL);
+      sigaction(SIGSEGV, &sa, NULL);
+      sigaction(SIGILL, &sa, NULL);
+      sigaction(SIGFPE, &sa, NULL);
+      sigaction(SIGTERM, &sa, NULL);
+      sigaction(SIGABRT, &sa, NULL);
+    }
+  else
+    {
+      sa.sa_handler = SIG_DFL;
+      sigemptyset(&sa.sa_mask);
+      sa.sa_flags = 0;
+      sigaction(SIGINT, &sa, NULL);
+      sigaction(SIGHUP, &sa, NULL);
+      sigaction(SIGQUIT, &sa, NULL);
+      sigaction(SIGSEGV, &sa, NULL);
+      sigaction(SIGILL, &sa, NULL);
+      sigaction(SIGFPE, &sa, NULL);
+      sigaction(SIGTERM, &sa, NULL);
+      sigaction(SIGABRT, &sa, NULL);
+    }
+}
+
 
 
