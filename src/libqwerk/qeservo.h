@@ -91,6 +91,10 @@ private:
   CQEServo();
   ~CQEServo();
 
+  void SetSignal(bool set);
+  
+  static void SigHandler(int signum);
+
   unsigned short m_min;
   unsigned short m_max;
   unsigned int m_num;
