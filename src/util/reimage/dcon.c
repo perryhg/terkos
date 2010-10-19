@@ -18,20 +18,24 @@
  * See dcon.doc for more information.
  */
 
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <signal.h>
+#ifdef WIN32
+#include "pcserial.h"
+#else
 #include <termio.h>
-#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <sys/wait.h>
+#endif
 #include <unistd.h>
-#include <string.h>
+#include <signal.h>
+#include <fcntl.h>
 #include <sys/time.h>
 #include <time.h>
 #include <sys/types.h>
-#include <sys/ioctl.h>
-#include <sys/wait.h>
 #include <sys/stat.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "ymodem.h"
 
 #define DEFAULT_DEVICE "/dev/ttyUSB0"
@@ -66,17 +70,24 @@ long intvars[NVARS]; /* [a-z][0-9] integer variables */
 char string[STRINGL]; /* For getstring() returns and misc. use (misuse) */
 char *stringvars[NVARS]; /* $[a-z][0-9] string variables */
 char cspeed[10];  /* Ascii representation of baudrate */
-int speed=B0; /* Set to B110, B150, B300,..., B38400 */
+#ifdef WIN32
+int speed=0; /* Set to B110, B150, B300,..., B38400 */
+int parity=0, bits=8, stopbits=0;
+CPCSerial serial;
+#else
+int speed=B0;
+int parity=0, bits=CS8, stopbits=0;
+struct termio cons, stbuf, svbuf;  /* termios: svbuf=before, stbuf=while */
+#endif
+
 char device[MAXPATH]; /* Comm device.  May be "-" */
 char token[MAXTOKEN];   /* For gettoken() returns */
 char scriptfile[MAXPATH]; /* Script file name */
 BOOL verbose=1; /* Log actions */
-struct termio cons, stbuf, svbuf;  /* termios: svbuf=before, stbuf=while */
 int comfd=0; /* Communication file descriptor.  Defaults to stdin. */
 char msg[STRINGL]; /* Massage messages here */
 int preturn,returns[MAXGOSUBS];
 int clocal=0;
-int parity=0, bits=CS8, stopbits=0;
 unsigned long hstart,hset;
 char NullString[]={ "" };
 BOOL lastcharnl=1; /* Indicate that last char printed from getonebyte
@@ -176,8 +187,7 @@ int load_script(void)
   int i = 0, bufsize = BUFSIZE, res;
 
   datafile = (unsigned char *)malloc(BUFSIZE);
-  fp = fopen(scriptfile, "r");
-  
+  fp = fopen(scriptfile, "rb");
   if (fp==NULL)
     {
       perror("The following error occurred");
@@ -189,8 +199,8 @@ int load_script(void)
 	{
 	  res = fread((char *)datafile+i, 1, BLOCKSIZE, fp);
 	  if (res<BLOCKSIZE)
-	    {
-	      i += res;
+            {
+              i += res;
 	      break;
 	    }
 	}
@@ -215,14 +225,21 @@ long htime(void) {
    On Linux, usleep() uses select() anyway.
 */
 void dormir(unsigned long microsecs) {
+#ifdef WIN32
+    Sleep(microsecs/1000);
+#else
   struct timeval timeout;
   timeout.tv_sec=microsecs/1000000L;
   timeout.tv_usec=microsecs-(timeout.tv_sec*1000000L);
   select(1,0,0,0,&timeout);
+#endif
 }
 
 /* Tests for ENTER key */
 void dotestkey(void) {
+#ifdef WIN32
+    getchar();
+#else
   fd_set fds;
   struct timeval timeout;
   timeout.tv_sec=0L;
@@ -231,16 +248,22 @@ void dotestkey(void) {
   FD_SET(0,&fds);  /* Prepare to select() from stdin */
   resultcode=select(1,&fds,0,0,&timeout);
   if(resultcode) getchar();
+#endif
 }
 
 /* Exit after resetting terminal settings */
 void ext(long xtc) {
+#ifdef WIN32
+  serial.Close();
+  exit(xtc);
+#else
   ioctl(1, TCSETA, &cons);
   if (fileout!=stderr && fileout!=NULL)
     fclose(fileout);
   if (datafile)
     free(datafile);
   exit(xtc);
+#endif
 }
 
 /* Log message if verbose is on */
@@ -252,8 +275,10 @@ void vmsg(char *text) {
       fprintf(fileout,"\n");
       lastcharnl=1;
     }
+
     t=time(0);
     ct=ctime(&t);
+
     fprintf(fileout,"dcon %c%c:%c%c:%c%c -> %s\n",
             ct[11],ct[12],ct[14],ct[15],ct[17],ct[18],
 	    text);
@@ -289,7 +314,11 @@ void writecom(char *text) {
     if (ch=='\r')
       flushcom();
     while(1) {
+#ifdef WIN32
+      res=serial.Send(&ch, 1, 0xffff);
+#else
       res=write(comfd,&ch,1);
+#endif
       if(senddelay) dormir(senddelay);
       if(res==1) 
 	break;
@@ -297,13 +326,32 @@ void writecom(char *text) {
   }
 }
 
-inline void putonebyte(char c) {
+void putonebyte(char c) {
+#ifdef WIN32
+  serial.Send(&c, 1, 0xffff);
+#else
   while(write(comfd, &c, 1)!=1);
+#endif
 }
 
 /* Gets a single byte from comm. device.  Return -1 if none avail. */
 int getonebyte(void) {
-#if 1
+#ifdef WIN32
+    char c;
+    if (serial.Receive(&c, 1, 10)==1)
+    {
+      if(comecho&&!ymodem) {
+         if(c=='\n') lastcharnl=1;
+         else {
+           if(c!='\r') lastcharnl=0;
+         }
+         fputc(c,fileout);
+      }
+      return c;
+    }
+    else
+      return -1;
+#else
   fd_set rfds;
   int res;
   char ch;
@@ -330,7 +378,9 @@ int getonebyte(void) {
     return(-1); /* Nada. */
   }
   return(0);
-#else
+#endif
+
+#if 0
   char ch;
   int res;
   struct timeval timeout;
@@ -540,7 +590,11 @@ long getvalue(void) {
       p=getpid();
     }
     else if(strcmp(token,"ppid")==0) {
+#ifdef WIN32
+      p=0;
+#else
       p=getppid();
+#endif
     }
     else if(strcmp(token,"verbose")==0) {
       p=verbose;
@@ -552,6 +606,8 @@ long getvalue(void) {
       p=atol(cspeed);
     }
     else if(strcmp(token,"access")==0) {
+#ifdef WIN32
+#else
       char toto[STRINGL];
       char afile[STRINGL];
       strcpy(toto,string);
@@ -576,6 +632,7 @@ long getvalue(void) {
       }
       p=access(afile,amode);
       strcpy(string,toto);
+#endif
     }
     else if(strcmp(token,"val")==0 || strcmp(token,"atol")==0) {
       char toto[STRINGL];
@@ -1023,19 +1080,28 @@ BOOL getonoroff(void) {
 }
 
 void setcom(void) {
+#ifdef WIN32
+#else
   stbuf.c_cflag &= ~(CBAUD | CSIZE | CSTOPB | CLOCAL | PARENB | ICANON | CRTSCTS);
   stbuf.c_cflag |= (speed | bits | CREAD | clocal | parity | stopbits );
   if (ioctl(comfd, TCSETA, &stbuf) < 0) {
     serror("Can't ioctl set device",1);
   }
+#endif
 }
 
 void doset(void) {
+#ifdef WIN32
+#else
   struct termio console;
+#endif
   int a,b;
   gettoken();
   if(strcmp(token,"echo")==0) {
     a=0;
+#ifdef WIN32
+    getonoroff();
+#else
     if(getonoroff()) a=ECHO|ECHOE;
     if(ioctl(0, TCGETA, &console)<0) {
       serror("Can't ioctl FD zero",2);
@@ -1043,17 +1109,26 @@ void doset(void) {
     console.c_lflag &= ~(ECHO | ECHOE);
     console.c_lflag |= a;
     ioctl(0, TCSETA, &console);
+#endif
   }
   else if(strcmp(token,"senddelay")==0) {
     senddelay=10000L*getdvalue();
   }
   else if(strcmp(token,"clocal")==0) {
     clocal=0;
+#ifdef WIN32
+    getonoroff();
+#else
     if(getonoroff()) clocal=CLOCAL;
+#endif
     setcom();
   }
   else if(strcmp(token,"umask")==0) {
+#ifdef WIN32
+    getvalue();
+#else
     umask(getvalue()&0777);
+#endif
   }
   else if(strcmp(token,"verbose")==0) {
     verbose=getonoroff();
@@ -1080,6 +1155,8 @@ void doset(void) {
     while(token[b]>='0' && token[b]<='9') {
       a=10*a+token[b++]-'0';
     }
+#ifdef WIN32
+#else
     if(token[b]) {
       switch(token[b]) {
       case 'n': parity=0; break;
@@ -1127,6 +1204,7 @@ void doset(void) {
     case 460800: speed = B460800;break;
     default: serror("Invalid baudrate",1);
     }
+#endif
     setcom();
   }
 }
@@ -1329,12 +1407,15 @@ void doclose(void) {
   if(strcmp(token,"hardcom")==0) {
     if(comfd== -1) serror("Com device not open",1);
     vmsg("Closing device");
+#ifdef WIN32
+#else
     if (ioctl(comfd, TCSETA, &svbuf) < 0) {
       sprintf(msg,"Can't ioctl set device %s",device);
       serror(msg,1);
     }
     close(comfd);
     comfd= -1;
+#endif
   }
   else if(strcmp(token,"com")==0) {
     if(comfd== -1) serror("Com device not open",1);
@@ -1350,6 +1431,58 @@ void doclose(void) {
 }
 
 void opendevice(void) {
+#ifdef WIN32
+  int port;
+
+  if ((port=CPCSerial::GetPort())==0 || serial.Open(port, 460800))
+  {
+    sprintf(msg,"Can't open device %s",device);
+    serror(msg,1);
+  }
+#if 0
+  int i = 0;
+  while(1)
+  {
+      dormir(senddelay);
+      if (i==100)
+      {
+        i = 0;
+        printf(".");
+      }
+      else
+        i++;
+  }
+#endif
+#if 0
+  char c;
+  int i = 0;
+  c=0;
+  while(1)
+  {
+      c=getonebyte();
+      if (c<0)
+      {
+          if (i==100)
+          {
+              i = 0;
+              printf(".");
+          }
+          else
+            i++;
+      }
+  }
+#endif
+#if 0
+  char c;
+  c=0;
+  while(1)
+  {
+      c=getonebyte();
+      if (c>0)
+          putchar(c);
+  }
+#endif
+#else
   if(strcmp(device,"-")!=0) {
     if ((comfd = open(device, O_RDWR|O_EXCL|O_NDELAY)) <0) {
       sprintf(msg,"Can't open device %s",device);
@@ -1395,6 +1528,7 @@ void opendevice(void) {
   dormir(200000); /* Wait a bit (DTR raise) */
   sprintf(msg,"Opened %s as FD %d",device,comfd);
   vmsg(msg);
+#endif
 }
 
 void doopen(void) {
@@ -1455,11 +1589,17 @@ int doscript(void) {
       dotestkey();
     }
     else if(strcmp(token,"kill")==0) {
+#ifdef WIN32
+#else
       a=getvalue();
       resultcode=kill(getvalue(),a);
+#endif
     }
     else if(strcmp(token,"fork")==0) {
-      resultcode=fork();
+#ifdef WIN32
+#else
+    resultcode=fork();
+#endif
     }
     else if(strcmp(token,"hset")==0) {
       hset=0;
@@ -1476,7 +1616,10 @@ int doscript(void) {
       resultcode=putenv(line); /* putenv can't read from global string[] */
     }
     else if(strcmp(token,"wait")==0) {
+#ifdef WIN32
+#else
       resultcode=wait(0);
+#endif
     }
     else if(strcmp(token,"system")==0) {
       getstring();
@@ -1574,9 +1717,13 @@ int doscript(void) {
     }
     else if(strcmp(token,"sleep")==0) {
       a=getdvalue();
+#ifdef WIN32
+      dormir(10000L*a);
+#else
       if(a<10000) dormir(10000L*a);
       else sleep(a/100); /* I guess it's the same.  Oh well, past 100 secs,
                             use sleep instead.  */
+#endif
     }
     else {
       /* Humour is the spice of life. */
@@ -1597,11 +1744,11 @@ int doscript(void) {
   return(exitcode);
 }
 
+
 int main(int argc,char **argv) {
   int a,b,i;
   unsigned char ch;
   unsigned char terminator='\n';
-
   printf("\nreimage -- firmware utility for VEXPro\n\n");
 
   fileout = fopen(FILEOUTNAME, "w");
@@ -1611,7 +1758,10 @@ int main(int argc,char **argv) {
   preturn=0;
   filep=NULL;
   scriptspace=4096;
+#ifdef WIN32
+#else
   ioctl(1, TCGETA, &cons);
+#endif
   if((script=(unsigned char *)malloc(scriptspace))==NULL) {
     serror("Could not malloc()",3);
   }
@@ -1672,8 +1822,8 @@ int main(int argc,char **argv) {
   script = find_file("script", NULL);
   if (script==NULL)
     {
-      sprintf(msg,"Could not find script file");
-      serror(msg,1);
+        fprintf(stderr,"Could not find script file\n");
+        exit(1);
     }
 
   i=strlen((char *)script); /* Script is one huge string */
