@@ -3,7 +3,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "ymodem.h"
-
+#ifdef WIN32
+#include "pcserial.h"
+#endif
 
 /* Some important defines for YModem */
 #define YMODEM_SOH	0x01
@@ -20,10 +22,14 @@
 #define BLKSIZE     8192
 
 extern unsigned char comecho;
+#ifdef WIN32
+extern CPCSerial serial;
+#else
 extern int comfd;
+#endif
 
 int getonebyte(void);
-inline void putonebyte(char c);
+void putonebyte(char c);
 
 
 int ymodem_getc(void)
@@ -125,7 +131,11 @@ void ymodem_send_block(const unsigned char *data, int block_no)
     {
       if (count>=BLKSIZE)
 	break;
+#ifdef WIN32
+      res = serial.Send((char *)(block + count), BLKSIZE - count, 0xffff);
+#else
       res = write(comfd, block + count, BLKSIZE - count);
+#endif
       if (res>0)
 	count += res;
     }
