@@ -19,6 +19,8 @@ private:
         HANDLE m_hComm;
 
         long m_timeout;
+        int m_baud;
+        int m_port;
         };
 
 #endif
