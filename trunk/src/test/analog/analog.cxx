@@ -60,6 +60,7 @@ int main(int argc, char **argv)
       {
 	printf("releasing\n");
 	phw->Release();
+	usleep(1);
 	while(1)
 	  {
 	    phw = CQEAnalog::GetPtr(true);
