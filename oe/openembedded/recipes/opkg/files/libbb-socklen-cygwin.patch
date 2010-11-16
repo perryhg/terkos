@@ -1,0 +1,13 @@
+Index: trunk/libbb/libbb.h
+===================================================================
+--- trunk/libbb/libbb.h	(revision 215)
++++ trunk/libbb/libbb.h	(working copy)
+@@ -52,7 +52,7 @@
+ 
+ #include <features.h>
+ 
+-#if (__GNU_LIBRARY__ < 5) && (!defined __dietlibc__)
++#if (__GNU_LIBRARY__ < 5) && (!defined __dietlibc__) && (!defined __CYGWIN__)
+ /* libc5 doesn't define socklen_t */
+ typedef unsigned int socklen_t;
+ /* libc5 doesn't implement BSD 4.4 daemon() */
