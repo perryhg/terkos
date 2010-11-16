@@ -164,9 +164,14 @@ do_populate_sdk() {
 	# Package it up
 	mkdir -p ${SDK_DEPLOY}
 	cd ${SDK_OUTPUT}
-	fakeroot tar cfj ${SDK_DEPLOY}/${TOOLCHAIN_OUTPUTNAME}.tar.bz2 .
+	if [ `uname -o` = "Cygwin" ]; then
+	   FAKEROOT=
+	else
+	   FAKEROOT=fakeroot
+	fi
+	$FAKEROOT tar cfj ${SDK_DEPLOY}/${TOOLCHAIN_OUTPUTNAME}.tar.bz2 .
 	cd ${SDK_OUTPUT2}
-	fakeroot tar cfj ${SDK_DEPLOY}/${TOOLCHAIN_OUTPUTNAME}-extras.tar.bz2 .
+	$FAKEROOT tar cfj ${SDK_DEPLOY}/${TOOLCHAIN_OUTPUTNAME}-extras.tar.bz2 .
 }
 
 do_populate_sdk[nostamp] = "1"
