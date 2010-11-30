@@ -34,6 +34,11 @@ class WirelessNetworkingManager
       static const bool enableWirelessNetworking();
 
       /**
+       * Enables ad-hoc wireless networking and returns true if enabling was successful, false otherwise.
+       */
+      static const bool enableAdHocWirelessNetworking();
+
+      /**
        * Disables wireless networking and returns true if disabling was successful, false otherwise.
        */
       static const bool disableWirelessNetworking();

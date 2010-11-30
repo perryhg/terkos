@@ -33,11 +33,15 @@ class WirelessStatusCheckingMenuItemAction : public CharacterDisplayMenuItemActi
    {
    public:
 
+      static const string WIRELESS_MODE_MANAGED;
+      static const string WIRELESS_MODE_AD_HOC;
+
       WirelessStatusCheckingMenuItemAction(void(*delObj)(void*), MenuItem* menuItem, MenuStatusManager* menuStatusManager,
-                                           CharacterDisplay* characterDisplay, map<string, string>& properties) :
+                                           CharacterDisplay* characterDisplay, map<string, string>& properties, const bool willVerifyMode = false, const string expectedWirelessMode = WIRELESS_MODE_MANAGED) :
          CharacterDisplayMenuItemAction(delObj, menuItem, menuStatusManager, characterDisplay, properties)
          {
-         // nothing to do
+         shouldVerifyMode = willVerifyMode;
+         expectedMode = expectedWirelessMode;
          }
 
       virtual ~WirelessStatusCheckingMenuItemAction()
@@ -54,6 +58,10 @@ class WirelessStatusCheckingMenuItemAction : public CharacterDisplayMenuItemActi
       virtual void handleWirelessUnplugged() = 0;
       virtual void handleWirelessStatusFailure() = 0;
 
+   private:
+
+      bool   shouldVerifyMode;
+      string expectedMode;
    };
 
 #endif /* WIRELESSSTATUSCHECKINGMENUITEMACTION_H_ */

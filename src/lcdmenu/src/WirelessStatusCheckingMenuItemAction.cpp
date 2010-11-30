@@ -15,6 +15,9 @@
 
 #include "WirelessStatusCheckingMenuItemAction.h"
 
+const string WirelessStatusCheckingMenuItemAction::WIRELESS_MODE_MANAGED = "Managed";
+const string WirelessStatusCheckingMenuItemAction::WIRELESS_MODE_AD_HOC = "Ad-Hoc";
+
 void WirelessStatusCheckingMenuItemAction::activate()
    {
    cout << "WirelessStatusCheckingMenuItemAction::activate()" << endl;
@@ -34,7 +37,30 @@ void WirelessStatusCheckingMenuItemAction::activate()
                Json::Value isEnabled = wirelessInterface["is-enabled"];
                if (isEnabled != Json::Value::null && isEnabled.asBool())
                   {
-                  handleWirelessEnabled();
+                  Json::Value accessPoint = wirelessInterface["access-point"];
+                  if (accessPoint != Json::Value::null)
+                     {
+                     if (shouldVerifyMode)
+                        {
+                        Json::Value mode = accessPoint["mode"];
+                        if (mode != Json::Value::null && expectedMode.compare(mode.asString()) == 0)
+                           {
+                           handleWirelessEnabled();
+                           }
+                        else
+                           {
+                           handleWirelessDisabled();
+                           }
+                        }
+                     else
+                        {
+                        handleWirelessEnabled();
+                        }
+                     }
+                  else
+                     {
+                     handleWirelessDisabled();
+                     }
                   }
                else
                   {

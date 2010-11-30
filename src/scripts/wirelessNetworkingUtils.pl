@@ -28,6 +28,18 @@ sub enableWirelessNetworking()
    return `/sbin/ifup $interfaceName`;
    }
 #===================================================================================================
+sub enableAdHocWirelessNetworking()
+   {
+   my ($interfaceName) = @_;
+
+   # make sure the wireless interface is down
+   &disableWirelessNetworking($interfaceName);
+
+   my $wpaSupplicantAdHocConfFile = &getPath('etc_network_wpa_supplicant_ad_hoc_conf');
+
+   return `/usr/sbin/wpa_supplicant -c$wpaSupplicantAdHocConfFile -i$interfaceName -Dwext -B && /sbin/ifconfig $interfaceName 169.254.226.42 netmask 255.255.255.0`;
+   }
+#===================================================================================================
 sub disableWirelessNetworking()
    {
    my ($interfaceName) = @_;
@@ -35,25 +47,6 @@ sub disableWirelessNetworking()
    # Call ifdown to shut down the wireless interface.  Note: I'm using backticks here because
    # using open() didn't work because wpa_supplicant would fail with this error message:
    # "run-parts: /etc/network/if-post-down.d/wpasupplicant exited with code 1013"
-   return `/sbin/ifdown $interfaceName`;
-   }
-#===================================================================================================
-sub enableAdHocWirelessNetworking()
-   {
-   my ($interfaceName) = @_;
-
-   # make sure the wireless interface is down
-   &disableAdHocWirelessNetworking($interfaceName);
-
-   my $wpaSupplicantAdHocConfFile = &getPath('etc_network_wpa_supplicant_ad_hoc_conf');
-
-   return `/usr/sbin/wpa_supplicant -c$wpaSupplicantAdHocConfFile -i$interfaceName -Dwext -B && /sbin/ifconfig $interfaceName 169.254.54.42 netmask 255.255.255.0`;
-   }
-#===================================================================================================
-sub disableAdHocWirelessNetworking()
-   {
-   my ($interfaceName) = @_;
-
    `/sbin/ifdown $interfaceName`;
    `/sbin/ifconfig $interfaceName down`;
    `/usr/bin/killall wpa_supplicant`;
@@ -132,9 +125,11 @@ sub printWirelessNetworkingStatusAsJSON()
                chomp $line;                  # chop off the newline
                $line =~ s/^\s+//;            # chop off leading whitespace
                $line =~ s/\s+$//;            # chop off trailing whitespace
-               if ($line =~ /^Mode:.+Frequency:.+Access Point:\s+(.+)$/)
+               if ($line =~ /^Mode:(\S+)\s+Frequency:.+(Access Point|Cell):\s+(.+)$/)
                   {
-                  my $accessPoint = $1;
+                  my $mode = $1;
+                  my $accessPoint = $3;
+                  $wirelessInterface{accessPoint}{mode} = $mode;
                   $wirelessInterface{accessPoint}{isAssociated} = ($accessPoint =~ /(([A-F0-9]{2}:){5}[A-F0-9]{2})/);
                   if ($wirelessInterface{accessPoint}{isAssociated})
                      {
@@ -169,6 +164,7 @@ sub printWirelessNetworkingStatusAsJSON()
       $json .= "         {\n";
       if ($wirelessInterface{isEnabled})
          {
+         $json .= '         "mode" : "'        . $wirelessInterface{accessPoint}{mode} . "\",\n";
          $json .= '         "ssid" : "'        . $wirelessInterface{accessPoint}{ssid} . "\",\n";
          $json .= '         "mac-address" : "' . $wirelessInterface{accessPoint}{macAddress} . "\",\n";
          $json .= '         "ip-address" : "'  . $wirelessInterface{accessPoint}{ipAddress} . "\"\n";

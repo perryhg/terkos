@@ -64,6 +64,30 @@ const bool WirelessNetworkingManager::disableWirelessNetworking()
    return false;
    }
 
+const bool WirelessNetworkingManager::enableAdHocWirelessNetworking()
+   {
+   // call the Perl script which enables ad-hoc
+   try
+      {
+      // execute the script and return the results as a stream
+      redi::ipstream is("perl -I/opt/scripts /opt/scripts/enableAdHocWirelessNetworking.pl");
+
+      // parse the stream to get the status
+      Json::Value wirelessNetworkingStatus = WirelessNetworkingConfigManager::parseWirelessNetworkingStatusJSONStream(is);
+
+      is.close();
+
+      // check the status to see whether the enabling worked
+      return WirelessNetworkingConfigManager::parseJSONAndReturnWhetherWirelessNetworkingIsEnabled(wirelessNetworkingStatus);
+      }
+   catch (...)
+      {
+      cerr << "WirelessNetworkingManager::enableWirelessNetworking(): failed to call script to enable ad-hoc wireless networking." << endl;
+      }
+
+   return false;
+   }
+
 Json::Value WirelessNetworkingManager::getWirelessNetworkingStatus()
    {
    // call the Perl script which returns the current wireless status
