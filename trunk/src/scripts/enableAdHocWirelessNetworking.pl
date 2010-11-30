@@ -19,7 +19,7 @@ my $interfaceName = "wlan0";
 enableAdHocWirelessNetworking($interfaceName);
 
 # sleep a bit to let it take effect
-sleep 5;
+sleep 7;
 
 # print the status
 printWirelessNetworkingStatusAsJSON($interfaceName);

@@ -16,7 +16,7 @@ require "/opt/scripts/wirelessNetworkingUtils.pl";
 my $interfaceName = "wlan0";
 
 # disable ad hoc
-disableAdHocWirelessNetworking($interfaceName);
+disableWirelessNetworking($interfaceName);
 
 # print the status
 printWirelessNetworkingStatusAsJSON($interfaceName);

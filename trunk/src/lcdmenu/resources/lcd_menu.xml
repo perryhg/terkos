@@ -148,6 +148,31 @@
             </implementation-class>
          </item>
       </item>
+      <item text="Ad-hoc Wifi   Networking">
+         <item text="">
+            <implementation-class name="AdHocWirelessStatusMenuItemAction" library="libNetworkMenuItemActions.so">
+               <property key="status.failure">Failed to get   ad-hoc status.</property>
+               <property key="status.unplugged">Wireless adapteris unplugged.</property>
+
+               <property key="wireless-disabled.action.prompt">Ad-hoc is off.</property>
+               <property key="wireless-disabled.action.cancel"></property>
+               <property key="wireless-disabled.choice.option1">Start   </property>
+               <property key="wireless-disabled.choice.option2">OK</property>
+               <property key="wireless-disabled.action.option1.before">Starting ad-hoc wifi network...</property>
+               <property key="wireless-disabled.action.option1">Ad-hoc network  is now on.</property>
+               <property key="wireless-disabled.option1.failure">Failed to start ad-hoc network.</property>
+
+               <property key="wireless-enabled.action.prompt">Ad-hoc is on.</property>
+               <property key="wireless-enabled.action.cancel"></property>
+               <property key="wireless-enabled.choice.option1">Info  </property>
+               <property key="wireless-enabled.choice.option2">Stop</property>
+               <property key="wireless-enabled.action.option2.before">Stopping ad-hoc wifi network...</property>
+               <property key="wireless-enabled.action.option2">Ad-hoc network  is now off.</property>
+               <property key="wireless-enabled.option1.failure">Could not obtainad-hoc details</property>
+               <property key="wireless-enabled.option2.failure">Failed to stop  ad-hoc network.</property>
+            </implementation-class>
+         </item>
+      </item>
       <item text="Wifi Adapter  MAC Address">
          <item text="">
             <implementation-class name="ViewWirelessAdapterMACAddressMenuItemAction" library="libNetworkMenuItemActions.so">
