@@ -16,9 +16,11 @@
 # * Applies the audio configuration prefs to the system
 # * Applies the wireless configuration prefs to the system
 # * Makes sure the user programs directory exists and is writable
+# * Generates the WPA Supplicant configuration file for ad-hoc wireless networking.
 ################################################################################
 
 require "/opt/scripts/pathUtils.pl";
+require "/opt/scripts/wirelessNetworkingUtils.pl";
 
 # apply audio configuration
 my $audioConfigTool = &getPath('AudioConfigTool');
