@@ -5,15 +5,6 @@ OBJECTS=$(SRCS:.cxx=.o)
 DIST_DIR=dist
 VPATH=$(DIST_DIR)
 
-ifdef WINDOWS_MACHINE
-CXX=/OpenEmbedded/bin/arm-oe-linux-uclibcgnueabi-g++
-AR=/OpenEmbedded/bin/arm-oe-linux-uclibcgnueabi-ar
-CP=copy
-RM=del
-MKDIR=mkdir
-LIB_INSTALL_DIR=\OpenEmbedded\arm-oe-linux-uclibcgnueabi\lib\terk
-HEADER_INSTALL_DIR=\OpenEmbedded\arm-oe-linux-uclibcgnueabi\include\terk
-else
 CXX=/usr/local/terkos/arm/bin/arm-oe-linux-uclibcgnueabi-g++
 AR=/usr/local/terkos/arm/bin/arm-oe-linux-uclibcgnueabi-ar
 CP=cp
@@ -21,7 +12,6 @@ RM=rm -rf
 MKDIR=mkdir -p
 LIB_INSTALL_DIR=/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/lib/terk
 HEADER_INSTALL_DIR=/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/include/terk
-endif
 
 default: all
 

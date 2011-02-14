@@ -103,7 +103,7 @@ dist: $(DIST_CGI_DIR) \
 
 	@echo 'Copying media...'
 	cp $(LIB_CONFIGURATION_MANAGEMENT_DIR)/dist/*.wav $(DIST_AUDIO_DIR)/
-	
+
 	@echo 'Copying scripts...'
 	cp $(SCRIPTS_DIR)/*.pl $(DIST_SCRIPTS_DIR)
 
