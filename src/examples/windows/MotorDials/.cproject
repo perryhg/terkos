@@ -3,43 +3,40 @@
 
 <cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
 <storageModule moduleId="org.eclipse.cdt.core.settings">
-<cconfiguration id="cdt.managedbuild.config.vex.gnu.exe.debug.481157169">
-<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.vex.gnu.exe.debug.481157169" moduleId="org.eclipse.cdt.core.settings" name="Debug">
+<cconfiguration id="org.terk.tools.config.cygwin.exe.debug.1716640088">
+<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="org.terk.tools.config.cygwin.exe.debug.1716640088" moduleId="org.eclipse.cdt.core.settings" name="Debug">
 <externalSettings/>
 <extensions>
 <extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 <extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 <extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 <extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 </extensions>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
-<configuration artifactName="MotorDials" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.vex.gnu.exe.debug.481157169" name="Debug" parent="cdt.managedbuild.config.vex.gnu.exe.debug">
-<folderInfo id="cdt.managedbuild.config.vex.gnu.exe.debug.481157169." name="/" resourcePath="">
-<toolChain id="cdt.managedbuild.toolchain.vex.gnu.exe.debug.1848568350" name="TerkOS GCC Linux" superClass="cdt.managedbuild.toolchain.vex.gnu.exe.debug">
-<targetPlatform id="cdt.managedbuild.target.vex.gnu.platform.exe.debug.1022443377" name="TerkOS Debug Platform" superClass="cdt.managedbuild.target.vex.gnu.platform.exe.debug"/>
-<builder buildPath="${workspace_loc:/MotorDials/Debug}" id="cdt.managedbuild.target.vex.gnu.builder.exe.debug.898071164" managedBuildOn="true" name="Gnu Make Builder.Debug" superClass="cdt.managedbuild.target.vex.gnu.builder.exe.debug"/>
-<tool id="cdt.managedbuild.tool.vex.gnu.archiver.base.807906970" name="TerkOS Archiver" superClass="cdt.managedbuild.tool.vex.gnu.archiver.base"/>
-<tool id="cdt.managedbuild.tool.vex.gnu.cpp.compiler.exe.debug.1164450889" name="TerkOS C++ Compiler" superClass="cdt.managedbuild.tool.vex.gnu.cpp.compiler.exe.debug">
-<option id="vex.gnu.cpp.compiler.exe.debug.option.optimization.level.1949645984" superClass="vex.gnu.cpp.compiler.exe.debug.option.optimization.level" value="vex.gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
-<option id="vex.gnu.cpp.compiler.exe.debug.option.debugging.level.443237330" superClass="vex.gnu.cpp.compiler.exe.debug.option.debugging.level" value="vex.gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
-<inputType id="cdt.managedbuild.tool.vex.gnu.cpp.compiler.input.679693372" superClass="cdt.managedbuild.tool.vex.gnu.cpp.compiler.input"/>
+<configuration artifactName="MotorDials" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="org.terk.tools.config.cygwin.exe.debug.1716640088" name="Debug" parent="org.terk.tools.config.cygwin.exe.debug">
+<folderInfo id="org.terk.tools.config.cygwin.exe.debug.1716640088." name="/" resourcePath="">
+<toolChain id="org.terk.tools.toolchain.cygwin.exe.debug.2085101227" name="TerkOS Cygwin GCC (Windows)" superClass="org.terk.tools.toolchain.cygwin.exe.debug">
+<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="org.terk.platform.dbg.cygwin.424818485" name="TerkOS Debug Platform" osList="win32" superClass="org.terk.platform.dbg.cygwin"/>
+<builder buildPath="${workspace_loc:/MotorDials/Debug}" id="org.tools.builder.cygwin.204835105" managedBuildOn="true" name="TerkOS Builder (Cygwin Make) .Debug" superClass="org.tools.builder.cygwin"/>
+<tool id="org.terk.tools.assembler.cygwin.179370760" name="TerkOS Assembler (Cygwin)" superClass="org.terk.tools.assembler.cygwin"/>
+<tool id="org.terk.tools.archiver.cygwin.914397797" name="TerkOS Archiver (Cygwin)" superClass="org.terk.tools.archiver.cygwin"/>
+<tool id="org.terk.tools.cpp.compiler.cygwin.541707855" name="TerkOS C++ Compiler (Cygwin)" superClass="org.terk.tools.cpp.compiler.cygwin">
+<option id="gnu.cpp.compiler.option.optimization.level.1808053880" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
+<option id="gnu.cpp.compiler.option.debugging.level.547059642" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
+<inputType id="org.terk.tools.cpp.compiler.cygwin.input.1062426137" superClass="org.terk.tools.cpp.compiler.cygwin.input"/>
 </tool>
-<tool id="cdt.managedbuild.tool.vex.gnu.c.compiler.exe.debug.456048685" name="TerkOS C Compiler" superClass="cdt.managedbuild.tool.vex.gnu.c.compiler.exe.debug">
-<option defaultValue="vex.gnu.c.optimization.level.none" id="vex.gnu.c.compiler.exe.debug.option.optimization.level.591132034" superClass="vex.gnu.c.compiler.exe.debug.option.optimization.level" valueType="enumerated"/>
-<option id="vex.gnu.c.compiler.exe.debug.option.debugging.level.464597819" superClass="vex.gnu.c.compiler.exe.debug.option.debugging.level" value="vex.gnu.c.debugging.level.max" valueType="enumerated"/>
-<inputType id="cdt.managedbuild.tool.vex.gnu.c.compiler.input.1959619131" superClass="cdt.managedbuild.tool.vex.gnu.c.compiler.input"/>
+<tool id="org.terk.tools.c.compiler.cygwin.508412528" name="TerkOS C Compiler (Cygwin)" superClass="org.terk.tools.c.compiler.cygwin">
+<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.2057989481" superClass="gnu.c.compiler.option.optimization.level" valueType="enumerated"/>
+<option id="gnu.c.compiler.option.debugging.level.1711167205" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
+<inputType id="org.terk.tools.c.compiler.cygwin.input.941423576" superClass="org.terk.tools.c.compiler.cygwin.input"/>
 </tool>
-<tool id="cdt.managedbuild.tool.vex.gnu.c.linker.exe.debug.945226561" name="TerkOS C Linker" superClass="cdt.managedbuild.tool.vex.gnu.c.linker.exe.debug"/>
-<tool id="cdt.managedbuild.tool.vex.gnu.cpp.linker.exe.debug.967809022" name="TerkOS C++ Linker" superClass="cdt.managedbuild.tool.vex.gnu.cpp.linker.exe.debug">
-<inputType id="cdt.managedbuild.tool.vex.gnu.cpp.linker.input.1007902775" superClass="cdt.managedbuild.tool.vex.gnu.cpp.linker.input">
+<tool id="org.terk.tools.c.linker.cygwin.1309728363" name="TerkOS C Linker (Cygwin)" superClass="org.terk.tools.c.linker.cygwin"/>
+<tool id="org.terk.tools.cpp.linker.cygwin.1692810087" name="TerkOS C++ Linker (Cygwin)" superClass="org.terk.tools.cpp.linker.cygwin">
+<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1236449188" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 <additionalInput kind="additionalinput" paths="$(LIBS)"/>
 </inputType>
-</tool>
-<tool id="cdt.managedbuild.tool.vex.gnu.assembler.exe.debug.2122620745" name="TerkOS Assembler" superClass="cdt.managedbuild.tool.vex.gnu.assembler.exe.debug">
-<inputType id="cdt.managedbuild.tool.vex.gnu.assembler.input.1369654663" superClass="cdt.managedbuild.tool.vex.gnu.assembler.input"/>
 </tool>
 </toolChain>
 </folderInfo>
@@ -103,7 +100,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/${specs_file}&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -113,7 +110,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+<runAction arguments="-c 'g++ -E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -123,12 +120,52 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
-<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.vex.gnu.exe.debug.481157169;cdt.managedbuild.config.vex.gnu.exe.debug.481157169.;cdt.managedbuild.tool.vex.gnu.c.compiler.exe.debug.456048685;cdt.managedbuild.tool.vex.gnu.c.compiler.input.1959619131">
-<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
+<profile id="org.terk.tools.org.terk.tools.scd.c.cygwin">
+<buildOutputProvider>
+<openAction enabled="false" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-c '/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/gcc -E -P -v -dD ${plugin_state_location}/specs.c'" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/sh" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.cpp.cygwin">
+<buildOutputProvider>
+<openAction enabled="true" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-c '/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/g++ -E -P -v -dD ${plugin_state_location}/specs.c'" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/sh" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.c">
+<buildOutputProvider>
+<openAction enabled="false" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/gcc" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.cpp">
+<buildOutputProvider>
+<openAction enabled="true" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/g++" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<scannerConfigBuildInfo instanceId="org.terk.tools.config.cygwin.exe.debug.1716640088;org.terk.tools.config.cygwin.exe.debug.1716640088.;org.terk.tools.cpp.compiler.cygwin.541707855;org.terk.tools.cpp.compiler.cygwin.input.1062426137">
+<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.terk.tools.scd.cpp.cygwin"/>
 <profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 <buildOutputProvider>
 <openAction enabled="true" filePath=""/>
@@ -185,7 +222,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/${specs_file}&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -195,7 +232,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+<runAction arguments="-c 'g++ -E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -205,13 +242,13 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
 </scannerConfigBuildInfo>
-<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.vex.gnu.exe.release.249785199;cdt.managedbuild.config.vex.gnu.exe.release.249785199.;cdt.managedbuild.tool.vex.gnu.c.compiler.exe.release.292155558;cdt.managedbuild.tool.vex.gnu.c.compiler.input.1452277958">
-<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
+<scannerConfigBuildInfo instanceId="org.terk.tools.config.cygwin.exe.release.1075752063;org.terk.tools.config.cygwin.exe.release.1075752063.;org.terk.tools.cpp.compiler.cygwin.1340395433;org.terk.tools.cpp.compiler.cygwin.input.686320718">
+<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.terk.tools.scd.cpp.cygwin"/>
 <profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 <buildOutputProvider>
 <openAction enabled="true" filePath=""/>
@@ -268,7 +305,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/${specs_file}&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -278,7 +315,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+<runAction arguments="-c 'g++ -E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -288,13 +325,53 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;'" command="sh" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.c.cygwin">
+<buildOutputProvider>
+<openAction enabled="false" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-c '/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/gcc -E -P -v -dD ${plugin_state_location}/specs.c'" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/sh" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.cpp.cygwin">
+<buildOutputProvider>
+<openAction enabled="true" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-c '/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/g++ -E -P -v -dD ${plugin_state_location}/specs.c'" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/sh" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.c">
+<buildOutputProvider>
+<openAction enabled="false" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/gcc" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.cpp">
+<buildOutputProvider>
+<openAction enabled="true" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/g++" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
 </scannerConfigBuildInfo>
-<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.vex.gnu.exe.release.249785199;cdt.managedbuild.config.vex.gnu.exe.release.249785199.;cdt.managedbuild.tool.vex.gnu.cpp.compiler.exe.release.1074192605;cdt.managedbuild.tool.vex.gnu.cpp.compiler.input.137195595">
-<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
+<scannerConfigBuildInfo instanceId="org.terk.tools.config.cygwin.exe.release.1075752063;org.terk.tools.config.cygwin.exe.release.1075752063.;org.terk.tools.c.compiler.cygwin.216612274;org.terk.tools.c.compiler.cygwin.input.1782973210">
+<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.terk.tools.scd.c.cygwin"/>
 <profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 <buildOutputProvider>
 <openAction enabled="true" filePath=""/>
@@ -351,7 +428,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/${specs_file}&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -361,7 +438,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+<runAction arguments="-c 'g++ -E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -371,13 +448,53 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;'" command="sh" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.c.cygwin">
+<buildOutputProvider>
+<openAction enabled="false" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-c '/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/gcc -E -P -v -dD ${plugin_state_location}/specs.c'" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/sh" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.cpp.cygwin">
+<buildOutputProvider>
+<openAction enabled="true" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-c '/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/g++ -E -P -v -dD ${plugin_state_location}/specs.c'" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/sh" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.c">
+<buildOutputProvider>
+<openAction enabled="false" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/gcc" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.cpp">
+<buildOutputProvider>
+<openAction enabled="true" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/g++" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
 </scannerConfigBuildInfo>
-<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.vex.gnu.exe.debug.481157169;cdt.managedbuild.config.vex.gnu.exe.debug.481157169.;cdt.managedbuild.tool.vex.gnu.cpp.compiler.exe.debug.1164450889;cdt.managedbuild.tool.vex.gnu.cpp.compiler.input.679693372">
-<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
+<scannerConfigBuildInfo instanceId="org.terk.tools.config.cygwin.exe.debug.1716640088;org.terk.tools.config.cygwin.exe.debug.1716640088.;org.terk.tools.c.compiler.cygwin.508412528;org.terk.tools.c.compiler.cygwin.input.941423576">
+<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.terk.tools.scd.c.cygwin"/>
 <profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 <buildOutputProvider>
 <openAction enabled="true" filePath=""/>
@@ -434,7 +551,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/${specs_file}&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -444,7 +561,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+<runAction arguments="-c 'g++ -E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -454,7 +571,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -462,43 +579,40 @@
 </storageModule>
 <storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 </cconfiguration>
-<cconfiguration id="cdt.managedbuild.config.vex.gnu.exe.release.249785199">
-<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.vex.gnu.exe.release.249785199" moduleId="org.eclipse.cdt.core.settings" name="Release">
+<cconfiguration id="org.terk.tools.config.cygwin.exe.release.1075752063">
+<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="org.terk.tools.config.cygwin.exe.release.1075752063" moduleId="org.eclipse.cdt.core.settings" name="Release">
 <externalSettings/>
 <extensions>
 <extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 <extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 <extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 <extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 </extensions>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
-<configuration artifactName="MotorDials" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.vex.gnu.exe.release.249785199" name="Release" parent="cdt.managedbuild.config.vex.gnu.exe.release">
-<folderInfo id="cdt.managedbuild.config.vex.gnu.exe.release.249785199." name="/" resourcePath="">
-<toolChain id="cdt.managedbuild.toolchain.vex.gnu.exe.release.1805589583" name="TerkOS GCC Linux" superClass="cdt.managedbuild.toolchain.vex.gnu.exe.release">
-<targetPlatform id="cdt.managedbuild.target.vex.gnu.platform.exe.release.235019174" name="TerkOS Debug Platform" superClass="cdt.managedbuild.target.vex.gnu.platform.exe.release"/>
-<builder buildPath="${workspace_loc:/MotorDials/Release}" id="cdt.managedbuild.target.vex.gnu.builder.exe.release.1690638551" managedBuildOn="true" name="Gnu Make Builder.Release" superClass="cdt.managedbuild.target.vex.gnu.builder.exe.release"/>
-<tool id="cdt.managedbuild.tool.vex.gnu.archiver.base.145876647" name="TerkOS Archiver" superClass="cdt.managedbuild.tool.vex.gnu.archiver.base"/>
-<tool id="cdt.managedbuild.tool.vex.gnu.cpp.compiler.exe.release.1074192605" name="TerkOS C++ Compiler" superClass="cdt.managedbuild.tool.vex.gnu.cpp.compiler.exe.release">
-<option id="vex.gnu.cpp.compiler.exe.release.option.optimization.level.150587519" superClass="vex.gnu.cpp.compiler.exe.release.option.optimization.level" value="vex.gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
-<option id="vex.gnu.cpp.compiler.exe.release.option.debugging.level.149003401" superClass="vex.gnu.cpp.compiler.exe.release.option.debugging.level" value="vex.gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
-<inputType id="cdt.managedbuild.tool.vex.gnu.cpp.compiler.input.137195595" superClass="cdt.managedbuild.tool.vex.gnu.cpp.compiler.input"/>
+<configuration artifactName="MotorDials" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="org.terk.tools.config.cygwin.exe.release.1075752063" name="Release" parent="org.terk.tools.config.cygwin.exe.release">
+<folderInfo id="org.terk.tools.config.cygwin.exe.release.1075752063." name="/" resourcePath="">
+<toolChain id="org.terk.tools.toolchain.cygwin.exe.release.858625124" name="TerkOS Cygwin GCC (Windows)" superClass="org.terk.tools.toolchain.cygwin.exe.release">
+<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="org.terk.platform.dbg.cygwin.330970742" name="TerkOS Debug Platform" osList="win32" superClass="org.terk.platform.dbg.cygwin"/>
+<builder buildPath="${workspace_loc:/MotorDials/Release}" id="org.tools.builder.cygwin.1986314454" managedBuildOn="true" name="TerkOS Builder (Cygwin Make) .Release" superClass="org.tools.builder.cygwin"/>
+<tool id="org.terk.tools.assembler.cygwin.1904880617" name="TerkOS Assembler (Cygwin)" superClass="org.terk.tools.assembler.cygwin"/>
+<tool id="org.terk.tools.archiver.cygwin.535583471" name="TerkOS Archiver (Cygwin)" superClass="org.terk.tools.archiver.cygwin"/>
+<tool id="org.terk.tools.cpp.compiler.cygwin.1340395433" name="TerkOS C++ Compiler (Cygwin)" superClass="org.terk.tools.cpp.compiler.cygwin">
+<option id="gnu.cpp.compiler.option.optimization.level.250763283" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
+<option id="gnu.cpp.compiler.option.debugging.level.368207030" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
+<inputType id="org.terk.tools.cpp.compiler.cygwin.input.686320718" superClass="org.terk.tools.cpp.compiler.cygwin.input"/>
 </tool>
-<tool id="cdt.managedbuild.tool.vex.gnu.c.compiler.exe.release.292155558" name="TerkOS C Compiler" superClass="cdt.managedbuild.tool.vex.gnu.c.compiler.exe.release">
-<option defaultValue="vex.gnu.c.optimization.level.most" id="vex.gnu.c.compiler.exe.release.option.optimization.level.1770612491" superClass="vex.gnu.c.compiler.exe.release.option.optimization.level" valueType="enumerated"/>
-<option id="vex.gnu.c.compiler.exe.release.option.debugging.level.2007675441" superClass="vex.gnu.c.compiler.exe.release.option.debugging.level" value="vex.gnu.c.debugging.level.none" valueType="enumerated"/>
-<inputType id="cdt.managedbuild.tool.vex.gnu.c.compiler.input.1452277958" superClass="cdt.managedbuild.tool.vex.gnu.c.compiler.input"/>
+<tool id="org.terk.tools.c.compiler.cygwin.216612274" name="TerkOS C Compiler (Cygwin)" superClass="org.terk.tools.c.compiler.cygwin">
+<option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.option.optimization.level.1962205259" superClass="gnu.c.compiler.option.optimization.level" valueType="enumerated"/>
+<option id="gnu.c.compiler.option.debugging.level.195716047" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.none" valueType="enumerated"/>
+<inputType id="org.terk.tools.c.compiler.cygwin.input.1782973210" superClass="org.terk.tools.c.compiler.cygwin.input"/>
 </tool>
-<tool id="cdt.managedbuild.tool.vex.gnu.c.linker.exe.release.2098444072" name="TerkOS C Linker" superClass="cdt.managedbuild.tool.vex.gnu.c.linker.exe.release"/>
-<tool id="cdt.managedbuild.tool.vex.gnu.cpp.linker.exe.release.1022182389" name="TerkOS C++ Linker" superClass="cdt.managedbuild.tool.vex.gnu.cpp.linker.exe.release">
-<inputType id="cdt.managedbuild.tool.vex.gnu.cpp.linker.input.1560988508" superClass="cdt.managedbuild.tool.vex.gnu.cpp.linker.input">
+<tool id="org.terk.tools.c.linker.cygwin.251594484" name="TerkOS C Linker (Cygwin)" superClass="org.terk.tools.c.linker.cygwin"/>
+<tool id="org.terk.tools.cpp.linker.cygwin.845263790" name="TerkOS C++ Linker (Cygwin)" superClass="org.terk.tools.cpp.linker.cygwin">
+<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.187696591" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 <additionalInput kind="additionalinput" paths="$(LIBS)"/>
 </inputType>
-</tool>
-<tool id="cdt.managedbuild.tool.vex.gnu.assembler.exe.release.772328701" name="TerkOS Assembler" superClass="cdt.managedbuild.tool.vex.gnu.assembler.exe.release">
-<inputType id="cdt.managedbuild.tool.vex.gnu.assembler.input.1826001317" superClass="cdt.managedbuild.tool.vex.gnu.assembler.input"/>
 </tool>
 </toolChain>
 </folderInfo>
@@ -562,7 +676,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/${specs_file}&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -572,7 +686,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+<runAction arguments="-c 'g++ -E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -582,12 +696,52 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
-<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.vex.gnu.exe.debug.481157169;cdt.managedbuild.config.vex.gnu.exe.debug.481157169.;cdt.managedbuild.tool.vex.gnu.c.compiler.exe.debug.456048685;cdt.managedbuild.tool.vex.gnu.c.compiler.input.1959619131">
-<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
+<profile id="org.terk.tools.org.terk.tools.scd.c.cygwin">
+<buildOutputProvider>
+<openAction enabled="false" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-c '/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/gcc -E -P -v -dD ${plugin_state_location}/specs.c'" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/sh" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.cpp.cygwin">
+<buildOutputProvider>
+<openAction enabled="true" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-c '/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/g++ -E -P -v -dD ${plugin_state_location}/specs.c'" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/sh" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.c">
+<buildOutputProvider>
+<openAction enabled="false" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/gcc" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.cpp">
+<buildOutputProvider>
+<openAction enabled="true" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/g++" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<scannerConfigBuildInfo instanceId="org.terk.tools.config.cygwin.exe.debug.1716640088;org.terk.tools.config.cygwin.exe.debug.1716640088.;org.terk.tools.cpp.compiler.cygwin.541707855;org.terk.tools.cpp.compiler.cygwin.input.1062426137">
+<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.terk.tools.scd.cpp.cygwin"/>
 <profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 <buildOutputProvider>
 <openAction enabled="true" filePath=""/>
@@ -644,7 +798,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/${specs_file}&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -654,7 +808,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+<runAction arguments="-c 'g++ -E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -664,13 +818,13 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
 </scannerConfigBuildInfo>
-<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.vex.gnu.exe.release.249785199;cdt.managedbuild.config.vex.gnu.exe.release.249785199.;cdt.managedbuild.tool.vex.gnu.c.compiler.exe.release.292155558;cdt.managedbuild.tool.vex.gnu.c.compiler.input.1452277958">
-<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
+<scannerConfigBuildInfo instanceId="org.terk.tools.config.cygwin.exe.release.1075752063;org.terk.tools.config.cygwin.exe.release.1075752063.;org.terk.tools.cpp.compiler.cygwin.1340395433;org.terk.tools.cpp.compiler.cygwin.input.686320718">
+<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.terk.tools.scd.cpp.cygwin"/>
 <profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 <buildOutputProvider>
 <openAction enabled="true" filePath=""/>
@@ -727,7 +881,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/${specs_file}&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -737,7 +891,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+<runAction arguments="-c 'g++ -E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -747,13 +901,53 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;'" command="sh" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.c.cygwin">
+<buildOutputProvider>
+<openAction enabled="false" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-c '/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/gcc -E -P -v -dD ${plugin_state_location}/specs.c'" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/sh" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.cpp.cygwin">
+<buildOutputProvider>
+<openAction enabled="true" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-c '/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/g++ -E -P -v -dD ${plugin_state_location}/specs.c'" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/sh" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.c">
+<buildOutputProvider>
+<openAction enabled="false" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/gcc" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.cpp">
+<buildOutputProvider>
+<openAction enabled="true" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/g++" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
 </scannerConfigBuildInfo>
-<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.vex.gnu.exe.release.249785199;cdt.managedbuild.config.vex.gnu.exe.release.249785199.;cdt.managedbuild.tool.vex.gnu.cpp.compiler.exe.release.1074192605;cdt.managedbuild.tool.vex.gnu.cpp.compiler.input.137195595">
-<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
+<scannerConfigBuildInfo instanceId="org.terk.tools.config.cygwin.exe.release.1075752063;org.terk.tools.config.cygwin.exe.release.1075752063.;org.terk.tools.c.compiler.cygwin.216612274;org.terk.tools.c.compiler.cygwin.input.1782973210">
+<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.terk.tools.scd.c.cygwin"/>
 <profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 <buildOutputProvider>
 <openAction enabled="true" filePath=""/>
@@ -810,7 +1004,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/${specs_file}&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -820,7 +1014,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+<runAction arguments="-c 'g++ -E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -830,13 +1024,53 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;'" command="sh" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.c.cygwin">
+<buildOutputProvider>
+<openAction enabled="false" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-c '/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/gcc -E -P -v -dD ${plugin_state_location}/specs.c'" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/sh" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.cpp.cygwin">
+<buildOutputProvider>
+<openAction enabled="true" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-c '/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/g++ -E -P -v -dD ${plugin_state_location}/specs.c'" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/sh" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.c">
+<buildOutputProvider>
+<openAction enabled="false" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/gcc" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.terk.tools.org.terk.tools.scd.cpp">
+<buildOutputProvider>
+<openAction enabled="true" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/bin/g++" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
 </scannerConfigBuildInfo>
-<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.vex.gnu.exe.debug.481157169;cdt.managedbuild.config.vex.gnu.exe.debug.481157169.;cdt.managedbuild.tool.vex.gnu.cpp.compiler.exe.debug.1164450889;cdt.managedbuild.tool.vex.gnu.cpp.compiler.input.679693372">
-<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
+<scannerConfigBuildInfo instanceId="org.terk.tools.config.cygwin.exe.debug.1716640088;org.terk.tools.config.cygwin.exe.debug.1716640088.;org.terk.tools.c.compiler.cygwin.508412528;org.terk.tools.c.compiler.cygwin.input.941423576">
+<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.terk.tools.scd.c.cygwin"/>
 <profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 <buildOutputProvider>
 <openAction enabled="true" filePath=""/>
@@ -893,7 +1127,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/${specs_file}&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -903,7 +1137,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+<runAction arguments="-c 'g++ -E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -913,7 +1147,7 @@
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;'" command="sh" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -922,6 +1156,6 @@
 </cconfiguration>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
-<project id="MotorDials.cdt.managedbuild.target.vex.gnu.exe.288282943" name="Executable" projectType="cdt.managedbuild.target.vex.gnu.exe"/>
+<project id="MotorDials.org.terk.tools.target.cygwin.exe.1214865358" name="Executable" projectType="org.terk.tools.target.cygwin.exe"/>
 </storageModule>
 </cproject>

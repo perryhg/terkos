@@ -30,9 +30,9 @@ int mood = 0;				// Corresponds to how much light the robot has been seeing.
 vexEncoder ren[2];
 vexEncoder len[2];
 
-void bumperCallback(unsigned int port, struct timeval *ptv);
+void bumperCallback(unsigned int port, struct timeval *ptv, void *userdata);
 unsigned long diff(struct timeval *ptv0, struct timeval *ptv1);
-void encoderCallback(unsigned int port, struct timeval *ptv);
+void encoderCallback(unsigned int port, struct timeval *ptv, void *userdata);
 void findLight();
 void findPath();
 void followLight();
@@ -42,7 +42,7 @@ void manageBumper();
 void manageSonar();
 void run();
 void showMood();
-void sonarCallback(unsigned int port, struct timeval* tv);
+void sonarCallback(unsigned int port, struct timeval* tv, void *userdata);
 void toggleSonar();
 void waitForDistance(double leftdiff, double rightdiff);
 
@@ -56,10 +56,10 @@ int main(void)
 	io.SetDataDirection((1 << ROUT) + (1 << LOUT));
 
 	// Setup Sonar
-	io.RegisterCallback(ROUT, sonarCallback);
-	io.RegisterCallback(RIN, sonarCallback);
-	io.RegisterCallback(LOUT, sonarCallback);
-	io.RegisterCallback(LIN, sonarCallback);
+	io.RegisterCallback(ROUT, NULL, sonarCallback);
+	io.RegisterCallback(RIN, NULL, sonarCallback);
+	io.RegisterCallback(LOUT, NULL, sonarCallback);
+	io.RegisterCallback(LIN, NULL, sonarCallback);
 
 	io.SetInterruptMode(ROUT, QEG_INTERRUPT_NEGEDGE);
 	io.SetInterruptMode(RIN, QEG_INTERRUPT_NEGEDGE);
@@ -71,8 +71,8 @@ int main(void)
 	motor.SetPIDVGains(LMOTOR, 100, 0, 500, 0);
 
 	// Setup Bumpers
-	io.RegisterCallback(RBUMPER, bumperCallback);
-	io.RegisterCallback(LBUMPER, bumperCallback);
+	io.RegisterCallback(RBUMPER, NULL, bumperCallback);
+	io.RegisterCallback(LBUMPER, NULL, bumperCallback);
 
 	// Setup Encoders
 	ren[0] = vexEncoder(RENC[0], DIAMETER);
@@ -80,10 +80,10 @@ int main(void)
 	len[0] = vexEncoder(LENC[0], DIAMETER);
 	len[1] = vexEncoder(LENC[1], DIAMETER);
 
-	io.RegisterCallback(RENC[0], encoderCallback);
-	io.RegisterCallback(RENC[1], encoderCallback);
-	io.RegisterCallback(LENC[0], encoderCallback);
-	io.RegisterCallback(LENC[1], encoderCallback);
+	io.RegisterCallback(RENC[0], NULL, encoderCallback);
+	io.RegisterCallback(RENC[1], NULL, encoderCallback);
+	io.RegisterCallback(LENC[0], NULL, encoderCallback);
+	io.RegisterCallback(LENC[1], NULL, encoderCallback);
 
 	run();
 }
@@ -125,7 +125,7 @@ void run()
 /**
  * Reads the sonar value and updates the global variable.
  */
-void sonarCallback(unsigned int port, struct timeval *ptv)
+void sonarCallback(unsigned int port, struct timeval *ptv, void *userdata)
 {
 	static struct timeval rtv, ltv;
 	static int rflag = 0, lflag = 0;
@@ -161,7 +161,7 @@ void sonarCallback(unsigned int port, struct timeval *ptv)
 /**
  * Toggles the state of the bumper that was hit.
  */
-void bumperCallback(unsigned int port, struct timeval *ptv)
+void bumperCallback(unsigned int port, struct timeval *ptv, void *userdata)
 {
 	bool bit = (io.GetData() & (1 << port)) == (1 << port);
 	if (bit)
@@ -172,7 +172,7 @@ void bumperCallback(unsigned int port, struct timeval *ptv)
  * Callback function for the encoders.
  * Updates the corresponding encoder object based on the port.
  */
-void encoderCallback(unsigned int port, struct timeval *ptv)
+void encoderCallback(unsigned int port, struct timeval *ptv, void *userdata)
 {
 	if (port == RENC[0])
 		ren[0].update(ptv, io.GetData());

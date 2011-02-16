@@ -17,7 +17,7 @@ const long bounce = 10000;
 long rtime = 0;
 long ltime = 0;
 
-void hit(unsigned int port, struct timeval *ptv)
+void hit(unsigned int port, struct timeval *ptv, void *userdata)
 {
 	//cout << "Signal at port" << port << ": " << io.GetData() << "\t" << ptv->tv_sec << "." << ptv->tv_usec << endl;
 	if (port == RBUMPER && (ptv->tv_usec - rtime) > bounce)
@@ -43,8 +43,8 @@ void walk(int axis, int velocity)
 
 int main(void)
 {
-	io.RegisterCallback(RBUMPER, hit); // Register ports
-	io.RegisterCallback(LBUMPER, hit); // Register ports
+	io.RegisterCallback(RBUMPER, NULL, hit); // Register ports
+	io.RegisterCallback(LBUMPER, NULL, hit); // Register ports
 	io.SetDataDirection(0);
 
 	walk(RMOTOR, -10000);
