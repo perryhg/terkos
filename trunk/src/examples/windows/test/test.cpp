@@ -23,7 +23,7 @@ CQEGpioInt &io = CQEGpioInt::GetRef();
 long ticks = 0;
 
 void analogtest(void);
-void callback(unsigned int io, struct timeval *ptv);
+void callback(unsigned int io, struct timeval *ptv, void *userdata);
 void servotest(void);
 void motortest(void);
 void digitaltest(void);
@@ -71,7 +71,7 @@ void motortest(void)
 	}
 }
 
-void callback(unsigned int port, struct timeval *ptv)
+void callback(unsigned int port, struct timeval *ptv, void *userdata)
 {
 //	printf("[%d:%d]\tSignal at port %d\n", ptv->tv_sec, ptv->tv_usec, port);
 	printf("[%d]\t", port);
@@ -94,7 +94,7 @@ void digitaltest(void)
 	printf("Digital Test:");
 	io.SetDataDirection(1); // Set for input
 	for (int i = 0; i < 16; i++)
-		io.RegisterCallback(i, callback); // Register ports
+		io.RegisterCallback(i, NULL, callback); // Register ports
 
 	while(1);
 	while(1)

@@ -15,7 +15,7 @@ unsigned long diff(struct timeval *ptv0, struct timeval *ptv1)
   return val;
 }
 
-void callback(unsigned int io, struct timeval *ptv)
+void callback(unsigned int io, struct timeval *ptv, void *userdata)
 {
   static struct timeval tv0;
   static int flag = 0;
@@ -50,8 +50,8 @@ int main()
 
   // set callbacks on negative edge for both bits 0 (trigger)
   // and 1 (echo)
-  gpio.RegisterCallback(0, callback);
-  gpio.RegisterCallback(1, callback);
+  gpio.RegisterCallback(0, NULL, callback);
+  gpio.RegisterCallback(1, NULL, callback);
   gpio.SetInterruptMode(0, QEG_INTERRUPT_NEGEDGE);
   gpio.SetInterruptMode(1, QEG_INTERRUPT_NEGEDGE);
 
