@@ -2,7 +2,7 @@
    "firmware" : {
       "version" : {
          "major" : "4",
-         "minor" : "0",
+         "minor" : "1",
          "revision" : "__REVISION__"
       },
       "timestamp" : "__DATE__"
