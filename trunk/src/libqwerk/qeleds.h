@@ -28,17 +28,17 @@
 
 #define QEL_GREEN         0xff00
 #define QEL_RED           0x00ff
-#define QEL_YELLOW        0xff40
-#define QEL_ORANGE        0xffff
+#define QEL_YELLOW        0xff10
+#define QEL_ORANGE        0xff40
 
 /**
  * The three LED's on the VEXPro.
  */
 typedef enum
   {
-    LED_ROBOT = 0,
+    LED_GAME = 0,
     LED_VEXNET,
-    LED_GAME
+    LED_ROBOT
   }
 ELEDIndex;
 
