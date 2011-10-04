@@ -7,7 +7,7 @@ VPATH=$(DIST_DIR)
 
 CXX=/usr/local/terkos/arm/bin/arm-oe-linux-uclibcgnueabi-g++
 AR=/usr/local/terkos/arm/bin/arm-oe-linux-uclibcgnueabi-ar
-CP=cp
+CP=cp -f
 RM=rm -rf
 MKDIR=mkdir -p
 LIB_INSTALL_DIR=/usr/local/terkos/arm/arm-oe-linux-uclibcgnueabi/lib/terk
