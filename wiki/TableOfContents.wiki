@@ -6,3 +6,4 @@
   # [LCDMenu LCD Menu]
   # [WebSite Web Site]
   # [SerialConsole USB Serial Console] 
+  # [http://code.google.com/p/terk-ide/wiki/CygwinInstallationInstructions test]
