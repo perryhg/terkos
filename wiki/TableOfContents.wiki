@@ -5,5 +5,4 @@
   # [WirelessNetworking Wireless Networking]
   # [LCDMenu LCD Menu]
   # [WebSite Web Site]
-  # [VEXProUserCode VEXPro User Code Package]
   # [SerialConsole USB Serial Console] 
