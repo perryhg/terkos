@@ -21,7 +21,8 @@ voltages into measurements. To achieve the best signal
 to noise ratio, the controller takes thousands of back-EMF
 measurements per second. In this way the VEXPro is able to provide accurate closed-loop motor control using simple motors without extra sensors.  This is what is meant by "smart 2-wire motor control". 
 
-, quadrature encoder inputs,  input ARM9 RISC processor .
+http://lh3.googleusercontent.com/-7IfEFWTdxOI/Tpizso9k0ZI/AAAAAAAABls/9oBIXuBhrjI/s653/vexprodiagram.gif
+
 The ARM9 Microcontroller uses standard 802.11b/g communication. This will allow (with programming) highly configurable communication to PC's and wireless networks. The Carnegie Mellon Telepresence Robot Kit (TeRK) project provides a powerful feature to the ARM9 Microcontroller allowing robot control and video feedback across the internet. The controller can be operated from almost any computer including Mac, PC, and Linux machines.
 The VEXPro features the following:
   * 16 x 2 LCD screen
