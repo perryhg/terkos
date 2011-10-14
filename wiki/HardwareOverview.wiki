@@ -23,6 +23,8 @@ measurements per second. In this way the VEXPro is able to provide accurate clos
 
 http://lh3.googleusercontent.com/-7IfEFWTdxOI/Tpizso9k0ZI/AAAAAAAABls/9oBIXuBhrjI/s653/vexprodiagram.gif
 
+http://lh4.googleusercontent.com/-tf-s2n7Us6Y/Tpixz754MTI/AAAAAAAABlQ/9n30CYHeGEA/s672/vexprosidediagram.gif
+
 The ARM9 Microcontroller uses standard 802.11b/g communication. This will allow (with programming) highly configurable communication to PC's and wireless networks. The Carnegie Mellon Telepresence Robot Kit (TeRK) project provides a powerful feature to the ARM9 Microcontroller allowing robot control and video feedback across the internet. The controller can be operated from almost any computer including Mac, PC, and Linux machines.
 The VEXPro features the following:
   * 16 x 2 LCD screen
