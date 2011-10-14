@@ -1,6 +1,28 @@
 #labels SortOrder-0020
 #sidebar TableOfContents
 = Hardware Overview =
+
+The VEXPro ARM9 Microcontroller began as the popular Qwerk robot controller, the result of a collaboration between Charmed Labs and the [http://cmucreatelab.org/ Carnegie Mellon CREATE Lab]. The VEXPro ARM9 is a redesign of Qwerk and intended to be used by advanced users at the high school and university level.  
+
+The VEXPro ARM9 is a fully-integrated robot controller.  It combines the power system, motor controllers, motor amplifiers, sensor inputs, RISC processor, multitasking OS, wireless networking, text LCD, speaker and keypad into one device.  Furthermore, what makes the VEXPro ARM9 well-suited for robotics is the tightly-integrated FPGA (field-programmable gate array).  The FPGA acts as robot ASIC (application-specific integrated circuit) that can be programmed with peripherals and co-processors specific to robotics.  In particular, it provides closed-loop multi-axis motor control that uses a special method for motion feedback unique to the VEXPro. 
+
+==Back-EMF Feedback==
+
+Many robot controllers offer open-loop motor control.  Open-loop simply means that the motor controller doesn't have knowledge of the motor's motion.  However, if a robot is expected to move accurately within its environment and deal effectively with random factors such as bumps or inclines, closed-loop motor control is much more useful. A closed-loop motor controller can automatically increase or decrease power to the motors in order to maintain the desired velocity or position in the presence of bumps or inclines.  
+
+Closed-loop motor control requires some form of motion feedback.  
+Back-EMF feedback is based on the principle that a motor is also a generator producing a voltage that's proportional to its velocity. This
+voltage, called the back-EMF voltage, can be used to infer a motor's motion if measured periodically.
+
+The VEXPro uses its FPGA to implement a custom four-axis
+back-EMF feedback controller. This controller talks directly to
+a 12-bit A/D converter, which converts back-EMF
+voltages into measurements. To achieve the best signal
+to noise ratio, the controller takes thousands of back-EMF
+measurements per second. In this way the VEXPro is able to provide accurate closed-loop motor control using simple motors without extra sensors.  This is what is meant by "smart 2-wire motor control". 
+
+, quadrature encoder inputs,  input ARM9 RISC processor .
+The ARM9 Microcontroller uses standard 802.11b/g communication. This will allow (with programming) highly configurable communication to PC's and wireless networks. The Carnegie Mellon Telepresence Robot Kit (TeRK) project provides a powerful feature to the ARM9 Microcontroller allowing robot control and video feedback across the internet. The controller can be operated from almost any computer including Mac, PC, and Linux machines.
 The VEXPro features the following:
   * 16 x 2 LCD screen
   * Six buttons: a 4-way direction pad plus buttons for OK and Cancel.  The OK button also doubles as the Power button.
