@@ -6,7 +6,30 @@ The VEXPro ARM9 Microcontroller began as the popular Qwerk robot controller, the
 
 The VEXPro ARM9 is a fully-integrated robot controller.  It combines the power system, motor controllers, motor amplifiers, sensor inputs, RISC processor, multitasking OS, wireless networking, text LCD, speaker and keypad into one device.  Furthermore, what makes the VEXPro ARM9 well-suited for robotics is the tightly-integrated FPGA (field-programmable gate array).  The FPGA acts as robot ASIC (application-specific integrated circuit) that can be programmed with peripherals and co-processors specific to robotics.  In particular, it provides closed-loop multi-axis motor control that uses a special method for motion feedback unique to the VEXPro. 
 
-==Back-EMF Feedback==
+http://lh3.googleusercontent.com/-7IfEFWTdxOI/Tpizso9k0ZI/AAAAAAAABls/9oBIXuBhrjI/s653/vexprodiagram.gif
+
+http://lh4.googleusercontent.com/-tf-s2n7Us6Y/Tpixz754MTI/AAAAAAAABlQ/9n30CYHeGEA/s672/vexprosidediagram.gif
+
+The VEXPro ARM9 features the following:
+  * 200 MHz ARM9 RISC processor
+  * 16 Mbytes of flash, 32 Mbytes of RAM
+  * Supports 802.11g (WiFi), VEXnet
+  * 2 USB 2.0 host ports
+  * Mini USB serial port for accessing Linux console 
+  * 16 digital I/O ports
+  * 16 analog input ports
+  * 4 "smart" 2-wire motor ports
+  * 12 servo motor ports
+  * UART port
+  * I2C port
+  * 16 x 2 LCD screen
+  * Power and battery backup ports
+  * Keypad
+  * Internal speaker
+
+To power on the VEXPro, hold down the power button (the one with the check mark next to it) until you see the LCD screen turn on.  Similarly, to power off, hold down the power button for several seconds until you see the LCD screen dim.
+
+==Back-EMF feedback, aka "Smart" 2-Wire Motor Control==
 
 Many robot controllers offer open-loop motor control.  Open-loop simply means that the motor controller doesn't have knowledge of the motor's motion.  However, if a robot is expected to move accurately within its environment and deal effectively with random factors such as bumps or inclines, closed-loop motor control is much more useful. A closed-loop motor controller can automatically increase or decrease power to the motors in order to maintain the desired velocity or position in the presence of bumps or inclines.  
 
@@ -20,27 +43,6 @@ a 12-bit A/D converter, which converts back-EMF
 voltages into measurements. To achieve the best signal
 to noise ratio, the controller takes thousands of back-EMF
 measurements per second. In this way the VEXPro is able to provide accurate closed-loop motor control using simple motors without extra sensors.  This is what is meant by "smart 2-wire motor control". 
-
-http://lh3.googleusercontent.com/-7IfEFWTdxOI/Tpizso9k0ZI/AAAAAAAABls/9oBIXuBhrjI/s653/vexprodiagram.gif
-
-http://lh4.googleusercontent.com/-tf-s2n7Us6Y/Tpixz754MTI/AAAAAAAABlQ/9n30CYHeGEA/s672/vexprosidediagram.gif
-
-The ARM9 Microcontroller uses standard 802.11b/g communication. This will allow (with programming) highly configurable communication to PC's and wireless networks. The Carnegie Mellon Telepresence Robot Kit (TeRK) project provides a powerful feature to the ARM9 Microcontroller allowing robot control and video feedback across the internet. The controller can be operated from almost any computer including Mac, PC, and Linux machines.
-The VEXPro features the following:
-  * 16 x 2 LCD screen
-  * Six buttons: a 4-way direction pad plus buttons for OK and Cancel.  The OK button also doubles as the Power button.
-  * Two USB ports: one on the top (into which the black USB wireless adapter is plugged) and another on the left side
-  * Mini USB port for accessing the Linux console
-  * Power and battery backup ports
-  * 16 digital I/O ports
-  * 16 analog I/O ports
-  * 4 motor ports
-  * 12 servo motor ports
-  * UART port
-  * I2C port
-  * internal speaker
-
-To power on the VEXPro, hold down the power button (the one with the check mark next to it) until you see the LCD screen turn on.  Similarly, to power off, hold down the power button for several seconds until you see the LCD screen dim.
 
 http://lh4.ggpht.com/_AaoS_28Sdhw/S6Jt-e3Q6UI/AAAAAAAAAC0/fT-G8Mr6_8Q/VEXPro.png
 ----
