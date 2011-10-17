@@ -50,4 +50,4 @@ The VEXPro takes several seconds to finish booting.  The VEXPro is finished boot
 
 http://lh4.ggpht.com/_AaoS_28Sdhw/S6Jt-e3Q6UI/AAAAAAAAAC0/fT-G8Mr6_8Q/VEXPro.png
 ----
-[VEXProTerkOSUserGuide previous] | [WirelessNetworking next]
+[VEXProTerkOSUserGuide previous] | [LCDMenu next]
