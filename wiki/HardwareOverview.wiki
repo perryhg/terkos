@@ -43,6 +43,11 @@ voltages into measurements. To achieve the best signal
 to noise ratio, the controller takes thousands of back-EMF
 measurements per second. In this way the VEXPro is able to provide accurate closed-loop motor control using simple motors without extra sensors.  This is what is meant by "smart 2-wire motor control". 
 
+==Basic Operation==
+The VEXPro requires an external battery for power.  Before turning the VEXPro on, plug in a fully charged 7.2V VEX battery pack into the main battery port.  Hold down the power button (the one with the check mark next to it -- refer to figure) until you see the LCD screen turn on.  Similarly, to power off, hold down the power button for several seconds until you see the LCD screen dim.
+
+The VEXPro takes several seconds to finish booting.  The VEXPro is finished booting when you see the message "Welcome to TerkOS" on the LCD. 
+
 http://lh4.ggpht.com/_AaoS_28Sdhw/S6Jt-e3Q6UI/AAAAAAAAAC0/fT-G8Mr6_8Q/VEXPro.png
 ----
 [VEXProTerkOSUserGuide previous] | [WirelessNetworking next]
