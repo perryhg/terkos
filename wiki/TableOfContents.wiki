@@ -2,8 +2,8 @@
 === Table of Contents ===
   # [VEXProTerkOSUserGuide Welcome and Introduction]
   # [HardwareOverview Hardware Overview]
-  # [WirelessNetworking Wireless Networking]
   # [LCDMenu LCD Menu]
+  # [WirelessNetworking Wireless Networking]
   # [WebSite Web Site]
   # [SerialConsole USB Serial Console] 
   # [http://code.google.com/p/terk-ide/wiki/CygwinInstallationInstructions test]
