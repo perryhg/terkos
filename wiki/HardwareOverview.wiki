@@ -28,7 +28,7 @@ The VEXPro ARM9 features the following:
   * Internal speaker
 
 
-==Back-EMF feedback, aka Smart 2-Wire Motor Control==
+==Back-EMF Control, aka Smart 2-Wire Motor Control==
 
 Many robot controllers offer open-loop motor control.  Open-loop simply means that the motor controller doesn't have knowledge of the motor's motion.  However, if a robot is expected to move accurately within its environment and deal effectively with random factors such as bumps or inclines, closed-loop motor control is much more useful. A closed-loop motor controller can automatically increase or decrease power to the motors in order to maintain the desired velocity or position in the presence of bumps or inclines.  
 
