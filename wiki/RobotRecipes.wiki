@@ -1,0 +1,8 @@
+#labels SortOrder-0070
+#sidebar TableOfContents
+= Robot Recipes =
+
+This section will contain several example "recipes" for robots you can build with your VEXPro.  Watch this space for more recipes coming soon!
+
+----
+[SerialConsole previous] | [RobotRecipesBasicVEXBot next]
