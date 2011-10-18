@@ -3,6 +3,13 @@
 = Wireless Networking =
 The VEXPro features an 802.11g wireless adapter.  The VEXPro supports open (unencrypted) networks, WEP and WPA encrypted networks, and ad-hoc networking.
 
-The [LCDMenu LCD Menu] and [WebSite Web Site] sections discuss wireless networking usage and configuration in more detail.
+You can list and join open networks and start/stop ad-hoc networking via the VEXPro's [LCDMenu LCD Menu].  The on-board [WebSite Web Site] enables you to configure both unencrypted and encrypted wireless networks, set preferred search order, etc.  The [LCDMenu LCD Menu] and [WebSite Web Site] sections discuss wireless networking usage and configuration in more detail.
+
+You can also configure wireless networking via the command line.  To do so, first connect to the VEXPro as described in the [SerialConsole USB Serial Console] instructions.  Once you are at the VEXPro command prompt, launch the wireless networking configuration utility like this:
+
+   `root@qwerk:~# /opt/scripts/setupWirelessNetworking.pl`
+
+The program will guide you through the setup.  Once complete, just reboot your VEXPro and it should connect to the network you specified.
+
 ----
-[HardwareOverview previous] | [LCDMenu next]
+[LCDMenu previous] | [WebSite next]
