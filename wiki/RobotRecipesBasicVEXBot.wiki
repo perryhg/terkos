@@ -1,0 +1,8 @@
+#labels SortOrder-0080
+#sidebar TableOfContents
+= Basic VEX Bot =
+
+Coming soon!
+
+----
+[RobotRecipes previous] | next
