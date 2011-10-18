@@ -6,3 +6,5 @@
   # [WirelessNetworking Wireless Networking]
   # [WebSite Web Site]
   # [SerialConsole USB Serial Console] 
+  # [RobotRecipes Robot Recipes]
+    # [RobotRecipesBasicVEXBot Basic VEX Bot]
