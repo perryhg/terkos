@@ -6,4 +6,3 @@
   # [WirelessNetworking Wireless Networking]
   # [WebSite Web Site]
   # [SerialConsole USB Serial Console] 
-  # [http://code.google.com/p/terk-ide/wiki/CygwinInstallationInstructions Cygwin Installation Instructions]
