@@ -27,7 +27,7 @@ http://www.terk.ri.cmu.edu/vexpro/WebSite02_Audio.png
 ===LCD===
 The LCD tab provides controls for setting the timeout for the LCD's backlight.  You can also turn it off altogether if you wish.
 
-http://www.terk.ri.cmu.edu/vexpro/WebSite02_LCD.png
+http://www.terk.ri.cmu.edu/vexpro/WebSite03_LCD.png
 ===Wireless Networking===
 The Wireless Networking tab provides controls for specifying which wireless network(s) you want the VEXPro to join, and in what order.  If none of your preferred networks is available, the VEXPro defaults to joining the first open network it can, sorted by signal strength.  You can add both open (unencrypted) and encrypted networks to your set of preferred networks.
 
