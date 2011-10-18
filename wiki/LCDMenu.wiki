@@ -34,4 +34,4 @@ When resetting system preferences, the root user password is reset to *qwerk* an
 
 Advanced users may appreciate knowing that the LCD Menu is based on a plugin architecture for easy expansion and customization of the options.  Also, the menu hierarchy is defined in XML, so it is easy to reorganize.  Finally, all text labels in the menu can be overridden to allow for internationalization.  We will provide more information on the LCD Menu plugin architecture and customization options in the future.
 ----
-[WirelessNetworking previous] | [WebSite next]
+[HardwareOverview previous] | [WirelessNetworking next]
