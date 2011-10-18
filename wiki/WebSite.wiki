@@ -7,6 +7,7 @@ The VEXPro features an on-board web site for various configuration and diagnosti
 The web site contains the following six sections:
   * *[WebSite#System_Info System Info]*
   * *[WebSite#Audio Audio]*
+  * *[WebSite#LCD LCD]*
   * *[WebSite#Wireless_Networking Wireless Networking]*
   * *[WebSite#User_Programs User Programs]*
   * *[WebSite#Passwords Passwords]*
