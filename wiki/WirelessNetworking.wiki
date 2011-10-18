@@ -1,4 +1,4 @@
-#labels SortOrder-0030
+#labels SortOrder-0040
 #sidebar TableOfContents
 = Wireless Networking =
 The VEXPro features an 802.11g wireless adapter.  The VEXPro supports open (unencrypted) networks, WEP and WPA encrypted networks, and ad-hoc networking.
