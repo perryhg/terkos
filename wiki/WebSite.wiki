@@ -22,13 +22,15 @@ http://www.terk.ri.cmu.edu/vexpro/WebSite01_SystemInfo.png
 ===Audio===
 The Audio tab provides controls for setting the speaker volume and whether you want audio alerts to be played.
 
-http://lh6.ggpht.com/_AaoS_28Sdhw/S6KkEFvDa2I/AAAAAAAAADQ/66ZgU1stj-o/2_Audio.png
-===Wireless Networking===
-The Wireless Networking tab provides controls for specifying which wireless network(s) you want the VEXPro to join, and in what order.  If none of your preferred networks is available, the VEXPro defaults to joining the first open network it can, sorted by signal strength.
+http://www.terk.ri.cmu.edu/vexpro/WebSite02_Audio.png
+===LCD===
+The LCD tab provides controls for setting the timeout for the LCD's backlight.  You can also turn it off altogether if you wish.
 
-http://lh4.ggpht.com/_AaoS_28Sdhw/S6KkESeQlqI/AAAAAAAAADU/SwLi8Uz3CGk/3_WirelessNetworking1.png
-http://lh5.ggpht.com/_AaoS_28Sdhw/S6KkEWq9TnI/AAAAAAAAADY/PuuJhNX-Yj4/3_WirelessNetworking2.png
-http://lh3.ggpht.com/_AaoS_28Sdhw/S6KkEo9i2qI/AAAAAAAAADc/Ezdd10fuVyI/3_WirelessNetworking3.png
+http://www.terk.ri.cmu.edu/vexpro/WebSite02_LCD.png
+===Wireless Networking===
+The Wireless Networking tab provides controls for specifying which wireless network(s) you want the VEXPro to join, and in what order.  If none of your preferred networks is available, the VEXPro defaults to joining the first open network it can, sorted by signal strength.  You can add both open (unencrypted) and encrypted networks to your set of preferred networks.
+
+http://www.terk.ri.cmu.edu/vexpro/WebSite04_WirelessNetworking.png
 ===User Programs===
 The User Programs tab provides controls for specifying which (if any) user program you want to be executed upon system boot.  User programs are stored in /opt/usr/bin.
 
