@@ -18,7 +18,7 @@ Screenshots and descriptions of each section are below.
 ===System Info===
 The System Info tab displays version information, memory and disk usage, and power status.
 
-http://lh3.ggpht.com/_AaoS_28Sdhw/S6KkDyVNUcI/AAAAAAAAADM/Lbc0MDRsWKw/1_SystemInfo.png
+http://www.terk.ri.cmu.edu/vexpro/WebSite01_SystemInfo.png
 ===Audio===
 The Audio tab provides controls for setting the speaker volume and whether you want audio alerts to be played.
 
