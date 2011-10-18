@@ -38,14 +38,14 @@ http://www.terk.ri.cmu.edu/vexpro/WebSite13_Wifi6.png
 ===User Programs===
 The User Programs tab provides controls for specifying which (if any) user program you want to be executed upon system boot.  User programs are stored in /opt/usr/bin.
 
-http://lh3.ggpht.com/_AaoS_28Sdhw/S6KkJWTzarI/AAAAAAAAADg/EoHPeJhAIXE/4_UserPrograms.png
+http://www.terk.ri.cmu.edu/vexpro/WebSite05_UserPrograms.png
 ===Passwords===
 The Passwords tab provides controls for setting the web control panel password and root user password.
 
-http://lh4.ggpht.com/_AaoS_28Sdhw/S6KkJ0KyyfI/AAAAAAAAADk/s2KTktXPygE/5_Passwords.png
+http://www.terk.ri.cmu.edu/vexpro/WebSite06_Passwords.png
 ===System Settings===
 The System Settings tab provides controls to backup/restore the VEXPro's configuration and reset preferences.
 
-http://lh4.ggpht.com/_AaoS_28Sdhw/S6KkJ7Lu9LI/AAAAAAAAADo/7jP3R95EEGc/6_SystemSettings.png
+http://www.terk.ri.cmu.edu/vexpro/WebSite07_SystemSettings.png
 ----
 [WirelessNetworking previous] | [SerialConsole next]
