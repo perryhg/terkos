@@ -1,5 +1,5 @@
 #summary How to use the USB serial console on the VEXPro
-#labels SortOrder-0070
+#labels SortOrder-0060
 #sidebar TableOfContents
 = VEXPro USB Serial Console Setup =
 
