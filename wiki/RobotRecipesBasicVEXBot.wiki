@@ -12,11 +12,12 @@ The Vex bot is the most basic robot you can build with the Vex robotics kit. The
 ----
 
 ===Table of Contents===
-  * *[RobotRecipesBasicVEXBot#Required_Tools Required Tools]*
-  * *[RobotRecipesBasicVEXBot#Required_Parts Required Parts]*
+  * *[RobotRecipesBasicVEXBot#Introduction Introduction]*
   * *[RobotRecipesBasicVEXBot#Build_the_Frame Build the Frame]*
 
 ----
+
+== Introduction == 
 
 === Required Tools ===
 
@@ -55,7 +56,35 @@ The Vex bot is the most basic robot you can build with the Vex robotics kit. The
 || [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/nut-832-keps_100.png] || 8-32 Keps Nuts || {qty} || NUT-LW-832-PACK-100 ||
 || [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/washer-steel_100.png] || Steel Washers || {qty} || WASHER-STEEL-PACK-200 ||
 
-=== Build the Frame ===
+----
+
+== Build the Frame ==
+
+=== Required Tools ===
+
+|| Image || Tool ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/tools/hex_key_3_32-300.jpg] || 3/32" Allen Wrench ||
+
+=== Required Parts ===
+
+|| Image || Part ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/c-channel_25x2-300.jpg] || C-Channel, 1x2x1x25 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/bumper_15-300.jpg] || Bumper 25x25x2 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/plate_5x15-300.jpg] || Plate, 5x15 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-832-0375_300.png] || 8-32 3/8-inch Bolt ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/nut-832-keps_300.png] || 8-32 Keps Nuts ||
+
+=== Steps ===
+
+  [http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/c-channel_bumper.jpg]
+  # Place a bumper over the c-channel as shown.[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/c-channel_bumper_join.jpg]
+  # Use two 8-32 3/8-inch bolts and two keps nuts to attach the bumper to the c-channel. Use the 3/32-inch Allen wrench to tighten the bolts.
+  # Repeat steps 1 and 2 to create another L-shaped structure.[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/full_frame.jpg]
+  # Align the two L-structures to form a rectangle. Remember to keep the bumpers on top of the c-channels[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/full_frame_2.jpg]
+  # Use the 8-32 3/8-inch bolts and keps nuts to secure the two L-structures together.[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/plate_frame.jpg]
+  # Rest the plate on the two c-channels. There should be seven holes to the right of the plate, and nine to the left.[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/frame_final.jpg]
+  # Use four 8-32 3/8-inch bolts and four keps nuts to secure the plate to the frame.
+
 
 ----
 [RobotRecipes previous] | next
