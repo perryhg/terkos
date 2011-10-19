@@ -3,7 +3,7 @@
 = Basic VEX Bot =
 
 
-1 Hour ~$100 Beginner
+http://www.terk.ri.cmu.edu/wp-content/themes/terk/img/icon_time.gif 1 Hour http://www.terk.ri.cmu.edu/wp-content/themes/terk/img/icon_cost.gif ~$100 http://www.terk.ri.cmu.edu/wp-content/themes/terk/img/icon_level.gif Beginner
 
 [http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image11_ready.jpg]
 
