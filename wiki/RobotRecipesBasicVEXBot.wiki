@@ -15,6 +15,7 @@ The Vex bot is the most basic robot you can build with the Vex robotics kit. The
   * *[RobotRecipesBasicVEXBot#Introduction Introduction]*
   * *[RobotRecipesBasicVEXBot#Build_the_Frame Build the Frame]*
   * *[RobotRecipesBasicVEXBot#Attach_the_Motors Attach the Motors]*
+  * *[RobotRecipesBasicVEXBot#Attach_the_Encoders Attach the Encoders]*
 
 ----
 
@@ -118,6 +119,41 @@ The Vex bot is the most basic robot you can build with the Vex robotics kit. The
   # Press the collar firmly against the outer edge of the c-channel.
   # Use the 5/34-inch Allen wrench to tighten it.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image16_repeat.jpg]
   # Repeat the process to attach the second motor to the other side of the frame.
+
+----
+
+== Attach the Encoders ==
+
+=== Required Tools ===
+
+|| Image || Tool ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/tools/564allen-300.jpg] || 5/64" Allen Wrench ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/tools/hex_key_3_32-300.jpg] || 3/32" Allen Wrench ||
+
+=== Required Parts ===
+
+|| Image || Part ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/optical-shaft-encoder_300.png] || Encoder ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-36-tooth-gear_300.png] || 36-tooth Gear ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/bearing-flat_300.png] || Delrin Bearing ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-2000_300.png] || 2-inch Shaft ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-collar_300.png] || Collar ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-832-0500_300.png] || 8-32 1/2-inch Bolt ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/nut-832-keps_300.png] || 8-32 Keps Nuts ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/washer-steel_300.png] || Steel Washers ||
+
+=== Steps ===
+  
+  # Attach a collar to the end of a 2-inch square bar. Use the 5/64-inch Allen wrench to tighten it.<br>
+  # Slide a 36-tooth gear on the bar. Slide on a washer after it.<br>
+  # Insert the square bar through the front of the encoder.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image13_shaft_encoder.jpg]
+  # On the other side, place a steel washer, followed by a collar.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image14_collar_encoder.jpg]
+  # Secure and tighten the collar such that none of the components are loose.
+  # Insert two 8-32 1/2-inch bolts through the Delrin bearing.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image15_bolt_bearing.jpg]
+  # Flip the frame.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image16_bearing_c-channel.jpg]
+  # Align the bearing inside the c-channel, two holes away from the motor.
+  # Secure the encoder to the bolts using keps nuts. Use the 5/64-inch Allen wrench to tighten the bolts.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image17_secure_encoder.jpg]
+  # Repeat this procedure to attach the second encoder to the other side of the frame.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image18_repeat.jpg]
 
 
 ----
