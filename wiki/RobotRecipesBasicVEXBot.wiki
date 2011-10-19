@@ -14,6 +14,7 @@ The Vex bot is the most basic robot you can build with the Vex robotics kit. The
 ===Table of Contents===
   * *[RobotRecipesBasicVEXBot#Introduction Introduction]*
   * *[RobotRecipesBasicVEXBot#Build_the_Frame Build the Frame]*
+  * *[RobotRecipesBasicVEXBot#Attach_the_Motors Attach the Motors]*
 
 ----
 
@@ -77,12 +78,47 @@ The Vex bot is the most basic robot you can build with the Vex robotics kit. The
 === Steps ===
 
   # Place a bumper over the c-channel as shown. <br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/c-channel_bumper.jpg]
-  # Use two 8-32 3/8-inch bolts and two keps nuts to attach the bumper to the c-channel. Use the 3/32-inch Allen wrench to tighten the bolts. [http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/c-channel_bumper_join.jpg]
+  # Use two 8-32 3/8-inch bolts and two keps nuts to attach the bumper to the c-channel. Use the 3/32-inch Allen wrench to tighten the bolts.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/c-channel_bumper_join.jpg]
   # Repeat steps 1 and 2 to create another L-shaped structure.
-  # Align the two L-structures to form a rectangle. Remember to keep the bumpers on top of the c-channels [http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/full_frame.jpg]
-  # Use the 8-32 3/8-inch bolts and keps nuts to secure the two L-structures together. [http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/full_frame_2.jpg]
-  # Rest the plate on the two c-channels. There should be seven holes to the right of the plate, and nine to the left. [http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/plate_frame.jpg]
-  # Use four 8-32 3/8-inch bolts and four keps nuts to secure the plate to the frame. [http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/frame_final.jpg]
+  # Align the two L-structures to form a rectangle. Remember to keep the bumpers on top of the c-channels<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/full_frame.jpg]
+  # Use the 8-32 3/8-inch bolts and keps nuts to secure the two L-structures together.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/full_frame_2.jpg]
+  # Rest the plate on the two c-channels. There should be seven holes to the right of the plate, and nine to the left.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/plate_frame.jpg]
+  # Use four 8-32 3/8-inch bolts and four keps nuts to secure the plate to the frame.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/frame_final.jpg]
+
+----
+
+== Attach the Motors ==
+
+=== Required Tools ===
+
+|| Image || Tool ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/tools/564allen-300.jpg] || 5/64" Allen Wrench ||
+
+=== Required Parts ===
+
+|| Image || Part ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-motor_300.png] || Motor Kit ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/clutch-300.jpg] || Clutch ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/clutch_post-300.jpg] || Clutch Post ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/bearing-flat_300.png] || Delrin Bearing ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-collar_300.png] || Collar ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-632-0500_300.png] || 6-32 1/2-inch Bolt ||
+
+=== Steps ===
+
+  # Flip the frame. Keep the side with more room between the frame and bumper to the left. This is the front of the robot.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image8_flip_frame.jpg]
+  # Insert one end of the clutch post into one side of the clutch.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image9_clutch_and_post.jpg]
+  # Insert the other end of the clutch post into one of the motors.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image10_clutch_motor.jpg]
+  # Insert two 6-32 1/2-inch bolts into a Delrin bearing.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image11_bolts_bearing.jpg]
+  # Align the Delrin bearing to the c-channel. The first bolt should go through the third hole on the channel.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image12_bearing_c-channel.jpg]
+  # Use the bolts to attach a motor to the c-channel. Insert the 5/64-inch Allen wrench through the other side of the c-channel and tighten the bolt.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image13_motor_c-channel.jpg]
+  # Insert a 3-inch square post through the hole across the clutch. Don’t insert it all the way through yet.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image14_post_motor.jpg]
+  # Place a collar on the post. Don’t tighten it yet.
+  # Push the post all the way into the clutch.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image15_tighten_collar.jpg]
+  # Press the collar firmly against the outer edge of the c-channel.
+  # Use the 5/34-inch Allen wrench to tighten it.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image16_repeat.jpg]
+  # Repeat the process to attach the second motor to the other side of the frame.
+
 
 ----
 [RobotRecipes previous] | next
