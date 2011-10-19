@@ -18,6 +18,7 @@ The Vex bot is the most basic robot you can build with the Vex robotics kit. The
   * *[RobotRecipesBasicVEXBot#Attach_the_Encoders Attach the Encoders]*
   * *[RobotRecipesBasicVEXBot#Wheels_and_Gears Wheels and Gears]*
   * *[RobotRecipesBasicVEXBot#Attach_the_Caster Attach the Caster]*
+  * *[RobotRecipesBasicVEXBot#Attach_the_Battery Attach the Battery]*
 
 ----
 
@@ -223,6 +224,33 @@ The Vex bot is the most basic robot you can build with the Vex robotics kit. The
   # Slide the omni wheel on to the bar, followed by a 1/4-inch spacer.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image13_post_wheel_spacer.jpg]
   # Slide the assembly through the bumper and into the pillow block.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image14_wheel_pillowblock.jpg]
   # Place a collar on the other side of the bar. Tighten it using the 5/64-inch Allen wrench.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image15_secure_wheel.jpg]
+
+----
+
+== Attach the Battery ==
+
+=== Required Tools ===
+
+|| Image || Tool ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/tools/hex_key_3_32-300.jpg] || 3/32" Allen Wrench ||
+
+=== Required Parts ===
+
+|| Image || Part ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/battery_strap-300.jpg] || Battery Strap ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/battery-300.jpg] || 7.2v Battery ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-832-0375_300.png] || 8-32 3/8-inch Bolt ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/nut-832-keps_300.png] || 8-32 Keps Nuts ||
+
+=== Steps ===
+
+  # On the underside of the plate, align a battery strap one hole away from the side, with the strap pointing to the back of the robot.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image6_strap1.jpg]
+  # Use 8-32 1/8-inch bolts and keps nuts to secure the strap.
+  # Repeat this for the second strap.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image7_strap2.jpg]
+  # Place the battery on the underside of the plate.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image8_fasten_battery.jpg]
+  # Loop the straps around the battery, and insert the ends through the slots near the base.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image9_loop_straps.jpg]
+  # Tighten the straps to secure the battery firmly.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image10_tighten_straps.jpg]
+  # Flip the robot. It is now complete, and ready for its processor.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image11_ready.jpg]
 
 ----
 [RobotRecipes previous] | next
