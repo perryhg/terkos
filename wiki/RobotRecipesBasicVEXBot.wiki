@@ -16,6 +16,7 @@ The Vex bot is the most basic robot you can build with the Vex robotics kit. The
   * *[RobotRecipesBasicVEXBot#Build_the_Frame Build the Frame]*
   * *[RobotRecipesBasicVEXBot#Attach_the_Motors Attach the Motors]*
   * *[RobotRecipesBasicVEXBot#Attach_the_Encoders Attach the Encoders]*
+  * *[RobotRecipesBasicVEXBot#Wheels_and_Gears Wheels and Gears]*
 
 ----
 
@@ -155,6 +156,41 @@ The Vex bot is the most basic robot you can build with the Vex robotics kit. The
   # Secure the encoder to the bolts using keps nuts. Use the 5/64-inch Allen wrench to tighten the bolts.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image17_secure_encoder.jpg]
   # Repeat this procedure to attach the second encoder to the other side of the frame.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image18_repeat.jpg]
 
+----
+
+== Wheels and Gears ==
+
+=== Required Tools ===
+
+|| Image || Tool ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/tools/564allen-300.jpg] || 5/64" Allen Wrench ||
+
+=== Required Parts ===
+
+|| Image || Part ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/4in_wheel-300.jpg] || 4-inch Wheel ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-84-tooth-gear_300.png] || 84-tooth Gear ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-36-tooth-gear_300.png] || 36-tooth Gear ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/12tooth_gear-300.jpg] || 12-tooth Gear ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-3000_300.png] || 3-inch Shaft ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/spacer-0500-0500_300.png] || 1/2-inch Spacer ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/spacer-0500-0125_300.png] || 1/8-inch Spacer ||
+
+=== Steps ===
+
+  # Place a collar at the end of a 3-inch square bar. Tighten it using the Allen wrench.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image10_collar_bar.jpg]
+  # Slide a 12-tooth gear on to the bar.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image11_12-t_gear_post.jpg]
+  # Slide the bar through the c-channel and into the middle of the Delrin bearing.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image12_post_c-channel.jpg]
+  # Slide a 1/2-inch spacer and a 1/8-inch spacer on the other side of the bar.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image13_spacer_post.jpg]
+  # Slide a 36-tooth gear on to the bar. Turn it so that the teeth align properly with the gear on the encoder.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image14_gear_post.jpg]
+  # Place a collar at the end of the post. Use the Allen wrench to tighten it.
+  # Slide a 1/8-inch spacer on the bar of the motor.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image15_spacer_front.jpg]
+  # Slide an 84-tooth gear on to the bar. Make sure that the small post on the gear is facing outward.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image16_gear_front.jpg]
+  # Turn the gear to align it with the 12-tooth gear on the encoder.
+  # Slide another 1/8-inch spacer on to the bar.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image17_spacer_gear.jpg]
+  # Slide a 4-inch wheel on to the bar, such that the arrows on the wheel point to the back of the frame.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image18_wheel.jpg]
+  # Place a collar at the end of the bar. Push it against the wheel and tighten it using the Allen wrench.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image19_wheel_collar.jpg]
+  # Repeat the procedure to attach a wheel to the other side of the robot.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image20_repeat.jpg]
 
 ----
 [RobotRecipes previous] | next
