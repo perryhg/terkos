@@ -2,7 +2,60 @@
 #sidebar TableOfContents
 = Basic VEX Bot =
 
-Coming soon!
+
+1 Hour ~$100 Beginner
+
+[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image11_ready.jpg]
+
+The Vex bot is the most basic robot you can build with the Vex robotics kit. The Omni wheel at the back lets it make sharp turns, while still enabling it to move forwards and backwards.
+
+----
+
+===Table of Contents===
+  * *[RobotRecipesBasicVEXBot#Required_Tools Required Tools]*
+  * *[RobotRecipesBasicVEXBot#Required_Parts Required Parts]*
+  * *[RobotRecipesBasicVEXBot#Build_the_Frame Build the Frame]*
+
+----
+
+=== Required Tools ===
+
+|| Image || Tool || Source || Part Number || Price ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/tools/hex_key_3_32-100.jpg] || 3/32" Allen Wrench || [http://www.mcmaster.com/ McMaster] || 7391A51 || $1.04 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/tools/564allen-100.jpg] || 5/64" Allen Wrench || [http://www.mcmaster.com/ McMaster] || 7122A15 || $0.14 ||
+
+=== Required Parts ===
+
+|| Image || Part || Quantity || Part Number ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/c-channel_25x2-100.jpg] || C-Channel, 1x2x1x25 || {qty} || VL-CHAN-121-25 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/bumper_15-100.jpg] || Bumper 25x25x2 || {qty} || CHASSIS-25x25x2 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/plate_5x15-100.jpg] || Plate, 5x15 || {qty} || VL-CHAN-121-25 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/4in_wheel-100.jpg] || 4-inch Wheel || {qty} || 276-2164 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/omni_wheel-100.jpg] || Large Omni Wheel || {qty} || 276-2185 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/optical-shaft-encoder_100.png] || Encoder || {qty} || 276-2156 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-motor_100.png] || Motor Kit || {qty} || 276-2163 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/clutch-100.jpg] || Clutch || {qty} || 276-2163 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/clutch_post-100.jpg] || Clutch Post || {qty} || 276-2163 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-84-tooth-gear_100.png] || 84-tooth Gear || {qty} || 276-2169 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-36-tooth-gear_100.png] || 36-tooth Gear || {qty} || 276-2169 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/12tooth_gear-100.jpg] || 12-tooth Gear || {qty} || 276-2169 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/battery_strap-100.jpg] || Battery Strap || {qty} || 276-2219 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/battery-100.jpg] || 7.2v Battery || {qty} || 276-2183 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/bearing-flat_100.png] || Delrin Bearing || {qty} || BEARING-FLAT-10PK ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/pillow_block-100.jpg] || Pillow Block || {qty} || BEARING-BLOCK-LOCK-BAR ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-3000_100.png] || 3-inch Shaft || {qty} || SQR-BAR-4PK ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-2000_100.png] || 2-inch Shaft || {qty} || SQR-BAR-4PK ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/spacer-0500-0500_100.png] || 1/2-inch Spacer || {qty} || SPACER-4X-PACK-10 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/spacer-0500-0250_100.png] || 1/4-inch Spacer || {qty} || SPACER-4X-PACK-10 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/spacer-0500-0125_100.png] || 1/8-inch Spacer || {qty} || SPACER-4X-PACK-10 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-collar_100.png] || Collar || {qty} || COLLAR-PK16 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-632-0500_100.png] || 6-32 1/2-inch Bolt || {qty} || SCREW-632-12-10PK ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-832-0500_100.png] || 8-32 1/2-inch Bolt || {qty} || SCREW-832-12-28PK ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-832-0375_100.png] || 8-32 3/8-inch Bolt || {qty} || SCREW-832-38-28PK ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/nut-832-keps_100.png] || 8-32 Keps Nuts || {qty} || NUT-LW-832-PACK-100 ||
+|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/washer-steel_100.png] || Steel Washers || {qty} || WASHER-STEEL-PACK-200 ||
+
+=== Build the Frame ===
 
 ----
 [RobotRecipes previous] | next
