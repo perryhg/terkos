@@ -45,19 +45,20 @@ The program will guide you through the setup.  Once complete, just reboot your V
 The VEXPro's [WebSite on-board web site] provides the most user-friendly interface for configuring wireless networking.  You can use it to specify the set of wireless networks to which the VEXPro should try to connect, and the order in which the VEXPro should try to connect to them.  However, since it's a web site, accessing it requires that the VEXPro already has wireless connectivity.
 
 When you first access the Wireless Networking tab in the on-board web site, you should see something similar to the following.  The upper section shows you the name of the network to which you're currently connected, the VEXPro's IP address, and its MAC address.  The lower section is where you can configure whether the VEXPro should start wireless networking on boot up, and the set of preferred networks:
-http://www.terk.ri.cmu.edu/vexpro/WebSite15_Wifi8.png
-To add a network to the list, click the plus button in the lower-left corner.  That will bring up a dialog box:
-http://www.terk.ri.cmu.edu/vexpro/WebSite08_Wifi1.png
-http://www.terk.ri.cmu.edu/vexpro/WebSite09_Wifi2.png
-http://www.terk.ri.cmu.edu/vexpro/WebSite10_Wifi3.png
-http://www.terk.ri.cmu.edu/vexpro/WebSite11_Wifi4.png
-http://www.terk.ri.cmu.edu/vexpro/WebSite12_Wifi5.png
-http://www.terk.ri.cmu.edu/vexpro/WebSite13_Wifi6.png
-http://www.terk.ri.cmu.edu/vexpro/WebSite14_Wifi7.png
-
-
+http://www.terk.ri.cmu.edu/vexpro/WebSite15_Wifi8.png<br>
+To add a network to the list, click the plus (+) button in the lower-left corner.  Doing so will bring up a dialog box for adding a new network to your set of preferred networks.   You can enter the network's name (SSID) here, as well and specify the encryption details (if any).  The following three screenshots show what the dialog looks like for open, WEP, and WPA networks:
+http://www.terk.ri.cmu.edu/vexpro/WebSite12_Wifi5.png<br>
+http://www.terk.ri.cmu.edu/vexpro/WebSite13_Wifi6.png<br>
+http://www.terk.ri.cmu.edu/vexpro/WebSite14_Wifi7.png<br>
+Instead of manually entering the network name and encryption type, you can scan for available networks.  If you click the Scan... button in the lower-left corner, the VEXPro will look for all available networks--this usually takes a few seconds:
+http://www.terk.ri.cmu.edu/vexpro/WebSite09_Wifi2.png<br>
+Once scanning is complete, you should see a list of all available networks.  Networks with a lock icon are encrypted networks:
+http://www.terk.ri.cmu.edu/vexpro/WebSite10_Wifi3.png<br>
+Selecting an encrypted network in the list will expand the dialog, allowing you to enter the encryption details:
+http://www.terk.ri.cmu.edu/vexpro/WebSite11_Wifi4.png<br>
+Click the Add button to add the network to your list of preferred networks:
 http://www.terk.ri.cmu.edu/vexpro/WebSite04_WirelessNetworking.png
-
+Once you have added some networks, you can drag them in the list to change the order in which the VEXPro will try to connect to them.  Click the minus (-) button to delete the selected network from the list.  Click the pencil button to edit the selected network.  Make sure you save your changes by clicking the Save button.
 
 ----
 
