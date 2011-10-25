@@ -57,7 +57,7 @@ http://www.terk.ri.cmu.edu/vexpro/WebSite10_Wifi3.png<br>
 Selecting an encrypted network in the list will expand the dialog, allowing you to enter the encryption details:
 http://www.terk.ri.cmu.edu/vexpro/WebSite11_Wifi4.png<br>
 Click the Add button to add the network to your list of preferred networks:
-http://www.terk.ri.cmu.edu/vexpro/WebSite04_WirelessNetworking.png
+http://www.terk.ri.cmu.edu/vexpro/WebSite04_WirelessNetworking.png<br>
 Once you have added some networks, you can drag them in the list to change the order in which the VEXPro will try to connect to them.  Click the minus (-) button to delete the selected network from the list.  Click the pencil button to edit the selected network.  Make sure you save your changes by clicking the Save button.
 
 ----
