@@ -26,8 +26,8 @@ The VEXPro's LCD Menu provides quick and easy access to both diagnostics and con
     * *Set Program to Run On Boot* - choose a program to auto-run upon bootup
     * *Reset User Programs* - reset the user program settings to the factory defaults
   * *System Settings*
-    * *Save Prefs to USB Drive* - saves systems preferences to a file on a USB drive
-    * *Load Prefs from USB Drive* - loads systems preferences from a file on a USB drive
+    * *Save Prefs to USB Drive* - saves system preferences to a file on a USB drive
+    * *Load Prefs from USB Drive* - loads system preferences from a file on a USB drive
     * *Reset System Preferences* - resets system preferences to the factory defaults.  
 
 When resetting system preferences, the root user password is reset to *qwerk* and the web control panel login is set to username *admin* and password *password*.
