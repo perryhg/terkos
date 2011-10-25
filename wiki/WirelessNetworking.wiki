@@ -1,15 +1,64 @@
 #labels SortOrder-0040
 #sidebar TableOfContents
 = Wireless Networking =
-The VEXPro features an 802.11g wireless adapter.  The VEXPro supports open (unencrypted) networks, WEP and WPA encrypted networks, and ad-hoc networking.
+The VEXPro is capable of 802.11g wireless networking (!WiFi) when equipped with the [http://www.vexrobotics.com/276-2245.html VEXnet USB Adapter].  The VEXPro supports open (unencrypted) networks, WEP and WPA encrypted networks, and ad-hoc networking.
 
-You can list and join open networks and start/stop ad-hoc networking via the VEXPro's [LCDMenu LCD Menu].  The on-board [WebSite Web Site] enables you to configure both unencrypted and encrypted wireless networks, set preferred search order, etc.  The [LCDMenu LCD Menu] and [WebSite Web Site] sections discuss wireless networking usage and configuration in more detail.
+By default, the VEXPro will connect to the first open network it finds (trying them in order of signal strength).  However, you can configure the VEXPro to connect to encrypted networks and/or define the set of networks it should try connecting to. There are three different ways to configure the VEXPro's wireless networking settings.  This guide will discuss each in turn and describe situations where one is preferable to the others.
 
-You can also configure wireless networking via the command line.  To do so, first connect to the VEXPro as described in the [SerialConsole USB Serial Console] instructions.  Once you are at the VEXPro command prompt, launch the wireless networking configuration utility like this:
+*Table of Contents*
+  * *[WirelessNetworking#LCD_Menu LCD Menu]*
+  * *[WirelessNetworking#Serial_Console Serial Console]*
+  * *[WirelessNetworking#Web_Site Web Site]*
+
+----
+
+===LCD Menu===
+
+You can list and join open networks and start/stop ad-hoc networking via the VEXPro's [LCDMenu LCD Menu].  The Wireless Networking section of the LCD menu contains the following submenus:
+
+  * *Wireless Networking*
+    * *Wireless Status* - provides ability to turn wireless on/off and--if wireless is currently enabled--display the wireless network name (SSID) and IP address
+    * *List Wireless Networks* - list all visible wireless networks.  Press the OK button to join the currently selected network.
+    * *Ad-hoc Wifi Networking* - turn on/off ad-hoc wireless networking
+    * *Wifi Adapter MAC Address* - display the wifi adapter's MAC address
+    * *Start Wireless Upon Boot* - specify whether wireless networking should be started upon system boot
+    * *Reset Wireless Settings* - reset the wireless networking settings to the factory defaults
+
+Since it's always available and easiest to access, choosing the network via the LCD menu is the preferred choice when connecting to an open network.  Since network preference changes made via the LCD Menu are not persisted beyond reboot, this option is often best when you want to quickly connect to an open network that you are not likely to use in the future, such as at a cafe or a friend's house.  If you want the VEXPro to always connect to the same network(s), then you should configure wireless networking by using the [WirelessNetworking#Serial_Console Serial Console] or on-board [WirelessNetworking#Web_Site Web Site].
+
+----
+
+===Serial Console===
+
+You can configure wireless networking by running a configuration program via the serial console.  The configuration program lets you specify either an open, unencrypted network, or a network encrypted with WEP or WPA.  You'll need to use this serial console configuration program instead of the LCD Menu if there are no open networks available, or if you want your preferences to persist beyond reboot.
+
+To use the serial console configuration program, first connect to the VEXPro as described in the [SerialConsole USB Serial Console] instructions.  Once you are at the VEXPro command prompt, launch the wireless networking configuration utility like this:
 
    `root@qwerk:~# /opt/scripts/setupWirelessNetworking.pl`
 
 The program will guide you through the setup.  Once complete, just reboot your VEXPro and it should connect to the network you specified.
 
 ----
+
+===Web Site===
+
+The VEXPro's [WebSite on-board web site] provides the most user-friendly interface for configuring wireless networking.  You can use it to specify the set of wireless networks to which the VEXPro should try to connect, and the order in which the VEXPro should try to connect to them.  However, since it's a web site, accessing it requires that the VEXPro already has wireless connectivity.
+
+When you first access the Wireless Networking tab in the on-board web site, you should see something similar to the following.  The upper section shows you the name of the network to which you're currently connected, the VEXPro's IP address, and its MAC address.  The lower section is where you can configure whether the VEXPro should start wireless networking on boot up, and the set of preferred networks:
+http://www.terk.ri.cmu.edu/vexpro/WebSite15_Wifi8.png
+To add a network to the list, click the plus button in the lower-left corner.  That will bring up a dialog box:
+http://www.terk.ri.cmu.edu/vexpro/WebSite08_Wifi1.png
+http://www.terk.ri.cmu.edu/vexpro/WebSite09_Wifi2.png
+http://www.terk.ri.cmu.edu/vexpro/WebSite10_Wifi3.png
+http://www.terk.ri.cmu.edu/vexpro/WebSite11_Wifi4.png
+http://www.terk.ri.cmu.edu/vexpro/WebSite12_Wifi5.png
+http://www.terk.ri.cmu.edu/vexpro/WebSite13_Wifi6.png
+http://www.terk.ri.cmu.edu/vexpro/WebSite14_Wifi7.png
+
+
+http://www.terk.ri.cmu.edu/vexpro/WebSite04_WirelessNetworking.png
+
+
+----
+
 [LCDMenu previous] | [WebSite next]
