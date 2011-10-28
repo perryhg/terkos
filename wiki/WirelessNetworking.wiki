@@ -31,6 +31,8 @@ Since it's always available and easiest to access, choosing the network via the 
 
 ===Ad Hoc Networking===
 
+Configuring your computer for ad hoc networking can be a little more involved, but the benefit is that you can connect to your VEXPro wirelessly and with no additional infrastructure such as a networking router.  Once connected, you can configure the VEXPro's wireless setting as described below in the [WirelessNetworking#Web_Site web site] section below
+
 When you turn on ad hoc networking on the VEXPro, it automatically chooses a network name and IP address.  The network name will be of the form {{{VEXProNNNN}}} where {{{NNNN}}} is a constant identifier for that particular VEXPro.  The IP address will be 169.254.226.42.  
 
 Once ad hoc networking is enabled on the VEXPro, you can connect to the network using your computer. You computer's wireless networking control panel should have some way of listing all the networks it sees.  Find your VEXPro's network in the list and connect to it.  If it's not obvious which VEXPro is yours (e.g. there are more than one, such as in a classroom, go to *Wireless Networking --> Wireless Status* in the LCD menu to see what network name your VEXPro is using.  Once your computer is connected to the ad hoc network, you'll most likely need to manually configure your computer's IP address.  Since the VEXPro's IP address is 169.254.226.42, we'll simply use 169.254.226.43 for the computer.  The procedure for setting the IP address differs depending on what operating system your using.  See below for details
