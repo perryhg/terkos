@@ -1,4 +1,5 @@
 #summary You are a VEXPro ARM9 owner and you just opened the box.
+#sidebar TableOfContents
 
 ===Getting Started with the VEXPro ARM9===
 
