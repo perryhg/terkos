@@ -2,7 +2,7 @@
 
 ===Getting Started with the VEXPro ARM9===
 
-This Quickstart Guide serves as a step-by-step guide on getting your VEXPro ARM9 up and running.  And it points you in the the direction to program and debug your VEXPro. 
+This Quickstart Guide serves as a step-by-step guide to get your VEXPro ARM9 up and running.  And it points you in the the direction to program and debug your VEXPro. 
 
   # The VEXPro ARM9 needs a 7.2V battery and a VEXnet USB Adapter Key. Please refer to the [http://www.vexrobotics.com/217-2180.html VEXPro ARM9 Page] for information about recommend and required accessories.  
   # Plug the VEXnet Key into your VEXPro (refer to figure below for location.) http://lh3.googleusercontent.com/-7IfEFWTdxOI/Tpizso9k0ZI/AAAAAAAABls/9oBIXuBhrjI/s653/vexprodiagram.gif
