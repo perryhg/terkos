@@ -1,0 +1,12 @@
+#summary You are a VEXPro Beta User and you just opened the box.
+
+===Getting Started with the VEXPro ARM9===
+
+  # Plug the battery into the battery charger.  This makes sure that the battery is fully charged and fully capable to operate your VEXPro.
+  # Prepare the network.  The beta firmware will automatically connect to the the strongest wireless router signal that does not have encryption.  For the time being this means that you will need to disable WPA and WEP encryption on your wireless router/access point in order for your VEXPro to connect to the network.
+  # Turn on your VEXPro, ie press the OK button – the button in the upper right of the keypad with the “check” icon next to it.  After pressing this button, you should see the LCD illuminate and display  “Booting...” When the VEXPro is finished booting, you should see the first item of the LCDMenu program “System Info”.
+  # Verify that the VEXPro has connected to your network.  Use the arrow keys on the keypad to scroll to “Wireless Networking” and press the OK button.  “Wireless Status” should then be displayed.  Press OK again.  “Wireless is on” should be displayed with “Info” checked.  Press OK again.  Your SSID should then be displayed with the DHCP-assigned IP address of your VEXPro.  If you wish, you can try to ping this address from your desktop computer for further verification that your VEXPro is connected and up and running.
+  # You are now ready to connect to the VEXPro and program it with the TerkIDE.  Refer to the [QuickstartGuide instructions on how to get started with the TerkIDE].
+
+----
+previous | up | [QuickstartGuide next]
