@@ -16,4 +16,4 @@ This Quickstart Guide serves as a step-by-step guide to get your VEXPro ARM9 up 
   # Once you've run through the VEXPro IDE Guide***, you are ready to start developing robotics programs with your VEXPro.  Be sure to check out the libqwerk API documentation as well as the following pages in this Wiki.
 
 ----
-previous | up | [QuickstartGuide next]
+previous | [VEXProTerkOSUserGuide next]
