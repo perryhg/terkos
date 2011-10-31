@@ -2,7 +2,7 @@
 #sidebar TableOfContents
 = Robot Recipes =
 
-This section will contain several example "recipes" for robots you can build with your VEXPro.  We are starting with a recipe for a [RobotRecipesBasicVEXBot Basic VEX Bot], but watch this space for more recipes coming soon!
+This section contains example "recipes" for robots you can build with your VEXPro.  We are starting with a recipe for a [RobotRecipesBasicVEXBot Basic VEX Bot], but watch this space for more recipes coming soon!
 
 ----
 [SerialConsole previous] | [RobotRecipesBasicVEXBot next]
