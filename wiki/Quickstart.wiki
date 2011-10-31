@@ -2,6 +2,7 @@
 
 ===Getting Started with the VEXPro ARM9===
 
+
   # Plug the battery into the battery charger.  This makes sure that the battery is fully charged and fully capable to operate your VEXPro.
   # Prepare the network.  The beta firmware will automatically connect to the the strongest wireless router signal that does not have encryption.  For the time being this means that you will need to disable WPA and WEP encryption on your wireless router/access point in order for your VEXPro to connect to the network.
   # Turn on your VEXPro, ie press the OK button – the button in the upper right of the keypad with the “check” icon next to it.  After pressing this button, you should see the LCD illuminate and display  “Booting...” When the VEXPro is finished booting, you should see the first item of the LCDMenu program “System Info”.
