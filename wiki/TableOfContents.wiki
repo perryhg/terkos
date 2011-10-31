@@ -1,5 +1,6 @@
 #labels SortOrder-1000
 === Table of Contents ===
+  # [Quickstart Get up and running quickly]
   # [VEXProTerkOSUserGuide Welcome and Introduction]
   # [HardwareOverview Hardware Overview]
   # [LCDMenu LCD Menu]
