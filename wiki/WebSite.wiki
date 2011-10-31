@@ -48,4 +48,4 @@ The System Settings tab provides controls to backup/restore the VEXPro's configu
 
 http://www.terk.ri.cmu.edu/vexpro/WebSite07_SystemSettings.png
 ----
-[WirelessNetworking previous] | [SerialConsole next]
+[WirelessNetworking previous] | [libqwerkAPI next]
