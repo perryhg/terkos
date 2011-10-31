@@ -6,6 +6,7 @@
   # [LCDMenu LCD Menu]
   # [WirelessNetworking Wireless Networking]
   # [WebSite Web Site]
+  # [libqwerkAPI Libqwerk: The Programmer's API]
   # [SerialConsole USB Serial Console] 
   # [RobotRecipes Robot Recipes]
     # [RobotRecipesBasicVEXBot Basic VEX Bot]
