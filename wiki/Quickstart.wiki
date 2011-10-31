@@ -1,7 +1,7 @@
 #summary You are a VEXPro ARM9 owner and you just opened the box.
 #sidebar TableOfContents
 
-===Getting Started with the VEXPro ARM9===
+=Getting Started with the VEXPro ARM9=
 
 This Quickstart Guide serves as a step-by-step guide to get your VEXPro ARM9 up and running.  And it points you in the the direction to program and debug your VEXPro. 
 
