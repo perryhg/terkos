@@ -12,6 +12,6 @@ TerkOS is a Google Code project that contains a bunch of open-source code for th
   * Drivers for the motor control, digital interrupts, sensor input, audio, voice synthesis, webcam/camera, etc. 
   * VEXPro ARM9 User Code package, includes sensor/motor interface library (libqwerk) and examples.
  
-So in other words, TerkOS is everything that runs onboard the VEXPro (embedded Linux OS, drivers, servers, programs).  If you are interested in learning more about the Integrated Development Environment (IDE) for the VEXPro ARM9, jump to the [http://code.google.com/p/terk-ide/ TerkIDE project], which is designed to work with TerkOS, but is maintained separately.  The [http://code.google.com/p/terk-ide/wiki/QuickstartGuide TerkIDE Quickstart] is a good place to get started developing programs for the VEXPro ARM9.   
+So in other words, TerkOS is everything that runs onboard the VEXPro (embedded Linux OS, drivers, servers, programs).  If you are interested in learning more about the Integrated Development Environment (IDE) for the VEXPro ARM9, jump to the [http://code.google.com/p/terk-ide/wiki/InstallationInstructions TerkIDE project], which is designed to work with TerkOS, but is maintained separately.  The [http://code.google.com/p/terk-ide/wiki/InstallationInstructions TerkIDE] is best place to get started developing programs for the VEXPro ARM9.   
 ----
 previous | [HardwareOverview next]
