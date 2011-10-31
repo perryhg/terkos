@@ -32,4 +32,4 @@ Now bring up a terminal program (such as hyperterminal or [http://realterm.sourc
 ===Logging in===
 When seeing the Linux login prompt "qwerk login:" type in "root".  The default password is "qwerk".  You should then see the command prompt "root@qwerk:~#", assuming your VEXPro's name is "qwerk".  You can now interact with the VEXPro's Linux OS.  
 ----
-[WebSite previous] | [RobotRecipes next]
+[libqwerkAPI previous] | [RobotRecipes next]
