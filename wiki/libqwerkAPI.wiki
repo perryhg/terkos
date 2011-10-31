@@ -19,4 +19,4 @@ Or you can find the most recent docs [http://content.vexrobotics.com/vexpro_api/
 
 Accessing the documentation on your computer is a good idea because you can be sure that the documentation is consistent with the version of libqwerk you are using.  Set a bookmark in your browser so you can refer to it easily.  
 
-[QuickIDEExample previous] | next 
+[WebSite previous] | [SerialConsole next] 
