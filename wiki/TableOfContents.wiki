@@ -10,3 +10,6 @@
   # [SerialConsole USB Serial Console] 
   # [RobotRecipes Robot Recipes]
     # [RobotRecipesBasicVEXBot Basic VEX Bot]
+
+
+== TerkIDE ==
