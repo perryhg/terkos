@@ -1,5 +1,7 @@
 #labels SortOrder-1000
-=== Table of Contents ===
+== Table of Contents ==
+
+=== TerOS ===
   # [Quickstart Get up and running quickly]
   # [VEXProTerkOSUserGuide Welcome and Introduction]
   # [HardwareOverview Hardware Overview]
@@ -12,4 +14,4 @@
     # [RobotRecipesBasicVEXBot Basic VEX Bot]
 
 
-== TerkIDE ==
+=== TerkIDE ===
