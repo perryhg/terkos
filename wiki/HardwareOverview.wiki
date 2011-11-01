@@ -22,7 +22,7 @@ The VEXPro ARM9 features the following:
   * 12 servo motor ports
   * UART port
   * I2C port
-  * 16 x 2 LCD screen
+  * 16 x 2 character LCD screen
   * Power and battery backup ports
   * Keypad
   * Internal speaker
