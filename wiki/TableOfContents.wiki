@@ -15,6 +15,6 @@
 
 
 === TerkIDE ===
- # [http://code.google.com/p/terk-ide/wiki/InstallationInstructions Introduction and Installation]
+  # [http://code.google.com/p/terk-ide/wiki/InstallationInstructions Introduction and Installation]
   # [http://code.google.com/p/terk-ide/wiki/QuickIDEExample TerkIDE Example Tutorial]
   # [http://code.google.com/p/terk-ide/wiki/libqwerkAPI Libqwerk: The Programmer's API]
