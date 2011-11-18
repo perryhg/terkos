@@ -1,2 +1,0 @@
-#labels SortOrder-1000
-Go to the [http://www.terk.ri.cmu.edu:8090/browse/TERKOS TerkOS Issue Tracker].
