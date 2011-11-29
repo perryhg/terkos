@@ -18,6 +18,7 @@
  * See dcon.doc for more information.
  */
 
+
 #ifdef WIN32
 #include "pcserial.h"
 #else
@@ -39,7 +40,6 @@
 #include "ymodem.h"
 
 #define DEFAULT_DEVICE "/dev/ttyUSB0"
-#define DEFAULT_BAUD 460800
 #define MAXLABELS 3000  /* Maximum number of labels */
 #define MAXGOSUBS 128  /* Max depth */
 #define STRINGL 1024   /* String lengths.  Also, max script line length */
@@ -74,7 +74,6 @@ char cspeed[10];  /* Ascii representation of baudrate */
 #ifdef WIN32
 int speed=0; /* Set to B110, B150, B300,..., B38400 */
 int parity=0, bits=8, stopbits=0;
-int comport=0;
 CPCSerial serial;
 #else
 int speed=B0;
@@ -339,18 +338,8 @@ void putonebyte(char c) {
 /* Gets a single byte from comm. device.  Return -1 if none avail. */
 int getonebyte(void) {
 #ifdef WIN32
-    int res;
     char c;
-
-    res = serial.Receive(&c, 1, 10);
-    if (res<0)
-    {
-        serial.Close();
-        serial.Open(comport, DEFAULT_BAUD);
-        Sleep(100);
-    }
-
-    if (res==1)
+    if (serial.Receive(&c, 1, 10)==1)
     {
       if(comecho&&!ymodem) {
          if(c=='\n') lastcharnl=1;
@@ -1444,12 +1433,56 @@ void doclose(void) {
 
 void opendevice(void) {
 #ifdef WIN32
-  if ((comport=CPCSerial::GetPort())==0 || serial.Open(comport, DEFAULT_BAUD))
+  int port;
+
+  if ((port=CPCSerial::GetPort())==0 || serial.Open(port, 460800))
   {
-    sprintf(msg,"Can't open device %s",device);
+    sprintf(msg,"Can't open comport");
     serror(msg,1);
   }
-
+#if 0
+  int i = 0;
+  while(1)
+  {
+      dormir(senddelay);
+      if (i==100)
+      {
+        i = 0;
+        printf(".");
+      }
+      else
+        i++;
+  }
+#endif
+#if 0
+  char c;
+  int i = 0;
+  c=0;
+  while(1)
+  {
+      c=getonebyte();
+      if (c<0)
+      {
+          if (i==100)
+          {
+              i = 0;
+              printf(".");
+          }
+          else
+            i++;
+      }
+  }
+#endif
+#if 0
+  char c;
+  c=0;
+  while(1)
+  {
+      c=getonebyte();
+      if (c>0)
+          putchar(c);
+  }
+#endif
 #else
   if(strcmp(device,"-")!=0) {
     if ((comfd = open(device, O_RDWR|O_EXCL|O_NDELAY)) <0) {
@@ -1740,12 +1773,6 @@ int main(int argc,char **argv) {
   strcpy(cspeed,"0");
   scriptfile[0]=0;
   b=0; a=0;
-
-#if 1
-  argv[1] = "runtest.dat";
-  argc = 2;
-#endif
-
   for(a=0;(unsigned int)a<strlen(argv[0]);a++) {
     if(argv[0][a]=='/') b=a+1;
   }
