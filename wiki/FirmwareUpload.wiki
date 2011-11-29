@@ -1,4 +1,5 @@
 #summary How to upload firmware into your VEXPro ARM9.
+#sidebar TableOfContents
 
 = Uploading Firmware Into Your VEXPro ARM9 =
 
