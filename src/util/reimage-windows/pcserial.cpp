@@ -11,7 +11,7 @@ CPCSerial::CPCSerial()
     m_hComm = 0;
     m_timeout = -1;
     m_baud = 0;
-    m_port = 0;
+    m_comport = 0;
 }
 
 
@@ -42,9 +42,6 @@ int CPCSerial::Open(unsigned int comport, unsigned int baud)
         DCB dcb;
         WCHAR wbuf[0x100];
 
-        m_baud = baud;
-        m_port = comport;
-
         swprintf(wbuf, L"\\\\.\\com%d", comport);
         m_hComm = CreateFileW(wbuf,
                 GENERIC_READ | GENERIC_WRITE,
@@ -56,7 +53,7 @@ int CPCSerial::Open(unsigned int comport, unsigned int baud)
         if (m_hComm==INVALID_HANDLE_VALUE)
              return -1;
 
-        GetCommState(m_hComm, &dcb);
+
         ZeroMemory(&dcb, sizeof(DCB));
         dcb.DCBlength = sizeof(DCB);
         dcb.BaudRate = baud;
@@ -66,14 +63,14 @@ int CPCSerial::Open(unsigned int comport, unsigned int baud)
         dcb.fBinary = 1;
         dcb.fRtsControl = 1;
         dcb.fTXContinueOnXoff = 1;
-        dcb.XoffLim = 512;
-        dcb.XonLim = 2048;
-        dcb.XoffChar = 19;
-        dcb.XonChar = 17;
+        dcb.XoffLim = 200;
+        dcb.XonLim = 80;
         // Set new state.
         if (!SetCommState(m_hComm, &dcb))
                 return -1;
 
+        m_comport = comport;
+        m_baud = baud;
         // success
         return 0;
         }
@@ -85,6 +82,7 @@ int CPCSerial::Close()
             if (CloseHandle(m_hComm)==0)
                 return -1;
             m_hComm = 0;
+            m_timeout = -1;
         }
         else
             return -1;
@@ -114,13 +112,23 @@ int CPCSerial::Receive(char *data, unsigned int len, unsigned short timeoutMs)
                 timeout.WriteTotalTimeoutConstant = 0;
                 timeout.WriteTotalTimeoutMultiplier = 0;
                 if (!SetCommTimeouts(m_hComm, &timeout))
-                    return -1;
-
+                {
+                        //DWORD error=GetLastError();
+                        //printf("error 1 %x\n", error);
+                        return -1;
+                }
                 m_timeout = timeoutMs;
                 }
 
         if (!ReadFile(m_hComm, data, len, &dwRead, 0))
-                return -1;
+        {
+            //DWORD error=GetLastError();
+            //printf("error 2 %x\n", error);
+            // it was found that getting an error here is not good-- status has changed and we should close/reopen.
+            Close();
+            Open(m_comport, m_baud);
+            return -1;
+        }
 
         return dwRead;
         }
