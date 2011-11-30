@@ -1,7 +1,7 @@
-#summary How to upload firmware into your VEXPro ARM9.
+#summary How to upload firmware into the VEXPro ARM9.
 #sidebar TableOfContents
 
-= Uploading Firmware Into Your VEXPro ARM9 =
+= Uploading Firmware into the VEXPro ARM9 =
 
 The VEXPro ARM9's firmware can be completely restored or upgraded through the serial “Console” port on the side of the VEXPro.  This requires a USB Mini B cable that are commonly available through computer/electronics stores.  The Firmware Reimaging Utility for Windows is available [http://code.google.com/p/terkos/downloads/detail?name=vexpro_arm9_firmware_reimager-1.0.exe&can=2&q here].  Additionally, you will need to install the correct serial driver, which can be downloaded through [http://www.ftdichip.com/Drivers/VCP.htm ftdi.com]. 
 
