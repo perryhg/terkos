@@ -211,6 +211,12 @@ cyg_start(void)
   HAL_READ_UINT32(EP9312_GPIO_PCDR, reg);
   HAL_WRITE_UINT32(EP9312_GPIO_PCDR, reg & ~0x01);
 
+  // enable 5V I/O regulator
+  HAL_READ_UINT32(EP9312_GPIO_PHDDR, reg);
+  HAL_WRITE_UINT32(EP9312_GPIO_PHDDR, reg | 0x0020);
+  HAL_READ_UINT32(EP9312_GPIO_PHDR, reg);
+  HAL_WRITE_UINT32(EP9312_GPIO_PHDR, reg | 0x0020);
+
   // delay for double reset of Qwerk/VEXPro
     for (d=0; d<3000000; d++);
 #endif
