@@ -3,9 +3,9 @@
 = Basic VEX Bot =
 
 
-http://www.terk.ri.cmu.edu/wp-content/themes/terk/img/icon_time.gif 1 Hour http://www.terk.ri.cmu.edu/wp-content/themes/terk/img/icon_cost.gif ~$100 http://www.terk.ri.cmu.edu/wp-content/themes/terk/img/icon_level.gif Beginner
+http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/themes/terk/img/icon_time.gif 1 Hour http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/themes/terk/img/icon_cost.gif ~$100 http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/themes/terk/img/icon_level.gif Beginner
 
-[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image11_ready.jpg]
+[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image11_ready.jpg]
 
 The Vex bot is the most basic robot you can build with the Vex robotics kit. The Omni wheel at the back lets it make sharp turns, while still enabling it to move forwards and backwards.
 
@@ -27,39 +27,39 @@ The Vex bot is the most basic robot you can build with the Vex robotics kit. The
 === Required Tools ===
 
 || Image || Tool || Source || Part Number || Price ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/tools/hex_key_3_32-100.jpg] || 3/32" Allen Wrench || [http://www.mcmaster.com/ McMaster] || 7391A51 || $1.04 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/tools/564allen-100.jpg] || 5/64" Allen Wrench || [http://www.mcmaster.com/ McMaster] || 7122A15 || $0.14 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/tools/hex_key_3_32-100.jpg] || 3/32" Allen Wrench || [http://www.mcmaster.com/ McMaster] || 7391A51 || $1.04 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/tools/564allen-100.jpg] || 5/64" Allen Wrench || [http://www.mcmaster.com/ McMaster] || 7122A15 || $0.14 ||
 
 === Required Parts ===
 
 || Image || Part || Quantity || Part Number ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/c-channel_25x2-100.jpg] || C-Channel, 1x2x1x25 || {qty} || VL-CHAN-121-25 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/bumper_15-100.jpg] || Bumper 25x25x2 || {qty} || CHASSIS-25x25x2 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/plate_5x15-100.jpg] || Plate, 5x15 || {qty} || VL-CHAN-121-25 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/4in_wheel-100.jpg] || 4-inch Wheel || {qty} || 276-2164 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/omni_wheel-100.jpg] || Large Omni Wheel || {qty} || 276-2185 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/optical-shaft-encoder_100.png] || Encoder || {qty} || 276-2156 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-motor_100.png] || Motor Kit || {qty} || 276-2163 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/clutch-100.jpg] || Clutch || {qty} || 276-2163 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/clutch_post-100.jpg] || Clutch Post || {qty} || 276-2163 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-84-tooth-gear_100.png] || 84-tooth Gear || {qty} || 276-2169 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-36-tooth-gear_100.png] || 36-tooth Gear || {qty} || 276-2169 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/12tooth_gear-100.jpg] || 12-tooth Gear || {qty} || 276-2169 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/battery_strap-100.jpg] || Battery Strap || {qty} || 276-2219 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/battery-100.jpg] || 7.2v Battery || {qty} || 276-2183 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/bearing-flat_100.png] || Delrin Bearing || {qty} || BEARING-FLAT-10PK ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/pillow_block-100.jpg] || Pillow Block || {qty} || BEARING-BLOCK-LOCK-BAR ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-3000_100.png] || 3-inch Shaft || {qty} || SQR-BAR-4PK ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-2000_100.png] || 2-inch Shaft || {qty} || SQR-BAR-4PK ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/spacer-0500-0500_100.png] || 1/2-inch Spacer || {qty} || SPACER-4X-PACK-10 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/spacer-0500-0250_100.png] || 1/4-inch Spacer || {qty} || SPACER-4X-PACK-10 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/spacer-0500-0125_100.png] || 1/8-inch Spacer || {qty} || SPACER-4X-PACK-10 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-collar_100.png] || Collar || {qty} || COLLAR-PK16 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-632-0500_100.png] || 6-32 1/2-inch Bolt || {qty} || SCREW-632-12-10PK ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-832-0500_100.png] || 8-32 1/2-inch Bolt || {qty} || SCREW-832-12-28PK ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-832-0375_100.png] || 8-32 3/8-inch Bolt || {qty} || SCREW-832-38-28PK ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/nut-832-keps_100.png] || 8-32 Keps Nuts || {qty} || NUT-LW-832-PACK-100 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/washer-steel_100.png] || Steel Washers || {qty} || WASHER-STEEL-PACK-200 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/c-channel_25x2-100.jpg] || C-Channel, 1x2x1x25 || {qty} || VL-CHAN-121-25 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/bumper_15-100.jpg] || Bumper 25x25x2 || {qty} || CHASSIS-25x25x2 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/plate_5x15-100.jpg] || Plate, 5x15 || {qty} || VL-CHAN-121-25 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/4in_wheel-100.jpg] || 4-inch Wheel || {qty} || 276-2164 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/omni_wheel-100.jpg] || Large Omni Wheel || {qty} || 276-2185 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/optical-shaft-encoder_100.png] || Encoder || {qty} || 276-2156 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-motor_100.png] || Motor Kit || {qty} || 276-2163 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/clutch-100.jpg] || Clutch || {qty} || 276-2163 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/clutch_post-100.jpg] || Clutch Post || {qty} || 276-2163 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-84-tooth-gear_100.png] || 84-tooth Gear || {qty} || 276-2169 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-36-tooth-gear_100.png] || 36-tooth Gear || {qty} || 276-2169 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/12tooth_gear-100.jpg] || 12-tooth Gear || {qty} || 276-2169 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/battery_strap-100.jpg] || Battery Strap || {qty} || 276-2219 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/battery-100.jpg] || 7.2v Battery || {qty} || 276-2183 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/bearing-flat_100.png] || Delrin Bearing || {qty} || BEARING-FLAT-10PK ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/pillow_block-100.jpg] || Pillow Block || {qty} || BEARING-BLOCK-LOCK-BAR ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-3000_100.png] || 3-inch Shaft || {qty} || SQR-BAR-4PK ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-2000_100.png] || 2-inch Shaft || {qty} || SQR-BAR-4PK ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/spacer-0500-0500_100.png] || 1/2-inch Spacer || {qty} || SPACER-4X-PACK-10 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/spacer-0500-0250_100.png] || 1/4-inch Spacer || {qty} || SPACER-4X-PACK-10 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/spacer-0500-0125_100.png] || 1/8-inch Spacer || {qty} || SPACER-4X-PACK-10 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-collar_100.png] || Collar || {qty} || COLLAR-PK16 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-632-0500_100.png] || 6-32 1/2-inch Bolt || {qty} || SCREW-632-12-10PK ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-832-0500_100.png] || 8-32 1/2-inch Bolt || {qty} || SCREW-832-12-28PK ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-832-0375_100.png] || 8-32 3/8-inch Bolt || {qty} || SCREW-832-38-28PK ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/nut-832-keps_100.png] || 8-32 Keps Nuts || {qty} || NUT-LW-832-PACK-100 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/washer-steel_100.png] || Steel Washers || {qty} || WASHER-STEEL-PACK-200 ||
 
 ----
 
@@ -68,26 +68,26 @@ The Vex bot is the most basic robot you can build with the Vex robotics kit. The
 === Required Tools ===
 
 || Image || Tool ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/tools/hex_key_3_32-300.jpg] || 3/32" Allen Wrench ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/tools/hex_key_3_32-300.jpg] || 3/32" Allen Wrench ||
 
 === Required Parts ===
 
 || Image || Part ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/c-channel_25x2-300.jpg] || C-Channel, 1x2x1x25 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/bumper_15-300.jpg] || Bumper 25x25x2 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/plate_5x15-300.jpg] || Plate, 5x15 ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-832-0375_300.png] || 8-32 3/8-inch Bolt ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/nut-832-keps_300.png] || 8-32 Keps Nuts ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/c-channel_25x2-300.jpg] || C-Channel, 1x2x1x25 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/bumper_15-300.jpg] || Bumper 25x25x2 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/plate_5x15-300.jpg] || Plate, 5x15 ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-832-0375_300.png] || 8-32 3/8-inch Bolt ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/nut-832-keps_300.png] || 8-32 Keps Nuts ||
 
 === Steps ===
 
-  # Place a bumper over the c-channel as shown. <br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/c-channel_bumper.jpg]
-  # Use two 8-32 3/8-inch bolts and two keps nuts to attach the bumper to the c-channel. Use the 3/32-inch Allen wrench to tighten the bolts.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/c-channel_bumper_join.jpg]
+  # Place a bumper over the c-channel as shown. <br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/c-channel_bumper.jpg]
+  # Use two 8-32 3/8-inch bolts and two keps nuts to attach the bumper to the c-channel. Use the 3/32-inch Allen wrench to tighten the bolts.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/c-channel_bumper_join.jpg]
   # Repeat steps 1 and 2 to create another L-shaped structure.
-  # Align the two L-structures to form a rectangle. Remember to keep the bumpers on top of the c-channels<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/full_frame.jpg]
-  # Use the 8-32 3/8-inch bolts and keps nuts to secure the two L-structures together.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/full_frame_2.jpg]
-  # Rest the plate on the two c-channels. There should be seven holes to the right of the plate, and nine to the left.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/plate_frame.jpg]
-  # Use four 8-32 3/8-inch bolts and four keps nuts to secure the plate to the frame.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/frame_final.jpg]
+  # Align the two L-structures to form a rectangle. Remember to keep the bumpers on top of the c-channels<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/full_frame.jpg]
+  # Use the 8-32 3/8-inch bolts and keps nuts to secure the two L-structures together.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/full_frame_2.jpg]
+  # Rest the plate on the two c-channels. There should be seven holes to the right of the plate, and nine to the left.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/plate_frame.jpg]
+  # Use four 8-32 3/8-inch bolts and four keps nuts to secure the plate to the frame.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/frame_final.jpg]
 
 ----
 
@@ -96,31 +96,31 @@ The Vex bot is the most basic robot you can build with the Vex robotics kit. The
 === Required Tools ===
 
 || Image || Tool ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/tools/564allen-300.jpg] || 5/64" Allen Wrench ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/tools/564allen-300.jpg] || 5/64" Allen Wrench ||
 
 === Required Parts ===
 
 || Image || Part ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-motor_300.png] || Motor Kit ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/clutch-300.jpg] || Clutch ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/clutch_post-300.jpg] || Clutch Post ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/bearing-flat_300.png] || Delrin Bearing ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-collar_300.png] || Collar ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-632-0500_300.png] || 6-32 1/2-inch Bolt ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-motor_300.png] || Motor Kit ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/clutch-300.jpg] || Clutch ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/clutch_post-300.jpg] || Clutch Post ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/bearing-flat_300.png] || Delrin Bearing ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-collar_300.png] || Collar ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-632-0500_300.png] || 6-32 1/2-inch Bolt ||
 
 === Steps ===
 
-  # Flip the frame. Keep the side with more room between the frame and bumper to the left. This is the front of the robot.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image8_flip_frame.jpg]
-  # Insert one end of the clutch post into one side of the clutch.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image9_clutch_and_post.jpg]
-  # Insert the other end of the clutch post into one of the motors.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image10_clutch_motor.jpg]
-  # Insert two 6-32 1/2-inch bolts into a Delrin bearing.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image11_bolts_bearing.jpg]
-  # Align the Delrin bearing to the c-channel. The first bolt should go through the third hole on the channel.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image12_bearing_c-channel.jpg]
-  # Use the bolts to attach a motor to the c-channel. Insert the 5/64-inch Allen wrench through the other side of the c-channel and tighten the bolt.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image13_motor_c-channel.jpg]
-  # Insert a 3-inch square post through the hole across the clutch. Don’t insert it all the way through yet.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image14_post_motor.jpg]
+  # Flip the frame. Keep the side with more room between the frame and bumper to the left. This is the front of the robot.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image8_flip_frame.jpg]
+  # Insert one end of the clutch post into one side of the clutch.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image9_clutch_and_post.jpg]
+  # Insert the other end of the clutch post into one of the motors.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image10_clutch_motor.jpg]
+  # Insert two 6-32 1/2-inch bolts into a Delrin bearing.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image11_bolts_bearing.jpg]
+  # Align the Delrin bearing to the c-channel. The first bolt should go through the third hole on the channel.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image12_bearing_c-channel.jpg]
+  # Use the bolts to attach a motor to the c-channel. Insert the 5/64-inch Allen wrench through the other side of the c-channel and tighten the bolt.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image13_motor_c-channel.jpg]
+  # Insert a 3-inch square post through the hole across the clutch. Don’t insert it all the way through yet.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image14_post_motor.jpg]
   # Place a collar on the post. Don’t tighten it yet.
-  # Push the post all the way into the clutch.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image15_tighten_collar.jpg]
+  # Push the post all the way into the clutch.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image15_tighten_collar.jpg]
   # Press the collar firmly against the outer edge of the c-channel.
-  # Use the 5/34-inch Allen wrench to tighten it.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image16_repeat.jpg]
+  # Use the 5/34-inch Allen wrench to tighten it.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image16_repeat.jpg]
   # Repeat the process to attach the second motor to the other side of the frame.
 
 ----
@@ -130,33 +130,33 @@ The Vex bot is the most basic robot you can build with the Vex robotics kit. The
 === Required Tools ===
 
 || Image || Tool ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/tools/564allen-300.jpg] || 5/64" Allen Wrench ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/tools/hex_key_3_32-300.jpg] || 3/32" Allen Wrench ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/tools/564allen-300.jpg] || 5/64" Allen Wrench ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/tools/hex_key_3_32-300.jpg] || 3/32" Allen Wrench ||
 
 === Required Parts ===
 
 || Image || Part ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/optical-shaft-encoder_300.png] || Encoder ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-36-tooth-gear_300.png] || 36-tooth Gear ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/bearing-flat_300.png] || Delrin Bearing ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-2000_300.png] || 2-inch Shaft ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-collar_300.png] || Collar ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-832-0500_300.png] || 8-32 1/2-inch Bolt ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/nut-832-keps_300.png] || 8-32 Keps Nuts ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/washer-steel_300.png] || Steel Washers ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/optical-shaft-encoder_300.png] || Encoder ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-36-tooth-gear_300.png] || 36-tooth Gear ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/bearing-flat_300.png] || Delrin Bearing ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-2000_300.png] || 2-inch Shaft ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-collar_300.png] || Collar ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-832-0500_300.png] || 8-32 1/2-inch Bolt ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/nut-832-keps_300.png] || 8-32 Keps Nuts ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/washer-steel_300.png] || Steel Washers ||
 
 === Steps ===
   
   # Attach a collar to the end of a 2-inch square bar. Use the 5/64-inch Allen wrench to tighten it.<br>
   # Slide a 36-tooth gear on the bar. Slide on a washer after it.<br>
-  # Insert the square bar through the front of the encoder.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image13_shaft_encoder.jpg]
-  # On the other side, place a steel washer, followed by a collar.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image14_collar_encoder.jpg]
+  # Insert the square bar through the front of the encoder.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image13_shaft_encoder.jpg]
+  # On the other side, place a steel washer, followed by a collar.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image14_collar_encoder.jpg]
   # Secure and tighten the collar such that none of the components are loose.
-  # Insert two 8-32 1/2-inch bolts through the Delrin bearing.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image15_bolt_bearing.jpg]
-  # Flip the frame.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image16_bearing_c-channel.jpg]
+  # Insert two 8-32 1/2-inch bolts through the Delrin bearing.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image15_bolt_bearing.jpg]
+  # Flip the frame.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image16_bearing_c-channel.jpg]
   # Align the bearing inside the c-channel, two holes away from the motor.
-  # Secure the encoder to the bolts using keps nuts. Use the 5/64-inch Allen wrench to tighten the bolts.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image17_secure_encoder.jpg]
-  # Repeat this procedure to attach the second encoder to the other side of the frame.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image18_repeat.jpg]
+  # Secure the encoder to the bolts using keps nuts. Use the 5/64-inch Allen wrench to tighten the bolts.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image17_secure_encoder.jpg]
+  # Repeat this procedure to attach the second encoder to the other side of the frame.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image18_repeat.jpg]
 
 ----
 
@@ -165,34 +165,34 @@ The Vex bot is the most basic robot you can build with the Vex robotics kit. The
 === Required Tools ===
 
 || Image || Tool ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/tools/564allen-300.jpg] || 5/64" Allen Wrench ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/tools/564allen-300.jpg] || 5/64" Allen Wrench ||
 
 === Required Parts ===
 
 || Image || Part ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/4in_wheel-300.jpg] || 4-inch Wheel ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-84-tooth-gear_300.png] || 84-tooth Gear ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-36-tooth-gear_300.png] || 36-tooth Gear ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/12tooth_gear-300.jpg] || 12-tooth Gear ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-3000_300.png] || 3-inch Shaft ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/spacer-0500-0500_300.png] || 1/2-inch Spacer ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/spacer-0500-0125_300.png] || 1/8-inch Spacer ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/4in_wheel-300.jpg] || 4-inch Wheel ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-84-tooth-gear_300.png] || 84-tooth Gear ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/vex-36-tooth-gear_300.png] || 36-tooth Gear ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/12tooth_gear-300.jpg] || 12-tooth Gear ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-3000_300.png] || 3-inch Shaft ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/spacer-0500-0500_300.png] || 1/2-inch Spacer ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/spacer-0500-0125_300.png] || 1/8-inch Spacer ||
 
 === Steps ===
 
-  # Place a collar at the end of a 3-inch square bar. Tighten it using the Allen wrench.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image10_collar_bar.jpg]
-  # Slide a 12-tooth gear on to the bar.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image11_12-t_gear_post.jpg]
-  # Slide the bar through the c-channel and into the middle of the Delrin bearing.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image12_post_c-channel.jpg]
-  # Slide a 1/2-inch spacer and a 1/8-inch spacer on the other side of the bar.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image13_spacer_post.jpg]
-  # Slide a 36-tooth gear on to the bar. Turn it so that the teeth align properly with the gear on the encoder.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image14_gear_post.jpg]
+  # Place a collar at the end of a 3-inch square bar. Tighten it using the Allen wrench.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image10_collar_bar.jpg]
+  # Slide a 12-tooth gear on to the bar.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image11_12-t_gear_post.jpg]
+  # Slide the bar through the c-channel and into the middle of the Delrin bearing.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image12_post_c-channel.jpg]
+  # Slide a 1/2-inch spacer and a 1/8-inch spacer on the other side of the bar.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image13_spacer_post.jpg]
+  # Slide a 36-tooth gear on to the bar. Turn it so that the teeth align properly with the gear on the encoder.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image14_gear_post.jpg]
   # Place a collar at the end of the post. Use the Allen wrench to tighten it.
-  # Slide a 1/8-inch spacer on the bar of the motor.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image15_spacer_front.jpg]
-  # Slide an 84-tooth gear on to the bar. Make sure that the small post on the gear is facing outward.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image16_gear_front.jpg]
+  # Slide a 1/8-inch spacer on the bar of the motor.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image15_spacer_front.jpg]
+  # Slide an 84-tooth gear on to the bar. Make sure that the small post on the gear is facing outward.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image16_gear_front.jpg]
   # Turn the gear to align it with the 12-tooth gear on the encoder.
-  # Slide another 1/8-inch spacer on to the bar.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image17_spacer_gear.jpg]
-  # Slide a 4-inch wheel on to the bar, such that the arrows on the wheel point to the back of the frame.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image18_wheel.jpg]
-  # Place a collar at the end of the bar. Push it against the wheel and tighten it using the Allen wrench.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image19_wheel_collar.jpg]
-  # Repeat the procedure to attach a wheel to the other side of the robot.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image20_repeat.jpg]
+  # Slide another 1/8-inch spacer on to the bar.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image17_spacer_gear.jpg]
+  # Slide a 4-inch wheel on to the bar, such that the arrows on the wheel point to the back of the frame.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image18_wheel.jpg]
+  # Place a collar at the end of the bar. Push it against the wheel and tighten it using the Allen wrench.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image19_wheel_collar.jpg]
+  # Repeat the procedure to attach a wheel to the other side of the robot.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image20_repeat.jpg]
 
 ----
 
@@ -201,29 +201,29 @@ The Vex bot is the most basic robot you can build with the Vex robotics kit. The
 === Required Tools ===
 
 || Image || Tool ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/tools/hex_key_3_32-300.jpg] || 3/32" Allen Wrench ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/tools/564allen-300.jpg] || 5/64" Allen Wrench ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/tools/hex_key_3_32-300.jpg] || 3/32" Allen Wrench ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/tools/564allen-300.jpg] || 5/64" Allen Wrench ||
 
 === Required Parts ===
 
 || Image || Part ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/omni_wheel-300.jpg] || Large Omni Wheel ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/pillow_block-300.jpg] || Pillow Block ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-2000_300.png] || 2-inch Shaft ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/spacer-0500-0250_300.png] || 1/4-inch Spacer ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-collar_300.png] || Collar ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-832-0375_300.png] || 8-32 3/8-inch Bolt ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/nut-832-keps_300.png] || 8-32 Keps Nuts ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/omni_wheel-300.jpg] || Large Omni Wheel ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/pillow_block-300.jpg] || Pillow Block ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-2000_300.png] || 2-inch Shaft ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/spacer-0500-0250_300.png] || 1/4-inch Spacer ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/shaft-collar_300.png] || Collar ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-832-0375_300.png] || 8-32 3/8-inch Bolt ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/nut-832-keps_300.png] || 8-32 Keps Nuts ||
 
 === Steps ===
 
-  # Flip the frame.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image10_pillowblock_bumper.jpg]
+  # Flip the frame.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image10_pillowblock_bumper.jpg]
   # Align the pillow block to the center of the back bumper.
-  # Use two 8-32 3/8-inch bolts and keps nuts to secure the pillow block to the bumper. Use the 5/64-inch Allen wrench to tighten the bolts.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image11_secure_pillowblock.jpg]
-  # Attach a collar to the end of the 2-inch square bar. Tighten it using the 5/64-inch Allen wrench.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image11_post_collar.jpg]
-  # Slide the omni wheel on to the bar, followed by a 1/4-inch spacer.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image13_post_wheel_spacer.jpg]
-  # Slide the assembly through the bumper and into the pillow block.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image14_wheel_pillowblock.jpg]
-  # Place a collar on the other side of the bar. Tighten it using the 5/64-inch Allen wrench.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image15_secure_wheel.jpg]
+  # Use two 8-32 3/8-inch bolts and keps nuts to secure the pillow block to the bumper. Use the 5/64-inch Allen wrench to tighten the bolts.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image11_secure_pillowblock.jpg]
+  # Attach a collar to the end of the 2-inch square bar. Tighten it using the 5/64-inch Allen wrench.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image11_post_collar.jpg]
+  # Slide the omni wheel on to the bar, followed by a 1/4-inch spacer.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image13_post_wheel_spacer.jpg]
+  # Slide the assembly through the bumper and into the pillow block.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image14_wheel_pillowblock.jpg]
+  # Place a collar on the other side of the bar. Tighten it using the 5/64-inch Allen wrench.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image15_secure_wheel.jpg]
 
 ----
 
@@ -232,25 +232,25 @@ The Vex bot is the most basic robot you can build with the Vex robotics kit. The
 === Required Tools ===
 
 || Image || Tool ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/tools/hex_key_3_32-300.jpg] || 3/32" Allen Wrench ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/tools/hex_key_3_32-300.jpg] || 3/32" Allen Wrench ||
 
 === Required Parts ===
 
 || Image || Part ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/battery_strap-300.jpg] || Battery Strap ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/battery-300.jpg] || 7.2v Battery ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-832-0375_300.png] || 8-32 3/8-inch Bolt ||
-|| [http://www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/nut-832-keps_300.png] || 8-32 Keps Nuts ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/battery_strap-300.jpg] || Battery Strap ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/battery-300.jpg] || 7.2v Battery ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/screw-832-0375_300.png] || 8-32 3/8-inch Bolt ||
+|| [http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/vex_parts/nut-832-keps_300.png] || 8-32 Keps Nuts ||
 
 === Steps ===
 
-  # On the underside of the plate, align a battery strap one hole away from the side, with the strap pointing to the back of the robot.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image6_strap1.jpg]
+  # On the underside of the plate, align a battery strap one hole away from the side, with the strap pointing to the back of the robot.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image6_strap1.jpg]
   # Use 8-32 1/8-inch bolts and keps nuts to secure the strap.
-  # Repeat this for the second strap.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image7_strap2.jpg]
-  # Place the battery on the underside of the plate.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image8_fasten_battery.jpg]
-  # Loop the straps around the battery, and insert the ends through the slots near the base.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image9_loop_straps.jpg]
-  # Tighten the straps to secure the battery firmly.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image10_tighten_straps.jpg]
-  # Flip the robot. It is now complete, and ready for its processor.<br>[http://www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image11_ready.jpg]
+  # Repeat this for the second strap.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image7_strap2.jpg]
+  # Place the battery on the underside of the plate.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image8_fasten_battery.jpg]
+  # Loop the straps around the battery, and insert the ends through the slots near the base.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image9_loop_straps.jpg]
+  # Tighten the straps to secure the battery firmly.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image10_tighten_straps.jpg]
+  # Flip the robot. It is now complete, and ready for its processor.<br>[http://cmucreatelab.org/www.terk.ri.cmu.edu/wp-content/uploads/basic-vex-bot/image11_ready.jpg]
 
 ----
 [RobotRecipes previous] | next
