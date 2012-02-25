@@ -63,6 +63,14 @@ void CQEServo::Disable(unsigned int index)
   m_up[index] = 0;
 }
 
+void CQEServo::DynamicBrake(unsigned int index)
+{
+  if (index>=m_num)
+    return;
+
+  m_up[index] = QES_DYNAMIC_BRAKE;
+}
+
 unsigned short CQEServo::GetCommand(unsigned int index)
 {
   if (index>=m_num)
@@ -88,7 +96,7 @@ void CQEServo::SetCommand(unsigned int index, unsigned short pos)
 
 void CQEServo::SigHandler(int signum)
 {
-  int i;
+  unsigned int i;
   CQEServo *pservo = CQEServo::GetPtr();
 
   // turn off all servos
