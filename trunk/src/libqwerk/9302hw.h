@@ -255,6 +255,11 @@ public:
    */
   CMemMap m_uart2;
 
+  /**
+   * memory mapped region for TIMER1-TIMER4 (timers) on EP9302
+   */
+  CMemMap m_timers;
+
 private:
   C9302Hardware();
   ~C9302Hardware();
