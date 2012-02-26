@@ -24,7 +24,8 @@ C9302Hardware::C9302Hardware() :
   m_fpga(0x20000000, 0x1000),
   m_adc(0x80900000, 0x28),
   m_uart1(0x808c0000, 0x21c),
-  m_uart2(0x808d0000, 0x21c)
+  m_uart2(0x808d0000, 0x21c),
+  m_timers(0x80810000,0x100)
 {
   // set up A/D converter
   *m_syscon.Uint(0xc0) = 0xaa; // unlock
