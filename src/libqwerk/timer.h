@@ -13,20 +13,26 @@
 // end license header
 //
 
+
+/**
+ * @file timer.h
+ * Interface for the CTimer class, which provides
+ * microsecond-resolution functions for timing and measuring single or
+ * repeating events, and implementing timeouts.
+ */
+
 #ifndef _TIMER_H
 #define _TIMER_H
 
-//#include "9302hw.h"
+/// Clock rate for Timer4, which is used by the CTimer class
+#define T4HZ			(983040UL)
 
 /**
- * CTimer.h Timer Services.
- *
- * The CTimer class provides microsecond-resolution busy wait functions
- * that can be used to provide reasonably precise timing for single
- * and repeating events, as well as timeouts.
+ * CTimer provides microsecond-resolution functions for timing and
+ * measuring single or repeating events, and implementing timeouts. 
  *
  * All time intervals must be constrained to one hour or less.  Time
- * intervals greater than an hour will be inaccurate and unpredictable.
+ * intervals greater than an hour will reported incorrectly.
  *
  * All functions are guaranteed to delay no less than the
  * specified interval, but may delay longer due to preimption.
@@ -59,7 +65,7 @@ public:
     static tick_t ticks(void);
 
     /**
-     * This function simply spins until the specified number
+     * This function spins until the specified number
      * of microseconds pass.
      *
      * This function is guaranteed to delay no less than the
@@ -75,7 +81,7 @@ public:
     static void usleep(unsigned long usec);
 
     /**
-     * This function simply spins until the specified number
+     * This function spins until the specified number
      * of milliseconds pass.
      *
      * This function is guaranteed to delay no less than the
@@ -91,7 +97,7 @@ public:
     static void msleep(unsigned long msec);
 
     /**
-     * This function simply spins until the specified number
+     * This function spins until the specified number
      * of seconds pass.
      *
      * This function is guaranteed to delay no less than the
@@ -108,7 +114,7 @@ public:
 
 
     /**
-     * This function simply spins until the specified number
+     * This function spins until the specified number
      * of microseconds pass.
      *
      * The 'start' parameter allows you to specify the
@@ -133,7 +139,7 @@ public:
     static void usleep(unsigned long usec, tick_t start);
 
     /**
-     * This function simply spins until the specified number
+     * This function spins until the specified number
      * of millioseconds pass.
      *
      * The 'start' parameter allows you to specify the
@@ -158,7 +164,7 @@ public:
     static void msleep(unsigned long msec, tick_t start);
 
     /**
-     * This function simply spins until the specified number
+     * This function spins until the specified number
      * of seconds pass.
      *
      * The 'start' parameter allows you to specify the
@@ -183,7 +189,7 @@ public:
     static void sleep(unsigned long sec, tick_t start);
 
     /**
-     * This function simply spins until the specified number
+     * This function simply until the specified number
      * of microseconds pass, and returns the ending time
      * for use as the starting time in subsequent calls
      * to umetro().  Use this for running repeating events
@@ -216,7 +222,7 @@ public:
     static tick_t umetro(unsigned long usec, tick_t last);
 
     /**
-     * This function simply spins until the specified number
+     * This function spins until the specified number
      * of milliseconds pass, and returns the ending time
      * for use as the starting time in subsequent calls
      * to umetro().  Use this for running repeating events
@@ -249,7 +255,7 @@ public:
     static tick_t mmetro(unsigned long msec, tick_t last);
 
     /**
-     * This function simply spins until the specified number
+     * This function spins until the specified number
      * of seconds pass, and returns the ending time
      * for use as the starting time in subsequent calls
      * to umetro().  Use this for running repeating events
@@ -283,9 +289,8 @@ public:
 
     /**
      * This function implements a simple timeout solution.
-     * Rather than spinning, this function simply checks
-     * the elapsed time and returns true if the timeout
-     * has expired, or false if not.
+     * This function checks the elapsed number of microseconds
+     * and returns true if the timeout has expired, or false if not.
      *
      * @param [in]    usec     Duration of the timeout in microseconds
      * @param [in]    start    The tick value at the start of the timout
@@ -303,9 +308,8 @@ public:
 
     /**
      * This function implements a simple timeout solution.
-     * Rather than spinning, this function simply checks
-     * the elapsed time and returns true if the timeout
-     * has expired, or false if not.
+     * This function checks the elapsed number of milliseconds
+     * and returns true if the timeout has expired, or false if not.
      *
      * @param [in]    msec     Duration of the timeout in milliseconds
      * @param [in]    start    The tick value at the start of the timout
@@ -323,9 +327,8 @@ public:
 
     /**
      * This function implements a simple timeout solution.
-     * Rather than spinning, this function simply checks
-     * the elapsed time and returns true if the timeout
-     * has expired, or false if not.
+     * This function checks the elapsed number of seconds
+     * and returns true if the timeout has expired, or false if not.
      *
      * @param [in]    sec      Duration of the timeout in seconds
      * @param [in]    start    The tick value at the start of the timout
@@ -342,9 +345,9 @@ public:
     static bool timeout(unsigned long sec, tick_t start);
 
     /**
-     * This function returns the time that has elapsed
-     * since the tick value specified by 'start'.
-     * This can be used to time events.
+     * This function returns the number of microseconds
+     * that have elapsed since the tick value specified
+     * by 'start'.  This can be used to time events.
      *
      * @param [in]    start    The starting tick value
      * @return Returns the elapsed time in microseconds
@@ -359,9 +362,9 @@ public:
     static unsigned long uelapsed(tick_t start);
 
     /**
-     * This function returns the time that has elapsed
-     * since the tick value specified by 'start'.
-     * This can be used to time events.
+     * This function returns the number of milliseconds
+     * that have elapsed since the tick value specified
+     * by 'start'.  This can be used to time events.
      *
      * @param [in]    start    The starting tick value
      * @return Returns the elapsed time in milliseconds
@@ -376,9 +379,9 @@ public:
     static unsigned long melapsed(tick_t start);
 
     /**
-     * This function returns the time that has elapsed
-     * since the tick value specified by 'start'.
-     * This can be used to time events.
+     * This function returns the number of seconds
+     * that have elapsed since the tick value specified
+     * by 'start'.  This can be used to time events.
      *
      * @param [in]    start    The starting tick value
      * @return Returns the elapsed time in seconds
@@ -393,7 +396,7 @@ public:
     static unsigned long elapsed(tick_t start);
 
     /**
-     * This function returns the time difference
+     * This function returns the difference in microseconds
      * between the 'start' and 'end' tick values.
      * This can be used to time events, and is handy
      * for post-processing collected timestamp data.
@@ -401,7 +404,7 @@ public:
      * Note: This returns a signed value, and will report a
      * negative result if 'end' happened before 'start'.
      * The two events must be within 30min of each other or
-     * the returned value will be inaccurate and unpredictable.
+     * the returned value will be incorrect.
      *
      * @param [in]    start    The starting tick value
      * @param [in]    end      The ending tick value
@@ -419,7 +422,7 @@ public:
     static signed long udelta(tick_t start, tick_t end);
 
     /**
-     * This function returns the time difference
+     * This function returns the difference in milliseconds
      * between the 'start' and 'end' tick values.
      * This can be used to time events, and is handy
      * for post-processing collected timestamp data.
@@ -427,7 +430,7 @@ public:
      * Note: This returns a signed value, and will report a
      * negative result if 'end' happened before 'start'.
      * The two events must be within 30min of each other or
-     * the returned value will be inaccurate and unpredictable.
+     * the returned value will be incorrect.
      *
      * @param [in]    start    The starting tick value
      * @param [in]    end      The ending tick value
@@ -445,7 +448,7 @@ public:
     static signed long mdelta(tick_t start, tick_t end);
 
     /**
-     * This function returns the time difference
+     * This function returns the difference in seconds
      * between the 'start' and 'end' tick values.
      * This can be used to time events, and is handy
      * for post-processing collected timestamp data.
@@ -453,7 +456,7 @@ public:
      * Note: This returns a signed value, and will report a
      * negative result if 'end' happened before 'start'.
      * The two events must be within 30min of each other or
-     * the returned value will be inaccurate and unpredictable.
+     * the returned value will be incorrect.
      *
      * @param [in]    start    The starting tick value
      * @param [in]    end      The ending tick value

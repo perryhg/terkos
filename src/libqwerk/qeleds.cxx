@@ -26,7 +26,7 @@ SINGLETON_REGISTER(CQELEDController);
 
 void *CQELEDController::LEDControllerThread(void *arg)
 {
-  CQELEDController *ledctl = (CQELEDController *)arg;
+  //CQELEDController *ledctl = (CQELEDController *)arg;
 
   return NULL;
 }
