@@ -15,6 +15,7 @@
 
 #include <unistd.h>
 #include "keypad.h"
+#include "timer.h"
 
 const unsigned int CKeypad::KEY_OK = KP_KEY_OK;
 const unsigned int CKeypad::KEY_CANCEL = KP_KEY_CANCEL;
@@ -50,7 +51,7 @@ const unsigned int CKeypad::GetKey(bool wait)
       if (!wait || key)
 	break;
 
-      usleep(10000);
+      CTimer::msleep(10);
     }
 
   if (wait)
@@ -62,8 +63,8 @@ const unsigned int CKeypad::GetKey(bool wait)
 void CKeypad::KeyRelease()
 {
   // wait for debouncing to dissipate
-  usleep(10000);
+  CTimer::msleep(10);
 
   while(GetKey(false))
-    usleep(10000);
+    CTimer::msleep(10);
 }

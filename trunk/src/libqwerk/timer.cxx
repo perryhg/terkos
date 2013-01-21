@@ -13,12 +13,11 @@
 // end license header
 //
 
-/*
- * timer.cxx
- *
- * The CTimer class provides (nearly) microsecond-resolution busy
- * wait functions that can be used to provide reasonably precise
- * timing for single and repeating events, as well as timeouts.
+/**
+ * @file timer.cxx
+ * Implementation of the CTimer class, which provides
+ * microsecond-resolution functions for timing and measuring single or
+ * repeating events, and implementing timeouts.
  *
  * CPU Timer 4 is used for all timing functions.  The actual clock
  * frequency is 983.04KHz, making the time resolution approximately
@@ -36,9 +35,6 @@ volatile unsigned int *t4 = C9302Hardware::GetPtr()->m_timers.Uint(0x60);
 // This is over used below, but we count on unsigned modulo-math for
 // timer wrap to work, so better to over-cast than under-cast.
 #define T(t)			( (tick_t)(t) )
-
-// Constants
-#define T4HZ			(983040UL)
 
 // Basic tick-evaluation functions
 #define	T4DELTA(start,end)		T( T(end) - T(start) )
@@ -177,17 +173,20 @@ bool CTimer::timeout(unsigned long sec, tick_t start)
  */
 unsigned long CTimer::uelapsed(tick_t start)
 {
-	return T4_TO_USEC(T4DELTA(start,*t4));
+	tick_t delta = T4DELTA(start,*t4);
+	return T4_TO_USEC(delta);
 }
 
 unsigned long CTimer::melapsed(tick_t start)
 {
-	return T4_TO_MSEC(T4DELTA(start,*t4));
+	tick_t delta = T4DELTA(start,*t4);
+	return T4_TO_MSEC(delta);
 }
 
 unsigned long CTimer::elapsed(tick_t start)
 {
-	return T4_TO_SEC(T4DELTA(start,*t4));
+	tick_t delta = T4DELTA(start,*t4);
+	return T4_TO_SEC(delta);
 }
 
 
@@ -202,15 +201,18 @@ unsigned long CTimer::elapsed(tick_t start)
  */
 signed long CTimer::udelta(tick_t start, tick_t end)
 {
-	return (signed long)(T4_TO_USEC(T4DELTA(start,end)));
+	tick_t delta = T4DELTA(start,end);
+	return (signed long)(T4_TO_USEC(delta));
 }
 
 signed long CTimer::mdelta(tick_t start, tick_t end)
 {
-	return (signed long)(T4_TO_MSEC(T4DELTA(start,end)));
+	tick_t delta = T4DELTA(start,end);
+	return (signed long)(T4_TO_MSEC(delta));
 }
 
 signed long CTimer::delta(tick_t start, tick_t end)
 {
-	return (signed long)(T4_TO_SEC(T4DELTA(start,end)));
+	tick_t delta = T4DELTA(start,end);
+	return (signed long)(T4_TO_SEC(delta));
 }
