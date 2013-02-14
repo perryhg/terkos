@@ -91,7 +91,7 @@ To add a network to the list, click the plus (+) button in the lower-left corner
 http://cmucreatelab.org/www.terk.ri.cmu.edu/vexpro/WebSite12_Wifi5.png<br>
 http://cmucreatelab.org/www.terk.ri.cmu.edu/vexpro/WebSite13_Wifi6.png<br>
 http://cmucreatelab.org/www.terk.ri.cmu.edu/vexpro/WebSite14_Wifi7.png<br>
-Instead of manually entering the network name and encryption type, you can scan for available networks.  If you click the Scan... button in the lower-left corner, the VEXPro will look for all available networks--this usually takes a few seconds:
+Instead of manually entering the network name and encryption type, you can scan for available networks.  If you click the Scan button in the lower-left corner, the VEXPro will look for all available networks--this usually takes a few seconds:
 http://cmucreatelab.org/www.terk.ri.cmu.edu/vexpro/WebSite09_Wifi2.png<br>
 Once scanning is complete, you should see a list of all available networks.  Networks with a lock icon are encrypted networks:
 http://cmucreatelab.org/www.terk.ri.cmu.edu/vexpro/WebSite10_Wifi3.png<br>
