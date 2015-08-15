@@ -1,0 +1,1 @@
+This project contains the operating system (OpenEmbedded/Linux), device drivers, control interfaces, and utilities that Terk/VEXPro uses as part of its firmware.
